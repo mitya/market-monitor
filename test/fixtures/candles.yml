@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  figi: MyString
+  interval: MyString
+  time: 2021-03-09 16:52:59
+
+two:
+  figi: MyString
+  interval: MyString
+  time: 2021-03-09 16:52:59
