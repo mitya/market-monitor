@@ -1,9 +1,14 @@
 + basic tickers database
 + separate spb tickers
 + separate rus & us tickers
+- load day candles from Tinkoff to files
+- load day candles from files to db
+- try to load logos from IEX
+- very basic listing UI
+- comparision to a random date
+
 - load basic ticker data from IEX
 - add ticker lists
-- very basic listing UI
 - load recommedations from IEX
 - load insider trades from IEX
 - load EOD data

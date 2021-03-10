@@ -1,25 +1,17 @@
-https://github.com/dblock/iex-ruby-client
-https://iexcloud.io/docs/api/#insider-transactions
+# Фичи скринера
+— список бумаг с динамикой за неделю / месяц / от интересных дат
+— инсайдерские покупки по своему списку
+— консенсус прогнозы по своему списку
+— идентификация простейших паттернов типа ползучего роста
 
-sk_98bc3790c85c45feba2a92de43400934
+— отслеживание взрывов на пятиминутках
+— автоматическое выставление заявок в Тинькове на уровнях для спекуляций
+
+— загружать текущие котировки, EOD данные, инсайдерские сделки, прогнозы, общая инфа по тикерам
+— UI для просмотра списка бумаг с фильтрами
+— опционы?
 
 
-curl 'https://cloud.iexapis.com/stable/tops?token=sk_98bc3790c85c45feba2a92de43400934&symbols=aapl'
-curl 'https://cloud.iexapis.com/stable/stock/aapl/quote?token=sk_98bc3790c85c45feba2a92de43400934'
-
-
-sk_98bc3790c85c45feba2a92de43400934
-
-
-curl -sk 'https://cloud.iexapis.com/stable/stock/CERN/insider-transactions?token=sk_98bc3790c85c45feba2a92de43400934' | jq
-curl -sk 'https://cloud.iexapis.com/stable//stock/twtr/chart/5d?token=sk_98bc3790c85c45feba2a92de43400934' | jq
-
-GET /stock/{symbol}/previous
-
-# Links
-
-* https://github.com/TinkoffCreditSystems/invest-openapi-js-sdk
-* https://tinkoffcreditsystems.github.io/invest-openapi/swagger-ui/#/
 
 # Data Sources
 

@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2021_03_09_135259) do
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
+    t.string "source"
     t.datetime "created_at", default: -> { "CURRENT_DATE" }, null: false
     t.index ["isin", "interval", "time"], name: "index_candles_on_isin_and_interval_and_time", unique: true
     t.index ["isin"], name: "index_candles_on_isin"

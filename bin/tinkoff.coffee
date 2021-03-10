@@ -41,3 +41,7 @@ do ->
 # api.candle({ figi }, (x) => {
 #   console.log(x.h);
 # });
+
+# coffee bin/tinkoff.coffee candles BBG000B9XRY4 day 2021-01-01T00:00:00+00:00 2021-03-10T00:00:00+00:00
+# coffee bin/tinkoff.coffee candles BBG000B9XRY4 day 2021-02-01T00:00:00 2021-03-10T00:00:00
+# coffee bin/tinkoff.coffee candles BBG000B9XRY4 day 2021-02-01 2021-03-10
