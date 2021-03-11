@@ -5,8 +5,17 @@ class Instrument < ApplicationRecord
   scope :tinkoff, -> { where "'tinkoff' = any(flags)" }
   scope :abc, -> { order :ticker }
 
-  def to_s
-    ticker
+  def to_s = ticker
+  def current = 1234
+
+  def open
+    # Candle.get(self, Date.today, :open)
+  end
+
+  def close
+  end
+
+  def open_p
   end
 
   class << self

@@ -1,0 +1,24 @@
+main.container-fluid
+  h1 Instruments
+  table.table.table-sm.table-hover
+    thead.table-dark
+      tr
+        th Ticker
+        th Current
+        th Open %
+        th Open
+        th Close
+        th 1w %
+        th 1m %
+        th jan1 %
+    tbody
+      - @instruments.each do |inst|
+        tr
+          td= inst.ticker
+          td= inst.current
+          td= inst.open
+          td= inst.open_p
+          td= inst.close
+          / td= inst.week_ago_p
+          / td= inst.month_ago_p
+          / td= inst.jan1_p
