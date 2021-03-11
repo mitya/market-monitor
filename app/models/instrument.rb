@@ -4,6 +4,7 @@ class Instrument < ApplicationRecord
   has_many :day_candles, class_name: 'Candle', foreign_key: 'isin'
 
   scope :tinkoff, -> { where "'tinkoff' = any(flags)" }
+  scope :usd, -> { where currency: 'USD' }
   scope :abc, -> { order :ticker }
 
   def to_s = ticker
@@ -17,6 +18,8 @@ class Instrument < ApplicationRecord
   def mar20     = @mar20     ||= day_candles.date_before(Date.new 2020, 3, 20).take
   def nov08     = @nov08     ||= day_candles.date_before(Date.new 2020, 11, 8).take
   def bc        = @bc        ||= day_candles.date_before(Date.new 2020, 2, 20).take
+
+  %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
   %w[low high open close].each do |price|
     %w[yesterday today week_ago month_ago jan01 mar20 nov08 bc].each do |date|
@@ -39,9 +42,15 @@ class Instrument < ApplicationRecord
     end
   end
 
+  def logo_path = Pathname("public/logos/#{ticker}.png")
+  def check_logo = update_column(:has_logo, logo_path.exist?)
+
   class << self
     def get(ticker = nil, figi: nil)
       figi ? find_by_figi(figi) : find_by_ticker(ticker.to_s.upcase)
     end
   end
 end
+
+__END__
+Instrument.find_each &:check_logo

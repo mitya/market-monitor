@@ -3,24 +3,28 @@ class IexConnector
 
   BASE = 'https://cloud.iexapis.com/stable'
 
-  def quote(ticker)
-    get "/stock/#{ticker}/quote"
+  def quote(symbol)
+    get "/stock/#{symbol}/quote"
   end
 
-  def insider_transactions(ticker)
-    get "/stock/#{ticker}/insider-transactions"
+  def insider_transactions(symbol)
+    get "/stock/#{symbol}/insider-transactions"
   end
 
-  def options(ticker)
-    get "/stock/#{ticker}/options"
+  def options(symbol)
+    get "/stock/#{symbol}/options"
   end
 
-  def recommedations(ticker)
-    get "/stock/#{ticker}/recommendation-trends"
+  def recommedations(symbol)
+    get "/stock/#{symbol}/recommendation-trends"
   end
 
-  def last(ticker)
-    get "/last?symbols=#{ticker}"
+  def last(symbol)
+    get "/last?symbols=#{symbol}"
+  end
+
+  def logo(symbol)
+    get "/stock/#{symbol}/logo"
   end
 
   private
@@ -30,3 +34,6 @@ class IexConnector
     JSON.parse response.body
   end
 end
+
+__END__
+IexConnector.logo 'BRK.B'

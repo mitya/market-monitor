@@ -45,3 +45,4 @@ do ->
 # coffee bin/tinkoff.coffee candles BBG000B9XRY4 day 2021-01-01T00:00:00+00:00 2021-03-10T00:00:00+00:00
 # coffee bin/tinkoff.coffee candles BBG000B9XRY4 day 2021-02-01T00:00:00 2021-03-10T00:00:00
 # coffee bin/tinkoff.coffee candles BBG000B9XRY4 day 2021-02-01 2021-03-10
+# coffee bin/tinkoff.coffee candles BBG000B9XRY4 5min 2021-03-11T20:00:00Z 2021-03-11T20:05:00Z

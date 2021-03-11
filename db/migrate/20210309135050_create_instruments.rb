@@ -10,6 +10,7 @@ class CreateInstruments < ActiveRecord::Migration[6.1]
       t.integer :lot
       t.float :price_step
       t.string :flags, array: true, default: []
+      t.boolean :has_logo
       t.timestamps
     end
   end

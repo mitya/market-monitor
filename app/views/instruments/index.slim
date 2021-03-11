@@ -3,6 +3,7 @@ main.container-fluid
   table.table.table-sm.table-hover.table-font-sm
     thead.table-dark
       tr
+        th
         th Ticker
         th Name
         th.money-cell Current
@@ -20,6 +21,7 @@ main.container-fluid
     tbody
       - @instruments.each do |inst|
         tr
+          td= image_tag "#{inst.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if inst.has_logo?
           td= inst.ticker
           td= inst.name
           td.money-cell= number_to_currency inst.current, unit: currency_sign(inst.currency)
