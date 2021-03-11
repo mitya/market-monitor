@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_09_135259) do
+ActiveRecord::Schema.define(version: 2021_03_11_201446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,9 @@ ActiveRecord::Schema.define(version: 2021_03_09_135259) do
     t.integer "volume", null: false
     t.string "source"
     t.datetime "created_at", default: -> { "CURRENT_DATE" }, null: false
+    t.date "date"
+    t.boolean "current", default: false
+    t.index ["isin", "interval", "date"], name: "index_candles_on_isin_and_interval_and_date", unique: true
     t.index ["isin", "interval", "time"], name: "index_candles_on_isin_and_interval_and_time", unique: true
     t.index ["isin"], name: "index_candles_on_isin"
     t.index ["ticker"], name: "index_candles_on_ticker"
@@ -43,8 +46,16 @@ ActiveRecord::Schema.define(version: 2021_03_09_135259) do
     t.string "flags", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "has_logo"
     t.index ["figi"], name: "index_instruments_on_figi", unique: true
     t.index ["ticker"], name: "index_instruments_on_ticker"
+  end
+
+  create_table "prices", primary_key: "figi", id: :string, force: :cascade do |t|
+    t.string "ticker", null: false
+    t.decimal "value", precision: 20, scale: 4
+    t.datetime "updated_at"
+    t.index ["ticker"], name: "index_prices_on_ticker", unique: true
   end
 
   add_foreign_key "candles", "instruments", column: "isin", primary_key: "isin"

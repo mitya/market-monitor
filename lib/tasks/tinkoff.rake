@@ -18,6 +18,10 @@ namespace :tinkoff do
   task 'candles:import:current' => :environment do
     TinkoffConnector.import_candles "db/tinkoff-day-#{Date.today.to_s :number}-current"
   end
+
+  task 'prices:refresh' => :environment do
+    InstrumentPrice.refresh
+  end
 end
 
 __END__

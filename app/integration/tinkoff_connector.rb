@@ -40,6 +40,15 @@ class TinkoffConnector
     download_candles ticker, interval: 'day', since: date, till: date.end_of_day, **opts
   end
 
+  def update_current_price(instrument, **opts)
+    since, till = 10.minutes.ago.beginning_of_minute, 1.minute.from_now.beginning_of_minute
+    response = `coffee bin/tinkoff.coffee candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}`
+    response_json = JSON.parse(response)
+    puts "#{instrument.ticker} #{response_json['candles'].count}"
+    high = response_json.dig 'candles', -1, 'h'
+    instrument.price.update! value: high
+  end
+
   def import_candles(directory)
     Pathname(directory).glob('*.json') do |file|
       data = JSON.parse file.read
@@ -90,6 +99,7 @@ end
 
 __END__
 
-TinkoffConnector.new.load_candles_to_files('AAPL')
-TinkoffConnector.new.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 6, 1), till: Date.new(2020, 12, 31))
-TinkoffConnector.new.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 1, 1), till: Date.new(2020, 12, 31))
+TinkoffConnector.load_candles_to_files('AAPL')
+TinkoffConnector.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 6, 1), till: Date.new(2020, 12, 31))
+TinkoffConnector.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 1, 1), till: Date.new(2020, 12, 31))
+TinkoffConnector.update_current_price Instrument.get('AAPL')

@@ -11,9 +11,9 @@
 + task to load all missing days ohlc data from Tinkoff
 + last, open, close, open %, 1w %, 1m %, jan1 %, nov9%, mar23%, bc%
 + load logos from IEX
++ current price loading from Tinkoff
 
 – candle preloading for selected symbols & dates
-– current price loading from Tinkoff
 
 – symbol lists model
 – symbol lists in UI
