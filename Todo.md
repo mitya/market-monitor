@@ -8,28 +8,29 @@
 + load day candles from Tinkoff to files
 + load day candles from files to db
 + very basic listing UI
++ task to load all missing days ohlc data from Tinkoff
 
-- task to load all missing days ohlc data from Tinkoff
-- cron task to load ohlc data from Tinkoff
-- recurring current price loading from Tinkoff
-- candle preloading for selected symbols & dates
-- last, open, close, open %, 1w %, 1m %, jan1 %, nov9%, mar23%, bc%
-- comparision to a random date
+– cron task to load ohlc data from Tinkoff
+– candle preloading for selected symbols & dates
+– last, open, close, open %, 1w %, 1m %, jan1 %, nov9%, mar23%, bc%
+– comparision to a random date
 
-- symbol lists model
-- symbol lists in UI
+– symbol lists model
+– symbol lists in UI
 
-- daily data aggregation
+– recurring current price loading from Tinkoff
 
-- load logos from IEX
-- load basic ticker data from IEX
+– daily data aggregation
 
-- load recommedations from IEX
-- load insider trades from IEX
+– load logos from IEX
+– load basic ticker data from IEX
 
-- find stocks growing N days in a row
-- find stocks with N% volatility on X previous days and high within Y%
-- find stocks with significant spikes last days
+– load recommedations from IEX
+– load insider trades from IEX
+
+– find stocks growing N days in a row
+– find stocks with N% volatility on X previous days and high within Y%
+– find stocks with significant spikes last days
 
 
 # Later

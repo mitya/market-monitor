@@ -15,9 +15,10 @@ class TinkoffConnector
     end
   end
 
-  def download_candles(ticker, interval: 'day', since: Candle.last_loaded_date&.tomorrow, till: Date.today.end_of_day, delay: 0.5.second)
+  def download_candles(ticker, interval: 'day', since: Candle.last_loaded_date&.tomorrow, till: Date.today.end_of_day, delay: 0.4.second, current: false)
+    return if since == till
     instrument = Instrument.get(ticker)
-    file = Pathname("db/tinkoff-candles-#{interval}-#{till.to_date.to_s :number}/#{instrument.ticker} #{since.to_s :number} #{till.to_s :number}.json")
+    file = Pathname("db/tinkoff-#{interval}-#{till.to_date.to_s :number}#{'-current' if current}/#{instrument.ticker} #{since.to_s :number} #{till.to_s :number}.json")
     unless file.exist?
       puts "Load Tinkoff #{interval} candles for [#{since.xmlschema} ... #{till.xmlschema}] #{instrument}"
       response = `coffee bin/tinkoff.coffee candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}`
@@ -25,6 +26,18 @@ class TinkoffConnector
       file.write response
       sleep delay
     end
+  end
+
+  def download_day_candles_upto_today(ticker, **opts)
+    download_candles ticker, interval: 'day', since: Candle.last_loaded_date.tomorrow, till: Date.today, **opts
+  end
+
+  def download_day_candle_for_today(ticker, **opts)
+    download_candles ticker, interval: 'day', since: Date.today, till: Date.today.end_of_day, current: true, **opts
+  end
+
+  def download_day_candle_for_date(ticker, date, **opts)
+    download_candles ticker, interval: 'day', since: date, till: date.end_of_day, **opts
   end
 
   def import_candles(directory)
@@ -39,15 +52,17 @@ class TinkoffConnector
       puts "Import #{candles.count} #{interval} candles for #{instrument}"
       Candle.transaction do
         candles.each do |hash|
-          instrument.candles.find_or_create_by! interval: hash['interval'], time: Time.parse(hash['time']) do |candle|
-            candle.open   = hash['o']
-            candle.close  = hash['c']
-            candle.high   = hash['h']
-            candle.low    = hash['l']
-            candle.volume = hash['v']
-            candle.ticker = instrument.ticker
-            candle.source = 'tinkoff'
-            candle.date   = Date.parse(hash['time'])
+          time = Time.parse hash['time']
+          instrument.candles.find_or_create_by! interval: hash['interval'], time: time do |candle|
+            candle.open    = hash['o']
+            candle.close   = hash['c']
+            candle.high    = hash['h']
+            candle.low     = hash['l']
+            candle.volume  = hash['v']
+            candle.ticker  = instrument.ticker
+            candle.source  = 'tinkoff'
+            candle.date    = time.to_date
+            candle.current = time.to_date.today?
           end
         end
       end

@@ -3,3 +3,11 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 @import "bootstrap/scss/bootstrap";
+
+.money-cell { text-align: right; }
+.percent-cell { text-align: right; }
+
+.changebox-green { color: green; }
+.changebox-red { color: red; }
+
+.table-font-sm { font-size: .875rem; }
