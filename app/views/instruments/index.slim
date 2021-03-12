@@ -1,5 +1,13 @@
 main.container-fluid
   h1 Instruments
+
+  form(action=instruments_path class='my-2 row align-items-baseline')
+    div
+      label
+        | Set:
+        select(name="set" id="set-select" class="ms-2")
+          = options_from_collection_for_select @sets.sort_by(&:name), 'key', 'name', @set&.key
+
   table.table.table-sm.table-hover.table-font-sm
     thead.table-dark
       tr

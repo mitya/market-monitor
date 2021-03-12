@@ -4,6 +4,8 @@ class InstrumentsController < ApplicationController
   end
 
   def index
-    @instruments = Instrument.tinkoff.abc.limit(100)
+    @sets = InstrumentSet.all
+    @set = InstrumentSet.new(params[:set]) if params[:set].present?
+    @instruments = @set ? @set.instruments.abc : Instrument.tinkoff.abc.limit(100)
   end
 end

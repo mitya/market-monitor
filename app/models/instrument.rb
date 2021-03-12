@@ -50,6 +50,7 @@ class Instrument < ApplicationRecord
 
   class << self
     def get(ticker = nil, figi: nil)
+      return ticker if self === ticker
       figi ? find_by_figi(figi) : find_by_ticker(ticker.to_s.upcase)
     end
   end

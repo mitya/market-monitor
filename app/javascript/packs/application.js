@@ -11,3 +11,9 @@ import "channels"
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
+
+document.addEventListener("turbolinks:load", () => {
+  document.querySelector('#set-select').addEventListener("change", e => {
+    e.target.closest('form').submit()
+  })
+})
