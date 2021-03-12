@@ -14,13 +14,13 @@
 + current price loading from Tinkoff
 + symbol lists model
 + symbol lists in UI
-
-– candle preloading for selected symbols & dates
++ candle preloading for selected symbols & dates
 
 - recurring current price loading
 - recurring day candle loading
 - recurring 5-min candles loading
 – cron task for nighly ohlc data loading
+
 – daily data aggregation
 
 – load basic ticker data from IEX
@@ -28,6 +28,8 @@
 – load recommedations from IEX
 – load daily ohlc from IEX
 – load current prices in batches from IEX
+
+- insider transactions list
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
