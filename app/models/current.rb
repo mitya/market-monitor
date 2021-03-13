@@ -2,7 +2,13 @@ class Current < ActiveSupport::CurrentAttributes
   attribute :day_candles_cache, :prices_cache
 
   def date
-    Time.current.hour < 6 ? Date.yesterday : Date.today
+    date = Time.current.hour < 7 ? Date.yesterday : Date.current
+    date.on_weekend?? date.prev_weekday : date
+  end
+  alias today date
+
+  def yesterday
+    date.prev_weekday
   end
 
   def preload_day_candles_for(instruments)
@@ -54,10 +60,10 @@ class Current < ActiveSupport::CurrentAttributes
 
     def dates
       [
-        Date.parse('2020-02-20'),
-        Date.parse('2020-03-20'),
-        Date.parse('2020-11-08'),
-        Date.parse('2021-01-01'),
+        Date.parse('2020-02-19'),
+        Date.parse('2020-03-23'),
+        Date.parse('2020-11-06'),
+        Date.parse('2021-01-04'),
         self_or_previous_workday(1.week.ago.to_date),
         self_or_previous_workday(1.month.ago.to_date),
         Current.date,
