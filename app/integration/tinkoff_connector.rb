@@ -15,10 +15,10 @@ class TinkoffConnector
     end
   end
 
-  def download_candles(ticker, interval: 'day', since: Candle.last_loaded_date&.tomorrow, till: Date.today.end_of_day, delay: 0.4.second, current: false)
+  def download_candles(ticker, interval: 'day', since: Candle.last_loaded_date&.tomorrow, till: Date.today.end_of_day, delay: 0.33.second, ongoing: false)
     return if since == till
     instrument = Instrument.get(ticker)
-    file = Pathname("db/tinkoff-#{interval}-#{till.to_date.to_s :number}#{'-current' if current}/#{instrument.ticker} #{since.to_s :number} #{till.to_s :number}.json")
+    file = Pathname("db/tinkoff-#{interval}-#{till.to_date.to_s :number}#{'-ongoing' if ongoing}/#{instrument.ticker} #{since.to_s :number} #{till.to_s :number}.json")
     unless file.exist?
       puts "Load Tinkoff #{interval} candles for [#{since.xmlschema} ... #{till.xmlschema}] #{instrument}"
       response = `coffee bin/tinkoff.coffee candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}`
@@ -32,8 +32,8 @@ class TinkoffConnector
     download_candles ticker, interval: 'day', since: Candle.last_loaded_date.tomorrow, till: Date.today, **opts
   end
 
-  def download_day_candle_for_today(ticker, **opts)
-    download_candles ticker, interval: 'day', since: Date.today, till: Date.today.end_of_day, current: true, **opts
+  def download_ongoing_day_candle(ticker, **opts)
+    download_candles ticker, interval: 'day', since: Date.current, till: Date.current.end_of_day, ongoing: true, **opts
   end
 
   def download_day_candle_for_date(ticker, date, **opts)
@@ -44,9 +44,9 @@ class TinkoffConnector
     since, till = 10.minutes.ago.beginning_of_minute, 1.minute.from_now.beginning_of_minute
     response = `coffee bin/tinkoff.coffee candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}`
     response_json = JSON.parse(response)
-    puts "#{instrument.ticker} #{response_json['candles'].count}"
-    high = response_json.dig 'candles', -1, 'h'
-    instrument.price.update! value: high
+    price = response_json.dig 'candles', -1, 'h'
+    printf "Refresh price for %-5s %3i candles price=#{price.inspect}\n", instrument.ticker, response_json['candles'].count
+    instrument.price.update! value: price if price
   end
 
   def import_candles(directory)
@@ -71,7 +71,7 @@ class TinkoffConnector
             candle.ticker  = instrument.ticker
             candle.source  = 'tinkoff'
             candle.date    = time.to_date
-            candle.current = time.to_date.today?
+            candle.ongoing = time.to_date.today?
           end
         end
       end

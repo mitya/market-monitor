@@ -4,43 +4,47 @@ class Instrument < ApplicationRecord
   has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'isin'
   has_one :price, class_name: 'InstrumentPrice', foreign_key: 'figi', inverse_of: :instrument
 
+  validates_presence_of :isin, :ticker, :name
+
   scope :tinkoff, -> { where "'tinkoff' = any(flags)" }
   scope :usd, -> { where currency: 'USD' }
   scope :abc, -> { order :ticker }
+  scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.unprefixed_symbols if key }
+  scope :main, -> { in_set :main }
+  scope :small, -> { in_set :small }
 
   def to_s = ticker
 
-  def today     = @today     ||= day_candles!.find_date(Current.date)
-  def yesterday = @yesterday ||= day_candles!.find_date_before(Current.date)
+  def today     = @today     ||= day_candles!.find_date(Current.today)
+  def yesterday = @yesterday ||= day_candles!.find_date(Current.yesterday)
   def week_ago  = @week_ago  ||= day_candles!.find_date_before(1.week.ago.to_date.tomorrow)
   def month_ago = @month_ago ||= day_candles!.find_date_before(1.month.ago.to_date.tomorrow)
-  def jan01     = @jan01     ||= day_candles!.find_date_before(Current.date.beginning_of_year)
-  def mar20     = @mar20     ||= day_candles!.find_date(Date.new 2020, 3, 20)
-  def nov08     = @nov08     ||= day_candles!.find_date(Date.new 2020, 11, 8)
-  def bc        = @bc        ||= day_candles!.find_date(Date.new 2020, 2, 20)
-  def current   = @current   ||= price!.value
+  def jan04     = @jan04     ||= day_candles!.find_date(Date.new 2021, 1,  4)
+  def mar23     = @mar23     ||= day_candles!.find_date(Date.new 2020, 3, 23)
+  def nov06     = @nov06     ||= day_candles!.find_date(Date.new 2020, 11, 6)
+  def bc        = @bc        ||= day_candles!.find_date(Date.new 2020, 2, 19)
+  def last      = @last      ||= price!.value
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
   %w[low high open close].each do |price|
-    %w[yesterday today week_ago month_ago jan01 mar20 nov08 bc].each do |date|
+    %w[yesterday today week_ago month_ago jan04 mar23 nov06 bc].each do |date|
       define_method("#{date}_#{price}") { send(date).try(price) }
-
-      define_method("#{date}_#{price}_rel") do |curr_price = 'current'|
-        base, curr = send("#{date}_#{price}"), send(curr_price)
-        curr / base if curr && base
-      end
-
-      define_method("#{date}_#{price}_diff") do |curr_price = 'current'|
-        base, curr = send("#{date}_#{price}"), send(curr_price)
-        curr - base if curr && base
-      end
-
-      define_method("#{date}_#{price}_rel_diff") do |curr_price = 'current'|
-        diff, curr = send("#{date}_#{price}_diff", curr_price), send(curr_price)
-        diff / curr if diff && curr
-      end
+      define_method("#{date}_#{price}_rel") { |curr_price = 'last'| rel_diff "#{date}_#{price}", curr_price }
+      define_method("#{date}_#{price}_diff") { |curr_price = 'last'| diff "#{date}_#{price}", curr_price }
     end
+  end
+
+  attribute :current_price_selector, default: "last"
+
+  def diff(old_price, new_price = current_price_selector)
+    old_price, new_price = send(old_price), send(new_price)
+    new_price - old_price if old_price && new_price
+  end
+
+  def rel_diff(old_price, new_price = current_price_selector)
+    old_price, new_price = send(old_price), send(new_price)
+    new_price / old_price - 1.0 if old_price && new_price
   end
 
   def logo_path = Pathname("public/logos/#{ticker}.png")
@@ -60,3 +64,9 @@ end
 __END__
 Instrument.find_each &:check_logo
 Instrument.find_each &:price!
+
+Candle.day.where(ticker: 'BGS', date: Current.date)
+Instrument.get('BGS').day_candles.where(date: Current.date)
+puts Instrument.get('BGS').today_open
+Instrument.get('CCL').nov06_low
+Instrument.get('CCL').today_open

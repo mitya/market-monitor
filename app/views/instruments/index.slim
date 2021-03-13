@@ -7,6 +7,8 @@ main.container-fluid
         | Set:
         select(name="set" id="set-select" class="ms-2")
           = options_from_collection_for_select @sets.sort_by(&:name), 'key', 'name', @set&.key
+  p
+    | Today: #{Current.today}, yesterday: #{Current.yesterday}
 
   table.table.table-sm.table-hover.table-font-sm
     thead.table-dark
@@ -14,33 +16,34 @@ main.container-fluid
         th
         th Ticker
         th Name
-        th.money-cell Current
+        th.money-cell Last
         th.money-cell Topen
+        th.money-cell Yclose %
         th.money-cell Yopen
-        th.money-cell Yclose
-        th.money-cell Yclose %
-        th.money-cell Jan1 %
-        th.money-cell Nov8 %
-        th.money-cell Mar20 %
-        th.money-cell BC %
+        th.money-cell Jan4 %
+        th.money-cell Nov6 %
+        th.money-cell Mar23 %
+        th.money-cell BC %
         / th 1w %
         / th 1m %
         / th jan1 %
     tbody
       - @instruments.each do |inst|
+        - inst.current_price_selector = :today_open
         tr
           td= image_tag "#{inst.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if inst.has_logo?
           td= inst.ticker
           td= inst.name
-          td.money-cell= number_to_currency inst.current, unit: currency_sign(inst.currency)
-          td.money-cell= number_to_currency inst.today_open, unit: currency_sign(inst.currency)
-          td.money-cell= number_to_currency inst.yesterday_open, unit: currency_sign(inst.currency)
-          td.money-cell= number_to_currency inst.yesterday_close, unit: currency_sign(inst.currency)
-          td.money-cell= colorize_change inst.yesterday_close_rel_diff(:today_open), format: :percentage
-          td.money-cell= colorize_change inst.jan01_close_rel_diff(:today_open), format: :percentage
-          td.money-cell= colorize_change inst.nov08_close_rel_diff(:today_open), format: :percentage
-          td.money-cell= colorize_change inst.mar20_close_rel_diff(:today_open), format: :percentage
-          td.money-cell= colorize_change inst.bc_close_rel_diff(:today_open), format: :percentage
+          td.money-cell= number_to_currency inst.last, unit: currency_span(inst.currency)
+          td.money-cell= number_to_currency inst.today_open, unit: currency_span(inst.currency)
+          td.money-cell= colorize_change inst.rel_diff(:yesterday_close), format: :percentage, title: inst.yesterday_close
+          td.money-cell= number_to_currency inst.yesterday_open, unit: currency_span(inst.currency)
+
+          td.money-cell= colorize_change inst.rel_diff(:jan04_open), format: :percentage, title: inst.jan04_open
+          td.money-cell= colorize_change inst.rel_diff(:nov06_low), format: :percentage, title: inst.nov06_low
+          td.money-cell= colorize_change inst.rel_diff(:mar23_low), format: :percentage, title: inst.mar23_low
+          td.money-cell= colorize_change inst.rel_diff(:bc_high), format: :percentage, title: inst.bc_high
+
           / td= inst.week_ago_p
           / td= inst.month_ago_p
           / td= inst.jan1_p

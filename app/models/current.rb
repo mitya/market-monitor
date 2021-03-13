@@ -66,7 +66,8 @@ class Current < ActiveSupport::CurrentAttributes
         Date.parse('2021-01-04'),
         self_or_previous_workday(1.week.ago.to_date),
         self_or_previous_workday(1.month.ago.to_date),
-        Current.date,
+        Current.today,
+        Current.yesterday,
       ]
     end
 

@@ -15,13 +15,16 @@
 + symbol lists model
 + symbol lists in UI
 + candle preloading for selected symbols & dates
++ rus logos
++ fix comparisons
+
+- extract special dates
+– data aggregation into a table
 
 - recurring current price loading
 - recurring day candle loading
 - recurring 5-min candles loading
-– cron task for nighly ohlc data loading
-
-– daily data aggregation
+– daily ohlc data load, import & aggregation
 
 – load basic ticker data from IEX
 – load insider trades from IEX
@@ -36,6 +39,7 @@
 – find stocks with significant spikes last days
 
 – comparision to a random date
+- fixed width digits
 
 # Later
 - terminal-based UI

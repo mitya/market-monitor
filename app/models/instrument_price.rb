@@ -5,10 +5,10 @@ class InstrumentPrice < ApplicationRecord
   before_create { self.ticker ||= instrument.ticker }
 
   class << self
-    def refresh
-      Instrument.tinkoff.abc.each do |inst|
+    def refresh(set: nil)
+      Instrument.tinkoff.in_set(set).abc.each do |inst|
         TinkoffConnector.update_current_price inst
-        sleep 0.4
+        sleep 0.33
       end
     end
   end

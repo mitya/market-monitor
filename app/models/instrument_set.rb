@@ -2,7 +2,7 @@ class InstrumentSet
   attr :key
 
   def initialize(key)
-    @key = key
+    @key = key&.to_sym
   end
 
   def name = key ? key.to_s.humanize : 'All'
@@ -13,7 +13,7 @@ class InstrumentSet
 
   class << self
     def get(key)
-      @all.find { |set| set.key == key }
+      all.find { |set| set.key == key.to_sym }
     end
 
     def all
