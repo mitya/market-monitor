@@ -1,8 +1,10 @@
 class Instrument < ApplicationRecord
   self.inheritance_column = nil
+
   has_many :candles, foreign_key: 'isin'
   has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'isin'
   has_one :price, class_name: 'InstrumentPrice', foreign_key: 'figi', inverse_of: :instrument
+  has_one :info, class_name: 'InstrumentInfo', foreign_key: 'ticker', primary_key: 'ticker', inverse_of: :instrument
 
   validates_presence_of :isin, :ticker, :name
 

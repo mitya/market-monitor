@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_11_201446) do
+ActiveRecord::Schema.define(version: 2021_03_13_171910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,11 +28,31 @@ ActiveRecord::Schema.define(version: 2021_03_11_201446) do
     t.string "source"
     t.datetime "created_at", default: -> { "CURRENT_DATE" }, null: false
     t.date "date"
-    t.boolean "current", default: false
+    t.boolean "ongoing", default: false
     t.index ["isin", "interval", "date"], name: "index_candles_on_isin_and_interval_and_date", unique: true
     t.index ["isin", "interval", "time"], name: "index_candles_on_isin_and_interval_and_time", unique: true
     t.index ["isin"], name: "index_candles_on_isin"
     t.index ["ticker"], name: "index_candles_on_ticker"
+  end
+
+  create_table "instrument_infos", primary_key: "ticker", id: :string, force: :cascade do |t|
+    t.string "name"
+    t.string "industry"
+    t.string "sector"
+    t.string "country"
+    t.bigint "marketcap"
+    t.bigint "shares"
+    t.float "beta"
+    t.float "pe"
+    t.float "dividend_yield"
+    t.date "next_earnings_date"
+    t.date "ex_divident_date"
+    t.jsonb "company"
+    t.datetime "company_updated_at"
+    t.jsonb "stats"
+    t.datetime "stats_updated_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "instruments", primary_key: "isin", id: :string, force: :cascade do |t|

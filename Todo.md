@@ -17,29 +17,31 @@
 + candle preloading for selected symbols & dates
 + rus logos
 + fix comparisons
++ load ticker data from IEX
 
 - extract special dates
-– data aggregation into a table
-
 - recurring current price loading
 - recurring day candle loading
 - recurring 5-min candles loading
 – daily ohlc data load, import & aggregation
 
-– load basic ticker data from IEX
 – load insider trades from IEX
-– load recommedations from IEX
+– load recommedation trends, estimates & price targets from IEX
 – load daily ohlc from IEX
 – load current prices in batches from IEX
 
 - insider transactions list
+- company infos list
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 
-– comparision to a random date
+– data aggregation into a table
 - fixed width digits
+- indexes & commodities
 
 # Later
+– comparision to a random date
+- column selection
 - terminal-based UI
