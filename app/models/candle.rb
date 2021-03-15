@@ -1,9 +1,10 @@
 class Candle < ApplicationRecord
   belongs_to :instrument, foreign_key: 'isin'
 
-  scope :current, -> { where current: true }
-  scope :final, -> { where current: false }
+  scope :ongoing, -> { where ongoing: true }
+  scope :final, -> { where ongoing: false }
   scope :day, -> { where interval: 'day' }
+  scope :todays, -> { where date: Current.date }
   scope :find_date, -> date { order(date: :desc).where(date: date.to_date).take }
   scope :find_date_before, -> date { order(date: :desc).where('date < ?', date.to_date).take }
 

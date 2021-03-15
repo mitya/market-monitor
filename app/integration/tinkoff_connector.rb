@@ -49,33 +49,55 @@ class TinkoffConnector
     instrument.price.update! value: price if price
   end
 
-  def import_candles(directory)
+  def import_candles(instrument, data)
+    interval = data['interval']
+    candles = data['candles'].to_a
+
+    # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
+    # puts "Import #{candles.count} #{interval} candles for #{instrument}"
+    Candle.transaction do
+      candles.each do |hash|
+        time = Time.parse hash['time']
+        puts "Import #{instrument} #{time} #{interval} candle"
+        candle = instrument.candles.find_or_initialize_by interval: interval, time: time
+        candle.ticker  = instrument.ticker
+        candle.source  = 'tinkoff'
+        candle.open    = hash['o']
+        candle.close   = hash['c']
+        candle.high    = hash['h']
+        candle.low     = hash['l']
+        candle.volume  = hash['v']
+        candle.date    = time.to_date
+        candle.ongoing = time.to_date == Current.date
+        candle.save!
+      end
+    end
+  end
+
+  def import_candles_from_dir(directory)
     Pathname(directory).glob('*.json') do |file|
       data = JSON.parse file.read
       instrument = Instrument.get figi: data['figi']
-      interval = data['interval']
-      candles = data['candles'].to_a
-
-      # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
-
-      puts "Import #{candles.count} #{interval} candles for #{instrument}"
-      Candle.transaction do
-        candles.each do |hash|
-          time = Time.parse hash['time']
-          instrument.candles.find_or_create_by! interval: hash['interval'], time: time do |candle|
-            candle.open    = hash['o']
-            candle.close   = hash['c']
-            candle.high    = hash['h']
-            candle.low     = hash['l']
-            candle.volume  = hash['v']
-            candle.ticker  = instrument.ticker
-            candle.source  = 'tinkoff'
-            candle.date    = time.to_date
-            candle.ongoing = time.to_date.today?
-          end
-        end
-      end
+      import_candles instrument, interval, hash
     end
+  end
+
+  def get_candles(instrument, interval: 'day', since: nil, till: nil)
+    response = `coffee bin/tinkoff.coffee candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}`
+    # puts "Load Tinkoff #{interval} candles for [#{since.xmlschema} ... #{till.xmlschema}] #{instrument}"
+    JSON.parse response
+  end
+
+  def get_candles_and_import(instrument, interval: 'day')
+    return if instrument.candles.day.where('date > ?', 2.weeks.ago).none?
+    return if instrument.candles.day.todays.where('updated_at > ?', 3.hours.ago).exists?
+    since = instrument.candles.day.final.last_loaded_date.tomorrow
+    till = Current.date.end_of_day
+    data = get_candles instrument, interval: 'day', since: since, till: till
+    import_candles instrument, data
+    sleep 0.33
+  rescue
+    puts "Import #{instrument} failed: #{$!}"
   end
 
   def insider_transactions(ticker)

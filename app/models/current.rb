@@ -60,6 +60,8 @@ class Current < ActiveSupport::CurrentAttributes
 
     def dates
       [
+        Date.parse('2019-01-03'),
+        Date.parse('2020-01-03'),
         Date.parse('2020-02-19'),
         Date.parse('2020-03-23'),
         Date.parse('2020-11-06'),

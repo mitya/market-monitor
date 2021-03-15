@@ -1,4 +1,10 @@
 namespace :tinkoff do
+  task 'candles:day' => :environment do
+    Instrument.tinkoff.in_set(ENV['set']).abc.each do |inst|
+      TinkoffConnector.get_candles_and_import(inst)
+    end
+  end
+
   task 'candles:download:range' => :environment do
     Instrument.tinkoff.abc.each do |inst|
       TinkoffConnector.download_candles inst, interval: 'day', since: Date.new(2021, 1, 1), till: Date.new(2021, 3, 13)
@@ -46,7 +52,8 @@ namespace :tinkoff do
 end
 
 __END__
-rake tinkoff:candles:download
+rake tinkoff:candles:day
+
 rake tinkoff:candles:import dir=db/tinkoff-day-2021-upto-0312
 rake tinkoff:candles:download:range
 

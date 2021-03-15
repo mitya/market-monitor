@@ -30,13 +30,13 @@ main.container-fluid
         th.money-cell Topen
         th.money-cell Yclose %
         th.money-cell Yopen
-        th.money-cell Jan4 %
         th.money-cell Nov6 %
         th.money-cell Mar23 %
-        th.money-cell BC %
+        th.money-cell Feb22 %
+        th.money-cell 2020 %
+        th.money-cell 2019 %
         / th 1w %
         / th 1m %
-        / th jan1 %
     tbody
       - @instruments.each do |inst|
         - inst.current_price_selector = :today_open
@@ -54,10 +54,11 @@ main.container-fluid
           td.money-cell= colorize_change inst.rel_diff(:yesterday_close), format: :percentage, title: inst.yesterday_close
           td.money-cell= number_to_currency inst.yesterday_open, unit: currency_span(inst.currency)
 
-          td.money-cell= colorize_change inst.rel_diff(:jan04_open), format: :percentage, title: inst.jan04_open
+          td.money-cell= colorize_change inst.rel_diff(:y2021_open), format: :percentage, title: inst.y2021_open
           td.money-cell= colorize_change inst.rel_diff(:nov06_low), format: :percentage, title: inst.nov06_low
           td.money-cell= colorize_change inst.rel_diff(:mar23_low), format: :percentage, title: inst.mar23_low
-          td.money-cell= colorize_change inst.rel_diff(:bc_high), format: :percentage, title: inst.bc_high
+          td.money-cell= colorize_change inst.rel_diff(:y2020_high), format: :percentage, title: inst.y2020_high
+          td.money-cell= colorize_change inst.rel_diff(:y2019_high), format: :percentage, title: inst.y2019_high
 
           / td= inst.week_ago_p
           / td= inst.month_ago_p
