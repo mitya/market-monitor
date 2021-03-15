@@ -18,33 +18,40 @@
 + rus logos
 + fix comparisons
 + load ticker data from IEX
++ load & import today ongoing & yesterday ohlc in one step
++ load current prices in one step
++ colorize last, Topen, Yopen
 
-- load & import today ongoing & yesterday ohlc in one step
-- load current prices in one step
+– load IEX ohlc data which is absent of Tinkoff
 – find stocks growing N days in a row
-
-- extract special dates
-- recurring current price loading
-- recurring day candle loading
-- recurring 5-min candles loading
-– daily ohlc data load, import & aggregation
-
-– load insider trades from IEX
-– load recommedation trends, estimates & price targets from IEX
-– load daily ohlc from IEX
-– load current prices in batches from IEX
-- load advanced stats (forward P/E) from IEX
-
-- insider transactions list
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 
+- extract special dates
+
+- load advanced stats (forward P/E) from IEX
+– load insider trades from IEX
+– load recommedation trends, estimates & price targets from IEX
+– load current prices in batches from IEX
+
+- insider transactions list
 - company extended info list
-– data aggregation into a table
+
 - fixed width digits
 - indexes & commodities
+- list sorting
+- list filtering by tickers
+- tinkoff ticker checking
+- fix table header
+- flags
+
+– data aggregation into a table
+- recurring current price loading
+- recurring day candle loading
+- 5-min candles loading
 
 # Later
 – comparision to a random date
 - column selection
 - terminal-based UI
+- charts

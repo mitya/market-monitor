@@ -21,38 +21,38 @@ main.container-fluid
         th
         th Ticker
         th Name
+        th.money-cell Cap (M)
         - if params[:fundamentals]
-          th.money-cell Cap (M)
           th.money-cell P/E
           th.money-cell ß
           th.money-cell Yield
         th.money-cell Last
         th.money-cell Topen
-        th.money-cell Yclose %
+        th.money-cell Yclose ﹪
         th.money-cell Yopen
-        th.money-cell Nov6 %
-        th.money-cell Mar23 %
-        th.money-cell Feb22 %
-        th.money-cell 2020 %
-        th.money-cell 2019 %
+        th.money-cell Nov6 ﹪
+        th.money-cell Mar23 ﹪
+        th.money-cell Feb22 ﹪
+        th.money-cell 2020 ﹪
+        th.money-cell 2019 ﹪
         / th 1w %
         / th 1m %
     tbody
       - @instruments.each do |inst|
-        - inst.current_price_selector = :today_open
+        - inst.current_price_selector = :last_or_open
         tr
           td= image_tag "#{inst.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if inst.has_logo?
           td= inst.ticker
           td(title=inst.info&.industry)= inst.name
+          td.money-cell= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           - if params[:fundamentals]
-            td.money-cell= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
             td.money-cell= number_with_precision inst.info&.pe, precision: 0
             td.money-cell= number_with_precision inst.info&.beta, precision: 1
             td.money-cell= number_to_percentage inst.info&.dividend_yield_percent, precision: 1
-          td.money-cell= number_to_currency inst.last, unit: currency_span(inst.currency)
-          td.money-cell= number_to_currency inst.today_open, unit: currency_span(inst.currency)
+          td.money-cell= colorize_value inst.last || inst.today_close, inst.today_open, unit: inst.currency
+          td.money-cell= colorize_value inst.today_open, inst.yesterday_close, unit: inst.currency
           td.money-cell= colorize_change inst.rel_diff(:yesterday_close), format: :percentage, title: inst.yesterday_close
-          td.money-cell= number_to_currency inst.yesterday_open, unit: currency_span(inst.currency)
+          td.money-cell= colorize_value inst.yesterday_open, inst.daybeforelast_close, unit: inst.currency
 
           td.money-cell= colorize_change inst.rel_diff(:y2021_open), format: :percentage, title: inst.y2021_open
           td.money-cell= colorize_change inst.rel_diff(:nov06_low), format: :percentage, title: inst.nov06_low

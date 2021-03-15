@@ -27,9 +27,15 @@ namespace :iex do
       sleep 0.5
     end
   end
+
+  task :stats => :environment do
+    InstrumentInfo.refresh
+  end
 end
 
 
 __END__
 rake iex:logos
 rake iex:logos:download
+
+rake iex:stats

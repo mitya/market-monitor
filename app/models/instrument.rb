@@ -17,21 +17,23 @@ class Instrument < ApplicationRecord
 
   def to_s = ticker
 
-  def today     = @today     ||= day_candles!.find_date(Current.today)
-  def yesterday = @yesterday ||= day_candles!.find_date(Current.yesterday)
-  def week_ago  = @week_ago  ||= day_candles!.find_date_before(1.week.ago.to_date.tomorrow)
-  def month_ago = @month_ago ||= day_candles!.find_date_before(1.month.ago.to_date.tomorrow)
-  def mar23     = @mar23     ||= day_candles!.find_date(Date.new 2020,  3, 23)
-  def nov06     = @nov06     ||= day_candles!.find_date(Date.new 2020, 11,  6)
-  def y2019     = @y2019     ||= day_candles!.find_date(Date.new 2019,  1,  3)
-  def y2020     = @y2020     ||= day_candles!.find_date(Date.new 2020,  1,  3)
-  def y2021     = @y2021     ||= day_candles!.find_date(Date.new 2021,  1,  4)
-  def last      = @last      ||= price!.value
+  def today         = @today     ||= day_candles!.find_date(Current.today)
+  def yesterday     = @yesterday ||= day_candles!.find_date(Current.yesterday)
+  def daybeforelast = @daybeforelast ||= day_candles!.find_date(Current.yesterday.yesterday)
+  def week_ago      = @week_ago  ||= day_candles!.find_date_before(1.week.ago.to_date.tomorrow)
+  def month_ago     = @month_ago ||= day_candles!.find_date_before(1.month.ago.to_date.tomorrow)
+  def mar23         = @mar23     ||= day_candles!.find_date(Date.new 2020,  3, 23)
+  def nov06         = @nov06     ||= day_candles!.find_date(Date.new 2020, 11,  6)
+  def y2019         = @y2019     ||= day_candles!.find_date(Date.new 2019,  1,  3)
+  def y2020         = @y2020     ||= day_candles!.find_date(Date.new 2020,  1,  3)
+  def y2021         = @y2021     ||= day_candles!.find_date(Date.new 2021,  1,  4)
+  def last          = @last      ||= price!.value
+  def last_or_open  = last || today_open
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
   %w[low high open close].each do |price|
-    %w[yesterday today week_ago month_ago mar23 nov06 y2019 y2020 y2021].each do |date|
+    %w[today yesterday daybeforelast week_ago month_ago mar23 nov06 y2019 y2020 y2021].each do |date|
       define_method("#{date}_#{price}") { send(date).try(price) }
       define_method("#{date}_#{price}_rel") { |curr_price = 'last'| rel_diff "#{date}_#{price}", curr_price }
       define_method("#{date}_#{price}_diff") { |curr_price = 'last'| diff "#{date}_#{price}", curr_price }

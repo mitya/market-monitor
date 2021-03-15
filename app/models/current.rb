@@ -70,6 +70,7 @@ class Current < ActiveSupport::CurrentAttributes
         self_or_previous_workday(1.month.ago.to_date),
         Current.today,
         Current.yesterday,
+        Current.yesterday.yesterday,
       ]
     end
 

@@ -2,10 +2,16 @@ module InstrumentsHelper
   def change_percentage(relation)
   end
 
+  def colorize_value(value, base, unit: '$', title: nil)
+    green = value > base
+    value_str = number_to_currency value, unit: currency_span(unit)
+    tag.span(value_str, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
+  end
+
   def colorize_change(value, green: nil, format: :number, title: nil)
     green = value > 0 if green == nil && value.is_a?(Numeric)
     value = number_to_currency value if format == :number
-    value = number_to_percentage value * 100, precision: 1, format: '%n %' if value && format == :percentage
+    value = number_to_percentage value * 100, precision: 1, format: '%n ﹪' if value && format == :percentage
 
     tag.span(value, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
     # tag.span(number_to_currency(title), class: "changebox changebox-#{green ? 'green' : 'red'}")

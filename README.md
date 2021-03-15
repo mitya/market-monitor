@@ -19,3 +19,11 @@
 
     https://spbexchange.ru/ru/listing/securities/list/
     iconv -f CP1251 -t UTF8 db/data/spbex.csv > db/data/spbex-utf.csv
+
+
+# Regular commands
+
+rake tinkoff:prices:refresh
+rake tinkoff:prices:refresh set=main
+rake tinkoff:candles:day
+rake iex:stats

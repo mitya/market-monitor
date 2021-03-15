@@ -133,6 +133,10 @@ class InstrumentSet
       NYSE:X
       NYSE:XOM
       NYSE:XRX
+      ICPT
+      CHKP
+      NLOK
+      TLRY
     ],
     small: %w[
       AMEX:INS

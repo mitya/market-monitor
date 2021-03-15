@@ -45,7 +45,7 @@ class TinkoffConnector
     response = `coffee bin/tinkoff.coffee candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}`
     response_json = JSON.parse(response)
     price = response_json.dig 'candles', -1, 'h'
-    printf "Refresh price for %-5s %3i candles price=#{price.inspect}\n", instrument.ticker, response_json['candles'].count
+    printf "Refresh price for %-7s %3i candles price=#{price.inspect}\n", instrument.ticker, response_json['candles'].count
     instrument.price.update! value: price if price
   end
 

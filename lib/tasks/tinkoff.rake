@@ -52,8 +52,6 @@ namespace :tinkoff do
 end
 
 __END__
-rake tinkoff:candles:day
-
 rake tinkoff:candles:import dir=db/tinkoff-day-2021-upto-0312
 rake tinkoff:candles:download:range
 
@@ -62,4 +60,6 @@ rake tinkoff:logos:download
 rake tinkoff:candles:download:ongoing set=main
 rake tinkoff:candles:import:ongoing
 
+rake tinkoff:candles:day
+rake tinkoff:prices:refresh
 rake tinkoff:prices:refresh set=main
