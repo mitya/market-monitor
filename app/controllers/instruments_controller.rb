@@ -7,6 +7,7 @@ class InstrumentsController < ApplicationController
     @sets = InstrumentSet.all
     @set = InstrumentSet.new(params[:set]) if params[:set].present?
     @instruments = @set ? @set.instruments.abc : Instrument.tinkoff.abc.limit(200)
+    @instruments = @instruments.includes(:info)
     Current.preload_day_candles_for @instruments
     Current.preload_prices_for @instruments
   end

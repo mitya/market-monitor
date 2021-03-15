@@ -7,8 +7,8 @@ class InstrumentInfo < ApplicationRecord
     self.company = IexConnector.company(ticker)
     self.company_updated_at = Time.current
     self.name = company['companyName']
-    self.industry = company['industry']
-    self.sector = company['sector']
+    self.industry = company['industry']&.strip
+    self.sector = company['sector']&.strip
     self.country = company['country']
     self.industry = company['industry']
     save!
@@ -28,9 +28,15 @@ class InstrumentInfo < ApplicationRecord
     destroy
   end
 
+  def marketcap = super.to_i.nonzero?
+  def marketcap_mil = marketcap && marketcap / 1_000_000
+  def industry = super&.strip
+  def dividend_yield_percent = dividend_yield && dividend_yield * 100
+
   class << self
     def refresh
       abc.find_each do |info|
+        next if info.stats.present?
         info.refresh
         sleep 0.33
       end

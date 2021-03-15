@@ -19,6 +19,7 @@
 + fix comparisons
 + load ticker data from IEX
 
+- load & import today ongoing & yesterday ohlc in one step
 - extract special dates
 - recurring current price loading
 - recurring day candle loading

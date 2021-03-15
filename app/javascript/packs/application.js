@@ -13,7 +13,7 @@ Turbolinks.start()
 ActiveStorage.start()
 
 document.addEventListener("turbolinks:load", () => {
-  document.querySelector('#set-select').addEventListener("change", e => {
+  document.querySelector('#list-config').addEventListener("change", e => {
     e.target.closest('form').submit()
   })
 })

@@ -15,9 +15,45 @@ module InstrumentsHelper
     CurrencySigns[currency_code.to_s.to_sym]
   end
 
-  def currency_span(currency_code)
-    tag.span currency_sign(currency_code), class: 'currency'
+  def currency_span(currency_code, suffix: nil)
+    tag.span [currency_sign(currency_code), suffix].join(''), class: 'currency'
   end
 
   CurrencySigns = { USD: '$', RUB: '₽', EUR: '€' }
+
+  IndustryShortNames = {
+    "All Other Telecommunications": "Telecommunications",
+    "Custom Computer Programming Services": "Computer Programming Services",
+    "Direct Life Insurance Carriers": "Life Insurance",
+    "Motor Vehicle Gasoline Engine and Engine Parts Manufacturing": "Vehicle Engine Manufacturing",
+    "Investment Banking and Securities Dealing": "Investment Banking",
+    "All Other Miscellaneous Chemical Product and Preparation Manufacturing": "Chemical Manufacturing",
+    "Computer Systems Design Services": "Computer Services",
+    "Direct Property and Casualty Insurance Carriers": "Property Insurance",
+    "Food Service Contractors": "Food Service",
+    "Research and Development in Biotechnology": "Biotech R&D",
+    "Nuclear Electric Power Generation": "Nuclear",
+    "Crude Petroleum and Natural Gas Extraction": "Crude & Gas",
+    "Securities and Commodity Exchanges": "Securities and Commodity",
+    "Biological Product (except Diagnostic) Manufacturing": "Biotech Manufacturing",
+    "Semiconductor and Related Device Manufacturing": "Semiconductor",
+    "Other Financial Vehicles": "Financial",
+    "Surgical and Medical Instrument Manufacturing": "Medical Manufacturing",
+    "Data Processing, Hosting, and Related Services": "Data Processing",
+    "Commercial Banking": "Banking",
+    "Pharmaceutical Preparation Manufacturing": "Pharmaceutical",
+    "Software Publishers": "Software",
+  }.transform_keys(&:to_s)
+
+  def industry_short_name(industry)
+    truncate IndustryShortNames[industry] || industry
+  end
 end
+
+__END__
+InstrumentsHelper::IndustryShortNames.keys
+InstrumentsHelper::IndustryShortNames.keys.include? Instrument.get('ANIP').info.industry
+Instrument.get('ANIP').info.industry
+InstrumentInfo.group_by(&:industry)
+
+InstrumentInfo.group(:industry).count.sort_by(&:second).each { |industry, count| p industry }; nil
