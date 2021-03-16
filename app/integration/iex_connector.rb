@@ -14,11 +14,12 @@ class IexConnector
   def logo(symbol) = get("/stock/#{symbol}/logo")
   def company(symbol) = get("/stock/#{symbol}/company")
   def stats(symbol) = get("/stock/#{symbol}/stats")
+  def day_candle(symbol, date) = get("/stock/#{symbol}/chart/date/#{date.to_s :number}", params: { chartByDay: true })
 
   def import_day_candle(instrument, date)
     return if instrument.candles.day.where(date: date).exists?
 
-    candles_data = get "/stock/#{instrument.ticker}/chart/date/#{date.to_s :number}", params: { chartByDay: true }
+    candles_data = day_candle instrument.ticker, date
     return puts "No IEX data for #{instrument} on #{date}" if candles_data.none?
 
     Candle.transaction do
@@ -49,6 +50,7 @@ end
 
 __END__
 IexConnector.logo 'BRK.B'
-IexConnector.company 'FANG'
+IexConnector.company 'X'
+IexConnector.day_candle 'X', Date.parse('2021-01-04')
 IexConnector.stats 'FANG'
 IexConnector.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')

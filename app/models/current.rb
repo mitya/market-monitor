@@ -51,7 +51,7 @@ class Current < ActiveSupport::CurrentAttributes
         @cache.candles_by_isin[@instrument.isin]&.find { |candle| candle.date == date }
       end
 
-      def find_date_before(date) = find_date(date)
+      def find_date_before(date) = find_date(MarketCalendar.closest_workday date)
     end
   end
 
@@ -66,18 +66,12 @@ class Current < ActiveSupport::CurrentAttributes
         Date.parse('2020-03-23'),
         Date.parse('2020-11-06'),
         Date.parse('2021-01-04'),
-        self_or_previous_workday(1.week.ago.to_date),
-        self_or_previous_workday(1.month.ago.to_date),
+        MarketCalendar.closest_workday(1.week.ago.to_date),
+        MarketCalendar.closest_workday(1.month.ago.to_date),
         Current.today,
         Current.yesterday,
         Current.yesterday.yesterday,
       ]
-    end
-
-    def self_or_previous_workday(date)
-      date.wday == 0 ? date - 2 :
-      date.wday == 6 ? date - 1 :
-      date
     end
   end
 end

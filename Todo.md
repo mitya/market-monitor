@@ -24,9 +24,14 @@
 + sync available stocks with Tinkoff
 + load IEX ohlc data which is absent of Tinkoff
 
+- disable stocks without any recent data
+
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
+- find stocks with continious flat
+
+- add Tinkoff premium tickers with data from IEX
 
 - load advanced stats (forward P/E) from IEX
 – load insider trades from IEX
@@ -36,7 +41,6 @@
 - insider transactions list
 - company extended info list
 
-- disable stocks without any recent data
 - extract lists to files
 - extract special dates
 - fixed width digits
@@ -51,6 +55,7 @@
 - recurring current price loading
 - recurring day candle loading
 - 5-min candles loading
+
 
 # Later
 – comparision to a random date

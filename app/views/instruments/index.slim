@@ -15,7 +15,7 @@ main.container-fluid
   p
     | Today: #{Current.today}, yesterday: #{Current.yesterday}
 
-  table.table.table-sm.table-hover.table-font-sm
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
     thead.table-dark
       tr
         th
@@ -29,14 +29,16 @@ main.container-fluid
         th.money-cell Last
         th.money-cell Topen
         th.money-cell Yclose ﹪
-        th.money-cell Yopen
+        th.money-cell Yopen ﹪
+
+        th.money-cell 1w ﹪
+        th.money-cell 1m ﹪
+        th.money-cell 2021 ﹪
         th.money-cell Nov6 ﹪
         th.money-cell Mar23 ﹪
-        th.money-cell Feb22 ﹪
+        th.money-cell Feb19 ﹪
         th.money-cell 2020 ﹪
         th.money-cell 2019 ﹪
-        / th 1w %
-        / th 1m %
     tbody
       - @instruments.each do |inst|
         - inst.current_price_selector = :last_or_open
@@ -44,22 +46,23 @@ main.container-fluid
           td= image_tag "#{inst.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if inst.has_logo?
           td= inst.ticker
           td(title=inst.info&.industry)= inst.name
+
           td.money-cell= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           - if params[:fundamentals]
             td.money-cell= number_with_precision inst.info&.pe, precision: 0
             td.money-cell= number_with_precision inst.info&.beta, precision: 1
             td.money-cell= number_to_percentage inst.info&.dividend_yield_percent, precision: 1
+
           td.money-cell= colorize_value inst.last || inst.today_close, inst.today_open, unit: inst.currency
           td.money-cell= colorize_value inst.today_open, inst.yesterday_close, unit: inst.currency
-          td.money-cell= colorize_change inst.rel_diff(:yesterday_close), format: :percentage, title: inst.yesterday_close
-          td.money-cell= colorize_value inst.yesterday_open, inst.daybeforelast_close, unit: inst.currency
 
-          td.money-cell= colorize_change inst.rel_diff(:y2021_open), format: :percentage, title: inst.y2021_open
-          td.money-cell= colorize_change inst.rel_diff(:nov06_low), format: :percentage, title: inst.nov06_low
-          td.money-cell= colorize_change inst.rel_diff(:mar23_low), format: :percentage, title: inst.mar23_low
-          td.money-cell= colorize_change inst.rel_diff(:y2020_high), format: :percentage, title: inst.y2020_high
-          td.money-cell= colorize_change inst.rel_diff(:y2019_high), format: :percentage, title: inst.y2019_high
-
-          / td= inst.week_ago_p
-          / td= inst.month_ago_p
-          / td= inst.jan1_p
+          td.money-cell.muted-cell= colorize_change inst.rel_diff(:yesterday_close),format: :percentage, unit: inst.currency, price: inst.yesterday_close
+          td.money-cell.muted-cell= colorize_change inst.rel_diff(:yesterday_open), format: :percentage, unit: inst.currency, price: inst.yesterday_open
+          td.money-cell           = colorize_change inst.rel_diff(:week_ago_open),  format: :percentage, unit: inst.currency, price: inst.week_ago_open
+          td.money-cell           = colorize_change inst.rel_diff(:month_ago_open), format: :percentage, unit: inst.currency, price: inst.month_ago_open
+          td.money-cell           = colorize_change inst.rel_diff(:y2021_open),     format: :percentage, unit: inst.currency, price: inst.y2021_open
+          td.money-cell           = colorize_change inst.rel_diff(:nov06_low),      format: :percentage, unit: inst.currency, price: inst.nov06_low
+          td.money-cell           = colorize_change inst.rel_diff(:mar23_low),      format: :percentage, unit: inst.currency, price: inst.mar23_low
+          td.money-cell.muted-cell= colorize_change inst.rel_diff(:feb19_low),      format: :percentage, unit: inst.currency, price: inst.feb19_low
+          td.money-cell           = colorize_change inst.rel_diff(:y2020_open),     format: :percentage, unit: inst.currency, price: inst.y2020_open
+          td.money-cell.muted-cell= colorize_change inst.rel_diff(:y2019_open),     format: :percentage, unit: inst.currency, price: inst.y2019_open

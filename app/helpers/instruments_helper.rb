@@ -8,13 +8,14 @@ module InstrumentsHelper
     tag.span(value_str, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
 
-  def colorize_change(value, green: nil, format: :number, title: nil)
+  def colorize_change(value, green: nil, format: :number, title: nil, unit: nil, price: nil)
     green = value > 0 if green == nil && value.is_a?(Numeric)
-    value = number_to_currency value if format == :number
+    value = number_to_currency value, unit: unit if format == :number
     value = number_to_percentage value * 100, precision: 1, format: '%n ﹪' if value && format == :percentage
+    title ||= number_to_currency price, unit: currency_sign(unit) if price
 
+    # return tag.span(number_to_currency(title, unit: ''), class: "changebox changebox-#{green ? 'green' : 'red'}")
     tag.span(value, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
-    # tag.span(number_to_currency(title), class: "changebox changebox-#{green ? 'green' : 'red'}")
   end
 
   def currency_sign(currency_code)
