@@ -17,7 +17,13 @@ do ->
       socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws'
       secretToken: process.env.TINKOFF_TEST_TOKEN
     }
-    await api.sandboxClear()
+    # await api.sandboxClear()
+
+    # api = new OpenAPI {
+    #   apiURL: 'https://api-invest.tinkoff.ru/openapi/' # 'https://api-invest.tinkoff.ru/openapi'
+    #   socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws'
+    #   secretToken: process.env.TINKOFF_PROD_TOKEN
+    # }
 
     switch command
       when 'stocks'     then print await api.stocks()
@@ -26,6 +32,7 @@ do ->
       when 'currencies' then print await api.currencies()
       when 'search'     then print await api.search(ticker: 'MSFT')
       when 'candles'    then print await api.candlesGet({ figi, interval, from: since, to: till })
+      when 'portfolio'  then print await api.portfolio()
 
   catch error
     print { error }

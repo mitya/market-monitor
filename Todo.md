@@ -21,13 +21,13 @@
 + load & import today ongoing & yesterday ohlc in one step
 + load current prices in one step
 + colorize last, Topen, Yopen
++ sync available stocks with Tinkoff
 
 – load IEX ohlc data which is absent of Tinkoff
+
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
-
-- extract special dates
 
 - load advanced stats (forward P/E) from IEX
 – load insider trades from IEX
@@ -37,6 +37,7 @@
 - insider transactions list
 - company extended info list
 
+- extract special dates
 - fixed width digits
 - indexes & commodities
 - list sorting

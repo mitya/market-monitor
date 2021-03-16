@@ -137,6 +137,8 @@ class InstrumentSet
       CHKP
       NLOK
       TLRY
+      APEI
+      RNFT
     ],
     small: %w[
       AMEX:INS

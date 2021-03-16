@@ -18,6 +18,8 @@ curl -sk 'https://cloud.iexapis.com/stable/stock/CERN/insider-transactions?token
 curl -sk 'https://cloud.iexapis.com/stable//stock/twtr/chart/5d?token=sk_98bc3790c85c45feba2a92de43400934' | jq
 
 
+curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_TEST_SECRET_KEY" | jq
+
 # Cost
 
 5.000.000 std credits / mon + 20$ for 20.000.000 premium credits

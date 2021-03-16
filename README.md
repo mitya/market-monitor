@@ -23,7 +23,7 @@
 
 # Regular commands
 
-rake tinkoff:prices:refresh
-rake tinkoff:prices:refresh set=main
+rake tinkoff:prices
+rake tinkoff:prices set=main
 rake tinkoff:candles:day
 rake iex:stats

@@ -3,7 +3,7 @@ module InstrumentsHelper
   end
 
   def colorize_value(value, base, unit: '$', title: nil)
-    green = value > base
+    green = value && base && value > base
     value_str = number_to_currency value, unit: currency_span(unit)
     tag.span(value_str, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
