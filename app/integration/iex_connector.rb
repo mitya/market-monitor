@@ -15,11 +15,34 @@ class IexConnector
   def company(symbol) = get("/stock/#{symbol}/company")
   def stats(symbol) = get("/stock/#{symbol}/stats")
 
+  def import_day_candle(instrument, date)
+    return if instrument.candles.day.where(date: date).exists?
+
+    candles_data = get "/stock/#{instrument.ticker}/chart/date/#{date.to_s :number}", params: { chartByDay: true }
+    return puts "No IEX data for #{instrument} on #{date}" if candles_data.none?
+
+    Candle.transaction do
+      candles_data.each do |hash|
+        date = Date.parse hash['date']
+        puts "Import #{instrument} #{date} candle from IEX"
+        candle = instrument.candles.find_or_initialize_by interval: 'day', date: date, source: 'iex'
+        candle.ticker  = instrument.ticker
+        candle.time    = date.to_time :utc
+        candle.ongoing = date == Current.date
+        candle.open    = hash['open']
+        candle.close   = hash['close']
+        candle.high    = hash['high']
+        candle.low     = hash['low']
+        candle.volume  = hash['volume']
+        candle.save!
+      end
+    end
+  end
+
   private
 
-  def get(path)
-    response = RestClient.get "#{BASE}#{path}", params: { token: ENV['IEX_SECRET_KEY'] }
-    p response
+  def get(path, params: {})
+    response = RestClient.get "#{BASE}#{path}", params: { token: ENV['IEX_SECRET_KEY'] }.merge(params)
     JSON.parse response.body
   end
 end
@@ -28,3 +51,4 @@ __END__
 IexConnector.logo 'BRK.B'
 IexConnector.company 'FANG'
 IexConnector.stats 'FANG'
+IexConnector.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')

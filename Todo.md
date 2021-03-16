@@ -22,8 +22,7 @@
 + load current prices in one step
 + colorize last, Topen, Yopen
 + sync available stocks with Tinkoff
-
-– load IEX ohlc data which is absent of Tinkoff
++ load IEX ohlc data which is absent of Tinkoff
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
@@ -37,6 +36,8 @@
 - insider transactions list
 - company extended info list
 
+- disable stocks without any recent data
+- extract lists to files
 - extract special dates
 - fixed width digits
 - indexes & commodities

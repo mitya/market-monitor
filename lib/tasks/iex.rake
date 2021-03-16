@@ -31,6 +31,30 @@ namespace :iex do
   task :stats => :environment do
     InstrumentInfo.refresh
   end
+
+  task 'ohlc:missing' => :environment do
+    date = Date.parse ENV['date']
+    with_missing_date = Instrument.iex.abc.select { |inst| inst.candles.day.where(date: date).none? }
+
+    puts "Date checked: #{date}"
+    puts "With missing date: #{with_missing_date.join(',')}"
+    puts "Total missing date #{with_missing_date.count}"
+    puts "Total instruments #{Instrument.count}"
+    puts "Total candles for #{date} is #{Candle.day.where(date: date).count}"
+
+    next unless ENV['ok'] == '1'
+    
+    with_missing_date.each do |inst|
+      IexConnector.import_day_candle inst, date
+      sleep 0.3
+    end
+  end
+
+  task 'candles:stats' => :environment do
+    (1.year.ago.to_date .. Date.current).each do |date|
+      puts "Total candles for #{date} is #{Candle.day.where(date: date).count}"
+    end
+  end
 end
 
 
@@ -39,3 +63,12 @@ rake iex:logos
 rake iex:logos:download
 
 rake iex:stats
+rake iex:ohlc:missing date=2019-01-03
+rake iex:ohlc:missing date=2020-01-03
+rake iex:ohlc:missing date=2020-02-19
+rake iex:ohlc:missing date=2020-03-23
+rake iex:ohlc:missing date=2020-11-06
+rake iex:ohlc:missing date=2021-01-04
+rake iex:candles:stats
+
+Instrument.get('AAON').candles.day.find_date('2020-03-23')

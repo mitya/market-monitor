@@ -9,6 +9,7 @@ class Instrument < ApplicationRecord
   validates_presence_of :isin, :ticker, :name
 
   scope :tinkoff, -> { where "'tinkoff' = any(flags)" }
+  scope :iex, -> { joins :info }
   scope :usd, -> { where currency: 'USD' }
   scope :abc, -> { order :ticker }
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.unprefixed_symbols if key }
@@ -58,6 +59,8 @@ class Instrument < ApplicationRecord
   def price! = Current.prices_cache&.for_instrument(self) || price || create_price!
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
 
+  def iex? = info.present?
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker
@@ -75,3 +78,4 @@ Instrument.get('BGS').day_candles.where(date: Current.date)
 puts Instrument.get('BGS').today_open
 Instrument.get('CCL').nov06_low
 Instrument.get('CCL').today_open
+Instrument.join(:info).count
