@@ -5,24 +5,26 @@ class IexConnector
 
   BASE = 'https://cloud.iexapis.com/stable'
 
-  def quote(symbol) = get("/stock/#{symbol}/quote")
-  def last(symbol) = get("/last?symbols=#{symbol}")
+  def quote(symbol)                   = get("/stock/#{symbol}/quote")
+  def ohlc(symbol)                    = get("/stock/#{symbol}/ohlc")
+  def previous(symbol)                = get("/stock/#{symbol}/previous")
+  def options(symbol)                 = get("/stock/#{symbol}/options")
+  def insider_transactions(symbol)    = get("/stock/#{symbol}/insider-transactions")
+  def recommedations(symbol)          = get("/stock/#{symbol}/recommendation-trends")
+  def logo(symbol)                    = get("/stock/#{symbol}/logo")
+  def company(symbol)                 = get("/stock/#{symbol}/company")
+  def stats(symbol)                   = get("/stock/#{symbol}/stats")
+  def day_candle_on(symbol, date)     = get("/stock/#{symbol}/chart/date/#{date.to_s :number}", chartByDay: true)
+  def day_candles_for(symbol, period) = get("/stock/#{symbol}/chart/#{period}")
+  def last(symbol)                    = get("/last?symbols=#{symbol}")
+  def tops(*symbols)                  = get("/tops", { symbols: symbols.join(',').presence }.presence)
+  def symbols                         = get("/ref-data/symbols")
 
-  def insider_transactions(symbol) = get("/stock/#{symbol}/insider-transactions")
-  def options(symbol) = get("/stock/#{symbol}/options")
-  def recommedations(symbol) = get("/stock/#{symbol}/recommendation-trends")
-  def logo(symbol) = get("/stock/#{symbol}/logo")
-  def company(symbol) = get("/stock/#{symbol}/company")
-  def stats(symbol) = get("/stock/#{symbol}/stats")
-  def tops(*symbols) = get("/tops?symbols=#{symbols.join(',')}")
-  def symbols = get("/ref-data/symbols")
-  def day_candle(symbol, date) = get("/stock/#{symbol}/chart/date/#{date.to_s :number}", params: { chartByDay: true })
+  def import_day_candles(instrument, date: nil, period: nil)
+    return if date && instrument.candles.day.where(date: date).exists?
 
-  def import_day_candle(instrument, date)
-    return if instrument.candles.day.where(date: date).exists?
-
-    candles_data = day_candle instrument.ticker, date
-    return puts "No IEX data for #{instrument} on #{date}" if candles_data.none?
+    candles_data = date ? day_candle_on(instrument.ticker, date) : day_candles_for(instrument.ticker, period)
+    return puts "No IEX data for #{instrument} for #{date || period}" if candles_data.none?
 
     Candle.transaction do
       candles_data.each do |hash|
@@ -44,8 +46,8 @@ class IexConnector
 
   private
 
-  def get(path, params: {})
-    response = RestClient.get "#{BASE}#{path}", params: { token: ENV['IEX_SECRET_KEY'] }.merge(params)
+  def get(path, params = {})
+    response = RestClient.get "#{BASE}#{path}", params: { token: ENV['IEX_SECRET_KEY'] }.merge(params || {})
     JSON.parse response.body
   end
 
@@ -53,8 +55,9 @@ class IexConnector
 end
 
 __END__
-IexConnector.logo 'BRK.B'
 IexConnector.company 'X'
-IexConnector.day_candle 'X', Date.parse('2021-01-04')
 IexConnector.stats 'FANG'
+IexConnector.quote 'X'
+IexConnector.previous 'X'
+IexConnector.day_candle 'X', Date.parse('2021-01-04')
 IexConnector.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')

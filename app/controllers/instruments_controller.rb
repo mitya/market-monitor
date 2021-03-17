@@ -6,8 +6,9 @@ class InstrumentsController < ApplicationController
   def index
     @sets = InstrumentSet.all
     @set = InstrumentSet.new(params[:set]) if params[:set].present?
-    @instruments = @set ? @set.instruments.abc : Instrument.tinkoff.abc.limit(200)
-    @instruments = @instruments.includes(:info)
+    @instruments = @set ? @set.instruments : Instrument.tinkoff
+    @instruments = @instruments.abc.includes(:info)
+    @instruments = @instruments.page(params[:page]).per(100)
     Current.preload_day_candles_for @instruments
     Current.preload_prices_for @instruments
   end

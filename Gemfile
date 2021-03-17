@@ -18,6 +18,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'rest-client'
 gem 'slim-rails'
 gem 'colorize'
+gem 'kaminari'
 
 group :development do
   gem 'web-console', '>= 4.1.0'

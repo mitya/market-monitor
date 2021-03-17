@@ -25,9 +25,11 @@
 + load IEX ohlc data which is absent of Tinkoff
 + use tickers as foreign keys for candles & prices
 + add Tinkoff premium tickers with ticker info from IEX
++ load old reference candles for premium tickers from IEX
++ load current candles for premium tickers from IEX
++ pagination
 
-- load old reference candles for premium tickers from IEX
-- load current candles for premium tickers from IEX
+- filters by industry / sector
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%

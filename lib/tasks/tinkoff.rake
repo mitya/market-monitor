@@ -105,6 +105,5 @@ rake tinkoff:candles:day:all tickers=MTX@DE,FIXP,TGKDP
 rake tinkoff:instruments:sync # ok=1
 
 rake tinkoff:candles:day
-rake tinkoff:prices:sync
-rake tinkoff:prices:sync set=main
+rake tinkoff:prices # set=main
 rake tinkoff:update

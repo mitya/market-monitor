@@ -6,12 +6,12 @@
 
 .money-cell { text-align: right; }
 .percent-cell { text-align: right; }
-.muted-cell { opacity: 0.5; }
-
-.money-cell .currency { opacity: 1; padding-right: 1px; }
+.money-cell .currency { padding-right: 1px; }
 
 .changebox-green { color: green; }
 .changebox-red { color: red; }
+.muted-cell .changebox-green { color: rgba(green, 0.5); }
+.muted-cell .changebox-red { color: rgba(red, 0.5); }
 
 .table-font-sm { font-size: .8rem; }
 

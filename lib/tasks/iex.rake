@@ -34,24 +34,34 @@ namespace :iex do
     InstrumentInfo.refresh
   end
 
-  task 'ohlc:missing' => :environment do
-    ENV['dates'].to_a.split(',').each do |date|
+  task 'candles:days:on_dates' => :environment do
+    ENV['dates'].to_s.split(',').each do |date|
       date = Date.parse(date)
-      with_missing_date = Instrument.iex.abc.select { |inst| inst.candles.day.where(date: date).none? }
+      with_missing_date = Instrument.premium.abc.select { |inst| inst.candles.day.where(date: date).none? }
 
       puts "Date checked: #{date}"
       puts "With missing date: #{with_missing_date.join(',')}"
       puts "Total missing date #{with_missing_date.count}"
       puts "Total instruments #{Instrument.count}"
       puts "Total candles for #{date} is #{Candle.day.where(date: date).count}"
+      puts
 
       next unless ENV['ok'] == '1'
 
       with_missing_date.each do |inst|
-        IexConnector.import_day_candle inst, date
+        IexConnector.import_day_candles inst, date: date
         sleep 0.3
       end
     end
+  end
+
+  %w[previous 5d 1m].each do |period|
+    task "candles:days:#{period}" => :environment do
+      Instrument.premium.abc.each { |inst| IexConnector.import_day_candles inst, period: period }
+    end
+  end
+
+  task 'candles:days:today' => :environment do
   end
 
   task 'candles:stats' => :env do
@@ -73,10 +83,11 @@ namespace :iex do
     end
   end
 
-  task 'update' => :env do
-    # update candles for premium tickers
-    # update prices for premium tickers
+  task 'prices' => :env do
+    InstrumentPrice.refresh_premium_from_iex
   end
+
+  task 'update' => %w[prices candles:days:previous]
 end
 
 
@@ -85,6 +96,11 @@ rake iex:logos
 rake iex:logos:download
 rake iex:symbols:load
 rake iex:symbols:process
-rake iex:ohlc:missing dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,2020-11-06,2021-01-04
+rake iex:candles:days:on_dates dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,2020-11-06,2021-01-04 ok=1
+rake iex:candles:days:1m
 
 rake iex:stats
+rake iex:candles:days:previous
+rake iex:prices
+
+rake iex:update

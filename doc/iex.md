@@ -5,19 +5,19 @@ https://github.com/dblock/iex-ruby-client
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/quote?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/1m?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable//stock/FANG/chart/date/2021-01-04?chartByDay=true&token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/date/20210317?chartByDay=true&token=$IEX_SECRET_KEY" | jq
+curl -s 'https://cloud.iexapis.com/stable/stock/aapl/chart/5d?token=sk_98bc3790c85c45feba2a92de43400934' | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/delayed-quote?token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable/last?symbols=aapl&token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/options?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/company?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/stats?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/advanced-stats?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/peers?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/volume-by-venue?token=$IEX_SECRET_KEY" | jq
-
-curl -sk 'https://cloud.iexapis.com/stable/stock/CERN/insider-transactions?token=sk_98bc3790c85c45feba2a92de43400934' | jq
-curl -sk 'https://cloud.iexapis.com/stable//stock/twtr/chart/5d?token=sk_98bc3790c85c45feba2a92de43400934' | jq
-
+curl -s 'https://cloud.iexapis.com/stable/stock/aapl/insider-transactions?token=sk_98bc3790c85c45feba2a92de43400934' | jq
+curl -s 'https://cloud.iexapis.com/stable/tops?symbols=aapl,fb,twtr&token=sk_98bc3790c85c45feba2a92de43400934' | jq
+curl -s 'https://cloud.iexapis.com/stable/tops?token=sk_98bc3790c85c45feba2a92de43400934' > tmp/tops.json
+curl -s 'https://cloud.iexapis.com/stable/tops?token=sk_98bc3790c85c45feba2a92de43400934&format=csv' > tmp/tops.csv
 
 curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_TEST_SECRET_KEY" | jq
 

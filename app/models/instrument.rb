@@ -69,6 +69,8 @@ class Instrument < ApplicationRecord
       return ticker if self === ticker
       figi ? find_by_figi(figi) : find_by_ticker(ticker.to_s.upcase)
     end
+
+    alias [] get
   end
 end
 
