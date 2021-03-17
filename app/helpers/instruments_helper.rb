@@ -52,8 +52,16 @@ module InstrumentsHelper
     "Software Publishers": "Software",
   }.transform_keys(&:to_s)
 
-  def industry_short_name(industry)
-    truncate IndustryShortNames[industry] || industry
+  def industry_short_name(industry, length: 30)
+    truncate IndustryShortNames[industry] || industry, length: length
+  end
+
+  def industry_options
+    InstrumentInfo.where.not(industry: '').group(:industry).order(count: :desc).count.map { |industry, count| ["#{industry_short_name industry, length: 100} (#{count})", industry] }
+  end
+
+  def sector_options
+    InstrumentInfo.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
   end
 end
 

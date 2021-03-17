@@ -1,19 +1,26 @@
 main.container-fluid.mb-4
   h1.display-3 Instruments
 
-  form#list-config(action=instruments_path class='my-2 row align-items-baseline')
-    div
-      label
-        | Set:
-        select(name="set" id="set-select" class="ms-2")
-          = options_from_collection_for_select @sets.sort_by(&:name), 'key', 'name', @set&.key
-      br
-      label
-        => check_box_tag :fundamentals, '1', params[:fundamentals] == '1'
-        | Show fundamentals
-
-  p
-    | Today: #{Current.today}, yesterday: #{Current.yesterday}
+  form#list-config(action=instruments_path class='my-2')
+    .row.mb-1
+      .col-sm-1= label_tag :set, 'Set:', class: 'col-form-label'
+      .col-sm-5= select_tag :set, options_from_collection_for_select(@sets.sort_by(&:name), 'key', 'name', @set&.key), class: "form-select", include_blank: true
+    .row.mb-1
+      .col-sm-1= label_tag :industry, 'Industry:', class: 'col-form-label'
+      .col-sm-5= select_tag :industry, options_for_select(industry_options, params[:industry]), class: "form-select", include_blank: true
+    .row.mb-1
+      .col-sm-1= label_tag :sector, 'Sector:', class: 'col-form-label'
+      .col-sm-5= select_tag :sector, options_for_select(sector_options, params[:sector]), class: "form-select", include_blank: true
+    .row.mb-3
+      .col-sm-1
+      .col-sm-5
+        .form-check
+          = check_box_tag :fundamentals, '1', params[:fundamentals] == '1', class: 'form-check-input'
+          = label_tag :fundamentals, 'Show fundamentals', class: 'form-check-label'
+    .row.mb-3
+      .col-sm-1
+      .col-sm-5
+        p Today: #{Current.today}, yesterday: #{Current.yesterday}
 
   = paginate @instruments, window: 20
 

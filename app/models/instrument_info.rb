@@ -50,3 +50,5 @@ __END__
 Instrument.premium.each &:create_info
 Instrument.get('AAPL').info.refresh
 InstrumentInfo.refresh
+InstrumentInfo.group(:industry).order(:count).count
+InstrumentInfo.pluck(:industry)

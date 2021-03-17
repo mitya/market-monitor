@@ -28,8 +28,7 @@
 + load old reference candles for premium tickers from IEX
 + load current candles for premium tickers from IEX
 + pagination
-
-- filters by industry / sector
++ filters by industry / sector
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
