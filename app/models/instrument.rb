@@ -6,11 +6,12 @@ class Instrument < ApplicationRecord
   has_one :price, class_name: 'InstrumentPrice', foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :info, class_name: 'InstrumentInfo',   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
-  validates_presence_of :isin, :ticker, :name
+  validates_presence_of :ticker, :name
 
   scope :tinkoff, -> { where "'tinkoff' = any(flags)" }
+  scope :premium, -> { where "'premium' = any(flags)" }
   scope :spb, -> { where "'spb' = any(flags)" }
-  scope :iex, -> { joins :info }
+  scope :iex, -> { where "'iex' = any(flags)" }
   scope :usd, -> { where currency: 'USD' }
   scope :abc, -> { order :ticker }
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.unprefixed_symbols if key }

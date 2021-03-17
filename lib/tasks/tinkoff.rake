@@ -11,7 +11,7 @@ namespace :tinkoff do
     end
   end
 
-  desc "Loads all day candlkes since 2019 for the 'tickers' specified"
+  desc "Loads all day candles since 2019 for the 'tickers' specified"
   task 'candles:day:all' => :environment do
     tickers = ENV['tickers'].to_s.split(',')
     Instrument.tinkoff.where(ticker: tickers).abc.each do |inst|
@@ -65,28 +65,46 @@ namespace :tinkoff do
   end
 
   task 'premium:filter' => :environment do
-    tickers = File.read("db/data/tinkoff-premium.txt").split
-    tickers = tickers.map &:upcase
+    tickers = File.read("db/data/tinkoff-premium.txt").split.map &:upcase
     tickers = tickers.reject { |t| Instrument.tinkoff.exists? ticker: t }
     puts tickers.sort.join(' ')
   end
+
+  task 'premium:import' => :environment do
+    iex_items = JSON.parse File.read("db/data/iex-symbols-#{Current.date.to_s :number}.json"), object_class: OpenStruct
+    tickers = File.read("db/data/tinkoff-premium.txt").split.map &:upcase
+    tickers.each do |ticker|
+      next if Instrument.exists?(ticker: ticker)
+      iex_item = iex_items.find { |item| item.symbol == ticker }
+      next puts "Skip #{ticker}" unless iex_item
+      puts "Create #{ticker}"
+      Instrument.create!(
+        ticker:   ticker,
+        name:     iex_item.name,
+        currency: iex_item.currency,
+        figi:     iex_item.figi,
+        exchange: IexConnector::ExchangeMapping[iex_item.exchange],
+        flags:    %w[premium iex],
+      )
+    end
+  end
+
+  task 'update' => %w[candles:day prices]
 end
 
 
 __END__
+rake tinkoff:logos:download
+rake tinkoff:premium:filter
+rake tinkoff:premium:import
 rake tinkoff:candles:import dir=db/tinkoff-day-2021-upto-0312
 rake tinkoff:candles:download:range
-
-rake tinkoff:logos:download
-
 rake tinkoff:candles:download:ongoing set=main
 rake tinkoff:candles:import:ongoing
-
-rake tinkoff:instruments:sync # ok=1
 rake tinkoff:candles:day:all tickers=MTX@DE,FIXP,TGKDP
+rake tinkoff:instruments:sync # ok=1
 
-
-rake tinkoff:candles:day:latest
+rake tinkoff:candles:day
 rake tinkoff:prices:sync
 rake tinkoff:prices:sync set=main
-rake tinkoff:premium:filter
+rake tinkoff:update

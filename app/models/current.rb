@@ -22,20 +22,20 @@ class Current < ActiveSupport::CurrentAttributes
   class PriceCache
     def initialize(instruments)
       @instruments = instruments
-      @prices = InstrumentPrice.where(figi: instruments.map(&:isin))
-      @prices_by_isin = @prices.index_by &:figi
+      @prices = InstrumentPrice.where(ticker: instruments.map(&:ticker))
+      @prices_by_ticker = @prices.index_by &:ticker
     end
 
-    def for_instrument(instrument) = @prices_by_isin[instrument.isin]
+    def for_instrument(instrument) = @prices_by_ticker[instrument.ticker]
   end
 
   class DayCandleCache
-    attr :candles, :candles_by_isin
+    attr :candles, :candles_by_ticker
 
     def initialize(instruments)
       @instruments = instruments
-      @candles = Candle.day.where(isin: instruments.map(&:isin), date: SpecialDates.dates).to_a
-      @candles_by_isin = @candles.group_by &:isin
+      @candles = Candle.day.where(ticker: instruments.map(&:ticker), date: SpecialDates.dates).to_a
+      @candles_by_ticker = @candles.group_by &:ticker
     end
 
     def scope_to_instrument(instrument) = InstrumentScope.new(instrument, self)
@@ -48,7 +48,7 @@ class Current < ActiveSupport::CurrentAttributes
       end
 
       def find_date(date)
-        @cache.candles_by_isin[@instrument.isin]&.find { |candle| candle.date == date }
+        @cache.candles_by_ticker[@instrument.ticker]&.find { |candle| candle.date == date }
       end
 
       def find_date_before(date) = find_date(MarketCalendar.closest_workday date)

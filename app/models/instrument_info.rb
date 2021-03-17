@@ -37,6 +37,7 @@ class InstrumentInfo < ApplicationRecord
     def refresh
       abc.find_each do |info|
         next if info.stats.present?
+        puts "Update company & stats for #{info.ticker}"
         info.refresh
         sleep 0.33
       end
@@ -46,6 +47,6 @@ end
 
 __END__
 
-Instrument.abc.each &:create_info
+Instrument.premium.each &:create_info
 Instrument.get('AAPL').info.refresh
 InstrumentInfo.refresh

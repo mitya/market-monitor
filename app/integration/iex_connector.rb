@@ -14,6 +14,8 @@ class IexConnector
   def logo(symbol) = get("/stock/#{symbol}/logo")
   def company(symbol) = get("/stock/#{symbol}/company")
   def stats(symbol) = get("/stock/#{symbol}/stats")
+  def tops(*symbols) = get("/tops?symbols=#{symbols.join(',')}")
+  def symbols = get("/ref-data/symbols")
   def day_candle(symbol, date) = get("/stock/#{symbol}/chart/date/#{date.to_s :number}", params: { chartByDay: true })
 
   def import_day_candle(instrument, date)
@@ -46,6 +48,8 @@ class IexConnector
     response = RestClient.get "#{BASE}#{path}", params: { token: ENV['IEX_SECRET_KEY'] }.merge(params)
     JSON.parse response.body
   end
+
+  ExchangeMapping = { NYS: 'NYSE', NAS: 'NASDAQ' }.stringify_keys.tap { |hash| hash.default_proc = -> (h, k) { k } }
 end
 
 __END__
