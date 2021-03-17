@@ -38,8 +38,7 @@
 
 - load advanced stats (forward P/E) from IEX
 – load insider trades from IEX
-– load recommedation trends, estimates & price targets from IEX
-– load current prices in batches from IEX
+– load recommedations, estimates & price targets from IEX
 
 - all insider transactions list
 - ticker insider transactions list

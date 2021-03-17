@@ -83,8 +83,12 @@ namespace :iex do
     end
   end
 
-  task 'prices' => :env do
+  task 'prices:premium' => :env do
     InstrumentPrice.refresh_premium_from_iex
+  end
+
+  task 'prices:all' => :env do
+    InstrumentPrice.refresh_from_iex
   end
 
   task 'update' => %w[prices candles:days:previous]
@@ -101,6 +105,6 @@ rake iex:candles:days:1m
 
 rake iex:stats
 rake iex:candles:days:previous
-rake iex:prices
+rake iex:prices:all
 
 rake iex:update

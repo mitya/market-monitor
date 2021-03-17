@@ -16,6 +16,7 @@ curl -s "https://cloud.iexapis.com/stable/stock/aapl/peers?token=$IEX_SECRET_KEY
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/volume-by-venue?token=$IEX_SECRET_KEY" | jq
 curl -s 'https://cloud.iexapis.com/stable/stock/aapl/insider-transactions?token=sk_98bc3790c85c45feba2a92de43400934' | jq
 curl -s 'https://cloud.iexapis.com/stable/tops?symbols=aapl,fb,twtr&token=sk_98bc3790c85c45feba2a92de43400934' | jq
+curl -s 'https://cloud.iexapis.com/stable/tops?token=sk_98bc3790c85c45feba2a92de43400934'
 curl -s 'https://cloud.iexapis.com/stable/tops?token=sk_98bc3790c85c45feba2a92de43400934' > tmp/tops.json
 curl -s 'https://cloud.iexapis.com/stable/tops?token=sk_98bc3790c85c45feba2a92de43400934&format=csv' > tmp/tops.csv
 

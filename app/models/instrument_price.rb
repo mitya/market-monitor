@@ -17,8 +17,11 @@ class InstrumentPrice < ApplicationRecord
     end
 
     def refresh_from_iex(symbols = [])
-      IexConnector.tops(*symbols).each do |result|
+      prices = IexConnector.tops(*symbols)
+      # prices = JSON.parse File.read "tmp/iex-tops.json"
+      prices.each do |result|
         if instrument = Instrument[result['symbol']]
+          next unless instrument.usd?
           price = result['lastSalePrice']
           puts "Update price for #{instrument.ticker} to #{price}"
           instrument.price!.update! value: price if price != nil && price != 0

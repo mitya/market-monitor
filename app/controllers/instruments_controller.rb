@@ -8,7 +8,7 @@ class InstrumentsController < ApplicationController
     @set = InstrumentSet.new(params[:set]) if params[:set].present?
     @instruments = @set ? @set.instruments : Instrument.tinkoff
     @instruments = @instruments.abc.includes(:info)
-    @instruments = @instruments.page(params[:page]).per(100)
+    @instruments = @instruments.page(params[:page]).per(200)
     Current.preload_day_candles_for @instruments
     Current.preload_prices_for @instruments
   end
