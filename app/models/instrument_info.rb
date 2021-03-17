@@ -1,5 +1,5 @@
 class InstrumentInfo < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'ticker', primary_key: 'ticker'
+  belongs_to :instrument, foreign_key: 'ticker'
 
   scope :abc, -> { order :ticker }
 

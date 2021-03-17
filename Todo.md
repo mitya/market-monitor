@@ -23,24 +23,27 @@
 + colorize last, Topen, Yopen
 + sync available stocks with Tinkoff
 + load IEX ohlc data which is absent of Tinkoff
++ use tickers as foreign keys for candles & prices
 
-- disable stocks without any recent data
+- add Tinkoff premium tickers with ticker info from IEX
+- load old reference candles for premium tickers from IEX
+- load current candles for premium tickers from IEX
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
-- add Tinkoff premium tickers with data from IEX
-
 - load advanced stats (forward P/E) from IEX
 – load insider trades from IEX
 – load recommedation trends, estimates & price targets from IEX
 – load current prices in batches from IEX
 
-- insider transactions list
-- company extended info list
+- all insider transactions list
+- ticker insider transactions list
+- ticker recommendations list
 
+- company extended info list
 - extract lists to files
 - extract special dates
 - fixed width digits
@@ -50,7 +53,7 @@
 - tinkoff ticker checking
 - fix table header
 - flags
-
+- disable stocks without any recent data
 – data aggregation into a table
 - recurring current price loading
 - recurring day candle loading

@@ -63,7 +63,15 @@ namespace :tinkoff do
       sleep 1
     end
   end
+
+  task 'premium:filter' => :environment do
+    tickers = File.read("db/data/tinkoff-premium.txt").split
+    tickers = tickers.map &:upcase
+    tickers = tickers.reject { |t| Instrument.tinkoff.exists? ticker: t }
+    puts tickers.sort.join(' ')
+  end
 end
+
 
 __END__
 rake tinkoff:candles:import dir=db/tinkoff-day-2021-upto-0312
@@ -81,3 +89,4 @@ rake tinkoff:candles:day:all tickers=MTX@DE,FIXP,TGKDP
 rake tinkoff:candles:day:latest
 rake tinkoff:prices:sync
 rake tinkoff:prices:sync set=main
+rake tinkoff:premium:filter

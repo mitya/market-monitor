@@ -1,14 +1,15 @@
 class Instrument < ApplicationRecord
   self.inheritance_column = nil
 
-  has_many :candles, foreign_key: 'isin'
-  has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'isin'
-  has_one :price, class_name: 'InstrumentPrice', foreign_key: 'figi', inverse_of: :instrument
-  has_one :info, class_name: 'InstrumentInfo', foreign_key: 'ticker', primary_key: 'ticker', inverse_of: :instrument
+  has_many :candles, foreign_key: 'ticker', dependent: :delete_all
+  has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'ticker'
+  has_one :price, class_name: 'InstrumentPrice', foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :info, class_name: 'InstrumentInfo',   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
   validates_presence_of :isin, :ticker, :name
 
   scope :tinkoff, -> { where "'tinkoff' = any(flags)" }
+  scope :spb, -> { where "'spb' = any(flags)" }
   scope :iex, -> { joins :info }
   scope :usd, -> { where currency: 'USD' }
   scope :abc, -> { order :ticker }

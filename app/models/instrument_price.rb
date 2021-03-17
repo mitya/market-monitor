@@ -1,6 +1,6 @@
 class InstrumentPrice < ApplicationRecord
   self.table_name = 'prices'
-  belongs_to :instrument, foreign_key: 'figi'
+  belongs_to :instrument, foreign_key: 'ticker'
 
   before_create { self.ticker ||= instrument.ticker }
 

@@ -1,5 +1,5 @@
 class Candle < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'isin'
+  belongs_to :instrument, foreign_key: 'ticker'
 
   scope :ongoing, -> { where ongoing: true }
   scope :final, -> { where ongoing: false }
