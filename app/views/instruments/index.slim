@@ -17,6 +17,9 @@ main.container-fluid.mb-4
         .form-check
           = check_box_tag :fundamentals, '1', params[:fundamentals] == '1', class: 'form-check-input'
           = label_tag :fundamentals, 'Show fundamentals', class: 'form-check-label'
+        .form-check
+          = check_box_tag :price_targets, '1', params[:price_targets] == '1', class: 'form-check-input'
+          = label_tag :price_targets, 'Show price targets', class: 'form-check-label'
     .row.mb-3
       .col-sm-1
       .col-sm-5
@@ -35,6 +38,10 @@ main.container-fluid.mb-4
           th.money-cell P/E
           th.money-cell ß
           th.money-cell Yield
+        - if params[:price_targets]
+          th.money-cell High
+          th.money-cell Average
+          th.money-cell Low
         th.money-cell Last
         th.money-cell Topen
         th.money-cell Yclose ﹪
@@ -62,6 +69,11 @@ main.container-fluid.mb-4
             td.money-cell= number_with_precision inst.info&.pe, precision: 0
             td.money-cell= number_with_precision inst.info&.beta, precision: 1
             td.money-cell= number_to_percentage inst.info&.dividend_yield_percent, precision: 1
+
+          - if params[:price_targets]
+            td.money-cell= colorize_value inst.price_target&.high, inst.last_or_open, unit: inst.price_target&.currency
+            td.money-cell= colorize_value inst.price_target&.average, inst.last_or_open, unit: inst.price_target&.currency
+            td.money-cell= colorize_value inst.price_target&.low, inst.last_or_open, unit: inst.price_target&.currency
 
           td.money-cell= colorize_value inst.last || inst.today_close, inst.today_open, unit: inst.currency
           td.money-cell= colorize_value inst.today_open, inst.yesterday_close, unit: inst.currency

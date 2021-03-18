@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_18_150238) do
+ActiveRecord::Schema.define(version: 2021_03_18_220814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,20 @@ ActiveRecord::Schema.define(version: 2021_03_18_150238) do
     t.string "exchange"
     t.index ["figi"], name: "index_instruments_on_figi", unique: true
     t.index ["isin"], name: "index_instruments_on_isin", unique: true
+  end
+
+  create_table "price_targets", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.date "date"
+    t.decimal "high", precision: 20, scale: 4
+    t.decimal "low", precision: 20, scale: 4
+    t.decimal "average", precision: 20, scale: 4
+    t.string "currency"
+    t.integer "analysts_count"
+    t.string "source"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ticker", "date"], name: "index_price_targets_on_ticker_and_date", unique: true
   end
 
   create_table "prices", primary_key: "ticker", id: :string, force: :cascade do |t|

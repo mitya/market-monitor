@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  high: MyString
+  low: MyString
+  average: MyString
+  date: MyString
+  currency: MyString
+  analysts_number: MyString
+
+two:
+  ticker: MyString
+  high: MyString
+  low: MyString
+  average: MyString
+  date: MyString
+  currency: MyString
+  analysts_number: MyString

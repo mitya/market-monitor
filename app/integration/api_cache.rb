@@ -1,6 +1,10 @@
 class ApiCache
   include StaticService
 
+  def exist?(pathname)
+    Pathname(pathname).exist?
+  end
+
   def get(pathname, skip_if: false, ttl: nil)
     return yield if skip_if
 

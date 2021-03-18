@@ -1,4 +1,4 @@
-main.container-fluid.mb-4
+main.container-fluid
   h1.display-3 Insider Transactions
 
   form#list-config(action=insider_transactions_path class='my-2')
@@ -61,7 +61,7 @@ main.container-fluid.mb-4
           td= truncate tx.insider_title
           td.text-end(class=red_green_class(tx.buy?))= number_to_currency tx.cost, unit: currency_span(tx.instrument.currency), precision: 0
           td.text-end(class=red_green_class(tx.buy?))= number_with_delimiter tx.shares
-          td.text-end(class=red_green_class(tx.buy?))= number_with_delimiter tx.shares_final
+          td.text-end= number_with_delimiter tx.shares_final
           td.text-end(class=red_green_class(tx.buy?))= number_to_percentage tx.shares_percent, precision: 3
           td= tx.data['directIndirect']
           td(title=sec_tx_code_desc(tx.sec_code))= sec_tx_code_name tx.sec_code

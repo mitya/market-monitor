@@ -29,21 +29,25 @@
 + load current candles for premium tickers from IEX
 + pagination
 + filters by industry / sector
++ load insider trades from IEX
++ all insider transactions list
++ ticker insider transactions list
++ load price targets from IEX
+
+– load recommedations from IEX
+- load advanced stats (forward P/E) from IEX
+- ticker recommendations list
+- ticker price targets list
+- ticker extended info list
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
-- load advanced stats (forward P/E) from IEX
-– load insider trades from IEX
-– load recommedations, estimates & price targets from IEX
-
-- all insider transactions list
-- ticker insider transactions list
-- ticker recommendations list
-
-- company extended info list
+- replace chart API with previous which is cheaper
+- add source & last_at to prices
+- try to use sectors from tops
 - extract lists to files
 - extract special dates
 - fixed width digits

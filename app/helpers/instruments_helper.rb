@@ -19,7 +19,7 @@ module InstrumentsHelper
   end
 
   def currency_sign(currency_code)
-    CurrencySigns[currency_code.to_s.to_sym]
+    CurrencySigns[currency_code.to_s.to_sym] || currency_code
   end
 
   def currency_span(currency_code, suffix: nil)
@@ -30,7 +30,7 @@ module InstrumentsHelper
     is_green ? 'is-green' : 'is-red'
   end
 
-  CurrencySigns = { USD: '$', RUB: '₽', EUR: '€' }
+  CurrencySigns = { USD: '$', RUB: '₽', EUR: '€', CNY: '¥' }
 
   IndustryShortNames = {
     "All Other Telecommunications": "Telecommunications",

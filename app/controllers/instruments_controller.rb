@@ -8,7 +8,7 @@ class InstrumentsController < ApplicationController
     @set = InstrumentSet.new(params[:set]) if params[:set].present?
 
     @instruments = @set ? @set.instruments : Instrument.tinkoff
-    @instruments = @instruments.abc.includes(:info)
+    @instruments = @instruments.abc.includes(:info, :price_target)
     @instruments = @instruments.where(info: { industry: params[:industry] }) if params[:industry].present?
     @instruments = @instruments.where(info: { sector: params[:sector] }) if params[:sector].present?
     @instruments = @instruments.page(params[:page]).per(200)
