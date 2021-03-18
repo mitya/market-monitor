@@ -11,6 +11,8 @@ class IexConnector
   def options(symbol)                 = get("/stock/#{symbol}/options")
   def insider_transactions(symbol)    = get("/stock/#{symbol}/insider-transactions")
   def recommedations(symbol)          = get("/stock/#{symbol}/recommendation-trends")
+  def price_target(symbol)            = get("/stock/#{symbol}/price-target")
+  def estimates(symbol)               = get("/stock/#{symbol}/estimates", period: 'annual')
   def logo(symbol)                    = get("/stock/#{symbol}/logo")
   def company(symbol)                 = get("/stock/#{symbol}/company")
   def stats(symbol)                   = get("/stock/#{symbol}/stats")

@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_13_171910) do
+ActiveRecord::Schema.define(version: 2021_03_18_150238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "candles", force: :cascade do |t|
-    t.string "isin"
     t.string "ticker"
     t.string "interval", null: false
     t.datetime "time", null: false
@@ -29,10 +28,28 @@ ActiveRecord::Schema.define(version: 2021_03_13_171910) do
     t.datetime "created_at", default: -> { "CURRENT_DATE" }, null: false
     t.date "date"
     t.boolean "ongoing", default: false
-    t.index ["isin", "interval", "date"], name: "index_candles_on_isin_and_interval_and_date", unique: true
-    t.index ["isin", "interval", "time"], name: "index_candles_on_isin_and_interval_and_time", unique: true
-    t.index ["isin"], name: "index_candles_on_isin"
+    t.datetime "updated_at"
+    t.index ["ticker", "interval", "date"], name: "index_candles_on_ticker_interval_date"
     t.index ["ticker"], name: "index_candles_on_ticker"
+  end
+
+  create_table "insider_transactions", force: :cascade do |t|
+    t.string "ticker"
+    t.string "insider_name"
+    t.string "insider_title"
+    t.date "date"
+    t.date "filling_date"
+    t.string "kind"
+    t.integer "shares"
+    t.integer "shares_final"
+    t.decimal "price", precision: 20, scale: 4
+    t.decimal "value", precision: 20, scale: 4
+    t.string "source"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["date"], name: "index_insider_transactions_on_date"
+    t.index ["ticker"], name: "index_insider_transactions_on_ticker"
   end
 
   create_table "instrument_infos", primary_key: "ticker", id: :string, force: :cascade do |t|
@@ -55,9 +72,9 @@ ActiveRecord::Schema.define(version: 2021_03_13_171910) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "instruments", primary_key: "isin", id: :string, force: :cascade do |t|
+  create_table "instruments", primary_key: "ticker", id: :string, force: :cascade do |t|
+    t.string "isin"
     t.string "figi"
-    t.string "ticker", null: false
     t.string "currency"
     t.string "name", null: false
     t.string "type", default: "Stock", null: false
@@ -67,16 +84,15 @@ ActiveRecord::Schema.define(version: 2021_03_13_171910) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "has_logo"
+    t.string "exchange"
     t.index ["figi"], name: "index_instruments_on_figi", unique: true
-    t.index ["ticker"], name: "index_instruments_on_ticker"
+    t.index ["isin"], name: "index_instruments_on_isin", unique: true
   end
 
-  create_table "prices", primary_key: "figi", id: :string, force: :cascade do |t|
-    t.string "ticker", null: false
+  create_table "prices", primary_key: "ticker", id: :string, force: :cascade do |t|
     t.decimal "value", precision: 20, scale: 4
     t.datetime "updated_at"
     t.index ["ticker"], name: "index_prices_on_ticker", unique: true
   end
 
-  add_foreign_key "candles", "instruments", column: "isin", primary_key: "isin"
 end

@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  name: MyString
+  title: MyString
+  date: MyString
+  shares: 1
+  shares_final: 1
+  shares_change_pct: 1
+  price: 9.99
+  value: 9.99
+  source: MyString
+  kind: MyString
+  data: 
+
+two:
+  ticker: MyString
+  name: MyString
+  title: MyString
+  date: MyString
+  shares: 1
+  shares_final: 1
+  shares_change_pct: 1
+  price: 9.99
+  value: 9.99
+  source: MyString
+  kind: MyString
+  data: 
