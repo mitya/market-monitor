@@ -1,0 +1,71 @@
+main.container-fluid.mb-4
+  h1.display-3 Insider Transactions
+
+  form#list-config(action=insider_transactions_path class='my-2')
+    .row.mb-1
+      .col-sm-1= label_tag :ticker, 'Ticker:', class: 'col-form-label'
+      .col-sm-5= text_field_tag :ticker, @ticker, class: "form-control"
+    - if @ticker
+      .row.mb-1
+        .col-sm-1= label_tag :insider, 'Insider:', class: 'col-form-label'
+        .col-sm-5= select_tag :insider, options_for_select(insider_options_for(@ticker), params[:insider]), class: "form-select", include_blank: 'All'
+    .row.mb-1
+      .col-sm-1
+      .col-sm-5
+        .form-check.form-switch
+          = check_box_tag :market_only, '1', params[:market_only] == '1', class: 'form-check-input'
+          = label_tag :market_only, 'Market Only', class: 'form-check-label'
+    .row.mb-3
+      legend class="col-form-label col-sm-1 pt-0"
+      .col-sm-5
+        .form-check.form-check-inline
+          = radio_button_tag :direction, '', params[:direction].blank?, class: 'form-check-input'
+          = label_tag :direction_, 'All', class: 'form-check-label'
+        .form-check.form-check-inline
+          = radio_button_tag :direction, 'buy', params[:direction] == 'buy', class: 'form-check-input'
+          = label_tag :direction_buy, 'Buys', class: 'form-check-label'
+        .form-check.form-check-inline
+          = radio_button_tag :direction, 'sell', params[:direction] == 'sell', class: 'form-check-input'
+          = label_tag :direction_sell, 'Sells', class: 'form-check-label'
+
+  = paginate @transactions, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th
+        th Ticker
+        th Company
+        th Date
+        th
+        th.text-end Price
+        th Insider Name
+        th Insider Position
+        th.text-end Cost
+        th.text-end Shares #
+        th.text-end Shares Final
+        th.text-end Change
+        th
+        th Code
+        th
+    tbody
+      - @transactions.each do |tx|
+        tr
+          td= image_tag "#{tx.instrument.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if tx.instrument.has_logo?
+          td= tx.instrument.ticker
+          td= tx.instrument.name
+          td= tx.date
+          td.text-end= "#{time_ago_in_words tx.date} ago +#{tx.date_gap}"
+          td.text-end(class=red_green_class(tx.buy?))= number_to_currency tx.price, unit: currency_span(tx.instrument.currency)
+          td= truncate tx.insider_name.to_s.titleize
+          td= truncate tx.insider_title
+          td.text-end(class=red_green_class(tx.buy?))= number_to_currency tx.cost, unit: currency_span(tx.instrument.currency), precision: 0
+          td.text-end(class=red_green_class(tx.buy?))= number_with_delimiter tx.shares
+          td.text-end(class=red_green_class(tx.buy?))= number_with_delimiter tx.shares_final
+          td.text-end(class=red_green_class(tx.buy?))= number_to_percentage tx.shares_percent, precision: 3
+          td= tx.data['directIndirect']
+          td(title=sec_tx_code_desc(tx.sec_code))= sec_tx_code_name tx.sec_code
+          td= number_to_currency tx.data['conversionOrExercisePrice']
+
+  = paginate @transactions, window: 20
+  .text-center= page_entries_info @transactions

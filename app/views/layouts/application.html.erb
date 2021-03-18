@@ -11,6 +11,11 @@
   </head>
 
   <body>
+    <nav class="text-center">
+      <%= link_to 'Instruments', instruments_path %>
+      |
+      <%= link_to 'Insider Trades', insider_transactions_path %>
+    </nav>
     <%= yield %>
   </body>
 </html>

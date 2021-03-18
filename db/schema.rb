@@ -43,7 +43,8 @@ ActiveRecord::Schema.define(version: 2021_03_18_150238) do
     t.integer "shares"
     t.integer "shares_final"
     t.decimal "price", precision: 20, scale: 4
-    t.decimal "value", precision: 20, scale: 4
+    t.decimal "cost", precision: 20, scale: 4
+    t.string "sec_code"
     t.string "source"
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false

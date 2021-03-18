@@ -23,7 +23,11 @@ module InstrumentsHelper
   end
 
   def currency_span(currency_code, suffix: nil)
-    tag.span [currency_sign(currency_code), suffix].join(''), class: 'currency'
+    tag.span [currency_sign(currency_code), suffix].join(''), class: 'currency' if currency_code.present?
+  end
+
+  def red_green_class(is_green)
+    is_green ? 'is-green' : 'is-red'
   end
 
   CurrencySigns = { USD: '$', RUB: '₽', EUR: '€' }
@@ -62,6 +66,47 @@ module InstrumentsHelper
 
   def sector_options
     InstrumentInfo.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
+  end
+
+  def insider_options_for(ticker)
+    InsiderTransaction.for_ticker(ticker).pluck(:insider_name).uniq.sort.map { |name| [name.titleize, name] }
+  end
+
+  Sec4TransactionCodesDescriptions = {
+    'P' => "Open market or private purchase of securities",
+    'S' => "Open market or private sale of securities",
+    'V' => "Transaction voluntarily reported earlier than required",
+    'A' => "Grant, award, or other acquisition",
+    'D' => "Sale (or disposition) back to the issuer of the securities",
+    'F' => "Payment of exercise price or tax liability by delivering or withholding securities",
+    'I' => "Discretionary transaction, which is an order to the broker to execute the transaction at the best possible price",
+    'M' => "Exercise or conversion of derivative security",
+    'C' => "Conversion of derivative security (usually options)",
+    'E' => "Expiration of short derivative position (usually options)",
+    'H' => "Expiration (or cancellation) of long derivative position with value received (usually options)",
+    'O' => "Exercise of out-of-the-money derivative securities (usually options)",
+    'X' => "Exercise of in-the-money or at-the-money derivatives securities (usually options)",
+    'G' => "Bona fide gift form of any clauses",
+    'L' => "Small acquisition",
+    'W' => "Acquisition or disposition by will or laws of descent and distribution",
+    'Z' => "Deposit into or withdrawal from voting trust",
+    'J' => "Other acquisition or disposition (transaction described in footnotes)",
+    'K' => "Transaction in equity swap or similar instrument",
+    'U' => "Disposition due to a tender of shares in a change of control transaction",
+  }
+
+  Sec4TransactionCodesNames = {
+    'P' => "Purchase",
+    'S' => "Sale",
+    'F' => "Exercise",
+  }
+
+  def sec_tx_code_desc(sec_code)
+    Sec4TransactionCodesDescriptions[sec_code]
+  end
+
+  def sec_tx_code_name(sec_code)
+    Sec4TransactionCodesNames[sec_code] || sec_code
   end
 end
 

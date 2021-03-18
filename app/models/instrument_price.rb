@@ -17,8 +17,9 @@ class InstrumentPrice < ApplicationRecord
     end
 
     def refresh_from_iex(symbols = [])
-      prices = IexConnector.tops(*symbols)
-      # prices = JSON.parse File.read "tmp/iex-tops.json"
+      prices = ApiCache.get "cache/iex/tops.json", skip_if: symbols.any?, ttl: 15.minutes do
+        IexConnector.tops(*symbols)
+      end
       prices.each do |result|
         if instrument = Instrument[result['symbol']]
           next unless instrument.usd?

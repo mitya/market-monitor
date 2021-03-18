@@ -92,6 +92,15 @@ namespace :iex do
   end
 
   task 'update' => %w[prices candles:days:previous]
+
+  task 'insider-transactions' => :env do
+    set = ENV['set'] || 'main'
+    Instrument.usd.iex.in_set(set).abc.each do |inst|
+      next if inst.ticker < 'MAC'
+      InsiderTransaction.import_iex_data_from_remote(inst)
+      sleep 0.5
+    end
+  end
 end
 
 
@@ -108,3 +117,4 @@ rake iex:candles:days:previous
 rake iex:prices:all
 
 rake iex:update
+rake iex:insider-transactions set=small

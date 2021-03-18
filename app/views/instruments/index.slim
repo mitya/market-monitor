@@ -48,6 +48,7 @@ main.container-fluid.mb-4
         th.money-cell Feb19 ﹪
         th.money-cell 2020 ﹪
         th.money-cell 2019 ﹪
+        th
     tbody
       - @instruments.each do |inst|
         - inst.current_price_selector = :last_or_open
@@ -75,6 +76,7 @@ main.container-fluid.mb-4
           td.money-cell.muted-cell= colorize_change inst.rel_diff(:feb19_low),      format: :percentage, unit: inst.currency, price: inst.feb19_low
           td.money-cell           = colorize_change inst.rel_diff(:y2020_open),     format: :percentage, unit: inst.currency, price: inst.y2020_open
           td.money-cell.muted-cell= colorize_change inst.rel_diff(:y2019_open),     format: :percentage, unit: inst.currency, price: inst.y2019_open
+          td= link_to 'Tx', insider_transactions_path(ticker: inst.ticker), target: '_blank'
 
   = paginate @instruments, window: 20
   .text-center= page_entries_info @instruments

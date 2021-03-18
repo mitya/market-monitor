@@ -14,7 +14,7 @@ class Instrument < ApplicationRecord
   scope :iex, -> { where "'iex' = any(flags)" }
   scope :usd, -> { where currency: 'USD' }
   scope :abc, -> { order :ticker }
-  scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.unprefixed_symbols if key }
+  scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.unprefixed_symbols if key && key.to_s != 'all' }
   scope :main, -> { in_set :main }
   scope :small, -> { in_set :small }
 

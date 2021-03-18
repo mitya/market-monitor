@@ -21,9 +21,17 @@
     iconv -f CP1251 -t UTF8 db/data/spbex.csv > db/data/spbex-utf.csv
 
 
-# Regular commands
+# Run once in a while
 
-rake tinkoff:prices
-rake tinkoff:prices set=main
-rake tinkoff:candles:day
 rake iex:stats
+
+# Run daily
+
+rake iex:insider-transactions set=main
+rake iex:candles:days:previous
+rake tinkoff:update
+
+# Run hourly
+
+curl -s 'https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY' > cache/iex/tops.json
+rake iex:prices:all

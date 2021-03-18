@@ -1,0 +1,2 @@
+module InsiderTransactionsHelper
+end

@@ -6,7 +6,8 @@ class CreateInsiderTransactions < ActiveRecord::Migration[6.1]
       t.date :date, :filling_date
       t.string :kind
       t.integer :shares, :shares_final
-      t.decimal :price, :value, precision: 20, scale: 4
+      t.decimal :price, :cost, precision: 20, scale: 4
+      t.string :sec_code
       t.string :source
       t.jsonb :data
       t.timestamps
