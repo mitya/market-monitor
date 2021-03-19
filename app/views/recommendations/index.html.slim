@@ -40,11 +40,11 @@ main.container-fluid
           td= instrument_logo instrument
           td= instrument.ticker
           td= instrument.name
-          td.money-cell= number_to_currency instrument.last || instrument.today_close, unit: currency_sign(instrument.currency)
+          td.money-cell= price_span instrument.last || instrument.today_close, unit: instrument.currency
           td.money-cell= colorize_value price_target&.low,     instrument.last_or_open, unit: price_target&.currency
           td.money-cell= colorize_value price_target&.average, instrument.last_or_open, unit: price_target&.currency
           td.money-cell= colorize_value price_target&.high,    instrument.last_or_open, unit: price_target&.currency
-          td
+          td.ps-3
             .progress
               .progress-bar class="bg-success"     style="width: #{rec.buy_percentage}%"         = recommedation_significant_rating rec, :buy
               .progress-bar class="bg-outweight"   style="width: #{rec.overweight_percentage}%"  = recommedation_significant_rating rec, :overweight

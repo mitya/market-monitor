@@ -67,6 +67,7 @@ class Instrument < ApplicationRecord
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
 
   def iex? = info.present?
+  def premium? = flags.include?('premium')
 
   class << self
     def get(ticker = nil, figi: nil)

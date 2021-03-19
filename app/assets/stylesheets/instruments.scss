@@ -3,6 +3,8 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 @import "bootstrap/scss/bootstrap";
+@import "@fortawesome/fontawesome-free/css/all.css";
+
 
 .money-cell { text-align: right; }
 .percent-cell { text-align: right; }
@@ -10,6 +12,12 @@
 
 .changebox-green, .is-green { color: green; }
 .changebox-red, .is-red { color: red; }
+
+
+.money-amount, .changebox, .badge-fixed {
+  font-family: helvetica, var(--bs-font-sans-serif);
+}
+
 .muted-cell .changebox-green { color: rgba(green, 0.5); }
 .muted-cell .changebox-red { color: rgba(red, 0.5); }
 

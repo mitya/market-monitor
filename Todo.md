@@ -35,6 +35,13 @@
 + load price targets from IEX
 + load recommedations from IEX
 + ticker recommendations & price targets list
++ mark premium tickers in the list
+
+- use radios for currencies & sets
+- show price targets in percents
+- try to use sectors from tops
+- add sector badge to the list
+- filter by premium tickers
 
 - ticker extended info list
 - load advanced stats (forward P/E) for selected tickers from IEX
@@ -45,9 +52,9 @@
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
+- add last insider transaction to the list
 - replace chart API with previous which is cheaper
 - add source & last_at to prices
-- try to use sectors from tops
 - extract lists to files
 - extract special dates
 - fixed width digits
