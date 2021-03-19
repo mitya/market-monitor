@@ -2,15 +2,9 @@ main.container-fluid.mb-4
   h1.display-3 Instruments
 
   form#list-config(action=instruments_path class='my-2')
-    .row.mb-1
-      .col-sm-1= label_tag :set, 'Set:', class: 'col-form-label'
-      .col-sm-5= select_tag :set, options_from_collection_for_select(@sets.sort_by(&:name), 'key', 'name', @set&.key), class: "form-select", include_blank: true
-    .row.mb-1
-      .col-sm-1= label_tag :industry, 'Industry:', class: 'col-form-label'
-      .col-sm-5= select_tag :industry, options_for_select(industry_options, params[:industry]), class: "form-select", include_blank: true
-    .row.mb-1
-      .col-sm-1= label_tag :sector, 'Sector:', class: 'col-form-label'
-      .col-sm-5= select_tag :sector, options_for_select(sector_options, params[:sector]), class: "form-select", include_blank: true
+    = render 'filter_by_set'
+    = render 'filter_by_sector'
+    = render 'filter_by_currency'
     .row.mb-3
       .col-sm-1
       .col-sm-5
@@ -25,6 +19,7 @@ main.container-fluid.mb-4
       .col-sm-5
         p Today: #{Current.today}, yesterday: #{Current.yesterday}
 
+  = page_entries_block @instruments
   = paginate @instruments, window: 20
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table
@@ -39,9 +34,9 @@ main.container-fluid.mb-4
           th.money-cell ß
           th.money-cell Yield
         - if params[:price_targets]
-          th.money-cell High
-          th.money-cell Average
           th.money-cell Low
+          th.money-cell Average
+          th.money-cell High
         th.money-cell Last
         th.money-cell Topen
         th.money-cell Yclose ﹪
@@ -71,9 +66,9 @@ main.container-fluid.mb-4
             td.money-cell= number_to_percentage inst.info&.dividend_yield_percent, precision: 1
 
           - if params[:price_targets]
-            td.money-cell= colorize_value inst.price_target&.high, inst.last_or_open, unit: inst.price_target&.currency
+          td.money-cell= colorize_value inst.price_target&.low, inst.last_or_open, unit: inst.price_target&.currency
             td.money-cell= colorize_value inst.price_target&.average, inst.last_or_open, unit: inst.price_target&.currency
-            td.money-cell= colorize_value inst.price_target&.low, inst.last_or_open, unit: inst.price_target&.currency
+            td.money-cell= colorize_value inst.price_target&.high, inst.last_or_open, unit: inst.price_target&.currency
 
           td.money-cell= colorize_value inst.last || inst.today_close, inst.today_open, unit: inst.currency
           td.money-cell= colorize_value inst.today_open, inst.yesterday_close, unit: inst.currency
@@ -91,4 +86,3 @@ main.container-fluid.mb-4
           td= link_to 'Tx', insider_transactions_path(ticker: inst.ticker), target: '_blank'
 
   = paginate @instruments, window: 20
-  .text-center= page_entries_info @instruments

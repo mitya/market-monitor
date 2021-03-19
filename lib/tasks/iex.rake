@@ -131,5 +131,5 @@ rake iex:prices:all
 
 rake iex:update
 rake iex:insider_transactions set=small
-rake iex:price_targets set=small
-rake iex:recommendations set=small
+rake iex:price_targets set=all
+rake iex:recommendations set=all

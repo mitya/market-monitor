@@ -8,4 +8,10 @@ module RecommendationsHelper
     rating_ratio    = recommendation.send("#{rating}_ratio")
     rating_ratio > 0.1 ? rating_analysts : nil
   end
+
+  def recommendation_scale_badge(scale)
+    return if scale.blank?
+    color = scale < 2 ? 'bg-success' : scale < 3 ? 'bg-warning text-dark' : 'bg-danger'
+    tag.span "#{number_with_precision scale, precision: 1}", class: "badge #{color}"
+  end
 end

@@ -2,8 +2,10 @@ class RecommendationsController < ApplicationController
   def index
     @ticker = params[:ticker].upcase if params[:ticker].present?
     @recommendations = Recommendation.all
+    @recommendations = @recommendations.where ticker: InstrumentSet.get(params[:set])&.tickers if params[:set].present?
+    @recommendations = @recommendations.where instruments: { currency: params[:currency] } if params[:currency].present?
     @recommendations = @recommendations.for_ticker @ticker if @ticker
-    @recommendations = @recommendations.current if params[:current] == '1'
+    @recommendations = @recommendations.current unless params[:current] == '0'
     @recommendations = @recommendations.order(ticker: :asc, starts_on: :desc)
     @recommendations = @recommendations.includes(:instrument => :price_target)
     @recommendations = @recommendations.page(params[:page]).per(200)

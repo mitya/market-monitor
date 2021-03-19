@@ -8,7 +8,7 @@ class Recommendation < ApplicationRecord
 
   alias_attribute :date, :starts_on
 
-  def ratings = @ratings ||= [buy, overweight, hold, underweight, sell].map(&:to_i)
+  def ratings       = @ratings ||= [buy, overweight, hold, underweight, sell].map(&:to_i)
   def total_ratings = @total_ratings ||= ratings.sum
 
   %w[buy overweight hold underweight sell none].each do |rating|
@@ -68,7 +68,7 @@ class Recommendation < ApplicationRecord
           recommendations = all.where(ticker: ticker).order(starts_on: :desc)
           first, *others = recommendations
           first.update! current: true
-          others.each { |rec| rec.update! current: false }          
+          others.each { |rec| rec.update! current: false }
         end
       end
     end

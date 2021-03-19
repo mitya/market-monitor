@@ -34,10 +34,11 @@
 + ticker insider transactions list
 + load price targets from IEX
 + load recommedations from IEX
++ ticker recommendations & price targets list
 
-- ticker recommendations & price targets list
 - ticker extended info list
-- load advanced stats (forward P/E) from IEX
+- load advanced stats (forward P/E) for selected tickers from IEX
+- single update task
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
@@ -55,7 +56,7 @@
 - list filtering by tickers
 - tinkoff ticker checking
 - fix table header
-- flags
+- country flags
 - disable stocks without any recent data
 – data aggregation into a table
 - recurring current price loading

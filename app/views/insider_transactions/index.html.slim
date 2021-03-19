@@ -28,6 +28,7 @@ main.container-fluid
           = radio_button_tag :direction, 'sell', params[:direction] == 'sell', class: 'form-check-input'
           = label_tag :direction_sell, 'Sells', class: 'form-check-label'
 
+  = page_entries_block @transactions
   = paginate @transactions, window: 10
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table
@@ -68,4 +69,3 @@ main.container-fluid
           td= number_to_currency tx.data['conversionOrExercisePrice']
 
   = paginate @transactions, window: 20
-  .text-center= page_entries_info @transactions

@@ -10,14 +10,16 @@ class InstrumentSet
   def unprefixed_symbols = symbols.map { |sym| sym.split(':').last }
   def missing_symbols = unprefixed_symbols.reject { |sym| Instrument.exists?(ticker: sym) }
   def instruments = Instrument.where(ticker: unprefixed_symbols)
+  alias tickers unprefixed_symbols
 
   class << self
     def get(key)
+      return key if self === key
       all.find { |set| set.key == key.to_sym }
     end
 
     def all
-      @all ||= (Data.keys + [nil]).map { |key| new(key) }
+      @all ||= Data.keys.map { |key| new(key) }
     end
   end
 

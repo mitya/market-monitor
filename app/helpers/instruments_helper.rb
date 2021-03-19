@@ -30,7 +30,7 @@ module InstrumentsHelper
     is_green ? 'is-green' : 'is-red'
   end
 
-  CurrencySigns = { USD: '$', RUB: '₽', EUR: '€', CNY: '¥' }
+  CurrencySigns = { USD: '$', RUB: '₽', EUR: '€', CNY: '¥', GBP: '£' }
 
   IndustryShortNames = {
     "All Other Telecommunications": "Telecommunications",
@@ -66,6 +66,10 @@ module InstrumentsHelper
 
   def sector_options
     InstrumentInfo.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
+  end
+
+  def currency_options
+    CurrencySigns.map { |code, sign| ["#{code} #{sign}", code] }
   end
 
   def insider_options_for(ticker)
@@ -111,6 +115,13 @@ module InstrumentsHelper
 
   def instrument_logo(instrument)
     image_tag "#{instrument.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if instrument.has_logo?
+  end
+
+  def days_old_badge(date)
+    return if date.blank?
+    days_ago = (Date.current - date).to_i
+    color = days_ago > 60 ? 'bg-danger' : days_ago > 15 ? 'bg-warning text-dark' : 'bg-success'
+    tag.span "#{days_ago} d", class: "badge #{color}"
   end
 end
 
