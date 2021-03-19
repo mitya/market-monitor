@@ -35,12 +35,13 @@ curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chart
 * analyst recommendation — 1000 (premium)
 * 1         RT   /quote
 * 2         15m  /ohlc
+* 2         EOD  /previous
 * 10        15m  /chart
 * 1         EOD  /company
 * 1         EOD  /logo
 * 5         EOD  /stats
 * 50 / tx   EOD  /insider-transactions
-* 3000 + 5  EOD  /advanced-stats
-* 1000      EOD  /recommendation-trends
-* 10000     EOD  /estimates
 * 500       EOD  /price-target
+* 1000      EOD  /recommendation-trends
+* 3000 + 5  EOD  /advanced-stats
+* 10000     EOD  /estimates

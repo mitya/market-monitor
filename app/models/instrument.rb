@@ -4,6 +4,8 @@ class Instrument < ApplicationRecord
   has_many :candles, foreign_key: 'ticker', dependent: :delete_all
   has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'ticker'
   has_many :price_targets, foreign_key: 'ticker'
+  has_many :recommendations, foreign_key: 'ticker'
+  has_one :recommendation, -> { where current: true }, foreign_key: 'ticker'
   has_one :price_target, foreign_key: 'ticker'
   has_one :price, class_name: 'InstrumentPrice', foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :info, class_name: 'InstrumentInfo',   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
@@ -70,6 +72,10 @@ class Instrument < ApplicationRecord
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker
       figi ? find_by_figi(figi) : find_by_ticker(ticker.to_s.upcase)
+    end
+
+    def get!(ticker = nil, figi: nil)
+      get(ticker, figi: figi) || raise(ActiveRecord::RecordNotFound, "Instrument '#{ticker || figi}' does not exist!")
     end
 
     alias [] get

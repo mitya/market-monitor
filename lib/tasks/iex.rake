@@ -107,6 +107,13 @@ namespace :iex do
       PriceTarget.import_iex_data_from_remote inst, delay: 0.33
     end
   end
+
+  task 'recommendations' => :env do
+    set = ENV['set'] || 'main'
+    Instrument.usd.iex.in_set(set).abc.each do |inst|
+      Recommendation.import_iex_data_from_remote inst, delay: 0.33
+    end
+  end
 end
 
 
@@ -125,3 +132,4 @@ rake iex:prices:all
 rake iex:update
 rake iex:insider_transactions set=small
 rake iex:price_targets set=small
+rake iex:recommendations set=small

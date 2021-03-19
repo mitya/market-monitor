@@ -3,6 +3,7 @@ class CreatePriceTargets < ActiveRecord::Migration[6.1]
     create_table :price_targets do |t|
       t.string :ticker, null: false
       t.date :date
+      t.boolean :current
       t.decimal :high, :low, :average, precision: 20, scale: 4
       t.string :currency
       t.integer :analysts_count

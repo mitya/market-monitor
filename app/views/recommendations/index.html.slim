@@ -1,0 +1,58 @@
+main.container-fluid
+  h1.display-3 Recommendations
+
+  form#list-config(action=recommendations_path class='my-2')
+    .row.mb-1
+      .col-sm-1= label_tag :ticker, 'Ticker:', class: 'col-form-label'
+      .col-sm-5= text_field_tag :ticker, @ticker, class: "form-control"
+    .row.mb-3
+      legend class="col-form-label col-sm-1 pt-0"
+      .col-sm-5
+        .form-check
+          = check_box_tag :current, '1', params[:current] == '1', class: 'form-check-input'
+          = label_tag :current, 'Only latest', class: 'form-check-label'
+
+  = paginate @recommendations, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th
+        th Ticker
+        th Company
+        th.text-end Current
+        th.money-cell High
+        th.money-cell Average
+        th.money-cell Low
+        th.text-center Recommendation
+        th.text-center Scale
+        th.text-center Scale 1-5
+        th Date
+        th
+    tbody
+      - @recommendations.each do |rec|
+        - instrument = rec.instrument
+        - price_target = instrument.price_target
+        tr
+          td= instrument_logo instrument
+          td= instrument.ticker
+          td= instrument.name
+          td.money-cell= number_to_currency instrument.last || instrument.today_close, unit: currency_sign(instrument.currency)
+          td.money-cell= colorize_value price_target&.high,    instrument.last_or_open, unit: price_target&.currency
+          td.money-cell= colorize_value price_target&.average, instrument.last_or_open, unit: price_target&.currency
+          td.money-cell= colorize_value price_target&.low,     instrument.last_or_open, unit: price_target&.currency
+          td
+            .progress
+              .progress-bar class="bg-success"     style="width: #{rec.buy_percentage}%"         = recommedation_significant_rating rec, :buy
+              .progress-bar class="bg-outweight"   style="width: #{rec.overweight_percentage}%"  = recommedation_significant_rating rec, :overweight
+              .progress-bar class="bg-warning"     style="width: #{rec.hold_percentage}%"        = recommedation_significant_rating rec, :hold
+              .progress-bar class="bg-underweight" style="width: #{rec.underweight_percentage}%" = recommedation_significant_rating rec, :underweight
+              .progress-bar class="bg-danger"      style="width: #{rec.sell_percentage}%"        = recommedation_significant_rating rec, :sell
+          td.text-center: span.badge.bg-secondary= number_with_precision rec.scale, precision: 1
+          td.text-center: span.badge.bg-secondary= number_with_precision rec.scale15, precision: 1
+          td= rec.date
+          td.text-end= "#{time_ago_in_words rec.date} ago"
+
+
+  = paginate @recommendations, window: 20
+  .text-center= page_entries_info @recommendations

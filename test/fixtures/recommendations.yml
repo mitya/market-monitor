@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  buy: 1
+  overweight: MyString
+  hold: MyString
+  underweight: MyString
+  sell: MyString
+  none: MyString
+  scale: MyString
+  mark: MyString
+  start_on: MyString
+  end_on: MyString
+  action_date: MyString
+
+two:
+  ticker: MyString
+  buy: 1
+  overweight: MyString
+  hold: MyString
+  underweight: MyString
+  sell: MyString
+  none: MyString
+  scale: MyString
+  mark: MyString
+  start_on: MyString
+  end_on: MyString
+  action_date: MyString

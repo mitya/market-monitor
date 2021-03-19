@@ -4,7 +4,7 @@ module InstrumentsHelper
 
   def colorize_value(value, base, unit: '$', title: nil)
     green = value && base && value > base
-    value_str = number_to_currency value, unit: currency_span(unit)
+    value_str = number_to_currency value, unit: currency_sign(unit)
     tag.span(value_str, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
 
@@ -107,6 +107,10 @@ module InstrumentsHelper
 
   def sec_tx_code_name(sec_code)
     Sec4TransactionCodesNames[sec_code] || sec_code
+  end
+
+  def instrument_logo(instrument)
+    image_tag "#{instrument.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if instrument.has_logo?
   end
 end
 

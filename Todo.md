@@ -33,12 +33,11 @@
 + all insider transactions list
 + ticker insider transactions list
 + load price targets from IEX
++ load recommedations from IEX
 
-– load recommedations from IEX
-- load advanced stats (forward P/E) from IEX
-- ticker recommendations list
-- ticker price targets list
+- ticker recommendations & price targets list
 - ticker extended info list
+- load advanced stats (forward P/E) from IEX
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%

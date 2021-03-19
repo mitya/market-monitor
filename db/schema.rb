@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_18_220814) do
+ActiveRecord::Schema.define(version: 2021_03_19_125707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,6 +108,26 @@ ActiveRecord::Schema.define(version: 2021_03_18_220814) do
     t.decimal "value", precision: 20, scale: 4
     t.datetime "updated_at"
     t.index ["ticker"], name: "index_prices_on_ticker", unique: true
+  end
+
+  create_table "recommendations", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.integer "buy"
+    t.integer "overweight"
+    t.integer "hold"
+    t.integer "underweight"
+    t.integer "sell"
+    t.integer "none"
+    t.float "scale"
+    t.float "scale15"
+    t.boolean "current"
+    t.date "corporate_action_date"
+    t.date "starts_on"
+    t.date "ends_on"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["current"], name: "index_recommendations_on_current"
+    t.index ["ticker"], name: "index_recommendations_on_ticker"
   end
 
 end
