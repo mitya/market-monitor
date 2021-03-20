@@ -1,3 +1,5 @@
+- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+
 main.container-fluid
   h1.display-3 Recommendations
 
@@ -8,9 +10,8 @@ main.container-fluid
     .row.mb-3
       legend class="col-form-label col-sm-1 pt-0"
       .col-sm-5
-        .form-check.form-switch
-          = check_box_tag :outdated, '1', params[:outdated] == '1', class: 'form-check-input'
-          = label_tag :outdated, 'Include outdated', class: 'form-check-label'
+        = bs_check_box :relative_price_targets, 'Use relative', switch: true
+        = bs_check_box :outdated, 'Include outdated', switch: true
 
   = page_entries_block @recommendations
   = paginate @recommendations, window: 10
@@ -39,9 +40,9 @@ main.container-fluid
           td= instrument.ticker
           td= instrument.name
           td.money-cell= price_span instrument.last || instrument.today_close, unit: instrument.currency
-          td.money-cell= colorize_value price_target&.low,     instrument.last_or_open, unit: price_target&.currency
-          td.money-cell= colorize_value price_target&.average, instrument.last_or_open, unit: price_target&.currency
-          td.money-cell= colorize_value price_target&.high,    instrument.last_or_open, unit: price_target&.currency
+          td.money-cell                = relative_price price_target&.low,     instrument.last_or_open, unit: price_target&.currency, format: price_target_format
+          td.money-cell                = relative_price price_target&.average, instrument.last_or_open, unit: price_target&.currency, format: price_target_format
+          td.money-cell.border-end.pe-2= relative_price price_target&.high,    instrument.last_or_open, unit: price_target&.currency, format: price_target_format
           td.ps-3
             .progress
               .progress-bar class="bg-success"     style="width: #{rec.buy_percentage}%"         = recommedation_significant_rating rec, :buy

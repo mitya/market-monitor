@@ -1,22 +1,46 @@
 module InstrumentsHelper
-  def change_percentage(relation)
-  end
+  def percentage_precision = 0
+  def ratio_color(ratio) = ratio ? (ratio > 0 ? 'green' : 'red') : 'none'
+  def price_ratio(price, base_price) = (price / base_price - 1.0 if price && base_price)
+
 
   def colorize_value(value, base, unit: '$', title: nil)
+    percentage = value / base - 1.0 if value && base
     green = value && base && value > base
     value_str = number_to_currency value, unit: currency_sign(unit)
+    title ||= number_to_percentage percentage * 100, precision: 1, format: '%n ﹪' if percentage
     tag.span(value_str, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
 
   def colorize_change(value, green: nil, format: :number, title: nil, unit: nil, price: nil)
     green = value > 0 if green == nil && value.is_a?(Numeric)
     value = number_to_currency value, unit: unit if format == :number
-    value = number_to_percentage value * 100, precision: 1, format: '%n ﹪' if value && format == :percentage
+    value = number_to_percentage value * 100, precision: percentage_precision, format: '%n ﹪' if value && format == :percentage
     title ||= number_to_currency price, unit: currency_sign(unit) if price
-
-    # return tag.span(number_to_currency(title, unit: ''), class: "changebox changebox-#{green ? 'green' : 'red'}")
     tag.span(value, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
+
+
+  def colorized_price(price, base_price, unit: nil, inverse: false)
+    ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
+    title = number_to_percentage ratio * 100, precision: 1, format: '%n ﹪' if ratio
+    tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
+      number_to_currency price, unit: currency_sign(unit)
+    end
+  end
+
+  def colorized_percentage(price, base_price, unit: nil, inverse: false)
+    ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
+    tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: number_to_currency(price, unit: currency_sign(unit)) do
+      number_to_percentage ratio * 100, precision: percentage_precision, format: '%n ﹪' if ratio
+    end
+  end
+
+  def relative_price(price, base_price, unit:, format: "absolute", inverse: false)
+    method = format == 'absolute' ? :colorized_price : :colorized_percentage
+    send method, price, base_price, unit: unit, inverse: inverse
+  end
+
 
   def currency_sign(currency_code)
     CurrencySigns[currency_code.to_s.to_sym] || currency_code

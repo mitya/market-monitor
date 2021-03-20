@@ -1,3 +1,7 @@
+- params[:relative_past_prices] ||= '1'
+- past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
+- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+
 main.container-fluid.mb-4
   h1.display-3 Instruments
 
@@ -10,12 +14,10 @@ main.container-fluid.mb-4
     .row.mb-3
       .col-sm-1
       .col-sm-5
-        .form-check
-          = check_box_tag :fundamentals, '1', params[:fundamentals] == '1', class: 'form-check-input'
-          = label_tag :fundamentals, 'Show fundamentals', class: 'form-check-label'
-        .form-check
-          = check_box_tag :price_targets, '1', params[:price_targets] == '1', class: 'form-check-input'
-          = label_tag :price_targets, 'Show price targets', class: 'form-check-label'
+        = bs_check_box :fundamentals, 'Show fundamentals'
+        = bs_check_box :price_targets, 'Show price targets', inline: true
+        = bs_check_box :relative_price_targets, 'Use relative', inline: true
+        = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
     .row.mb-3
       .col-sm-1
       .col-sm-5
@@ -57,36 +59,38 @@ main.container-fluid.mb-4
         th
     tbody
       - @instruments.each do |inst|
+        - price_target = inst.price_target
+        - info = inst.info
         - inst.current_price_selector = :last_or_open
         tr
           td= instrument_logo inst
           td= inst.ticker
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if inst.premium?
-          td(title=inst.info&.industry)= inst.name
+          td(title=info&.industry)= inst.name
 
-          td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+          td.money-cell(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           - if params[:fundamentals]
-            td.money-cell= number_with_precision inst.info&.pe, precision: 0
-            td.money-cell= number_with_precision inst.info&.beta, precision: 1
-            td.money-cell.border-end.pe-2= number_to_percentage inst.info&.dividend_yield_percent, precision: 1
+            td.money-cell                = number_with_precision info&.pe, precision: 0
+            td.money-cell                = number_with_precision info&.beta, precision: 1
+            td.money-cell.border-end.pe-2= number_to_percentage  info&.dividend_yield_percent, precision: 1
 
           - if params[:price_targets]
-            td.money-cell= colorize_value inst.price_target&.low, inst.last_or_open, unit: inst.price_target&.currency
-            td.money-cell= colorize_value inst.price_target&.average, inst.last_or_open, unit: inst.price_target&.currency
-            td.money-cell.border-end.pe-2= colorize_value inst.price_target&.high, inst.last_or_open, unit: inst.price_target&.currency
+            td.money-cell                = relative_price price_target&.low,     inst.base_price, unit: price_target&.currency, format: price_target_format
+            td.money-cell                = relative_price price_target&.average, inst.base_price, unit: price_target&.currency, format: price_target_format
+            td.money-cell.border-end.pe-2= relative_price price_target&.high,    inst.base_price, unit: price_target&.currency, format: price_target_format
 
-          td.money-cell                 = colorize_value inst.last || inst.today_close, inst.today_open, unit: inst.currency
-          td.money-cell                 = colorize_change inst.rel_diff(:today_open),     format: :percentage, unit: inst.currency, price: inst.today_open
-          td.money-cell.muted-cell      = colorize_change inst.rel_diff(:yesterday_close),format: :percentage, unit: inst.currency, price: inst.yesterday_close
-          td.money-cell.muted-cell      = colorize_change inst.rel_diff(:yesterday_open), format: :percentage, unit: inst.currency, price: inst.yesterday_open
-          td.money-cell                 = colorize_change inst.rel_diff(:week_ago_open),  format: :percentage, unit: inst.currency, price: inst.week_ago_open
-          td.money-cell                 = colorize_change inst.rel_diff(:month_ago_open), format: :percentage, unit: inst.currency, price: inst.month_ago_open
-          td.money-cell.border-end.pe-2 = colorize_change inst.rel_diff(:y2021_open),     format: :percentage, unit: inst.currency, price: inst.y2021_open
-          td.money-cell                 = colorize_change inst.rel_diff(:nov06_low),      format: :percentage, unit: inst.currency, price: inst.nov06_low
-          td.money-cell                 = colorize_change inst.rel_diff(:mar23_low),      format: :percentage, unit: inst.currency, price: inst.mar23_low
-          td.money-cell.muted-cell      = colorize_change inst.rel_diff(:feb19_low),      format: :percentage, unit: inst.currency, price: inst.feb19_low
-          td.money-cell.border-end.pe-2 = colorize_change inst.rel_diff(:y2020_open),     format: :percentage, unit: inst.currency, price: inst.y2020_open
-          td.money-cell.muted-cell      = colorize_change inst.rel_diff(:y2019_open),     format: :percentage, unit: inst.currency, price: inst.y2019_open
+          td.money-cell                  = relative_price inst.last || inst.today_close, inst.today_open, unit: inst.currency, format: 'absolute'
+          td.money-cell                  = relative_price inst.today_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.yesterday_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.yesterday_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.week_ago_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.month_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.nov06_low,       inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.mar23_low,       inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.feb19_low,       inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.border-end.pe-2  = relative_price inst.y2020_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.y2019_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td= link_to fa_icon('shopping-cart'), insider_transactions_path(ticker: inst.ticker), target: '_blank', title: 'Insider Transactions'
           td= exchange_logo inst.exchange_name
 

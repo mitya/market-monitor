@@ -51,6 +51,7 @@ class Instrument < ApplicationRecord
   end
 
   attribute :current_price_selector, default: "last"
+  def base_price = send(current_price_selector)
 
   def diff(old_price, new_price = current_price_selector)
     old_price, new_price = send(old_price), send(new_price)

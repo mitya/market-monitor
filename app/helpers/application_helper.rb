@@ -26,6 +26,14 @@ module ApplicationHelper
     end
   end
 
+  def bs_check_box(name, label, value: '1', false_value: '0', inline: false, switch: false, default: false)
+    tag.div class: class_names('form-check', 'form-check-inline': inline, 'form-switch': switch) do
+      (default ? hidden_field_tag(name, '0', id: nil) : ''.html_safe) +
+      check_box_tag(name, value, params[name] == value, class: 'form-check-input') +
+      label_tag(name, label, class: 'form-check-label')
+    end
+  end
+
   ExcahngesWithLogos = %w[NYSE NASDAQ MOEX]
   def exchange_logo(exchange_name)
     image_tag "exchange-logos/#{exchange_name}.png", size: '15x15', class: 'exchange-logo' if exchange_name.in?(ExcahngesWithLogos)
