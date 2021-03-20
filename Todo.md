@@ -41,14 +41,17 @@
 + filter by entered tickers
 + exchange icons
 + show price targets in percents (option)
++ try to use sectors from tops
++ add sector badge to the list
 
-- try to use sectors from tops
-- add sector badge to the list
-
-- ticker extended info list
 - load advanced stats (forward P/E) for selected tickers from IEX
-- single update task
+- single morning update task
+- single hourly update task
+- single weekly update task
+- sorting & filtering by calculated values (maybe right in code)
 
+- volatility indication
+- volume indication
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
@@ -73,6 +76,7 @@
 - recurring current price loading
 - recurring day candle loading
 - 5-min candles loading
+- company info list
 
 
 # Later

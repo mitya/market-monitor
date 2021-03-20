@@ -42,6 +42,15 @@ class InstrumentInfo < ApplicationRecord
         sleep 0.33
       end
     end
+
+    def load_sector_codes_from_tops
+      data = JSON.parse File.read "cache/iex/tops.json"
+      data.each do |item|
+        if instrument = Instrument[item['symbol']]
+          instrument.info&.update! sector_code: item['sector']
+        end
+      end
+    end
   end
 end
 
@@ -52,3 +61,4 @@ Instrument.get('AAPL').info.refresh
 InstrumentInfo.refresh
 InstrumentInfo.group(:industry).order(:count).count
 InstrumentInfo.pluck(:industry)
+InstrumentInfo.load_sector_codes_from_tops

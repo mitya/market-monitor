@@ -92,6 +92,10 @@ module InstrumentsHelper
     InstrumentInfo.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
   end
 
+  def sector_code_options
+    SectorCodeOptions
+  end
+
   def currency_options
     CurrencySigns.map { |code, sign| ["#{code} #{sign}", code] }
   end
@@ -128,6 +132,39 @@ module InstrumentsHelper
     'S' => "Sale",
     'F' => "Exercise",
   }
+
+  SectorCodeTitles = {
+    "commercialservices"    => ["Commercial"],
+    "communications"        => ["Communications"],
+    "consumerdurables"      => ["Consumer Durables"],
+    "consumernon-durables"  => ["Consumer Non-durables"],
+    "consumerservices"      => ["Consumer Services"],
+    "distributionservices"  => ["Distribution"],
+    "electronictechnology"  => ["Electronics",        'warning'],
+    "energyminerals"        => ["Energy",             'success'],
+    "finance"               => ["Finance",            'info'],
+    "healthservices"        => ["Health Services",    'danger'],
+    "healthtechnology"      => ["Health Tech",        'danger'],
+    "industrialservices"    => ["Industrial",         'success'],
+    "miscellaneous"         => ["Misc"],
+    "n/a"                   => ["N/A"],
+    "non-energyminerals"    => ["Minerals",           'success'],
+    "processindustries"     => ["Process Industries", 'success'],
+    "producermanufacturing" => ["Manufactoring"],
+    "retailtrade"           => ["Retail"],
+    "technologyservices"    => ["Technology",         'warning'],
+    "transportation"        => ["Transportation"],
+    "utilities"             => ["Utilities"],
+  }
+
+  SectorCodeOptions = SectorCodeTitles.transform_values { |val| val.first }.invert
+
+  def sector_badge(code, **options)
+    text, background = *SectorCodeTitles[code]
+    background ||= 'secondary'
+    foreground = 'text-dark' if background.in?(%w[warning info])
+    tag.span text || code, class: "badge bg-#{background} #{foreground}", **options if text
+  end
 
   def sec_tx_code_desc(sec_code)
     Sec4TransactionCodesDescriptions[sec_code]

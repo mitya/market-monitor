@@ -1,3 +1,1 @@
-.row.mb-1
-  .col-sm-1= label_tag :sector, 'Sector:', class: 'col-form-label'
-  .col-sm-5= select_tag :sector, options_for_select(sector_options, params[:sector]), class: "form-select", include_blank: true
+= bs_select :sector, 'Sector:', sector_options
