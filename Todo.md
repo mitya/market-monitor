@@ -36,12 +36,12 @@
 + load recommedations from IEX
 + ticker recommendations & price targets list
 + mark premium tickers in the list
++ use radios for currencies & sets
 
-- use radios for currencies & sets
-- show price targets in percents
+- filter by premium tickers
+- show price targets in percents (option)
 - try to use sectors from tops
 - add sector badge to the list
-- filter by premium tickers
 
 - ticker extended info list
 - load advanced stats (forward P/E) for selected tickers from IEX

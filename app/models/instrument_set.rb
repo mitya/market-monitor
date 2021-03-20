@@ -18,8 +18,16 @@ class InstrumentSet
       all.find { |set| set.key == key.to_sym }
     end
 
+    def null
+      new(nil)
+    end
+
     def all
       @all ||= Data.keys.map { |key| new(key) }
+    end
+
+    def all_with_null
+      [null] + all
     end
   end
 

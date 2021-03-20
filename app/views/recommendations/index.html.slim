@@ -10,9 +10,9 @@ main.container-fluid
     .row.mb-3
       legend class="col-form-label col-sm-1 pt-0"
       .col-sm-5
-        .form-check
-          = check_box_tag :current, '1', params[:current] != '0', class: 'form-check-input'
-          = label_tag :current, 'Only latest', class: 'form-check-label'
+        .form-check.form-switch
+          = check_box_tag :outdated, '1', params[:outdated] == '1', class: 'form-check-input'
+          = label_tag :outdated, 'Include outdated', class: 'form-check-label'
 
   = page_entries_block @recommendations
   = paginate @recommendations, window: 10

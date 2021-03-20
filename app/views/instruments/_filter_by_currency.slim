@@ -1,3 +1,10 @@
+/ .row.mb-1
+/   .col-sm-1= label_tag :currency, 'Currency:', class: 'col-form-label'
+/   .col-sm-5= select_tag :currency, options_for_select(currency_options, params[:currency]), class: "form-select", include_blank: true
 .row.mb-1
-  .col-sm-1= label_tag :currency, 'Currency:', class: 'col-form-label'
-  .col-sm-5= select_tag :currency, options_for_select(currency_options, params[:currency]), class: "form-select", include_blank: true
+  legend class="col-form-label col-sm-1 pt-0" Currency
+  .col-sm-5
+    - ([['All', '']] + currency_options).each do |name, key|
+      .form-check.form-check-inline
+        = radio_button_tag :currency, key, params[:currency].to_s == key, class: 'form-check-input'
+        = label_tag :"currency_#{key}", name, class: 'form-check-label'

@@ -3,8 +3,8 @@ main.container-fluid.mb-4
 
   form#list-config(action=instruments_path class='my-2')
     = render 'filter_by_set'
-    = render 'filter_by_sector'
     = render 'filter_by_currency'
+    = render 'filter_by_sector'
     .row.mb-3
       .col-sm-1
       .col-sm-5
@@ -39,9 +39,9 @@ main.container-fluid.mb-4
           th.money-cell Average
           th.money-cell.border-end.pe-2 High
         th.money-cell Last
-        th.money-cell Topen ﹪
-        th.money-cell Yclose ﹪
-        th.money-cell Yopen ﹪
+        th.money-cell Open ﹪
+        th.money-cell Ycl ﹪
+        th.money-cell Yop ﹪
 
         th.money-cell 1w ﹪
         th.money-cell 1m ﹪
