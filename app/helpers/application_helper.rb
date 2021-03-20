@@ -25,4 +25,9 @@ module ApplicationHelper
       label_tag("#{name}_#{value}", label, class: 'form-check-label')
     end
   end
+
+  ExcahngesWithLogos = %w[NYSE NASDAQ MOEX]
+  def exchange_logo(exchange_name)
+    image_tag "exchange-logos/#{exchange_name}.png", size: '15x15', class: 'exchange-logo' if exchange_name.in?(ExcahngesWithLogos)
+  end
 end

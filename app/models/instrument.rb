@@ -70,6 +70,7 @@ class Instrument < ApplicationRecord
 
   def iex? = info.present?
   def premium? = flags.include?('premium')
+  def exchange_name = exchange || (rub?? 'MOEX' : nil)
 
   class << self
     def get(ticker = nil, figi: nil)

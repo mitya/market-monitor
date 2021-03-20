@@ -35,7 +35,7 @@ main.container-fluid.mb-4
         - if params[:fundamentals]
           th.money-cell P/E
           th.money-cell ß
-          th.money-cell Yield
+          th.money-cell.border-end.pe-2 Yield
         - if params[:price_targets]
           th.money-cell Low
           th.money-cell Average
@@ -54,20 +54,21 @@ main.container-fluid.mb-4
         th.money-cell.border-end.pe-2 2020 ﹪
         th.money-cell 2019 ﹪
         th
+        th
     tbody
       - @instruments.each do |inst|
         - inst.current_price_selector = :last_or_open
         tr
-          td= image_tag "#{inst.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if inst.has_logo?
+          td= instrument_logo inst
           td= inst.ticker
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if inst.premium?
           td(title=inst.info&.industry)= inst.name
 
-          td.money-cell= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+          td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           - if params[:fundamentals]
             td.money-cell= number_with_precision inst.info&.pe, precision: 0
             td.money-cell= number_with_precision inst.info&.beta, precision: 1
-            td.money-cell= number_to_percentage inst.info&.dividend_yield_percent, precision: 1
+            td.money-cell.border-end.pe-2= number_to_percentage inst.info&.dividend_yield_percent, precision: 1
 
           - if params[:price_targets]
             td.money-cell= colorize_value inst.price_target&.low, inst.last_or_open, unit: inst.price_target&.currency
@@ -87,5 +88,6 @@ main.container-fluid.mb-4
           td.money-cell.border-end.pe-2 = colorize_change inst.rel_diff(:y2020_open),     format: :percentage, unit: inst.currency, price: inst.y2020_open
           td.money-cell.muted-cell      = colorize_change inst.rel_diff(:y2019_open),     format: :percentage, unit: inst.currency, price: inst.y2019_open
           td= link_to fa_icon('shopping-cart'), insider_transactions_path(ticker: inst.ticker), target: '_blank', title: 'Insider Transactions'
+          td= exchange_logo inst.exchange_name
 
   = paginate @instruments, window: 20

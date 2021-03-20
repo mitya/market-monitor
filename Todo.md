@@ -38,12 +38,13 @@
 + mark premium tickers in the list
 + use radios for currencies & sets
 + filter by premium tickers
++ filter by entered tickers
++ exchange icons
 
-- filter by entered tickers
-- show price targets in percents (option)
 - try to use sectors from tops
 - add sector badge to the list
 
+- show price targets in percents (option)
 - ticker extended info list
 - load advanced stats (forward P/E) for selected tickers from IEX
 - single update task
