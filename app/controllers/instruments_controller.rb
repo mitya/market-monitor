@@ -11,6 +11,7 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.where(info: { industry: params[:industry] }) if params[:industry].present?
     @instruments = @instruments.where(info: { sector: params[:sector] }) if params[:sector].present?
     @instruments = @instruments.where(currency: params[:currency]) if params[:currency].present?
+    @instruments = @instruments.with_flag(params[:availability]) if params[:availability].present?
     @instruments = @instruments.page(params[:page]).per(200)
 
     Current.preload_day_candles_for @instruments

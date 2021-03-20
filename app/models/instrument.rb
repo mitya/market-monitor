@@ -12,8 +12,9 @@ class Instrument < ApplicationRecord
 
   validates_presence_of :ticker, :name
 
-  scope :tinkoff, -> { where "'tinkoff' = any(flags)" }
-  scope :premium, -> { where "'premium' = any(flags)" }
+  scope :with_flag, -> flag { where "? = any(flags)", flag }
+  scope :tinkoff, -> { with_flag 'tinkoff' }
+  scope :premium, -> { with_flag 'premium' }
   scope :spb, -> { where "'spb' = any(flags)" }
   scope :iex, -> { where "'iex' = any(flags)" }
   scope :usd, -> { where currency: 'USD' }

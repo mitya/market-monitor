@@ -5,7 +5,4 @@
   legend class="col-form-label col-sm-1 pt-0" Set
   .col-sm-5
     - InstrumentSet.all_with_null.each do |set|
-      - key = set.key.to_s
-      .form-check.form-check-inline
-        = radio_button_tag :set, key, params[:set].to_s == key, class: 'form-check-input'
-        = label_tag :"set_#{key}", set.name, class: 'form-check-label'
+      = bs_radio_button :set, set.key.to_s, set.name

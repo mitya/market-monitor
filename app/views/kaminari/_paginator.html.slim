@@ -8,7 +8,7 @@
 
 = paginator.render do
   nav
-    ul.pagination.pagination-sm.justify-content-center
+    ul.pagination.justify-content-center
       == first_page_tag unless current_page.first?
       == prev_page_tag unless current_page.first?
       - each_page do |page|
