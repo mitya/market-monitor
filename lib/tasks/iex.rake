@@ -130,6 +130,6 @@ rake iex:candles:days:previous
 rake iex:prices:all
 
 rake iex:update
-rake iex:insider_transactions set=small
+rake iex:insider_transactions set=main
 rake iex:price_targets set=all
 rake iex:recommendations set=all

@@ -4,14 +4,14 @@ class InstrumentsController < ApplicationController
   end
 
   def index
-    @set = InstrumentSet.new(params[:set]) if params[:set].present?
-
-    @instruments = Instrument.in_set(@set)
+    @instruments = Instrument.all
     @instruments = @instruments.abc.includes(:info, :price_target)
     @instruments = @instruments.where(info: { industry: params[:industry] }) if params[:industry].present?
-    @instruments = @instruments.where(info: { sector: params[:sector] }) if params[:sector].present?
-    @instruments = @instruments.where(currency: params[:currency]) if params[:currency].present?
-    @instruments = @instruments.with_flag(params[:availability]) if params[:availability].present?
+    @instruments = @instruments.where(info: { sector: params[:sector] })     if params[:sector].present?
+    @instruments = @instruments.where(currency: params[:currency])           if params[:currency].present?
+    @instruments = @instruments.with_flag(params[:availability])             if params[:availability].present?
+    @instruments = @instruments.in_set(params[:set].presence)                if params[:set].present? && params[:tickers].blank?
+    @instruments = @instruments.for_tickers(params[:tickers].to_s.split)     if params[:tickers].present?
     @instruments = @instruments.page(params[:page]).per(200)
 
     Current.preload_day_candles_for @instruments

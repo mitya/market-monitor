@@ -3,6 +3,7 @@ class InsiderTransaction < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
   scope :for_ticker, -> ticker { where ticker: ticker.upcase if ticker }
+  scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
   scope :for_insider, -> insider { where insider_name: insider if insider }
   scope :for_direction, -> direction { direction == 'buy' ? buys : sells }
   scope :buys, -> { where 'shares > 0' }

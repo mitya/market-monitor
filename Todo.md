@@ -53,6 +53,8 @@
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
+- use same filters & filter logic on all pages
+- focus tickers filter on load if it it used
 - add last insider transaction to the list
 - replace chart API with previous which is cheaper
 - add source & last_at to prices

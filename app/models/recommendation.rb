@@ -3,6 +3,7 @@ class Recommendation < ApplicationRecord
 
   scope :current, -> { where current: true }
   scope :for_ticker, -> ticker { where ticker: ticker.upcase if ticker }
+  scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
 
   CacheDir = Pathname("cache/iex-recommendations")
 

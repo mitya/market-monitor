@@ -22,6 +22,7 @@ class Instrument < ApplicationRecord
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.unprefixed_symbols if key && key.to_s != 'all' }
   scope :main, -> { in_set :main }
   scope :small, -> { in_set :small }
+  scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
 
   def to_s = ticker
 

@@ -2,13 +2,11 @@ main.container-fluid
   h1.display-3 Insider Transactions
 
   form#list-config(action=insider_transactions_path class='my-2')
-    .row.mb-1
-      .col-sm-1= label_tag :ticker, 'Ticker:', class: 'col-form-label'
-      .col-sm-5= text_field_tag :ticker, @ticker, class: "form-control"
-    - if @ticker
+    = render 'instruments/filter_by_tickers'
+    - if @transactions.map(&:ticker).uniq.one?
       .row.mb-1
         .col-sm-1= label_tag :insider, 'Insider:', class: 'col-form-label'
-        .col-sm-5= select_tag :insider, options_for_select(insider_options_for(@ticker), params[:insider]), class: "form-select", include_blank: 'All'
+        .col-sm-5= select_tag :insider, options_for_select(insider_options_for(@transactions.first.ticker), params[:insider]), class: "form-select", include_blank: 'All'
     .row.mb-1
       .col-sm-1
       .col-sm-5
