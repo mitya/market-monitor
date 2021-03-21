@@ -43,12 +43,14 @@
 + show price targets in percents (option)
 + try to use sectors from tops
 + add sector badge to the list
++ extract lists to files
++ filtering by calculated values (maybe right in the code)
 
 - load advanced stats (forward P/E) for selected tickers from IEX
 - single morning update task
 - single hourly update task
 - single weekly update task
-- sorting & filtering by calculated values (maybe right in the code)
+- sorting by calculated values
 
 - volatility indication
 - volume indication
@@ -62,7 +64,6 @@
 - add last insider transaction to the list
 - replace chart API with previous which is cheaper
 - add source & last_at to prices
-- extract lists to files
 - extract special dates
 - fixed width digits
 - indexes & commodities

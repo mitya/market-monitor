@@ -19,7 +19,7 @@ class Instrument < ApplicationRecord
   scope :iex, -> { where "'iex' = any(flags)" }
   scope :usd, -> { where currency: 'USD' }
   scope :abc, -> { order :ticker }
-  scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.unprefixed_symbols if key && key.to_s != 'all' }
+  scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.symbols if key && key.to_s != 'all' }
   scope :main, -> { in_set :main }
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
@@ -86,6 +86,10 @@ class Instrument < ApplicationRecord
     alias [] get
 
     def reject_missing(tickers) = Instrument.for_tickers(tickers).pluck(:ticker)
+  end
+
+  concerning :Filters do
+    def down_in_2021? = y2021_open_rel.to_f < 0
   end
 end
 
