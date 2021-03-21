@@ -48,7 +48,7 @@
 - single morning update task
 - single hourly update task
 - single weekly update task
-- sorting & filtering by calculated values (maybe right in code)
+- sorting & filtering by calculated values (maybe right in the code)
 
 - volatility indication
 - volume indication

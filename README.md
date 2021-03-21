@@ -35,3 +35,9 @@ rake tinkoff:update
 
 curl -s 'https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY' > cache/iex/tops.json
 rake iex:prices:all
+
+# Seeking Alpha
+
+    Array.from(document.querySelectorAll('.a-info > span:first-child')).map(e => e.innerText)
+    tickers = []
+    Instrument.reject_missing(tickers).join(' ')

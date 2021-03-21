@@ -84,6 +84,8 @@ class Instrument < ApplicationRecord
     end
 
     alias [] get
+
+    def reject_missing(tickers) = Instrument.for_tickers(tickers).pluck(:ticker)
   end
 end
 
