@@ -60,7 +60,9 @@ main.container-fluid.mb-4
         th
         th
     tbody
-      - @instruments.each do |inst|
+      - instruments = @instruments
+      / - instruments = @instruments.sort_by &:y2021_open_rel
+      - instruments.each do |inst|
         - price_target = inst.price_target
         - info = inst.info
         - inst.current_price_selector = :last_or_open

@@ -45,15 +45,16 @@
 + add sector badge to the list
 + extract lists to files
 + filtering by calculated values (maybe right in the code)
++ add poor man sorting
 
+- 1/2/3 day dynamics
+- volatility indication
+- volume indication
 - load advanced stats (forward P/E) for selected tickers from IEX
 - single morning update task
 - single hourly update task
 - single weekly update task
-- sorting by calculated values
 
-- volatility indication
-- volume indication
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
