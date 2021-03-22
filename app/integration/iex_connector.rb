@@ -85,6 +85,6 @@ IexConnector.company 'X'
 IexConnector.stats 'FANG'
 IexConnector.quote 'X'
 IexConnector.previous 'X'
-IexConnector.day_candle_on 'PTN', Date.parse('2021-03-22')
+IexConnector.day_candle_on 'ALTO', Date.parse('2021-01-04')
 IexConnector.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
 IexConnector.import_today_candle Instrument['PVAC']

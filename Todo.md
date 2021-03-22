@@ -51,9 +51,10 @@
 + indicate that the price is old
 + fix 2 day old candle for premium tickers
 + load opening prices for premium tickers somehow
++ check tickers without any price data
 
-- check tickers without any price data
 - load advanced stats (forward P/E) for selected tickers from IEX
+- try to get european ticker historical data from IEX
 
 - volatility indication
 - volume indication
@@ -82,6 +83,7 @@
 - recurring day candle loading
 - 5-min candles loading
 - company info list
+- russian ticker company info
 
 
 # Later

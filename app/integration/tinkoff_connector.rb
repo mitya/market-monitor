@@ -1,6 +1,13 @@
 class TinkoffConnector
   include StaticService
 
+  OutdatedTickers = %w[
+    AGN AIMT AOBC APY AVP AXE BEAT BFYT BMCH CHA CHL CXO CY DLPH DNKN
+    ENPL ETFC FTRE HDS HIIQ IMMU LM LOGM LVGO MINI MYL MYOK NBL
+    PRSC PRTK RUSP SERV SINA TECD TIF TRCN TSS UTX VAR VRTU WYND
+    CHK
+  ]
+
   def sync_instruments(preview: true)
     file = Pathname("db/data/tinkoff-stocks-#{Date.current.to_s :number}.json")
     file.write `coffee bin/tinkoff.coffee stocks` unless file.exist?

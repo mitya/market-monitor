@@ -103,6 +103,6 @@ Instrument.find_each &:price!
 Candle.day.where(ticker: 'BGS', date: Current.date)
 Instrument.get('BGS').day_candles.where(date: Current.date)
 puts Instrument.get('BGS').today_open
-Instrument.get('CCL').nov06_low
+Instrument.get('CHK').destroy
 Instrument.get('CCL').today_open
 Instrument.join(:info).count
