@@ -119,7 +119,7 @@ class TinkoffConnector
     Candle.transaction do
       candles.each do |hash|
         time = Time.parse hash['time']
-        puts "Import #{instrument} #{time} #{interval} candle"
+        puts "Import #{time} #{interval} candle for #{instrument}"
         candle = instrument.candles.find_or_initialize_by interval: interval, time: time
         candle.ticker  = instrument.ticker
         candle.source  = 'tinkoff'
@@ -175,5 +175,6 @@ TinkoffConnector.load_candles_to_files('AAPL')
 TinkoffConnector.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 6, 1), till: Date.new(2020, 12, 31))
 TinkoffConnector.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 1, 1), till: Date.new(2020, 12, 31))
 TinkoffConnector.update_current_price Instrument.get('AAPL')
+TinkoffConnector.import_latest_day_candles Instrument['PRGS']
 Instrument.tinkoff.each { |inst| TinkoffConnector.import_day_candles inst, since: Date.parse('2019-12-31'), till: Date.parse('2019-12-31').end_of_day }
 Instrument.tinkoff.each { |inst| TinkoffConnector.import_day_candles inst, since: Date.parse('2020-12-31'), till: Date.parse('2020-12-31').end_of_day }

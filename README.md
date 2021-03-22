@@ -24,21 +24,19 @@
 # Run once in a while
 
 rake iex:stats
+rake iex:price_targets
+rake iex:insider-transactions set=main
+
 
 # Run daily
 
-rake iex:insider-transactions set=main
-rake iex:candles:days:previous
+rake iex:candles:days:previous iex:candles:days:today tinkoff:candles:day
 
-rake tinkoff:candles:day tinkoff:prices
 
 # Run hourly
 
-rake iex:prices:premium
-rake tinkoff:prices:all
+rake iex:prices:all tinkoff:prices:uniq          || rake iex:prices:premium tinkoff:prices:all
 
-rake iex:prices:all
-rake tinkoff:prices:uniq
 
 # Seeking Alpha
 

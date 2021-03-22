@@ -50,6 +50,26 @@ class IexConnector
     end
   end
 
+  def import_today_candle(instrument)
+    data = quote(instrument.ticker)
+    candle = instrument.candles.day.find_or_initialize_by date: Current.date
+    return if candle.persisted? && candle.final?
+
+    puts "Import IEX today (#{Current.date}) candle for #{instrument}"
+    candle.ticker  = instrument.ticker
+    candle.source  = 'iex'
+    candle.ongoing = true
+    candle.time    = Time.ms data['lastTradeTime']
+    candle.open    = data['open']  || data['iexOpen']  # || data['latestPrice']
+    candle.close   = data['close'] || data['iexClose'] # || data['latestPrice']
+    candle.high    = data['high']                      || data['latestPrice']
+    candle.low     = data['low']                       || data['latestPrice']
+    candle.volume  = data['latestVolume']
+    candle.save!
+  rescue e
+    puts "IEX today candle import error for #{instrument.ticker}: #{e}".red
+  end
+
   private
 
   def get(path, params = {})
@@ -65,5 +85,6 @@ IexConnector.company 'X'
 IexConnector.stats 'FANG'
 IexConnector.quote 'X'
 IexConnector.previous 'X'
-IexConnector.day_candle 'X', Date.parse('2021-01-04')
+IexConnector.day_candle_on 'PTN', Date.parse('2021-03-22')
 IexConnector.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
+IexConnector.import_today_candle Instrument['PVAC']

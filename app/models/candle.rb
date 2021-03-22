@@ -9,6 +9,8 @@ class Candle < ApplicationRecord
   scope :find_date, -> date { order(date: :desc).where(date: date.to_date).take }
   scope :find_date_before, -> date { order(date: :desc).where('date < ?', date.to_date).take }
 
+  def final? = !ongoing?
+
   class << self
     def last_loaded_date = final.maximum(:date)
   end

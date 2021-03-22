@@ -49,20 +49,21 @@
 + 1/2/3 day dynamics
 + add source & last_at to prices
 + indicate that the price is old
++ fix 2 day old candle for premium tickers
++ load opening prices for premium tickers somehow
+
+- check tickers without any price data
+- load advanced stats (forward P/E) for selected tickers from IEX
 
 - volatility indication
 - volume indication
-- load advanced stats (forward P/E) for selected tickers from IEX
-- single morning update task
-- single hourly update task
-- single weekly update task
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
-- load opening prices for premium tickers somehow
+- download all recent missing previous days in iex:candle:previous
 - use same filters & filter logic on all pages
 - focus tickers filter on load if it it used
 - add last insider transaction to the list
