@@ -25,7 +25,11 @@ class IexConnector
   def import_day_candles(instrument, date: nil, period: nil)
     return if date && instrument.candles.day.where(date: date).exists?
 
-    candles_data = date ? day_candle_on(instrument.ticker, date) : day_candles_for(instrument.ticker, period)
+    candles_data =
+      date ? day_candle_on(instrument.ticker, date) :
+      period == 'previous' ? [previous(instrument.ticker)] :
+      day_candles_for(instrument.ticker, period)
+
     return puts "No IEX data for #{instrument} for #{date || period}" if candles_data.none?
 
     Candle.transaction do

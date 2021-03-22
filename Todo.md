@@ -46,8 +46,8 @@
 + extract lists to files
 + filtering by calculated values (maybe right in the code)
 + add poor man sorting
++ 1/2/3 day dynamics
 
-- 1/2/3 day dynamics
 - volatility indication
 - volume indication
 - load advanced stats (forward P/E) for selected tickers from IEX
@@ -60,6 +60,7 @@
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
+- indicate that the price is old
 - use same filters & filter logic on all pages
 - focus tickers filter on load if it it used
 - add last insider transaction to the list

@@ -25,7 +25,7 @@ module InstrumentsHelper
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
     title = number_to_percentage ratio * 100, precision: 1, format: '%n ﹪' if ratio
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
-      number_to_currency price, unit: currency_sign(unit)
+      number_to_currency price, unit: currency_sign(unit), precision: price && price > 10_000 ? 0 : 2
     end
   end
 
