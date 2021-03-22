@@ -34,8 +34,11 @@ rake tinkoff:candles:day tinkoff:prices
 
 # Run hourly
 
-curl -s 'https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY' > cache/iex/tops.json
+rake iex:prices:premium
+rake tinkoff:prices:all
+
 rake iex:prices:all
+rake tinkoff:prices:uniq
 
 # Seeking Alpha
 

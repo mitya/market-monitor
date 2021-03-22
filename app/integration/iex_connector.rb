@@ -19,7 +19,7 @@ class IexConnector
   def day_candle_on(symbol, date)     = get("/stock/#{symbol}/chart/date/#{date.to_s :number}", chartByDay: true)
   def day_candles_for(symbol, period) = get("/stock/#{symbol}/chart/#{period}")
   def last(symbol)                    = get("/last?symbols=#{symbol}")
-  def tops(*symbols)                  = get("/tops", { symbols: symbols.join(',').presence }.presence)
+  def tops(*symbols)                  = get("/tops", { symbols: symbols.join(',').presence }.compact)
   def symbols                         = get("/ref-data/symbols")
 
   def import_day_candles(instrument, date: nil, period: nil)
@@ -30,12 +30,12 @@ class IexConnector
       period == 'previous' ? [previous(instrument.ticker)] :
       day_candles_for(instrument.ticker, period)
 
-    return puts "No IEX data for #{instrument} for #{date || period}" if candles_data.none?
+    return puts "No IEX data on #{date || period} for #{instrument}" if candles_data.none?
 
     Candle.transaction do
       candles_data.each do |hash|
         date = Date.parse hash['date']
-        puts "Import #{instrument} #{date} candle from IEX"
+        puts "Import IEX #{date} candle for #{instrument}"
         candle = instrument.candles.find_or_initialize_by interval: 'day', date: date, source: 'iex'
         candle.ticker  = instrument.ticker
         candle.time    = date.to_time :utc

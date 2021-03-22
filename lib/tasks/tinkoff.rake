@@ -45,8 +45,12 @@ namespace :tinkoff do
   #   TinkoffConnector.import_candles "db/tinkoff-day-#{Date.current.to_s :number}-ongoing"
   # end
 
-  task 'prices' => :environment do
-    InstrumentPrice.refresh(set: ENV['set'])
+  task 'prices:all' => :env do
+    InstrumentPrice.refresh_from_tinkoff(set: ENV['set'])
+  end
+
+  task 'prices:uniq' => :env do
+    InstrumentPrice.refresh_tinkoff_exclusive
   end
 
   task 'logos:download' => :environment do

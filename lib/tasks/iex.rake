@@ -123,6 +123,7 @@ rake iex:logos:download
 rake iex:symbols:load
 rake iex:symbols:process
 rake iex:candles:days:on_dates dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,2020-11-06,2021-01-04 ok=1
+rake iex:candles:days:on_dates dates=2019-01-18
 rake iex:candles:days:1m
 
 rake iex:stats

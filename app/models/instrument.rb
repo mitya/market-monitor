@@ -18,6 +18,8 @@ class Instrument < ApplicationRecord
   scope :spb, -> { where "'spb' = any(flags)" }
   scope :iex, -> { where "'iex' = any(flags)" }
   scope :usd, -> { where currency: 'USD' }
+  scope :eur, -> { where currency: 'EUR' }
+  scope :rub, -> { where currency: 'RUB' }
   scope :abc, -> { order :ticker }
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.symbols if key && key.to_s != 'all' }
   scope :main, -> { in_set :main }
