@@ -19,10 +19,6 @@ main.container-fluid.mb-4
         = bs_check_box :price_targets, 'Show price targets', inline: true
         = bs_check_box :relative_price_targets, 'Use relative', inline: true
         = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
-    .row.mb-3
-      .col-sm-1
-      .col-sm-5
-        p Today: #{Current.today}, yesterday: #{Current.yesterday}
 
   = page_entries_block @instruments
   = paginate @instruments, window: 20
@@ -45,13 +41,13 @@ main.container-fluid.mb-4
           th.money-cell Average
           th.money-cell.border-end.pe-2 High
         th.money-cell Last
-        th.money-cell Open ﹪
-        th.money-cell 1d ﹪
-        th.money-cell 2d ﹪
-        th.money-cell 3d ﹪
+        th.money-cell(title=l(Current.today,     format: :week_day)) Open ﹪
+        th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d ﹪
+        th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d ﹪
+        th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d ﹪
 
-        th.money-cell 1w ﹪
-        th.money-cell 1m ﹪
+        th.money-cell(title=l(Current.week_ago,  format: :week_day)) 1w ﹪
+        th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
         th.money-cell.border-end.pe-2 2021 ﹪
         th.money-cell Nov6 ﹪
         th.money-cell Mar23 ﹪
@@ -85,7 +81,11 @@ main.container-fluid.mb-4
             td.money-cell                = relative_price price_target&.average, inst.base_price, unit: price_target&.currency, format: price_target_format
             td.money-cell.border-end.pe-2= relative_price price_target&.high,    inst.base_price, unit: price_target&.currency, format: price_target_format
 
-          td.money-cell                  = relative_price inst.last || inst.today_close, inst.today_open, unit: inst.currency, format: 'absolute'
+          td.money-cell
+            - if inst.price!.outdated? && inst.last
+              span.outdated-price(title="Last at #{inst.price!.last_at}")= format_price inst.last, unit: inst.currency
+            - else
+              = colorized_price inst.last, inst.today_open, unit: inst.currency
           td.money-cell                  = relative_price inst.today_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.yesterday_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.d2_ago_open,     inst.base_price, unit: inst.currency, format: past_price_format, inverse: true

@@ -29,7 +29,8 @@ rake iex:stats
 
 rake iex:insider-transactions set=main
 rake iex:candles:days:previous
-rake tinkoff:update
+
+rake tinkoff:candles:day tinkoff:prices
 
 # Run hourly
 

@@ -4,6 +4,10 @@ class InstrumentPrice < ApplicationRecord
 
   before_create { self.ticker ||= instrument.ticker }
 
+  def outdated?
+    !last_at || last_at < Current.date
+  end
+
   class << self
     def refresh(set: nil)
       Instrument.tinkoff.in_set(set).abc.each do |inst|

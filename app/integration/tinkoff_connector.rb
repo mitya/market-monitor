@@ -77,9 +77,10 @@ class TinkoffConnector
     since, till = 10.minutes.ago.beginning_of_minute, 1.minute.from_now.beginning_of_minute
     response = `coffee bin/tinkoff.coffee candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}`
     response_json = JSON.parse(response)
-    price = response_json.dig 'candles', -1, 'h'
+    candle = response_json.dig 'candles', -1
+    price = candle&.dig 'h'
     printf "Refresh price for %-7s %3i candles price=#{price.inspect}\n", instrument.ticker, response_json['candles'].count
-    instrument.price.update! value: price if price
+    instrument.price.update! value: price, last_at: candle['time'], source: 'tinkoff' if price
   end
 
 

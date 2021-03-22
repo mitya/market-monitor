@@ -21,17 +21,21 @@ module InstrumentsHelper
   end
 
 
+  def format_price(price, unit: nil)
+    number_to_currency price, unit: currency_sign(unit), precision: price && price > 10_000 ? 0 : 2 if price
+  end
+
   def colorized_price(price, base_price, unit: nil, inverse: false)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
     title = number_to_percentage ratio * 100, precision: 1, format: '%n ﹪' if ratio
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
-      number_to_currency price, unit: currency_sign(unit), precision: price && price > 10_000 ? 0 : 2
+      format_price price, unit: unit
     end
   end
 
   def colorized_percentage(price, base_price, unit: nil, inverse: false)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
-    tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: number_to_currency(price, unit: currency_sign(unit)) do
+    tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: format_price(price, unit: currency_sign(unit)) do
       number_to_percentage ratio * 100, precision: percentage_precision, format: '%n ﹪' if ratio
     end
   end

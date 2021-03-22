@@ -47,6 +47,8 @@
 + filtering by calculated values (maybe right in the code)
 + add poor man sorting
 + 1/2/3 day dynamics
++ add source & last_at to prices
++ indicate that the price is old
 
 - volatility indication
 - volume indication
@@ -60,12 +62,10 @@
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
-- indicate that the price is old
 - use same filters & filter logic on all pages
 - focus tickers filter on load if it it used
 - add last insider transaction to the list
 - replace chart API with previous which is cheaper
-- add source & last_at to prices
 - extract special dates
 - fixed width digits
 - indexes & commodities

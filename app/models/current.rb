@@ -7,9 +7,11 @@ class Current < ActiveSupport::CurrentAttributes
   end
   alias today date
 
-  def yesterday
-    date.prev_weekday
-  end
+  def yesterday = date.prev_weekday
+  def d2_ago    = yesterday.prev_weekday
+  def d3_ago    = d2_ago.prev_weekday
+  def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
+  def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
 
   def preload_day_candles_for(instruments)
     self.day_candles_cache = DayCandleCache.new(instruments)
@@ -66,12 +68,12 @@ class Current < ActiveSupport::CurrentAttributes
         Date.parse('2020-03-23'),
         Date.parse('2020-11-06'),
         Date.parse('2021-01-04'),
-        MarketCalendar.closest_weekday(1.week.ago.to_date),
-        MarketCalendar.closest_weekday(1.month.ago.to_date),
+        Current.week_ago,
+        Current.month_ago,
         Current.date,
         Current.yesterday,
-        Current.yesterday.prev_weekday,
-        Current.yesterday.prev_weekday.prev_weekday,
+        Current.d2_ago,
+        Current.d3_ago,
       ]
     end
   end

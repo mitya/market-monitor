@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+
+  date:
+    formats:
+      week_day: '%A, %d %B %Y'
