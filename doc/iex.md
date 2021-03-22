@@ -1,7 +1,6 @@
 https://iexcloud.io/docs/api
 https://github.com/dblock/iex-ruby-client
 
-
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/quote?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/previous?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/1m?token=$IEX_SECRET_KEY" | jq

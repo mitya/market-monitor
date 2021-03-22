@@ -52,12 +52,11 @@
 + fix 2 day old candle for premium tickers
 + load opening prices for premium tickers somehow
 + check tickers without any price data
-
-- load advanced stats (forward P/E) for selected tickers from IEX
-- try to get european ticker historical data from IEX
++ try to get european ticker historical data from IEX
++ load advanced stats (forward P/E) for selected tickers from IEX
++ volume indication
 
 - volatility indication
-- volume indication
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
@@ -84,6 +83,7 @@
 - 5-min candles loading
 - company info list
 - russian ticker company info
+- maintain average volume for last N months
 
 
 # Later

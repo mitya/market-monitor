@@ -48,13 +48,14 @@ class InsiderTransaction < ApplicationRecord
       import_iex_data JSON.parse File.read file_name
     end
 
-    def import_iex_data_from_remote(instrument)
+    def import_iex_data_from_remote(instrument, delay: 0)
       instrument = Instrument[instrument]
       data = ApiCache.get "cache/iex-insider-transactions/#{instrument.ticker} transactions #{Date.current.to_s :number}.json" do
         puts "Load insider transactions for #{instrument.ticker}"
         IexConnector.insider_transactions(instrument.ticker)
       end
       import_iex_data data
+      sleep delay
     end
   end
 end

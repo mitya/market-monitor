@@ -1,6 +1,7 @@
 - params[:relative_past_prices] ||= '1'
 - past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- historical_prices = params['volume'] != '1'
 
 main.container-fluid.mb-4
   h1.display-3 Instruments
@@ -15,7 +16,9 @@ main.container-fluid.mb-4
     .row.mb-3
       .col-sm-1
       .col-sm-5
-        = bs_check_box :fundamentals, 'Show fundamentals'
+        = bs_check_box :fundamentals, 'Show fundamentals', inline: true
+        = bs_check_box :volume, 'Show volume', inline: true
+        br
         = bs_check_box :price_targets, 'Show price targets', inline: true
         = bs_check_box :relative_price_targets, 'Use relative', inline: true
         = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
@@ -41,7 +44,7 @@ main.container-fluid.mb-4
           th.money-cell Average
           th.money-cell.border-end.pe-2 High
         th.money-cell Last
-        th.money-cell(title=l(Current.today,     format: :week_day)) Open ﹪
+        th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
         th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d ﹪
         th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d ﹪
         th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d ﹪
@@ -49,11 +52,18 @@ main.container-fluid.mb-4
         th.money-cell(title=l(Current.week_ago,  format: :week_day)) 1w ﹪
         th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
         th.money-cell.border-end.pe-2 2021 ﹪
-        th.money-cell Nov6 ﹪
-        th.money-cell Mar23 ﹪
-        th.money-cell Feb19 ﹪
-        th.money-cell.border-end.pe-2 2020 ﹪
-        th.money-cell 2019 ﹪
+        - if params[:volume] == '1'
+          th.money-cell Vol 1d
+          th.money-cell Vol 2d
+          th.money-cell Vol 3d
+          th.money-cell Vol 1w
+          th.money-cell Vol 1m
+        - if historical_prices
+          th.money-cell Nov6 ﹪
+          th.money-cell Mar23 ﹪
+          th.money-cell Feb19 ﹪
+          th.money-cell.border-end.pe-2 2020 ﹪
+          th.money-cell 2019 ﹪
         th
         th
     tbody
@@ -86,18 +96,25 @@ main.container-fluid.mb-4
               span.outdated-price(title="Last at #{inst.price!.last_at}")= format_price inst.last, unit: inst.currency
             - else
               = colorized_price inst.last, inst.today_open, unit: inst.currency
-          td.money-cell                  = relative_price inst.today_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.border-end.pe-2  = relative_price inst.    today_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.yesterday_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.d2_ago_open,     inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.d3_ago_open,     inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.week_ago_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.   d2_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.   d3_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst. week_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell                  = relative_price inst.month_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.nov06_low,       inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.mar23_low,       inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.feb19_low,       inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.border-end.pe-2  = relative_price inst.y2020_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.y2019_open,      inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          - if params[:volume] == '1'
+            td.money-cell= format_price_in_millions inst.base_price * inst.yesterday_volume, unit: inst.currency
+            td.money-cell= format_price_in_millions inst.base_price * inst.d2_ago_volume,    unit: inst.currency
+            td.money-cell= format_price_in_millions inst.base_price * inst.d3_ago_volume,    unit: inst.currency
+            td.money-cell= format_price_in_millions inst.base_price * inst.week_ago_volume,  unit: inst.currency
+            td.money-cell= format_price_in_millions inst.base_price * inst.month_ago_volume, unit: inst.currency
+          - if historical_prices
+            td.money-cell                  = relative_price inst.     nov06_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell                  = relative_price inst.     mar23_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.border-end.pe-2  = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td= link_to fa_icon('shopping-cart'), insider_transactions_path(ticker: inst.ticker), target: '_blank', title: 'Insider Transactions'
           td= exchange_logo inst.exchange_name
 

@@ -45,7 +45,7 @@ class Instrument < ApplicationRecord
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
-  %w[low high open close].each do |price|
+  %w[low high open close volume].each do |price|
     %w[today yesterday d2_ago d3_ago week_ago month_ago feb19 mar23 nov06 y2019 y2020 y2021].each do |date|
       define_method("#{date}_#{price}") { send(date).try(price) }
       define_method("#{date}_#{price}_rel") { |curr_price = 'last'| rel_diff "#{date}_#{price}", curr_price }

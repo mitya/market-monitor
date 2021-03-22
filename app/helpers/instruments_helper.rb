@@ -20,6 +20,11 @@ module InstrumentsHelper
     tag.span(value, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
 
+  def format_price_in_millions(price, unit: nil)
+    return unless price
+    price_in_millions = price / 1_000_000.0
+    number_to_currency price_in_millions, unit: currency_sign(unit), precision: 1, format: '%u%nm'
+  end
 
   def format_price(price, unit: nil)
     number_to_currency price, unit: currency_sign(unit), precision: price && price > 10_000 ? 0 : 2 if price
@@ -138,7 +143,7 @@ module InstrumentsHelper
   }
 
   SectorCodeTitles = {
-    "commercialservices"    => ["Commercial"],
+    "commercialservices"    => ["Commercial",         'primary'],
     "communications"        => ["Communications"],
     "consumerdurables"      => ["Consumer Durables"],
     "consumernon-durables"  => ["Consumer Non-durables"],
@@ -146,7 +151,7 @@ module InstrumentsHelper
     "distributionservices"  => ["Distribution"],
     "electronictechnology"  => ["Electronics",        'warning'],
     "energyminerals"        => ["Energy",             'success'],
-    "finance"               => ["Finance",            'info'],
+    "finance"               => ["Finance",            'dark'],
     "healthservices"        => ["Health Services",    'danger'],
     "healthtechnology"      => ["Health Tech",        'danger'],
     "industrialservices"    => ["Industrial",         'success'],
@@ -155,7 +160,7 @@ module InstrumentsHelper
     "non-energyminerals"    => ["Minerals",           'success'],
     "processindustries"     => ["Process Industries", 'success'],
     "producermanufacturing" => ["Manufactoring"],
-    "retailtrade"           => ["Retail"],
+    "retailtrade"           => ["Retail",             'primary'],
     "technologyservices"    => ["Technology",         'warning'],
     "transportation"        => ["Transportation"],
     "utilities"             => ["Utilities"],

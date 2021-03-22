@@ -3,15 +3,9 @@ class InstrumentInfo < ApplicationRecord
 
   scope :abc, -> { order :ticker }
 
-  def refresh
-    self.company = IexConnector.company(ticker)
-    self.company_updated_at = Time.current
-    self.name = company['companyName']
-    self.industry = company['industry']&.strip
-    self.sector = company['sector']&.strip
-    self.country = company['country']
-    self.industry = company['industry']
-    save!
+  def refresh(include_company: false)
+    return if stats_updated_at > 15.minutes.ago
+    puts "Update info for #{ticker}"
 
     self.stats = IexConnector.stats(ticker)
     self.stats_updated_at = Time.current
@@ -24,6 +18,23 @@ class InstrumentInfo < ApplicationRecord
     self.ex_divident_date = stats['exDividendDate']
     save!
 
+    if include_company
+      self.company = IexConnector.company(ticker)
+      self.company_updated_at = Time.current
+      self.name = company['companyName']
+      self.industry = company['industry']&.strip
+      self.sector = company['sector']&.strip
+      self.country = company['country']
+      self.industry = company['industry']
+      save!
+    end
+
+    if false
+      self.advanced_stats = IexConnector.advanced_stats!(ticker)
+      self.advanced_stats_updated_at = Time.current
+      save!
+    end
+
   rescue RestClient::NotFound
     destroy
   end
@@ -32,6 +43,8 @@ class InstrumentInfo < ApplicationRecord
   def marketcap_mil = marketcap && marketcap / 1_000_000
   def industry = super&.strip
   def dividend_yield_percent = dividend_yield && dividend_yield * 100
+  def avg_10d_volume = stats['avg10Volume']
+  def avg_30d_volume = stats['avg30Volume']
 
   class << self
     def refresh
@@ -62,3 +75,4 @@ InstrumentInfo.refresh
 InstrumentInfo.group(:industry).order(:count).count
 InstrumentInfo.pluck(:industry)
 InstrumentInfo.load_sector_codes_from_tops
+Instrument['BABA'].info.refresh
