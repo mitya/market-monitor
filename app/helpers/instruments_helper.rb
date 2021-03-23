@@ -50,6 +50,15 @@ module InstrumentsHelper
     send method, price, base_price, unit: unit, inverse: inverse
   end
 
+  def volatility_indicator(instrument, accessor)
+    volatility = instrument.send "#{accessor}_volatility"
+    high       = instrument.send "#{accessor}_high"
+    low        = instrument.send "#{accessor}_low"
+    text  = number_to_percentage volatility.to_f * 100, precision: 1
+    title = "L:#{number_with_precision low, precision: 2} H:#{number_with_precision high, precision: 2}"
+    tag.span text, title: title
+  end
+
 
   def currency_sign(currency_code)
     CurrencySigns[currency_code.to_s.to_sym] || currency_code

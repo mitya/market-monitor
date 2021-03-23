@@ -26,14 +26,15 @@ class Instrument < ApplicationRecord
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
 
-  def to_s = ticker
+  DateSelectors = %w[today yesterday] + %w[d2 d3 d4 d6 d6 d7 week month].map { |period| "#{period}_ago" }
 
-  def today         = @today     ||= day_candles!.find_date(Current.today)
-  def yesterday     = @yesterday ||= day_candles!.find_date(Current.yesterday)
-  def d2_ago        = @d2_ago    ||= day_candles!.find_date(Current.d2_ago)
-  def d3_ago        = @d3_ago    ||= day_candles!.find_date(Current.d3_ago)
-  def week_ago      = @week_ago  ||= day_candles!.find_date(Current.week_ago)
-  def month_ago     = @month_ago ||= day_candles!.find_date(Current.month_ago)
+  DateSelectors.each do |selector|
+    define_method("#{selector}") do
+      instance_variable_get("@#{selector}") ||
+      instance_variable_set("@#{selector}", day_candles!.find_date(Current.send(selector))  )
+    end
+  end
+
   def feb19         = @feb19     ||= day_candles!.find_date(Date.new 2020,  2, 19)
   def mar23         = @mar23     ||= day_candles!.find_date(Date.new 2020,  3, 23)
   def nov06         = @nov06     ||= day_candles!.find_date(Date.new 2020, 11,  6)
@@ -45,8 +46,8 @@ class Instrument < ApplicationRecord
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
-  %w[low high open close volume].each do |price|
-    %w[today yesterday d2_ago d3_ago week_ago month_ago feb19 mar23 nov06 y2019 y2020 y2021].each do |date|
+  %w[low high open close volume volatility volatility_range].each do |price|
+    (DateSelectors + %w[feb19 mar23 nov06 y2019 y2020 y2021]).each do |date|
       define_method("#{date}_#{price}") { send(date).try(price) }
       define_method("#{date}_#{price}_rel") { |curr_price = 'last'| rel_diff "#{date}_#{price}", curr_price }
       define_method("#{date}_#{price}_diff") { |curr_price = 'last'| diff "#{date}_#{price}", curr_price }
@@ -75,6 +76,8 @@ class Instrument < ApplicationRecord
   def iex? = info.present?
   def premium? = flags.include?('premium')
   def exchange_name = exchange || (rub?? 'MOEX' : nil)
+
+  def to_s = ticker
 
   class << self
     def get(ticker = nil, figi: nil)

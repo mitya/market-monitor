@@ -10,6 +10,8 @@ class Candle < ApplicationRecord
   scope :find_date_before, -> date { order(date: :desc).where('date < ?', date.to_date).take }
 
   def final? = !ongoing?
+  def volatility_range = high - low
+  def volatility = (high - low) / low
 
   class << self
     def last_loaded_date = final.maximum(:date)

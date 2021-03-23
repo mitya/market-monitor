@@ -55,8 +55,10 @@
 + try to get european ticker historical data from IEX
 + load advanced stats (forward P/E) for selected tickers from IEX
 + volume indication
++ volatility percentage per day
 
-- volatility indication
+- colorize volatility based on day color
+- volatility bar indication
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%

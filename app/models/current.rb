@@ -10,6 +10,10 @@ class Current < ActiveSupport::CurrentAttributes
   def yesterday = date.prev_weekday
   def d2_ago    = yesterday.prev_weekday
   def d3_ago    = d2_ago.prev_weekday
+  def d4_ago    = d3_ago.prev_weekday
+  def d5_ago    = d4_ago.prev_weekday
+  def d6_ago    = d5_ago.prev_weekday
+  def d7_ago    = d6_ago.prev_weekday
   def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
   def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
 
@@ -68,12 +72,15 @@ class Current < ActiveSupport::CurrentAttributes
         Date.parse('2020-03-23'),
         Date.parse('2020-11-06'),
         Date.parse('2021-01-04'),
-        Current.week_ago,
-        Current.month_ago,
         Current.date,
         Current.yesterday,
         Current.d2_ago,
         Current.d3_ago,
+        Current.d4_ago,
+        Current.week_ago,
+        Current.d6_ago,
+        Current.d7_ago,
+        Current.month_ago,
       ]
     end
   end
