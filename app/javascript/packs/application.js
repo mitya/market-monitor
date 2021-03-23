@@ -16,4 +16,18 @@ document.addEventListener("turbolinks:load", () => {
   document.querySelector('#list-config').addEventListener("change", e => {
     e.target.closest('form').submit()
   })
+
+  document.querySelector('.tickers-table').addEventListener("change", e => {
+    if (e.target.matches('.lots-input')) {
+      let input = e.target
+      let row = input.closest('tr')
+      fetch(`/portfolio/${row.dataset.ticker}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lots: input.value })
+      }).then(response => {
+        console.log(response)
+      })
+    }
+  })
 })

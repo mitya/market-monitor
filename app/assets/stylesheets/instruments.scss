@@ -16,7 +16,7 @@
 .changebox-red, .is-red { color: red; }
 
 
-.money-amount, .changebox, .badge-fixed {
+.money-cell, .money-amount, .changebox, .badge-fixed {
   font-family: helvetica, var(--bs-font-sans-serif);
 }
 
@@ -47,3 +47,13 @@
 .volatility-value.volatility-high { font-weight: bold; }
 .volatility-value.direction-up { color: green; }
 .volatility-value.direction-down { color: red; }
+
+
+.lots-input {
+  width: 75px; text-align: right; display: inline-block;
+  padding: 1px 2px;
+  min-height: 16px;
+  font-size: 0.7rem;
+}
+
+.lots-input::-webkit-outer-spin-button, .lots-input::-webkit-inner-spin-button { -webkit-appearance: none; }

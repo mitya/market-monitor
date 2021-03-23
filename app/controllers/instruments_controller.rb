@@ -15,6 +15,8 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
     @instruments = @instruments.page(params[:page]).per(200)
 
+    @portfolio = PortfolioItem.all
+
     extra_dates = []
     extra_dates += Current.last_2_weeks if params[:chart_volatility]
 

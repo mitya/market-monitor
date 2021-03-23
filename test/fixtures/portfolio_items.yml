@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  lots: MyString
+  lots_expr: MyString
+  price: MyString
+
+two:
+  ticker: MyString
+  lots: MyString
+  lots_expr: MyString
+  price: MyString

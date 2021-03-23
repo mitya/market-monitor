@@ -59,25 +59,29 @@
 + volatility bar indication
 + 2-week volatility chart
 + a set with portfolio tickers
++ number of lots for portfolio set
++ fixed width digits
++ fix table header
++ replace chart API with previous which is cheaper
+
+- missing TEVA ARCH BTU
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
-- number of lots for portfolio set
+- portfolio: add a new ticker from UI
+- portfolio: convert RUS ticker totals to USD
+- portfolio: sorting by total
 - download all recent missing previous days in iex:candle:previous
 - use same filters & filter logic on all pages
 - focus tickers filter on load if it it used
 - add last insider transaction to the list
-- replace chart API with previous which is cheaper
 - extract special dates
-- fixed width digits
 - indexes & commodities
 - list sorting
-- list filtering by tickers
 - tinkoff ticker checking
-- fix table header
 - country flags
 - disable stocks without any recent data
 – data aggregation into a table

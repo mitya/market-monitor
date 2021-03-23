@@ -9,6 +9,7 @@ class Instrument < ApplicationRecord
   has_one :price_target, foreign_key: 'ticker'
   has_one :price, class_name: 'InstrumentPrice', foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :info, class_name: 'InstrumentInfo',   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :portfolio_item, foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
   validates_presence_of :ticker, :name
 

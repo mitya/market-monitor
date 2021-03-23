@@ -26,9 +26,9 @@ module InstrumentsHelper
     number_to_currency price_in_millions, unit: currency_sign(unit), precision: 1, format: '%u%nm'
   end
 
-  def format_price(price, unit: nil)
+  def format_price(price, unit: nil, precision: nil)
     return unless price
-    precision = price > 10_000 ? 0 : price < 1 ? 4 : 2
+    precision ||= price > 10_000 ? 0 : price < 1 ? 4 : 2
     number_to_currency price, unit: currency_sign(unit), precision: precision if price
   end
 

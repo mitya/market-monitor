@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_19_125707) do
+ActiveRecord::Schema.define(version: 2021_03_23_155512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,9 @@ ActiveRecord::Schema.define(version: 2021_03_19_125707) do
     t.datetime "stats_updated_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "sector_code"
+    t.jsonb "advanced_stats"
+    t.datetime "advanced_stats_updated_at"
   end
 
   create_table "instruments", primary_key: "ticker", id: :string, force: :cascade do |t|
@@ -90,6 +93,14 @@ ActiveRecord::Schema.define(version: 2021_03_19_125707) do
     t.index ["isin"], name: "index_instruments_on_isin", unique: true
   end
 
+  create_table "portfolio_items", primary_key: "ticker", id: :string, force: :cascade do |t|
+    t.integer "lots"
+    t.string "lots_expr"
+    t.decimal "price", precision: 20, scale: 4
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "price_targets", force: :cascade do |t|
     t.string "ticker", null: false
     t.date "date"
@@ -107,6 +118,8 @@ ActiveRecord::Schema.define(version: 2021_03_19_125707) do
   create_table "prices", primary_key: "ticker", id: :string, force: :cascade do |t|
     t.decimal "value", precision: 20, scale: 4
     t.datetime "updated_at"
+    t.datetime "last_at"
+    t.string "source"
     t.index ["ticker"], name: "index_prices_on_ticker", unique: true
   end
 

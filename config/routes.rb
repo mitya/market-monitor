@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   resources :instruments
   resources :insider_transactions, path: 'insider-transactions'
   resources :recommendations
+  resources :portfolio, as: :portfolio_items
 end
