@@ -17,8 +17,10 @@ class Current < ActiveSupport::CurrentAttributes
   def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
   def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
 
-  def preload_day_candles_for(instruments)
-    self.day_candles_cache = DayCandleCache.new(instruments)
+  def last_2_weeks = 2.weeks.ago.to_date.upto(Current.yesterday).to_a.select(&:on_weekday?).reverse
+
+  def preload_day_candles_for(instruments, extra_dates: nil)
+    self.day_candles_cache = DayCandleCache.new(instruments, extra_dates)
   end
 
   def preload_prices_for(instruments)
@@ -38,9 +40,9 @@ class Current < ActiveSupport::CurrentAttributes
   class DayCandleCache
     attr :candles, :candles_by_ticker
 
-    def initialize(instruments)
+    def initialize(instruments, extra_dates = nil)
       @instruments = instruments
-      @candles = Candle.day.where(ticker: instruments.map(&:ticker), date: SpecialDates.dates).to_a
+      @candles = Candle.day.where(ticker: instruments.map(&:ticker), date: (SpecialDates.dates + extra_dates.to_a).uniq.sort).to_a
       @candles_by_ticker = @candles.group_by &:ticker
     end
 

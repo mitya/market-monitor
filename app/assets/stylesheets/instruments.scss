@@ -39,6 +39,9 @@
 .outdated-price { color: rgba(#212529, 0.33); }
 
 .volatility-bar { display: block; background-color: rgba(black, 0.5); margin: 0 auto; width: 8px; }
+.volatility-bar.volatility-low { background-color: rgba(black, 0.2); }
+.volatility-bar.volatility-high { background-color: rgba(black, 1); }
+.volatility-chart .volatility-bar { display: inline-block; margin-right: 2px; }
 
 .volatility-value.volatility-low { color: rgba(black, 0.33); }
 .volatility-value.volatility-high { font-weight: bold; }

@@ -2,8 +2,9 @@
 - past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - show_volume = params['volume'] == '1'
-- show_volatility = params['volatility'] == '1'
-- show_historical_prices = !show_volume && !show_volatility
+- chart_volatility = params['chart_volatility'] == '1'
+- show_volatility = params['volatility'] == '1' && !chart_volatility
+- show_historical_prices = !show_volume && !show_volatility && !chart_volatility
 - volatility_format = :percentage
 - volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
 
@@ -20,12 +21,13 @@ main.container-fluid.mb-4
     .row.mb-3
       .col-sm-1
       .col-sm-5
-        = bs_check_box :fundamentals, 'Show fundamentals', inline: true
-        = bs_check_box :volume, 'Show volume', inline: true
-        = bs_check_box :volatility, 'Show volatility', inline: true
+        = bs_check_box :fundamentals, 'Fundamentals'
+        = bs_check_box :volume, 'Volume'
+        = bs_check_box :volatility, 'Volatility', inline: true
+        = bs_check_box :chart_volatility, 'as chart', inline: true
         br
-        = bs_check_box :price_targets, 'Show price targets', inline: true
-        = bs_check_box :relative_price_targets, 'Use relative', inline: true
+        = bs_check_box :price_targets, 'Price targets', inline: true
+        = bs_check_box :relative_price_targets, 'relative', inline: true
         = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
 
   = page_entries_block @instruments
@@ -66,6 +68,8 @@ main.container-fluid.mb-4
           th.money-cell 6d σ
           th.money-cell 7d σ
           th.money-cell 1m σ
+        - if chart_volatility
+          th.text-left Volatility
         - if show_volume
           th.money-cell Vol 1d
           th.money-cell Vol 2d
@@ -128,6 +132,11 @@ main.container-fluid.mb-4
             td[class=volatility_cell_class]= volatility_indicator inst, :d6_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d7_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :month_ago, format: volatility_format
+          - if chart_volatility
+            td.volatility-chart
+              - Current.last_2_weeks.each do |date|
+                = volatility_indicator inst, date, format: :bar
+
           - if show_volume
             td.money-cell= format_price_in_millions inst.base_price * inst.yesterday_volume, unit: inst.currency
             td.money-cell= format_price_in_millions inst.base_price * inst.   d2_ago_volume, unit: inst.currency

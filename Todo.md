@@ -57,12 +57,15 @@
 + volume indication
 + volatility percentage per day
 + volatility bar indication
++ 2-week volatility chart
++ a set with portfolio tickers
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 - find stocks with continious flat
 
+- number of lots for portfolio set
 - download all recent missing previous days in iex:candle:previous
 - use same filters & filter logic on all pages
 - focus tickers filter on load if it it used
@@ -84,6 +87,7 @@
 - company info list
 - russian ticker company info
 - maintain average volume for last N months
+- ticker selection & commands
 
 
 # Later

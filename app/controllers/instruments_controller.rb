@@ -15,7 +15,10 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
     @instruments = @instruments.page(params[:page]).per(200)
 
-    Current.preload_day_candles_for @instruments
+    extra_dates = []
+    extra_dates += Current.last_2_weeks if params[:chart_volatility]
+
+    Current.preload_day_candles_for @instruments, extra_dates: extra_dates
     Current.preload_prices_for @instruments
   end
 end

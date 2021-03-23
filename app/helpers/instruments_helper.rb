@@ -27,7 +27,9 @@ module InstrumentsHelper
   end
 
   def format_price(price, unit: nil)
-    number_to_currency price, unit: currency_sign(unit), precision: price && price > 10_000 ? 0 : 2 if price
+    return unless price
+    precision = price > 10_000 ? 0 : price < 1 ? 4 : 2
+    number_to_currency price, unit: currency_sign(unit), precision: precision if price
   end
 
   def colorized_price(price, base_price, unit: nil, inverse: false)
@@ -50,19 +52,27 @@ module InstrumentsHelper
     send method, price, base_price, unit: unit, inverse: inverse
   end
 
-  def volatility_indicator(instrument, accessor, format: :bar)
-    volatility = instrument.send("#{accessor}_volatility")
-    return if not volatility
-    high       = instrument.send "#{accessor}_high"
-    low        = instrument.send "#{accessor}_low"
-    direction  = instrument.send "#{accessor}_direction"
+  def volatility_indicator(instrument, accessor_or_date, format: :bar)
+    candle = accessor_or_date.is_a?(Date) ?
+      instrument.day_candles!.find_date(accessor_or_date) :
+      instrument.send(accessor_or_date)
+
+    volatility = candle&.volatility
+    if volatility == nil
+      return nil if format == :percentage
+      return tag.span class: "volatility-bar volatility-nil", style: "height: 0px"
+    end
+
+    high       = candle.high
+    low        = candle.low
+    direction  = candle.direction
     percent    = number_to_percentage volatility * 100, precision: 0, format: '%n ﹪'
     title      = "L:#{number_with_precision low, precision: 2} H:#{number_with_precision high, precision: 2}"
     klass      = volatility < 0.03 ? 'low' : volatility < 0.06 ? 'mid' : 'high'
     case format
     when :bar
-      title = "V:#{percent} #{title}"
-      tag.span class: "volatility-bar", style: "height: #{volatility * 100 * 5}px", title: title
+      title = "V:#{percent} #{title} #{accessor_or_date}"
+      tag.span class: "volatility-bar volatility-#{klass}", style: "height: #{volatility * 100 * 5}px", title: title
     when :percentage
       tag.span percent, title: title, class: "volatility-value volatility-#{klass}"
     end
