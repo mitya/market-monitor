@@ -14,8 +14,11 @@ class Current < ActiveSupport::CurrentAttributes
   def d5_ago    = d4_ago.prev_weekday
   def d6_ago    = d5_ago.prev_weekday
   def d7_ago    = d6_ago.prev_weekday
+  def d10_ago   = d7_ago.prev_weekday.prev_weekday.prev_weekday
   def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
   def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
+  alias w1_ago d5_ago
+  alias w2_ago d10_ago
 
   def last_2_weeks = 2.weeks.ago.to_date.upto(Current.yesterday).to_a.select(&:on_weekday?).reverse
 
@@ -25,6 +28,14 @@ class Current < ActiveSupport::CurrentAttributes
 
   def preload_prices_for(instruments)
     self.prices_cache = PriceCache.new(instruments)
+  end
+
+  def in_usd(amount, currency)
+    case currency
+    when 'USD' then amount
+    when 'EUR' then amount * 1.2
+    when 'RUB' then amount / 76
+    end
   end
 
   class PriceCache
@@ -79,9 +90,10 @@ class Current < ActiveSupport::CurrentAttributes
         Current.d2_ago,
         Current.d3_ago,
         Current.d4_ago,
-        Current.week_ago,
+        Current.d5_ago,
         Current.d6_ago,
         Current.d7_ago,
+        Current.w2_ago,
         Current.month_ago,
       ]
     end

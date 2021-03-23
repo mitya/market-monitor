@@ -221,6 +221,10 @@ module InstrumentsHelper
     color = days_ago > 60 ? 'bg-danger' : days_ago > 15 ? 'bg-warning text-dark' : 'bg-success'
     tag.span "#{days_ago} d", class: "badge #{color}"
   end
+
+  def trading_view_url(instrument)
+    "https://www.tradingview.com/chart/?symbol=#{instrument.exchange_ticker}"
+  end
 end
 
 __END__

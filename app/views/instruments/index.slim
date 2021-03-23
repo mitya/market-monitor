@@ -60,7 +60,8 @@ main.container-fluid.mb-4
         th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d ﹪
         th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d ﹪
         th.money-cell(title=l(Current.d4_ago,    format: :week_day)) 4d ﹪
-        th.money-cell(title=l(Current.week_ago,  format: :week_day)) 1w ﹪
+        th.money-cell(title=l(Current.w1_ago,    format: :week_day)) 1w ﹪
+        th.money-cell(title=l(Current.w2_ago,    format: :week_day)) 2w ﹪
         th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
         th.money-cell.border-end.pe-2 2021 ﹪
         - if show_volatility
@@ -68,9 +69,10 @@ main.container-fluid.mb-4
           th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d σ
           th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d σ
           th.money-cell(title=l(Current.d4_ago,    format: :week_day)) 4d σ
-          th.money-cell(title=l(Current.week_ago,  format: :week_day)) 1w σ
+          th.money-cell(title=l(Current.d5_ago,    format: :week_day)) 1w σ
           th.money-cell(title=l(Current.d6_ago,    format: :week_day)) 6d σ
           th.money-cell(title=l(Current.d7_ago,    format: :week_day)) 7d σ
+          th.money-cell(title=l(Current.w2_ago,    format: :week_day)) 2w σ
           th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m σ
         - if chart_volatility
           th.text-left Volatility
@@ -89,14 +91,14 @@ main.container-fluid.mb-4
         th
     tbody
       - instruments = @instruments
-      / - instruments = @instruments.sort_by &:y2021_open_rel
+      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.total_in_usd.to_d }.reverse if is_portfolio
       - instruments.each do |inst|
         - price_target = inst.price_target
-        - portfolio_item = @portfolio.find { |item| item.ticker == inst.ticker }
+        - portfolio_item = inst.portfolio_item
         - info = inst.info
         - inst.current_price_selector = :last_or_open
         tr data-ticker=inst.ticker
-          td= instrument_logo inst
+          td= link_to instrument_logo(inst), trading_view_url(inst), target: '_blank', tabindex: '-1' if inst.has_logo?
           td= inst.ticker
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if inst.premium?
           td= truncate inst.name
@@ -104,7 +106,7 @@ main.container-fluid.mb-4
             td.money-cell
               input class="form-control form-control-sm lots-input" type="number" value=portfolio_item&.lots
             td.money-cell
-              = format_price portfolio_item.lots * inst.last, unit: inst.currency, precision: 0 if portfolio_item&.lots && inst.last
+              = format_price portfolio_item.total_in_usd, unit: 'USD', precision: 0 if portfolio_item&.total_in_usd
 
           td= sector_badge info&.sector_code, title: info&.industry
 
@@ -129,7 +131,8 @@ main.container-fluid.mb-4
           td.money-cell.muted-cell       = relative_price inst.   d2_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.   d3_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.   d4_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst. week_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.   w1_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.   w2_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell                  = relative_price inst.month_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
@@ -138,9 +141,10 @@ main.container-fluid.mb-4
             td[class=volatility_cell_class]= volatility_indicator inst, :d2_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d3_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d4_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :week_ago,  format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :d5_ago,  format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d6_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d7_ago,    format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :w2_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :month_ago, format: volatility_format
           - if chart_volatility
             td.volatility-chart
@@ -160,7 +164,7 @@ main.container-fluid.mb-4
             td.money-cell.border-end.pe-2  = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell.muted-cell       = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
-          td= link_to insider_transactions_path(ticker: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
+          td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
             = exchange_logo(inst.exchange_name)
 
   = paginate @instruments, window: 20

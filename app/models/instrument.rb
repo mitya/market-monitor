@@ -27,7 +27,7 @@ class Instrument < ApplicationRecord
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
 
-  DateSelectors = %w[today yesterday] + %w[d2 d3 d4 d6 d6 d7 week month].map { |period| "#{period}_ago" }
+  DateSelectors = %w[today yesterday] + %w[d2 d3 d4 d5 d6 d6 d7 w1 w2 week month].map { |period| "#{period}_ago" }
 
   DateSelectors.each do |selector|
     define_method("#{selector}") do
@@ -81,6 +81,7 @@ class Instrument < ApplicationRecord
   def exchange_name = exchange || (rub?? 'MOEX' : nil)
 
   def to_s = ticker
+  def exchange_ticker = "#{exchange}:#{ticker}".upcase
 
   class << self
     def get(ticker = nil, figi: nil)

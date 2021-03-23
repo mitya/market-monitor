@@ -63,6 +63,8 @@
 + fixed width digits
 + fix table header
 + replace chart API with previous which is cheaper
++ portfolio: convert RUS ticker totals to USD
++ portfolio: sorting by total
 
 - missing TEVA ARCH BTU
 
@@ -72,8 +74,6 @@
 - find stocks with continious flat
 
 - portfolio: add a new ticker from UI
-- portfolio: convert RUS ticker totals to USD
-- portfolio: sorting by total
 - download all recent missing previous days in iex:candle:previous
 - use same filters & filter logic on all pages
 - focus tickers filter on load if it it used
