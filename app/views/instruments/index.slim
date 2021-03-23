@@ -4,6 +4,8 @@
 - show_volume = params['volume'] == '1'
 - show_volatility = params['volatility'] == '1'
 - show_historical_prices = !show_volume && !show_volatility
+- volatility_format = :percentage
+- volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
 
 main.container-fluid.mb-4
   h1.display-3 Instruments
@@ -51,7 +53,7 @@ main.container-fluid.mb-4
         th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d ﹪
         th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d ﹪
         th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d ﹪
-
+        th.money-cell(title=l(Current.d4_ago,    format: :week_day)) 4d ﹪
         th.money-cell(title=l(Current.week_ago,  format: :week_day)) 1w ﹪
         th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
         th.money-cell.border-end.pe-2 2021 ﹪
@@ -105,26 +107,27 @@ main.container-fluid.mb-4
 
           td.money-cell
             - if inst.price!.outdated? && inst.last
-              span.outdated-price(title="Last at #{inst.price!.last_at}")= format_price inst.last, unit: inst.currency
+              span.outdated-price(title="Last at #{inst.price!.last_at&.localtime}")= format_price inst.last, unit: inst.currency
             - else
               = colorized_price inst.last, inst.today_open, unit: inst.currency
           td.money-cell.border-end.pe-2  = relative_price inst.    today_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.yesterday_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.   d2_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.   d3_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.   d4_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell                  = relative_price inst. week_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell                  = relative_price inst.month_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           - if show_volatility
-            td.money-cell= volatility_indicator inst, :yesterday
-            td.money-cell= volatility_indicator inst, :d2_ago
-            td.money-cell= volatility_indicator inst, :d3_ago
-            td.money-cell= volatility_indicator inst, :d4_ago
-            td.money-cell= volatility_indicator inst, :week_ago
-            td.money-cell= volatility_indicator inst, :d6_ago
-            td.money-cell= volatility_indicator inst, :d7_ago            
-            td.money-cell= volatility_indicator inst, :month_ago
+            td[class=volatility_cell_class]= volatility_indicator inst, :yesterday, format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :d2_ago,    format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :d3_ago,    format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :d4_ago,    format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :week_ago,  format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :d6_ago,    format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :d7_ago,    format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :month_ago, format: volatility_format
           - if show_volume
             td.money-cell= format_price_in_millions inst.base_price * inst.yesterday_volume, unit: inst.currency
             td.money-cell= format_price_in_millions inst.base_price * inst.   d2_ago_volume, unit: inst.currency

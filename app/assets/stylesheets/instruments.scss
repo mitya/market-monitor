@@ -9,6 +9,8 @@
 .money-cell { text-align: right; }
 .percent-cell { text-align: right; }
 .money-cell .currency { padding-right: 1px; }
+.indicator-cell { vertical-align: bottom; text-align: center; }
+.table-sm .indicator-cell { padding-bottom: 0; }
 
 .changebox-green, .is-green { color: green; }
 .changebox-red, .is-red { color: red; }
@@ -34,5 +36,11 @@
 .exchange-logo { filter: grayscale(100%); }
 
 .text-muted-alt { color: rgba(#212529, 0.6); }
-// .outdated-price { background-color: rgba(#212529, 0.6); color: white; padding: 1px 2px; border-radius: 2px; font-size: 0.7rem; }
 .outdated-price { color: rgba(#212529, 0.33); }
+
+.volatility-bar { display: block; background-color: rgba(black, 0.5); margin: 0 auto; width: 8px; }
+
+.volatility-value.volatility-low { color: rgba(black, 0.33); }
+.volatility-value.volatility-high { font-weight: bold; }
+.volatility-value.direction-up { color: green; }
+.volatility-value.direction-down { color: red; }

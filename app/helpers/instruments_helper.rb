@@ -50,13 +50,22 @@ module InstrumentsHelper
     send method, price, base_price, unit: unit, inverse: inverse
   end
 
-  def volatility_indicator(instrument, accessor)
-    volatility = instrument.send "#{accessor}_volatility"
+  def volatility_indicator(instrument, accessor, format: :bar)
+    volatility = instrument.send("#{accessor}_volatility")
+    return if not volatility
     high       = instrument.send "#{accessor}_high"
     low        = instrument.send "#{accessor}_low"
-    text  = number_to_percentage volatility.to_f * 100, precision: 1
-    title = "L:#{number_with_precision low, precision: 2} H:#{number_with_precision high, precision: 2}"
-    tag.span text, title: title
+    direction  = instrument.send "#{accessor}_direction"
+    percent    = number_to_percentage volatility * 100, precision: 0, format: '%n ﹪'
+    title      = "L:#{number_with_precision low, precision: 2} H:#{number_with_precision high, precision: 2}"
+    klass      = volatility < 0.03 ? 'low' : volatility < 0.06 ? 'mid' : 'high'
+    case format
+    when :bar
+      title = "V:#{percent} #{title}"
+      tag.span class: "volatility-bar", style: "height: #{volatility * 100 * 5}px", title: title
+    when :percentage
+      tag.span percent, title: title, class: "volatility-value volatility-#{klass}"
+    end
   end
 
 

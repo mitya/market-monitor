@@ -46,11 +46,13 @@ class Instrument < ApplicationRecord
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
-  %w[low high open close volume volatility volatility_range].each do |price|
+  %w[low high open close volume volatility volatility_range direction].each do |selector|
     (DateSelectors + %w[feb19 mar23 nov06 y2019 y2020 y2021]).each do |date|
-      define_method("#{date}_#{price}") { send(date).try(price) }
-      define_method("#{date}_#{price}_rel") { |curr_price = 'last'| rel_diff "#{date}_#{price}", curr_price }
-      define_method("#{date}_#{price}_diff") { |curr_price = 'last'| diff "#{date}_#{price}", curr_price }
+      define_method("#{date}_#{selector}") { send(date).try(selector) }
+      if selector.in? %w[low high open close]
+        define_method("#{date}_#{selector}_rel")  { |curr_price = 'last'| rel_diff "#{date}_#{selector}", curr_price }
+        define_method("#{date}_#{selector}_diff") { |curr_price = 'last'|     diff "#{date}_#{selector}", curr_price }
+      end
     end
   end
 

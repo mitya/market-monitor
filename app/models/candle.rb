@@ -12,6 +12,7 @@ class Candle < ApplicationRecord
   def final? = !ongoing?
   def volatility_range = high - low
   def volatility = (high - low) / low
+  def direction = close - open > 0 ? 'up' : 'down'
 
   class << self
     def last_loaded_date = final.maximum(:date)
