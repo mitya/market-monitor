@@ -65,6 +65,7 @@
 + replace chart API with previous which is cheaper
 + portfolio: convert RUS ticker totals to USD
 + portfolio: sorting by total
++ sets for FallenAngels, Pending
 
 - missing TEVA ARCH BTU
 
@@ -72,6 +73,7 @@
 – find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
 - find stocks with continious flat
+
 
 - portfolio: add a new ticker from UI
 - download all recent missing previous days in iex:candle:previous
