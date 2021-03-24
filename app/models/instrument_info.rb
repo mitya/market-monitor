@@ -4,7 +4,7 @@ class InstrumentInfo < ApplicationRecord
   scope :abc, -> { order :ticker }
 
   def refresh(include_company: false)
-    return if stats_updated_at > 15.minutes.ago
+    return if stats_updated_at && stats_updated_at > 15.minutes.ago
     puts "Update info for #{ticker}"
 
     self.stats = IexConnector.stats(ticker)
@@ -19,6 +19,7 @@ class InstrumentInfo < ApplicationRecord
     save!
 
     if include_company
+      puts "Update comp for #{ticker}"
       self.company = IexConnector.company(ticker)
       self.company_updated_at = Time.current
       self.name = company['companyName']

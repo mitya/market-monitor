@@ -35,18 +35,19 @@ namespace :iex do
 
   namespace :candles do
     envtask 'days:on_dates' do
-      ENV['dates'].to_s.split(',').each do |date|
-        date = Date.parse(date)
-        with_missing_date = Instrument.premium.abc.select { |inst| inst.candles.day.where(date: date).none? }
+      dates = ENV['dates'].to_s.split(',').presence || Current::SpecialDates.dates
+      dates.sort.each do |date|
+        date = Date.parse(date) if String === date
+        instruments = R.instruments_from_env || Instrument.premium
+        with_missing_date = instruments.abc.select { |inst| inst.candles.day.where(date: date).none? }
 
         puts "Date checked: #{date}"
         puts "With missing date: #{with_missing_date.join(',')}"
         puts "Total missing date #{with_missing_date.count}"
-        puts "Total instruments #{Instrument.count}"
         puts "Total candles for #{date} is #{Candle.day.where(date: date).count}"
         puts
 
-        next unless ENV['ok'] == '1'
+        next unless R.confirmed?
 
         with_missing_date.each do |inst|
           IexConnector.import_day_candles inst, date: date
@@ -94,8 +95,9 @@ namespace :iex do
 
 
   envtask :stats do
-    Instrument.usd.iex.in_set(ENV['set'] || 'all').abc.each do |inst|
-      inst.info.refresh
+    instruments = R.instruments_from_env || Instrument.all
+    instruments.usd.iex.abc.each do |inst|
+      inst.info.refresh include_company: R.true?(:company)
       sleep 0.33
     end
   end
@@ -126,7 +128,6 @@ rake iex:logos:download
 rake iex:symbols:load
 rake iex:symbols:process
 rake iex:candles:days:on_dates dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,2020-11-06,2021-01-04 ok=1
-rake iex:candles:days:on_dates dates=2021-03-18
 rake iex:candles:days:1m
 
 rake iex:stats

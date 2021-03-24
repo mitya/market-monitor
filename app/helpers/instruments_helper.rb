@@ -1,7 +1,7 @@
 module InstrumentsHelper
   def percentage_precision = 0
   def ratio_color(ratio) = ratio ? (ratio > 0 ? 'green' : 'red') : 'none'
-  def price_ratio(price, base_price) = (price / base_price - 1.0 if price && base_price)
+  def price_ratio(price, base_price) = (price && base_price ? price / base_price - 1.0 : 0)
 
 
   def colorize_value(value, base, unit: '$', title: nil)

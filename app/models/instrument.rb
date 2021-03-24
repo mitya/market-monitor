@@ -75,6 +75,7 @@ class Instrument < ApplicationRecord
 
   def price! = Current.prices_cache&.for_instrument(self) || price || create_price!
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
+  def info! = info || create_info
 
   def iex? = info.present?
   def premium? = flags.include?('premium')

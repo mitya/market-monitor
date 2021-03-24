@@ -66,8 +66,8 @@
 + portfolio: convert RUS ticker totals to USD
 + portfolio: sorting by total
 + sets for FallenAngels, Pending
++ missing TEVA ARCH BTU
 
-- missing TEVA ARCH BTU
 
 – find stocks growing N days in a row
 – find stocks with N% volatility on X previous days and high within Y%

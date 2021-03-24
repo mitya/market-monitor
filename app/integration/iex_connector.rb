@@ -5,7 +5,7 @@ class IexConnector
 
   BASE = 'https://cloud.iexapis.com/stable'
 
-  def stock(symbol, api, params = {}) = get("/stock/#{symbol}/#{api.to_s.dasherize}")
+  def stock(symbol, api, params = {}) = get("/stock/#{symbol}/#{api.to_s.dasherize}", params)
   def price(symbol)                   = stock(symbol, 'price')
   def quote(symbol)                   = stock(symbol, 'quote')
   def ohlc(symbol)                    = stock(symbol, 'ohlc')
@@ -44,14 +44,17 @@ class IexConnector
         candle.ticker  = instrument.ticker
         candle.time    = date.to_time :utc
         candle.ongoing = date == Current.date
-        candle.open    = hash['open']
-        candle.close   = hash['close']
-        candle.high    = hash['high']
-        candle.low     = hash['low']
-        candle.volume  = hash['volume']
+        candle.open    = hash['open']  # || hash['marketOpen']
+        candle.close   = hash['close'] # || hash['marketClose']
+        candle.high    = hash['high']  # || hash['marketHigh']
+        candle.low     = hash['low']   # || hash['marketLow']
+        candle.volume  = hash['volume'].to_i.nonzero? || hash['marketVolume']
         candle.save!
       end
     end
+
+  rescue ActiveRecord::NotNullViolation => e
+    puts "Missing some data when importing IEX candle for #{instrument} on #{date}: #{e}".red
   end
 
   def import_today_candle(instrument)
@@ -77,6 +80,7 @@ class IexConnector
   private
 
   def get(path, params = {})
+    # puts "GET #{path} #{params}".yellow
     response = RestClient.get "#{BASE}#{path}", params: { token: ENV['IEX_SECRET_KEY'] }.merge(params || {})
     JSON.parse response.body
   end

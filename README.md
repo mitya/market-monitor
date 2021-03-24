@@ -43,3 +43,9 @@ rake iex:prices:all iex:candles:days:today # after US open
     Array.from(document.querySelectorAll('.a-info > span:first-child')).map(e => e.innerText)
     tickers = []
     Instrument.reject_missing(tickers).join(' ')
+
+# Adding new tickers
+
+rake tinkoff:premium:import tickers='TEVA ARCH BTU'
+rake iex:stats tickers='TEVA ARCH BTU' company=1
+rake iex:candles:days:on_dates tickers='TEVA ARCH BTU'
