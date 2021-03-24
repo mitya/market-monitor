@@ -87,7 +87,7 @@ class TinkoffConnector
     candle = response_json.dig 'candles', -1
     price = candle&.dig 'h'
     return puts "No response for #{instrument}: #{response_json}".red if response_json['candles'] == nil
-    printf "Refresh price for %-7s %3i candles price=#{price.inspect}\n", instrument.ticker, response_json['candles'].count
+    printf "Refresh Tinkoff price for %-7s %3i candles price=#{price.inspect}\n", instrument.ticker, response_json['candles'].count
     instrument.price.update! value: price, last_at: candle['time'], source: 'tinkoff' if price
   end
 
@@ -127,7 +127,7 @@ class TinkoffConnector
     Candle.transaction do
       candles.each do |hash|
         time = Time.parse hash['time']
-        puts "Import #{time} #{interval} candle for #{instrument}"
+        puts "Import Tinkoff #{time} #{interval} candle for #{instrument}"
         candle = instrument.candles.find_or_initialize_by interval: interval, time: time
         candle.ticker  = instrument.ticker
         candle.source  = 'tinkoff'

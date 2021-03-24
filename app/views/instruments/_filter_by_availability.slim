@@ -2,4 +2,4 @@
   legend class="col-form-label col-sm-1 pt-0" Availability
   .col-sm-5
     - (all_option + availability_options).each do |label, value|
-      = bs_radio_button :availability, value, label
+      = bs_toggle_button :availability, value, label

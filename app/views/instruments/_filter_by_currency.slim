@@ -2,4 +2,4 @@
   legend class="col-form-label col-sm-1 pt-0" Currency
   .col-sm-5
     - (all_option + currency_options).each do |label, value|
-      = bs_radio_button :currency, value, label
+      = bs_toggle_button :currency, value, label

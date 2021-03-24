@@ -26,6 +26,13 @@ module ApplicationHelper
     end
   end
 
+  def bs_toggle_button(name, value, label)
+    tag.span class: 'me-2' do
+      radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'btn-check') +
+      label_tag("#{name}_#{value}", label, class: 'btn btn-sm btn-outline-secondary')
+    end
+  end
+
   def bs_check_box(name, label, value: '1', false_value: '0', inline: false, switch: false, default: false)
     tag.div class: class_names('form-check', 'form-check-inline': inline, 'form-switch': switch) do
       (default ? hidden_field_tag(name, '0', id: nil) : ''.html_safe) +
