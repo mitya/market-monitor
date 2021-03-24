@@ -61,6 +61,7 @@ class InstrumentInfo < ApplicationRecord
       data = JSON.parse File.read "cache/iex/tops.json"
       data.each do |item|
         if instrument = Instrument[item['symbol']]
+          next unless instrument.usd?
           instrument.info&.update! sector_code: item['sector']
         end
       end

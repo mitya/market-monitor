@@ -4,7 +4,8 @@ require 'open-uri'
 namespace :iex do
   namespace :logos do
     envtask :default do
-      Instrument.usd.each do |inst|
+      instruments = R.instruments_from_env || Instrument.usd
+      instruments.each do |inst|
         response = IexConnector.logo(inst.ticker)
         url = response['url'].presence
         puts "Icon for #{inst.ticker}: #{url}"
@@ -14,7 +15,8 @@ namespace :iex do
     end
 
     envtask :download do
-      Instrument.premium.abc.each do |inst|
+      instruments = R.instruments_from_env || Instrument.premium
+      instruments.abc.each do |inst|
         next if File.exist? "public/logos/#{inst.ticker}.png"
 
         puts "Load #{inst.ticker}"
@@ -70,6 +72,10 @@ namespace :iex do
       (1.year.ago.to_date .. Date.current).each do |date|
         puts "Total candles for #{date} is #{Candle.day.where(date: date).count}"
       end
+    end
+
+    envtask :set_sectors_from_tops do
+      InstrumentInfo.load_sector_codes_from_tops
     end
   end
 

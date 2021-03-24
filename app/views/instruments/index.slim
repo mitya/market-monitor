@@ -108,7 +108,7 @@ main.container-fluid.mb-4
             td.money-cell
               = format_price portfolio_item.total_in_usd, unit: 'USD', precision: 0 if portfolio_item&.total_in_usd
 
-          td= sector_badge info&.sector_code, title: info&.industry
+          td= sector_badge inst
 
           td.money-cell(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           - if params[:fundamentals]

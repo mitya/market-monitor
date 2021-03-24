@@ -196,11 +196,14 @@ module InstrumentsHelper
 
   SectorCodeOptions = SectorCodeTitles.transform_values { |val| val.first }.invert
 
-  def sector_badge(code, **options)
+  def sector_badge(instrument)
+    info = instrument&.info
+    code = info&.sector_code
     text, background = *SectorCodeTitles[code]
+    text, background = ['RUS', 'light'] if instrument.rub?
     background ||= 'secondary'
-    foreground = 'text-dark' if background.in?(%w[warning info])
-    tag.span text || code, class: "badge bg-#{background} #{foreground}", **options if text
+    foreground = 'text-dark' if background.in?(%w[warning info light])
+    tag.span text || code, class: "badge bg-#{background} #{foreground}", title: info&.industry if text
   end
 
   def sec_tx_code_desc(sec_code)

@@ -47,5 +47,7 @@ rake iex:prices:all iex:candles:days:today # after US open
 # Adding new tickers
 
 rake tinkoff:premium:import tickers='TEVA ARCH BTU'
-rake iex:stats tickers='TEVA ARCH BTU' company=1
 rake iex:candles:days:on_dates tickers='TEVA ARCH BTU'
+rake iex:stats tickers='TEVA ARCH BTU' company=1
+rake iex:set_sectors_from_tops
+rake iex:logos:download tickers='TEVA ARCH BTU'
