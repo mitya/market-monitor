@@ -36,18 +36,19 @@ namespace :iex do
 
 
   namespace :candles do
-    envtask 'days:on_dates' do
-      dates = ENV['dates'].to_s.split(',').presence || Current::SpecialDates.dates
+    envtask 'days:missing' do
+      dates = ENV['dates'].to_s.split(',').presence           if ENV['dates']
+      dates = Current.last_n_weeks(ENV['weeks'].to_i)         if ENV['weeks']
+      dates = Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
+      dates = Current::SpecialDates.dates                     if R.true?('special_dates')
+      dates ||= Current.last_2_weeks
       dates.sort.each do |date|
         date = Date.parse(date) if String === date
         instruments = R.instruments_from_env || Instrument.premium
         with_missing_date = instruments.abc.select { |inst| inst.candles.day.where(date: date).none? }
 
-        puts "Date checked: #{date}"
-        puts "With missing date: #{with_missing_date.join(',')}"
-        puts "Total missing date #{with_missing_date.count}"
-        puts "Total candles for #{date} is #{Candle.day.where(date: date).count}"
-        puts
+        puts if date.monday?
+        puts "#{date} #{date.strftime '%a'} #{with_missing_date.count} #{with_missing_date.join(',')}".yellow
 
         next unless R.confirmed?
 
@@ -135,11 +136,12 @@ rake iex:logos
 rake iex:logos:download
 rake iex:symbols:load
 rake iex:symbols:process
-rake iex:candles:days:on_dates dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,2020-11-06,2021-01-04 ok=1
+rake iex:candles:days:missing dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,2020-11-06,2021-01-04 ok=1
 rake iex:candles:days:1m
 
 rake iex:stats
 rake iex:candles:days:previous
+rake iex:candles:days:today
 rake iex:prices:all
 
 rake iex:update

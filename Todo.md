@@ -70,8 +70,9 @@
 + list sorting
 + add current price to the insider transactions list
 + add special dates to aggregates
++ add a way to check which IEX dates are missing
 
-- download all recent missing previous days in iex:candle:previous
+- sort by clicking a column
 – find stocks growing N days in a row
 
 – find stocks with significant spikes last days

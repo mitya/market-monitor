@@ -43,8 +43,10 @@
 .volatility-bar.volatility-high { background-color: rgba(black, 1); }
 .volatility-chart .volatility-bar { display: inline-block; margin-right: 2px; }
 
-.volatility-value.volatility-low { color: rgba(black, 0.33); }
-.volatility-value.volatility-high { font-weight: bold; }
+.volatility-value.volatility-low { color: rgba(black, 0.25); }
+.volatility-value.volatility-mid { color: rgba(black, 0.5); }
+.volatility-value.volatility-high { color: black; }
+// .volatility-value.volatility-high { font-weight: bold; }
 .volatility-value.direction-up { color: green; }
 .volatility-value.direction-down { color: red; }
 

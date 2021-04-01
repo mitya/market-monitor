@@ -8,7 +8,7 @@ class Current < ActiveSupport::CurrentAttributes
   alias today date
 
   def us_market_open?
-    us_time = ActiveSupport::TimeZone['Eastern Time (US & Canada)'].now
+    us_time = Time.find_zone!('Eastern Time (US & Canada)').now
     date.on_weekday? && us_time.to_s(:time) >= '16:30'
   end
 
@@ -33,7 +33,9 @@ class Current < ActiveSupport::CurrentAttributes
   alias w2_ago d10_ago
   alias m1_ago month_ago
 
-  def last_2_weeks = 2.weeks.ago.to_date.upto(Current.yesterday).to_a.select(&:on_weekday?).reverse
+  def weekdays_since(date) = date.upto(Current.yesterday).to_a.select(&:on_weekday?).reverse
+  def last_n_weeks(n) = n.weeks.ago.to_date.upto(Current.yesterday).to_a.select(&:on_weekday?).reverse
+  def last_2_weeks = last_n_weeks(2)
 
   def preload_day_candles_for(instruments)
     self.day_candles_cache = DayCandleCache.new(instruments, nil)

@@ -5,7 +5,7 @@ class Instrument < ApplicationRecord
   has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'ticker'
   has_many :price_targets, foreign_key: 'ticker'
   has_many :recommendations, foreign_key: 'ticker'
-  has_many :aggregates, foreign_key: 'ticker'
+  has_many :aggregates, foreign_key: 'ticker', dependent: :delete_all
   has_one :recommendation, -> { where current: true }, foreign_key: 'ticker'
   has_one :price_target, foreign_key: 'ticker'
   has_one :aggregate, -> { where current: true }, foreign_key: 'ticker', inverse_of: :instrument
@@ -110,6 +110,8 @@ end
 __END__
 Instrument.find_each &:check_logo
 Instrument.find_each &:price!
+
+Instrument['TGC'].destroy
 
 Candle.day.where(ticker: 'BGS', date: Current.date)
 Instrument.get('BGS').day_candles.where(date: Current.date)

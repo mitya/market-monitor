@@ -67,6 +67,7 @@ main.container-fluid.mb-4
         th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
         th.money-cell.border-end.pe-2 ytd ﹪
         - if show_volatility
+          th.money-cell(title=l(Current.today,     format: :week_day))    σ
           th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d σ
           th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d σ
           th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d σ
@@ -137,6 +138,7 @@ main.container-fluid.mb-4
           td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           - if show_volatility
+            td[class=volatility_cell_class]= volatility_indicator inst, :today,     format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d1_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d2_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d3_ago,    format: volatility_format
