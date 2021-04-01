@@ -68,14 +68,13 @@
 + sets for FallenAngels, Pending
 + missing TEVA ARCH BTU
 + list sorting
-
+- add special dates to aggregates
 
 – find stocks growing N days in a row
-– find stocks with N% volatility on X previous days and high within Y%
 – find stocks with significant spikes last days
+
+– find stocks with N% volatility on X previous days and high within Y%
 - find stocks with continious flat
-
-
 - portfolio: add a new ticker from UI
 - download all recent missing previous days in iex:candle:previous
 - use same filters & filter logic on all pages

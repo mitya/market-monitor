@@ -8,6 +8,7 @@ class Aggregate < ApplicationRecord
 
   class << self
     def create_for(instrument, date)
+      puts "Aggregate data on #{date} for #{instrument}"
       aggregate = find_or_initialize_by instrument: instrument, date: date, current: true
       Accessors.each do |accessor|
         if candle = instrument.send(accessor)

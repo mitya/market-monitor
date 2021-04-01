@@ -10,27 +10,28 @@
 - is_portfolio = params[:set] == 'portfolio'
 
 main.container-fluid.mb-4
-  h1.display-3 Instruments
-
   form#list-config(action=instruments_path class='my-2')
-    = render 'filter_by_set'
-    = render 'filter_by_currency'
-    = render 'filter_by_availability'
-    = render 'filter_by_sector'
-    = render 'filter_by_sector_code'
-    = render 'filter_by_tickers'
-    = render 'order_options'
     .row.mb-3
-      .col-sm-1
-      .col-sm-5
-        = bs_check_box :fundamentals, 'Fundamentals'
-        = bs_check_box :volume, 'Volume'
-        = bs_check_box :volatility, 'Volatility', inline: true
-        = bs_check_box :chart_volatility, 'as chart', inline: true
-        br
-        = bs_check_box :price_targets, 'Price targets', inline: true
-        = bs_check_box :relative_price_targets, 'relative', inline: true
-        = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
+      .col
+        = render 'filter_by_set'
+        = render 'filter_by_currency'
+        = render 'filter_by_availability'
+        = render 'filter_by_sector'
+        = render 'filter_by_sector_code'
+        = render 'filter_by_tickers'
+        = render 'order_options'
+      .col
+        .row.mb-3
+          .col-sm-1
+          .col-sm-10
+            = bs_check_box :fundamentals, 'Fundamentals'
+            = bs_check_box :volume, 'Volume'
+            = bs_check_box :volatility, 'Volatility', inline: true
+            = bs_check_box :chart_volatility, 'as chart', inline: true
+            br
+            = bs_check_box :price_targets, 'Price targets', inline: true
+            = bs_check_box :relative_price_targets, 'relative', inline: true
+            = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
 
   = page_entries_block @instruments
   = paginate @instruments, window: 20
@@ -64,15 +65,13 @@ main.container-fluid.mb-4
         th.money-cell(title=l(Current.w1_ago,    format: :week_day)) 1w ﹪
         th.money-cell(title=l(Current.w2_ago,    format: :week_day)) 2w ﹪
         th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
-        th.money-cell.border-end.pe-2 2021 ﹪
+        th.money-cell.border-end.pe-2 ytd ﹪
         - if show_volatility
           th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d σ
           th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d σ
           th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d σ
           th.money-cell(title=l(Current.d4_ago,    format: :week_day)) 4d σ
-          th.money-cell(title=l(Current.d5_ago,    format: :week_day)) 1w σ
-          th.money-cell(title=l(Current.d6_ago,    format: :week_day)) 6d σ
-          th.money-cell(title=l(Current.d7_ago,    format: :week_day)) 7d σ
+          th.money-cell(title=l(Current.w1_ago,    format: :week_day)) 1w σ
           th.money-cell(title=l(Current.w2_ago,    format: :week_day)) 2w σ
           th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m σ
         - if chart_volatility
@@ -142,9 +141,7 @@ main.container-fluid.mb-4
             td[class=volatility_cell_class]= volatility_indicator inst, :d2_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d3_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d4_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :d5_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :d6_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :d7_ago,    format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :w1_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :w2_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :month_ago, format: volatility_format
           - if chart_volatility

@@ -9,3 +9,7 @@ envtask :day do
     rake 'tinkoff:prices:all'     unless R.false?(:price)
   end
 end
+
+envtask :aggregate do
+  Aggregate.create_for_all
+end
