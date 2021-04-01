@@ -10,10 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_23_155512) do
+ActiveRecord::Schema.define(version: 2021_03_30_134627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "aggregates", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.boolean "current", default: false, null: false
+    t.date "date", null: false
+    t.float "d1"
+    t.float "d1_vol"
+    t.float "d2"
+    t.float "d2_vol"
+    t.float "d3"
+    t.float "d3_vol"
+    t.float "d4"
+    t.float "d4_vol"
+    t.float "d5"
+    t.float "d5_vol"
+    t.float "d6"
+    t.float "d6_vol"
+    t.float "d7"
+    t.float "d7_vol"
+    t.float "w1"
+    t.float "w1_vol"
+    t.float "w2"
+    t.float "w2_vol"
+    t.float "m1"
+    t.float "m1_vol"
+    t.float "y2021"
+    t.float "y2021_vol"
+    t.jsonb "data", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
+    t.index ["ticker"], name: "index_aggregates_on_ticker"
+  end
 
   create_table "candles", force: :cascade do |t|
     t.string "ticker"

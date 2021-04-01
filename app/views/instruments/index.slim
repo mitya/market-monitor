@@ -19,6 +19,7 @@ main.container-fluid.mb-4
     = render 'filter_by_sector'
     = render 'filter_by_sector_code'
     = render 'filter_by_tickers'
+    = render 'order_options'
     .row.mb-3
       .col-sm-1
       .col-sm-5
@@ -91,7 +92,7 @@ main.container-fluid.mb-4
         th
     tbody
       - instruments = @instruments
-      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.total_in_usd.to_d }.reverse if is_portfolio
+      / - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.total_in_usd.to_d }.reverse if is_portfolio
       - instruments.each do |inst|
         - price_target = inst.price_target
         - portfolio_item = inst.portfolio_item
@@ -137,7 +138,7 @@ main.container-fluid.mb-4
           td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           - if show_volatility
-            td[class=volatility_cell_class]= volatility_indicator inst, :yesterday, format: volatility_format
+            td[class=volatility_cell_class]= volatility_indicator inst, :d1_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d2_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d3_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d4_ago,    format: volatility_format

@@ -41,7 +41,8 @@ class InstrumentInfo < ApplicationRecord
   end
 
   def marketcap = super.to_i.nonzero?
-  def marketcap_mil = marketcap && marketcap / 1_000_000
+  def marketcap_mil = marketcap && marketcap / 1_000_000.0
+  def marketcap_bil = marketcap && marketcap / 1_000_000_000.0
   def industry = super&.strip
   def dividend_yield_percent = dividend_yield && dividend_yield * 100
   def avg_10d_volume = stats['avg10Volume']

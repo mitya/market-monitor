@@ -41,13 +41,13 @@ module ApplicationHelper
     end
   end
 
-  def bs_select(name, label, options, mb: 1)
+  def bs_select(name, label, options, mb: 1, blank: true)
     tag.div class: "row mb-#{mb}" do
       tag.div(class: 'col-sm-1') do
         label_tag name, label, class: 'col-form-label'
       end +
       tag.div(class: 'col-sm-5') do
-        select_tag name, options_for_select(options, params[name]), class: "form-select", include_blank: true
+        select_tag name, options_for_select(options, params[name]), class: "form-select", include_blank: blank
       end
     end
   end

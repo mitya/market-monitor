@@ -12,7 +12,12 @@ class Candle < ApplicationRecord
   def final? = !ongoing?
   def volatility_range = high - low
   def volatility = (high - low) / low
-  def direction = close - open > 0 ? 'up' : 'down'
+  def up? = close >= open
+  def down? = close < open
+  def direction = up?? 'up' : 'down'
+
+  def siblings = instrument.candles.where(interval: interval)
+  def previous = siblings.where(date: date.prev_weekday) || siblings.where('date < ?', date).order(:date).last
 
   class << self
     def last_loaded_date = final.maximum(:date)

@@ -30,7 +30,11 @@ class Current < ActiveSupport::CurrentAttributes
 
   def last_2_weeks = 2.weeks.ago.to_date.upto(Current.yesterday).to_a.select(&:on_weekday?).reverse
 
-  def preload_day_candles_for(instruments, extra_dates: nil)
+  def preload_day_candles_for(instruments)
+    self.day_candles_cache = DayCandleCache.new(instruments, nil)
+  end
+
+  def preload_day_candles_with(instruments, extra_dates)
     self.day_candles_cache = DayCandleCache.new(instruments, extra_dates)
   end
 
@@ -59,7 +63,7 @@ class Current < ActiveSupport::CurrentAttributes
   class DayCandleCache
     attr :candles, :candles_by_ticker
 
-    def initialize(instruments, extra_dates = nil)
+    def initialize(instruments, extra_dates)
       @instruments = instruments
       @candles = Candle.day.where(ticker: instruments.map(&:ticker), date: (SpecialDates.dates + extra_dates.to_a).uniq.sort).to_a
       @candles_by_ticker = @candles.group_by &:ticker

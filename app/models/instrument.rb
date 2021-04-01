@@ -5,11 +5,13 @@ class Instrument < ApplicationRecord
   has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'ticker'
   has_many :price_targets, foreign_key: 'ticker'
   has_many :recommendations, foreign_key: 'ticker'
+  has_many :aggregates, foreign_key: 'ticker'
   has_one :recommendation, -> { where current: true }, foreign_key: 'ticker'
   has_one :price_target, foreign_key: 'ticker'
-  has_one :price, class_name: 'InstrumentPrice', foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
-  has_one :info, class_name: 'InstrumentInfo',   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
-  has_one :portfolio_item, foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :aggregate, -> { where current: true }, foreign_key: 'ticker', inverse_of: :instrument
+  has_one :price, class_name: 'InstrumentPrice',  foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :info, class_name: 'InstrumentInfo',    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :portfolio_item,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
   validates_presence_of :ticker, :name
 
@@ -27,7 +29,7 @@ class Instrument < ApplicationRecord
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
 
-  DateSelectors = %w[today yesterday] + %w[d2 d3 d4 d5 d6 d6 d7 w1 w2 week month].map { |period| "#{period}_ago" }
+  DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d6 d7 w1 w2 m1 week month].map { |period| "#{period}_ago" }
 
   DateSelectors.each do |selector|
     define_method("#{selector}") do

@@ -67,6 +67,7 @@
 + portfolio: sorting by total
 + sets for FallenAngels, Pending
 + missing TEVA ARCH BTU
++ list sorting
 
 
 – find stocks growing N days in a row
@@ -82,7 +83,6 @@
 - add last insider transaction to the list
 - extract special dates
 - indexes & commodities
-- list sorting
 - tinkoff ticker checking
 - country flags
 - disable stocks without any recent data

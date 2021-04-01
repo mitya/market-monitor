@@ -1,5 +1,11 @@
 require "active_support/core_ext/integer/time"
 
+module Rails::ConsoleMethods
+  def instr(ticker)
+    Instrument[ticker]
+  end
+end
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 

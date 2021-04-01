@@ -1,7 +1,7 @@
 module InstrumentsHelper
   def percentage_precision = 0
   def ratio_color(ratio) = ratio ? (ratio > 0 ? 'green' : 'red') : 'none'
-  def price_ratio(price, base_price) = (price && base_price ? price / base_price - 1.0 : 0)
+  def price_ratio(price, base_price) = (price && base_price ? price / base_price - 1.0 : nil)
 
 
   def colorize_value(value, base, unit: '$', title: nil)
@@ -139,6 +139,11 @@ module InstrumentsHelper
 
   def insider_options_for(ticker)
     InsiderTransaction.for_ticker(ticker).pluck(:insider_name).uniq.sort.map { |name| [name.titleize, name] }
+  end
+
+  def instrument_order_options
+    Aggregate::Accessors.map { |p| "aggregates.#{p.delete('_ago')}" } +
+    Aggregate::Accessors.map { |p| "aggregates.#{p.delete('_ago')}_vol desc" }
   end
 
   Sec4TransactionCodesDescriptions = {
