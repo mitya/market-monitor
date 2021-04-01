@@ -43,7 +43,7 @@ module InstrumentsHelper
   def colorized_percentage(price, base_price, unit: nil, inverse: false)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: format_price(price, unit: currency_sign(unit)) do
-      number_to_percentage ratio * 100, precision: percentage_precision, format: '%n ﹪' if ratio
+      number_to_percentage ratio * 100, precision: percentage_precision, delimiter: ',', format: '%n ﹪' if ratio
     end
   end
 
@@ -170,8 +170,8 @@ module InstrumentsHelper
   }
 
   Sec4TransactionCodesNames = {
-    'P' => "Purchase",
-    'S' => "Sale",
+    'P' => "Buy",
+    'S' => "Sell",
     'F' => "Exercise",
   }
 

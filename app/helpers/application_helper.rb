@@ -56,4 +56,9 @@ module ApplicationHelper
   def exchange_logo(exchange_name)
     image_tag "exchange-logos/#{exchange_name}.png", size: '15x15', class: 'exchange-logo' if exchange_name.in?(ExcahngesWithLogos)
   end
+
+  def decapitalize(string)
+    string = string.to_s
+    string.length > 10 && string.upcase == string ? string.titleize : string
+  end
 end

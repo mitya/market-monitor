@@ -35,3 +35,4 @@ en:
   date:
     formats:
       week_day: '%A, %d %B %Y'
+      text: '%d %B %Y'

@@ -109,7 +109,9 @@ namespace :iex do
   end
 
   envtask :insider_transactions do
+    main = Instrument.main
     Instrument.usd.iex.in_set(ENV['set'] || 'main').abc.each do |inst|
+      next if main.include? inst
       InsiderTransaction.import_iex_data_from_remote inst, delay: 0.33
     end
   end

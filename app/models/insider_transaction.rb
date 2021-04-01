@@ -14,7 +14,9 @@ class InsiderTransaction < ApplicationRecord
   def buy? = shares.to_i > 0
   def date_gap = (date && filling_date && filling_date - date).to_i
   def subkey = data['subkey']
-  def shares_percent = (shares.to_f / shares_final.to_f if shares_final.to_f != 0)
+  def shares_percent = (shares.to_f / shares_final.to_f * 100 if shares_final.to_f != 0)
+
+  def nasdaq_url = "https://www.nasdaq.com/market-activity/stocks/#{ticker.downcase}/insider-activity"
 
   class << self
     def import_iex_data(data)

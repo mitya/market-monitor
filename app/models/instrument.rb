@@ -38,13 +38,13 @@ class Instrument < ApplicationRecord
     end
   end
 
-  def feb19         = @feb19     ||= day_candles!.find_date(Date.new 2020,  2, 19)
-  def mar23         = @mar23     ||= day_candles!.find_date(Date.new 2020,  3, 23)
-  def nov06         = @nov06     ||= day_candles!.find_date(Date.new 2020, 11,  6)
-  def y2019         = @y2019     ||= day_candles!.find_date(Date.new 2019,  1,  3)
-  def y2020         = @y2020     ||= day_candles!.find_date(Date.new 2020,  1,  3)
-  def y2021         = @y2021     ||= day_candles!.find_date(Date.new 2021,  1,  4)
-  def last          = @last      ||= price!.value
+  def feb19         = @feb19 ||= day_candles!.find_date(Date.new 2020,  2, 19)
+  def mar23         = @mar23 ||= day_candles!.find_date(Date.new 2020,  3, 23)
+  def nov06         = @nov06 ||= day_candles!.find_date(Date.new 2020, 11,  6)
+  def y2019         = @y2019 ||= day_candles!.find_date(Date.new 2019,  1,  3)
+  def y2020         = @y2020 ||= day_candles!.find_date(Date.new 2020,  1,  3)
+  def y2021         = @y2021 ||= day_candles!.find_date(Date.new 2021,  1,  4)
+  def last          = @last  ||= price!.value
   def last_or_open  = last || today_open
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
@@ -81,6 +81,7 @@ class Instrument < ApplicationRecord
 
   def iex? = info.present?
   def premium? = flags.include?('premium')
+  def nasdaq? = exchange_name == 'NASDAQ'
   def exchange_name = exchange || (rub?? 'MOEX' : nil)
 
   def to_s = ticker

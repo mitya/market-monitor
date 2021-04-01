@@ -10,5 +10,7 @@ class InsiderTransactionsController < ApplicationController
     @transactions = @transactions.order(date: :desc, ticker: :asc)
     @transactions = @transactions.includes(:instrument)
     @transactions = @transactions.page(params[:page]).per(200)
+
+    Current.preload_prices_for @transactions.map &:instrument
   end
 end
