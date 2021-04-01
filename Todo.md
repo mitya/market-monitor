@@ -69,14 +69,13 @@
 + missing TEVA ARCH BTU
 + list sorting
 + add current price to the insider transactions list
++ add special dates to aggregates
 
-- add special dates to aggregates
-- add last insider transaction to aggregate
-
-– find stocks growing N days in a row
-– find stocks with significant spikes last days
 - download all recent missing previous days in iex:candle:previous
+– find stocks growing N days in a row
 
+– find stocks with significant spikes last days
+- add last insider transaction to aggregate
 – find stocks with N% volatility on X previous days and high within Y%
 - find stocks with continious flat
 - portfolio: add a new ticker from UI

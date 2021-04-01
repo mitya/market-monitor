@@ -38,12 +38,12 @@ class Instrument < ApplicationRecord
     end
   end
 
-  def feb19         = @feb19 ||= day_candles!.find_date(Date.new 2020,  2, 19)
-  def mar23         = @mar23 ||= day_candles!.find_date(Date.new 2020,  3, 23)
-  def nov06         = @nov06 ||= day_candles!.find_date(Date.new 2020, 11,  6)
-  def y2019         = @y2019 ||= day_candles!.find_date(Date.new 2019,  1,  3)
-  def y2020         = @y2020 ||= day_candles!.find_date(Date.new 2020,  1,  3)
-  def y2021         = @y2021 ||= day_candles!.find_date(Date.new 2021,  1,  4)
+  def feb19         = @feb19 ||= day_candles!.find_date(Current.feb19)
+  def mar23         = @mar23 ||= day_candles!.find_date(Current.mar23)
+  def nov06         = @nov06 ||= day_candles!.find_date(Current.nov06)
+  def y2019         = @y2019 ||= day_candles!.find_date(Current.y2019)
+  def y2020         = @y2020 ||= day_candles!.find_date(Current.y2020)
+  def y2021         = @y2021 ||= day_candles!.find_date(Current.y2021)
   def last          = @last  ||= price!.value
   def last_or_open  = last || today_open
 

@@ -10,6 +10,8 @@ envtask :day do
   end
 end
 
+task :price => %w[iex:prices:all tinkoff:prices:uniq]
+
 envtask :aggregate do
   Aggregate.create_for_all
 end

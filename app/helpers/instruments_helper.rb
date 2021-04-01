@@ -142,8 +142,8 @@ module InstrumentsHelper
   end
 
   def instrument_order_options
-    Aggregate::Accessors.map { |p| "aggregates.#{p.delete('_ago')}" } +
-    Aggregate::Accessors.map { |p| "aggregates.#{p.delete('_ago')}_vol desc" }
+    Aggregate::Accessors.map { |p| "aggregates.#{p.remove('_ago')}" } +
+    Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" }
   end
 
   Sec4TransactionCodesDescriptions = {

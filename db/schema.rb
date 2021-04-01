@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
 
   create_table "aggregates", force: :cascade do |t|
     t.string "ticker", null: false
-    t.boolean "current", default: false, null: false
     t.date "date", null: false
+    t.boolean "current", default: false, null: false
     t.float "d1"
     t.float "d1_vol"
     t.float "d2"
@@ -27,12 +27,6 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.float "d3_vol"
     t.float "d4"
     t.float "d4_vol"
-    t.float "d5"
-    t.float "d5_vol"
-    t.float "d6"
-    t.float "d6_vol"
-    t.float "d7"
-    t.float "d7_vol"
     t.float "w1"
     t.float "w1_vol"
     t.float "w2"
@@ -40,7 +34,11 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.float "m1"
     t.float "m1_vol"
     t.float "y2021"
-    t.float "y2021_vol"
+    t.float "nov06"
+    t.float "mar23"
+    t.float "feb19"
+    t.float "y2020"
+    t.float "y2019"
     t.jsonb "data", default: {}
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

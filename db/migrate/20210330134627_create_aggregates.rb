@@ -5,8 +5,8 @@ class CreateAggregates < ActiveRecord::Migration[6.1]
       t.date :date, null: false
       t.boolean :current, default: false, null: false
       Aggregate::Accessors.each do |period|
-        t.float "#{period.delete '_ago'}"
-        t.float "#{period.delete '_ago'}_vol"
+        t.float "#{period.remove '_ago'}"
+        t.float "#{period.remove '_ago'}_vol" if period.include?('ago')
       end
       t.jsonb :data, default: {}
       t.timestamps

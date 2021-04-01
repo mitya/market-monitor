@@ -17,6 +17,8 @@ class InstrumentSet
       all.find { |set| set.key == key.to_sym }
     end
 
+    alias [] get
+
     def null
       new(nil)
     end

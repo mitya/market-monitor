@@ -22,6 +22,11 @@ class Current < ActiveSupport::CurrentAttributes
   def d10_ago   = d7_ago.prev_weekday.prev_weekday.prev_weekday
   def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
   def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
+  def feb19     = Date.new(2020,  2, 19)
+  def mar23     = Date.new(2020,  3, 23)
+  def nov06     = Date.new(2020, 11,  6)
+  def y2019     = Date.new(2019,  1,  3)
+  def y2020     = Date.new(2020,  1,  3)
   def y2021     = Date.new(2021,  1,  4)
   alias d1_ago yesterday
   alias w1_ago d5_ago
