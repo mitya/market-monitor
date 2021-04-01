@@ -7,9 +7,9 @@ namespace :tinkoff do
 
   namespace 'candles:day' do
     desc "Loads day candles for missing latest days & for today"
-    envtask :default do
+    envtask :latest do
       Instrument.tinkoff.in_set(ENV['set']).abc.each do |inst|
-        TinkoffConnector.import_latest_day_candles(inst)
+        TinkoffConnector.import_latest_day_candles(inst, today: R.true_or_nil?(:today))
       end
     end
 

@@ -7,6 +7,10 @@ def envtask(task_name, &block)
   task task_name => :env, &block
 end
 
+def rake(*tasks)
+  Array(tasks).each { |task| Rake::Task[task].invoke }
+end
+
 module R
   module_function
 
@@ -16,13 +20,10 @@ module R
     nil
   end
 
-  def confirmed?
-    true? :ok
-  end
-
-  def true?(variable)
-    ENV[variable.to_s] == '1'
-  end
+  def confirmed? = true?(:ok)
+  def true?(variable) = ENV[variable.to_s] == '1'
+  def true_or_nil?(variable) = true?(variable) || ENV[variable.to_s].blank?
+  def false?(variable) = ENV[variable.to_s] == '0'
 end
 
 Rails.application.load_tasks

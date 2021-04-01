@@ -159,11 +159,11 @@ class TinkoffConnector
     puts "Import #{instrument} failed: #{$!}"
   end
 
-  def import_latest_day_candles(instrument)
+  def import_latest_day_candles(instrument, today: true)
     return if instrument.candles.day.where('date > ?', 2.weeks.ago).none?
     return if instrument.candles.day.todays.where('updated_at > ?', 3.hours.ago).exists?
     since = instrument.candles.day.final.last_loaded_date.tomorrow
-    till = Current.date.end_of_day
+    till = today ? Current.date.end_of_day : Current.yesterday.end_of_day
     import_day_candles instrument, since: since, till: till
   end
 

@@ -28,6 +28,7 @@ class IexConnector
 
   def import_day_candles(instrument, date: nil, period: nil)
     return if date && instrument.candles.day.where(date: date).exists?
+    return if period = 'previous' && instrument.candles.day.where(date: Current.yesterday).exists?
 
     candles_data =
       date ? day_candle_on(instrument.ticker, date) :

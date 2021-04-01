@@ -7,6 +7,11 @@ class Current < ActiveSupport::CurrentAttributes
   end
   alias today date
 
+  def us_market_open?
+    us_time = ActiveSupport::TimeZone['Eastern Time (US & Canada)'].now
+    date.on_weekday? && us_time.to_s(:time) >= '16:30'
+  end
+
   def yesterday = date.prev_weekday
   def d2_ago    = yesterday.prev_weekday
   def d3_ago    = d2_ago.prev_weekday
@@ -17,8 +22,11 @@ class Current < ActiveSupport::CurrentAttributes
   def d10_ago   = d7_ago.prev_weekday.prev_weekday.prev_weekday
   def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
   def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
+  def y2021     = Date.new(2021,  1,  4)
+  alias d1_ago yesterday
   alias w1_ago d5_ago
   alias w2_ago d10_ago
+  alias m1_ago month_ago
 
   def last_2_weeks = 2.weeks.ago.to_date.upto(Current.yesterday).to_a.select(&:on_weekday?).reverse
 

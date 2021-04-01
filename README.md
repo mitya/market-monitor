@@ -30,7 +30,7 @@ rake iex:insider-transactions set=main
 
 # Run daily
 
-rake iex:candles:days:previous tinkoff:prices:uniq tinkoff:candles:day
+rake iex:candles:days:previous tinkoff:candles:day:latest tinkoff:prices:uniq  iex:prices:all iex:candles:days:today
 rake iex:prices:all iex:candles:days:today # after US open
 
 // rake tinkoff:prices:all # morning only
