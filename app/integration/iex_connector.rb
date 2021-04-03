@@ -27,8 +27,8 @@ class IexConnector
   def otc_symbols                     = get("/ref-data/otc/symbols")
 
   def import_day_candles(instrument, date: nil, period: nil)
-    return if date && instrument.candles.day.where(date: date).exists?
-    return if period == 'previous' && instrument.candles.day.where(date: Current.yesterday).exists?
+    return if date && instrument.candles.day.final.where(date: date).exists?
+    return if period == 'previous' && instrument.candles.day.final.where(date: Current.yesterday).exists?
 
     candles_data =
       date ? day_candle_on(instrument.ticker, date) :

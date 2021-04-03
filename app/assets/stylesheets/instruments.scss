@@ -12,6 +12,8 @@
 .indicator-cell { vertical-align: bottom; text-align: center; }
 .table-sm .indicator-cell { padding-bottom: 0; }
 
+th[data-sort] { cursor: pointer; }
+
 .changebox-green, .is-green { color: green; }
 .changebox-red, .is-red { color: red; }
 

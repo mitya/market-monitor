@@ -30,4 +30,14 @@ document.addEventListener("turbolinks:load", () => {
       })
     }
   })
+
+  document.querySelector('.tickers-table').addEventListener("click", e => {
+    if (e.target.matches('[data-sort]')) {
+      let th = e.target
+      console.log(th.dataset.sort)
+      let sortKey = th.dataset.sort == 'ticker' ? '' : `aggregates.${th.dataset.sort}`
+      document.querySelector('#order').value = sortKey
+      document.querySelector('#list-config').submit()
+    }
+  })
 })

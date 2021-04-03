@@ -71,8 +71,10 @@
 + add current price to the insider transactions list
 + add special dates to aggregates
 + add a way to check which IEX dates are missing
++ sort by clicking a column
 
-- sort by clicking a column
+- respect US holidays when looking for prev days
+- handle data loading on weekend
 – find stocks growing N days in a row
 
 – find stocks with significant spikes last days
@@ -95,6 +97,7 @@
 - russian ticker company info
 - maintain average volume for last N months
 - ticker selection & commands
+- track the first date for tickers (eg ALTO 2021-02-01)
 
 
 # Later

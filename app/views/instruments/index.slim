@@ -40,14 +40,14 @@ main.container-fluid.mb-4
     thead.table-dark
       tr
         th
-        th Ticker
+        th(data-sort="ticker") Ticker
         th
         th Name
         - if is_portfolio
           th.money-cell Lots
           th.money-cell Cost
         th Sector
-        th.money-cell Cap (M)
+        th.money-cell(data-sort="capitalization") Cap (M)
         - if params[:fundamentals]
           th.money-cell P/E
           th.money-cell ß
@@ -58,23 +58,23 @@ main.container-fluid.mb-4
           th.money-cell.border-end.pe-2 High
         th.money-cell Last
         th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
-        th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d ﹪
-        th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d ﹪
-        th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d ﹪
-        th.money-cell(title=l(Current.d4_ago,    format: :week_day)) 4d ﹪
-        th.money-cell(title=l(Current.w1_ago,    format: :week_day)) 1w ﹪
-        th.money-cell(title=l(Current.w2_ago,    format: :week_day)) 2w ﹪
-        th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
-        th.money-cell.border-end.pe-2 ytd ﹪
+        th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="d1") 1d ﹪
+        th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="d2") 2d ﹪
+        th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="d3") 3d ﹪
+        th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="d4") 4d ﹪
+        th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="w1") 1w ﹪
+        th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="w2") 2w ﹪
+        th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="m1") 1m ﹪
+        th.money-cell.border-end.pe-2(data-sort="y2021") ytd ﹪
         - if show_volatility
-          th.money-cell(title=l(Current.today,     format: :week_day))    σ
-          th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d σ
-          th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d σ
-          th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d σ
-          th.money-cell(title=l(Current.d4_ago,    format: :week_day)) 4d σ
-          th.money-cell(title=l(Current.w1_ago,    format: :week_day)) 1w σ
-          th.money-cell(title=l(Current.w2_ago,    format: :week_day)) 2w σ
-          th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m σ
+          th.money-cell(title=l(Current.today,     format: :week_day)                   )    σ
+          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="d1_vol") 1d σ
+          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="d2_vol") 2d σ
+          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="d3_vol") 3d σ
+          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="d4_vol") 4d σ
+          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="w1_vol") 1w σ
+          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="w2_vol") 2w σ
+          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="m1_vol") 1m σ
         - if chart_volatility
           th.text-left Volatility
         - if show_volume
@@ -84,11 +84,11 @@ main.container-fluid.mb-4
           th.money-cell Vol 1w
           th.money-cell Vol 1m
         - if show_historical_prices
-          th.money-cell Nov6 ﹪
-          th.money-cell Mar23 ﹪
-          th.money-cell Feb19 ﹪
-          th.money-cell.border-end.pe-2 2020 ﹪
-          th.money-cell 2019 ﹪
+          th.money-cell(data-sort="nov06") Nov6 ﹪
+          th.money-cell(data-sort="mar23") Mar23 ﹪
+          th.money-cell(data-sort="feb19") Feb19 ﹪
+          th.money-cell(data-sort="y2020" class="border-end pe-2") 2020 ﹪
+          th.money-cell(data-sort="y2019") 2019 ﹪
         th
     tbody
       - instruments = @instruments

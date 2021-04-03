@@ -42,6 +42,7 @@ namespace :iex do
       dates = Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
       dates = Current::SpecialDates.dates                     if R.true?('special_dates')
       dates ||= Current.last_2_weeks
+      dates = dates - Current::SpecialDates.nyse_holidays
       dates.sort.each do |date|
         date = Date.parse(date) if String === date
         instruments = R.instruments_from_env || Instrument.premium
@@ -67,6 +68,15 @@ namespace :iex do
 
     envtask 'days:today' do
       Instrument.premium.abc.each { |inst| IexConnector.import_today_candle inst }
+    end
+
+    envtask 'days:on_dates' do
+      dates = ENV['dates'].to_s.split(',').map { |str| Date.parse(str) }
+      Instrument.premium.abc.each do |inst|
+        dates.each do |date|
+          IexConnector.import_day_candles inst, date: date
+        end
+      end
     end
 
     envtask :stats do
@@ -138,6 +148,7 @@ rake iex:symbols:load
 rake iex:symbols:process
 rake iex:candles:days:missing dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,2020-11-06,2021-01-04 ok=1
 rake iex:candles:days:1m
+rake iex:candles:days:on_dates dates=2021-04-01
 
 rake iex:stats
 rake iex:candles:days:previous

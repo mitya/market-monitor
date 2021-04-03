@@ -116,5 +116,18 @@ class Current < ActiveSupport::CurrentAttributes
         Current.month_ago,
       ]
     end
+
+    def nyse_holidays
+      %w[
+        2021-01-01
+        2021-01-18
+        2021-02-15
+        2021-04-02
+        2021-05-31
+        2021-07-05
+        2021-09-06
+        2021-12-24
+      ].map { |str| Date.parse str }
+    end
   end
 end
