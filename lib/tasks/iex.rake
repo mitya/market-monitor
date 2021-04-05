@@ -42,11 +42,11 @@ namespace :iex do
       dates = Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
       dates = Current::SpecialDates.dates                     if R.true?('special_dates')
       dates ||= Current.last_2_weeks
-      dates = dates - Current::SpecialDates.nyse_holidays
+      dates = dates - MarketCalendar.nyse_holidays.to_a
       dates.sort.each do |date|
         date = Date.parse(date) if String === date
         instruments = R.instruments_from_env || Instrument.premium
-        with_missing_date = instruments.abc.select { |inst| inst.candles.day.where(date: date).none? }
+        with_missing_date = instruments.abc.select { |inst| inst.candles.day.final.where(date: date).none? }
 
         puts if date.monday?
         puts "#{date} #{date.strftime '%a'} #{with_missing_date.count} #{with_missing_date.join(',')}".yellow
@@ -129,7 +129,7 @@ namespace :iex do
 
   envtask :price_targets do
     Instrument.usd.iex.in_set(ENV['set'] || 'main').abc.each do |inst|
-      PriceTarget.import_iex_data_from_remote inst, delay: 0.33
+      PriceTarget.import_iex_data_from_remote inst, delay: 0.1
     end
   end
 

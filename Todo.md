@@ -73,10 +73,12 @@
 + add a way to check which IEX dates are missing
 + sort by clicking a column
 
+– find stocks growing N days in a row
+- find stocks which hit N-month bottom in last X days and recovered Y %
+
+- peers
 - respect US holidays when looking for prev days
 - handle data loading on weekend
-– find stocks growing N days in a row
-
 – find stocks with significant spikes last days
 - add last insider transaction to aggregate
 – find stocks with N% volatility on X previous days and high within Y%

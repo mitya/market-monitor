@@ -10,8 +10,14 @@ class Candle < ApplicationRecord
   scope :find_date_before, -> date { order(date: :desc).where('date < ?', date.to_date).take }
 
   def final? = !ongoing?
+  def range_high = close > open ? close : open
+  def range_low  = close < open ? close : open
   def volatility_range = high - low
   def volatility = (high - low) / low
+  def volatility_above = (high - range_high) / high
+  def volatility_below = (range_low - low) / range_low
+  def volatility_body  = (range_high - range_low) / range_low
+
   def up? = close >= open
   def down? = close < open
   def direction = up?? 'up' : 'down'

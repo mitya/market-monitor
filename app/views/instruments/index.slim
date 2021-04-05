@@ -47,34 +47,34 @@ main.container-fluid.mb-4
           th.money-cell Lots
           th.money-cell Cost
         th Sector
-        th.money-cell(data-sort="capitalization") Cap (M)
+        th.money-cell.border-end.pe-2(data-sort="capitalization") Cap (M)
         - if params[:fundamentals]
-          th.money-cell P/E
-          th.money-cell ß
-          th.money-cell.border-end.pe-2 Yield
+          th.money-cell(data-sort="instrument_infos.pe desc") P/E
+          th.money-cell(data-sort="instrument_infos.beta desc") ß
+          th.money-cell.border-end.pe-2(data-sort="instrument_infos.dividend_yield desc") Yield
         - if params[:price_targets]
           th.money-cell Low
           th.money-cell Average
           th.money-cell.border-end.pe-2 High
         th.money-cell Last
         th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
-        th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="d1") 1d ﹪
-        th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="d2") 2d ﹪
-        th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="d3") 3d ﹪
-        th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="d4") 4d ﹪
-        th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="w1") 1w ﹪
-        th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="w2") 2w ﹪
-        th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="m1") 1m ﹪
-        th.money-cell.border-end.pe-2(data-sort="y2021") ytd ﹪
+        th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1") 1d ﹪
+        th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2") 2d ﹪
+        th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3") 3d ﹪
+        th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4") 4d ﹪
+        th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1") 1w ﹪
+        th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2") 2w ﹪
+        th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
+        th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
         - if show_volatility
           th.money-cell(title=l(Current.today,     format: :week_day)                   )    σ
-          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="d1_vol") 1d σ
-          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="d2_vol") 2d σ
-          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="d3_vol") 3d σ
-          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="d4_vol") 4d σ
-          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="w1_vol") 1w σ
-          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="w2_vol") 2w σ
-          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="m1_vol") 1m σ
+          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_vol") 1d σ
+          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2_vol") 2d σ
+          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3_vol") 3d σ
+          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4_vol") 4d σ
+          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1_vol") 1w σ
+          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_vol") 2w σ
+          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_vol") 1m σ
         - if chart_volatility
           th.text-left Volatility
         - if show_volume
@@ -84,15 +84,15 @@ main.container-fluid.mb-4
           th.money-cell Vol 1w
           th.money-cell Vol 1m
         - if show_historical_prices
-          th.money-cell(data-sort="nov06") Nov6 ﹪
-          th.money-cell(data-sort="mar23") Mar23 ﹪
-          th.money-cell(data-sort="feb19") Feb19 ﹪
-          th.money-cell(data-sort="y2020" class="border-end pe-2") 2020 ﹪
-          th.money-cell(data-sort="y2019") 2019 ﹪
+          th.money-cell(data-sort="aggregates.nov06") Nov6 ﹪
+          th.money-cell(data-sort="aggregates.mar23") Mar23 ﹪
+          th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
+          th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
+          th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
         th
     tbody
       - instruments = @instruments
-      / - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.total_in_usd.to_d }.reverse if is_portfolio
+      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.total_in_usd.to_d }.reverse if is_portfolio
       - instruments.each do |inst|
         - price_target = inst.price_target
         - portfolio_item = inst.portfolio_item
@@ -111,7 +111,7 @@ main.container-fluid.mb-4
 
           td= sector_badge inst
 
-          td.money-cell(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+          td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           - if params[:fundamentals]
             td.money-cell                = number_with_precision info&.pe, precision: 0
             td.money-cell                = number_with_precision info&.beta, precision: 1

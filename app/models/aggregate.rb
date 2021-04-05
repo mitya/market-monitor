@@ -1,6 +1,8 @@
 class Aggregate < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
+  scope :current, -> { where current: true }
+
   store_accessor :data, :change
   store_accessor :data, :volatility
 
@@ -28,6 +30,7 @@ class Aggregate < ApplicationRecord
       end
 
       aggregate.save!
+      current.where('date < ?', date).update_all current: false
     end
 
     def create_for_all

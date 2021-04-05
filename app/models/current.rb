@@ -12,14 +12,14 @@ class Current < ActiveSupport::CurrentAttributes
     date.on_weekday? && us_time.to_s(:time) >= '16:30'
   end
 
-  def yesterday = date.prev_weekday
-  def d2_ago    = yesterday.prev_weekday
-  def d3_ago    = d2_ago.prev_weekday
-  def d4_ago    = d3_ago.prev_weekday
-  def d5_ago    = d4_ago.prev_weekday
-  def d6_ago    = d5_ago.prev_weekday
-  def d7_ago    = d6_ago.prev_weekday
-  def d10_ago   = d7_ago.prev_weekday.prev_weekday.prev_weekday
+  def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)
+  def d2_ago    = MarketCalendar.closest_weekday(yesterday.prev_weekday)
+  def d3_ago    = MarketCalendar.closest_weekday(d2_ago.prev_weekday)
+  def d4_ago    = MarketCalendar.closest_weekday(d3_ago.prev_weekday)
+  def d5_ago    = MarketCalendar.closest_weekday(d4_ago.prev_weekday)
+  def d6_ago    = MarketCalendar.closest_weekday(d5_ago.prev_weekday)
+  def d7_ago    = MarketCalendar.closest_weekday(d6_ago.prev_weekday)
+  def d10_ago   = MarketCalendar.closest_weekday(d7_ago.prev_weekday.prev_weekday.prev_weekday)
   def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
   def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
   def feb19     = Date.new(2020,  2, 19)
@@ -115,19 +115,6 @@ class Current < ActiveSupport::CurrentAttributes
         Current.w2_ago,
         Current.month_ago,
       ]
-    end
-
-    def nyse_holidays
-      %w[
-        2021-01-01
-        2021-01-18
-        2021-02-15
-        2021-04-02
-        2021-05-31
-        2021-07-05
-        2021-09-06
-        2021-12-24
-      ].map { |str| Date.parse str }
     end
   end
 end

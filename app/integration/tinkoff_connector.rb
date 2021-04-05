@@ -87,7 +87,7 @@ class TinkoffConnector
     candle = response_json.dig 'candles', -1
     price = candle&.dig 'h'
     return puts "No response for #{instrument}: #{response_json}".red if response_json['candles'] == nil
-    printf "Refresh Tinkoff price for %-7s %3i candles price=#{price.inspect}\n", instrument.ticker, response_json['candles'].count
+    printf "Refresh Tinkoff price for %-7s %3i candles price=#{price}\n", instrument.ticker, response_json['candles'].count
     instrument.price.update! value: price, last_at: candle['time'], source: 'tinkoff' if price
   end
 

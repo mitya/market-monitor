@@ -60,7 +60,9 @@ module InstrumentsHelper
     volatility = candle&.volatility
     if volatility == nil
       return nil if format == :percentage
-      return tag.span class: "volatility-bar volatility-nil", style: "height: 0px"
+      return tag.span class: 'candle' do
+        tag.span class: "volatility-bar volatility-nil", style: "height: 0px"
+      end
     end
 
     high       = candle.high
@@ -68,11 +70,16 @@ module InstrumentsHelper
     direction  = candle.direction
     percent    = number_to_percentage volatility * 100, precision: 0, format: '%n ﹪'
     title      = "L:#{number_with_precision low, precision: 2} H:#{number_with_precision high, precision: 2}"
-    klass      = volatility < 0.03 ? 'low' : volatility < 0.06 ? 'mid' : 'high'
+    klass      = volatility < 0.02 ? 'low' : volatility < 0.05 ? 'mid' : 'high'
     case format
     when :bar
       title = "V:#{percent} #{title} #{accessor_or_date}"
-      tag.span class: "volatility-bar volatility-#{klass}", style: "height: #{volatility * 100 * 5}px", title: title
+      tag.span class: 'candle' do
+        tag.span(class: "candle-above volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_above * 100 * 5}px", title: title) +
+        tag.span(class: "candle-body  volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_body  * 100 * 5}px", title: title) +
+        tag.span(class: "candle-below volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_below * 100 * 5}px", title: title)
+      end
+      # tag.span class: "volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{volatility * 100 * 5}px", title: title
     when :percentage
       tag.span percent, title: title, class: "volatility-value volatility-#{klass}"
     end
@@ -143,7 +150,12 @@ module InstrumentsHelper
 
   def instrument_order_options
     Aggregate::Accessors.map { |p| "aggregates.#{p.remove('_ago')}" } +
-    Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" }
+    Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" } +
+    [
+      ['P/E',   'instrument_infos.pe desc'],
+      ['ß',     'instrument_infos.beta desc'],
+      ['Yield', 'instrument_infos.dividend_yield desc'],
+    ]
   end
 
   Sec4TransactionCodesDescriptions = {

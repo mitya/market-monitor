@@ -32,14 +32,14 @@ class InstrumentPrice < ApplicationRecord
         puts "Load new prices from IEX..."
         IexConnector.tops(*symbols)
       end
-      prices.each do |result|
+      prices.sort_by { |p| p['symbol'] }.each do |result|
         if instrument = Instrument[result['symbol']]
           next unless instrument.usd?
           price = result['lastSalePrice']
           last_at = Time.ms(result['lastUpdated'])
           next if instrument.price!.last_at && instrument.price!.last_at > last_at
 
-          puts "Update price for #{instrument.ticker} to #{price}"
+          puts "Update price for #{instrument.ticker.ljust 5} [#{last_at}] to #{price}"
           instrument.price!.update! value: price, last_at: last_at, source: 'iex' if price.to_f != 0
         end
       end

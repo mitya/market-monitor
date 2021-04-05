@@ -40,15 +40,21 @@ th[data-sort] { cursor: pointer; }
 .text-muted-alt { color: rgba(#212529, 0.6); }
 .outdated-price { color: rgba(#212529, 0.33); }
 
-.volatility-bar { display: block; background-color: rgba(black, 0.5); margin: 0 auto; width: 8px; }
-.volatility-bar.volatility-low { background-color: rgba(black, 0.2); }
-.volatility-bar.volatility-high { background-color: rgba(black, 1); }
-.volatility-chart .volatility-bar { display: inline-block; margin-right: 2px; }
+.volatility-bar { background-color: black; opacity: 1; margin: 0 auto; width: 7px; }
+.volatility-bar.candle-above, .volatility-bar.candle-below { width: 1px; }
+.volatility-bar.volatility-low { opacity: .33; }
+.volatility-bar.volatility-mid { opacity: .33; }
+.volatility-bar.volatility-high { opacity: 1; }
+.volatility-bar.direction-up { background-color: green; }
+.volatility-bar.direction-down { background-color: red; }
+
+
+.candle { display: flex; flex-direction: column; justify-content: flex-end; align-content: center; margin-right: 3px; }
+.volatility-chart { display: flex; flex-direction: row; }
 
 .volatility-value.volatility-low { color: rgba(black, 0.25); }
 .volatility-value.volatility-mid { color: rgba(black, 0.5); }
 .volatility-value.volatility-high { color: black; }
-// .volatility-value.volatility-high { font-weight: bold; }
 .volatility-value.direction-up { color: green; }
 .volatility-value.direction-down { color: red; }
 
@@ -61,3 +67,6 @@ th[data-sort] { cursor: pointer; }
 }
 
 .lots-input::-webkit-outer-spin-button, .lots-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+
+input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-webkit-search-cancel-button:hover { cursor:pointer; }
