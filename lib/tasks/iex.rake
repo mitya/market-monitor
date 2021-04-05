@@ -120,9 +120,8 @@ namespace :iex do
   end
 
   envtask :insider_transactions do
-    main = Instrument.main
-    Instrument.usd.iex.in_set(ENV['set'] || 'main').abc.each do |inst|
-      next if main.include? inst
+    instruments = R.instruments_from_env || Instrument.main
+    instruments.usd.iex.abc.each do |inst|
       InsiderTransaction.import_iex_data_from_remote inst, delay: 0.33
     end
   end
@@ -156,6 +155,7 @@ rake iex:candles:days:today
 rake iex:prices:all
 
 rake iex:update
+rake iex:insider_transactions tickers=CLF
 rake iex:insider_transactions set=main
 rake iex:price_targets set=all
 rake iex:recommendations set=all

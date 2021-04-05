@@ -68,13 +68,13 @@ main.container-fluid.mb-4
         th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
         - if show_volatility
           th.money-cell(title=l(Current.today,     format: :week_day)                   )    σ
-          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_vol") 1d σ
-          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2_vol") 2d σ
-          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3_vol") 3d σ
-          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4_vol") 4d σ
-          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1_vol") 1w σ
-          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_vol") 2w σ
-          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_vol") 1m σ
+          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_vol desc") 1d σ
+          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2_vol desc") 2d σ
+          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3_vol desc") 3d σ
+          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4_vol desc") 4d σ
+          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1_vol desc") 1w σ
+          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_vol desc") 2w σ
+          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_vol desc") 1m σ
         - if chart_volatility
           th.text-left Volatility
         - if show_volume
