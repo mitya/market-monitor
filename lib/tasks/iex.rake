@@ -35,8 +35,8 @@ namespace :iex do
   end
 
 
-  namespace :candles do
-    envtask 'days:missing' do
+  namespace :days do
+    envtask :missing do
       dates = ENV['dates'].to_s.split(',').presence           if ENV['dates']
       dates = Current.last_n_weeks(ENV['weeks'].to_i)         if ENV['weeks']
       dates = Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
@@ -66,11 +66,11 @@ namespace :iex do
       end
     end
 
-    envtask 'days:today' do
+    envtask :today do
       Instrument.premium.abc.each { |inst| Iex.import_today_candle inst }
     end
 
-    envtask 'days:on_dates' do
+    envtask :on_dates do
       dates = ENV['dates'].to_s.split(',').map { |str| Date.parse(str) }
       Instrument.premium.abc.each do |inst|
         dates.each do |date|
@@ -84,10 +84,11 @@ namespace :iex do
         puts "Total candles for #{date} is #{Candle.day.where(date: date).count}"
       end
     end
+  end
 
-    envtask :set_sectors_from_tops do
-      InstrumentInfo.load_sector_codes_from_tops
-    end
+
+  envtask :set_sectors_from_tops do
+    InstrumentInfo.load_sector_codes_from_tops
   end
 
 
@@ -106,9 +107,10 @@ namespace :iex do
 
 
   namespace :prices do
-    envtask(:premium) { InstrumentPrice.refresh_premium_from_iex }
-    envtask(:all)     { InstrumentPrice.refresh_from_iex }
+    envtask(:uniq) { InstrumentPrice.refresh_premium_from_iex }
+    envtask(:all)  { InstrumentPrice.refresh_from_iex }
   end
+  task :prices => 'prices:all'
 
 
   envtask :stats do

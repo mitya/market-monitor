@@ -6,7 +6,7 @@ class InstrumentsController < ApplicationController
   def index
     @instruments = Instrument.all
     @instruments = @instruments.joins(:aggregate)
-    @instruments = @instruments.includes(:info, :price_target, :portfolio_item)
+    @instruments = @instruments.includes(:info, :price_target, :portfolio_item, :aggregate)
     @instruments = @instruments.where(info: { industry: params[:industry] })       if params[:industry].present?
     @instruments = @instruments.where(info: { sector: params[:sector] })           if params[:sector].present?
     @instruments = @instruments.where(info: { sector_code: params[:sector_code] }) if params[:sector_code].present?

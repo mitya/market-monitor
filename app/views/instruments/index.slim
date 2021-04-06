@@ -2,7 +2,7 @@
 - past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - show_volume = params['volume'] == '1'
-- chart_volatility = params['chart_volatility'] == '1'
+- chart_volatility = params['volatility'] == '1' && params['chart_volatility'] == '1'
 - show_volatility = params['volatility'] == '1' && !chart_volatility
 - show_historical_prices = !show_volume && !show_volatility && !chart_volatility
 - volatility_format = :percentage
@@ -90,7 +90,7 @@ main.container-fluid.mb-4
           th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
           th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
         th
-        th
+        th Up
 
     tbody
       - instruments = @instruments

@@ -5,7 +5,7 @@ namespace :tinkoff do
   end
 
 
-  namespace 'candles:day' do
+  namespace :days do
     desc "Loads day candles for missing latest days & for today"
     envtask :latest do
       Instrument.tinkoff.in_set(ENV['set']).abc.each do |inst|
@@ -14,7 +14,7 @@ namespace :tinkoff do
     end
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"
-    envtask :all do
+    envtask :year do
       tickers = ENV['tickers'].to_s.split(',')
       Instrument.tinkoff.where(ticker: tickers).abc.each do |inst|
         Tinkoff.import_all_day_candles(inst)
@@ -27,6 +27,7 @@ namespace :tinkoff do
     envtask(:all)  { InstrumentPrice.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }
     envtask(:uniq) { InstrumentPrice.refresh_from_tinkoff Instrument.where(currency: %w[RUB EUR]).abc }
   end
+  task :prices => 'prices:all'
 
 
   namespace :logos do
@@ -75,7 +76,7 @@ namespace :tinkoff do
     end
   end
 
-  task :update => %i[candles:day prices]
+  task :update => %i[days prices]
 end
 
 

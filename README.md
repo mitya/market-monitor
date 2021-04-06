@@ -26,12 +26,12 @@
 rake iex:stats
 rake iex:price_targets
 rake iex:insider-transactions set=main
-rake iex:candles:days:missing
+rake iex:days:missing
 
 # Run daily
 
-rake day aggregate
-rake price
+rake main
+rake prices
 
 // rake iex:candles:days:previous iex:prices:all iex:candles:days:today
 // rake tinkoff:candles:day:latest tinkoff:prices:uniq
