@@ -54,7 +54,7 @@ class InsiderTransaction < ApplicationRecord
       instrument = Instrument[instrument]
       data = ApiCache.get "cache/iex-insider-transactions/#{instrument.ticker} transactions #{Date.current.to_s :number}.json" do
         puts "Load insider transactions for #{instrument.ticker}"
-        IexConnector.insider_transactions(instrument.ticker)
+        Iex.insider_transactions(instrument.ticker)
       end
       import_iex_data data
       sleep delay

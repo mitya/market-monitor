@@ -7,7 +7,7 @@ class InstrumentInfo < ApplicationRecord
     return if stats_updated_at && stats_updated_at > 15.minutes.ago
     puts "Update info for #{ticker}"
 
-    self.stats = IexConnector.stats(ticker)
+    self.stats = Iex.stats(ticker)
     self.stats_updated_at = Time.current
     self.marketcap = stats['marketcap']
     self.shares = stats['sharesOutstanding']
@@ -20,7 +20,7 @@ class InstrumentInfo < ApplicationRecord
 
     if include_company
       puts "Update comp for #{ticker}"
-      self.company = IexConnector.company(ticker)
+      self.company = Iex.company(ticker)
       self.company_updated_at = Time.current
       self.name = company['companyName']
       self.industry = company['industry']&.strip
@@ -31,7 +31,7 @@ class InstrumentInfo < ApplicationRecord
     end
 
     if false
-      self.advanced_stats = IexConnector.advanced_stats!(ticker)
+      self.advanced_stats = Iex.advanced_stats!(ticker)
       self.advanced_stats_updated_at = Time.current
       save!
     end

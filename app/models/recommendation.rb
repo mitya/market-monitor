@@ -53,7 +53,7 @@ class Recommendation < ApplicationRecord
       # return if ApiCache.exist? CacheDir / "#{instrument.ticker} recommendations #{Date.current.to_s :number}.json"
       data = ApiCache.get CacheDir / "#{instrument.ticker} recommendations #{Date.current.to_s :number}.json" do
         puts "Load   recommendations for #{instrument.ticker}"
-        IexConnector.recommedations(instrument.ticker)
+        Iex.recommedations(instrument.ticker)
       end
 
       import_iex_data instrument.ticker, data

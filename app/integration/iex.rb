@@ -1,6 +1,6 @@
 # https://iexcloud.io/console/
 # https://iexcloud.io/docs/api
-class IexConnector
+class Iex
   include StaticService
 
   BASE = 'https://cloud.iexapis.com/stable'
@@ -91,12 +91,11 @@ class IexConnector
 end
 
 __END__
-IexConnector.company 'X'
-IexConnector.stats 'FANG'
-IexConnector.quote 'X'
-IexConnector.previous 'X'
-IexConnector.day_candle_on 'ALTO', Date.parse('2021-01-04')
-IexConnector.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
-IexConnector.import_today_candle Instrument['PVAC']
-
-IexConnector.day_candle_on('ARCH', Date.parse('2021-03-01'))
+Iex.company 'X'
+Iex.stats 'FANG'
+Iex.quote 'X'
+Iex.previous 'X'
+Iex.day_candle_on 'ALTO', Date.parse('2021-01-04')
+Iex.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
+Iex.import_today_candle Instrument['PVAC']
+Iex.day_candle_on('ARCH', Date.parse('2021-03-01'))

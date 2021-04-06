@@ -74,8 +74,8 @@
 + sort by clicking a column
 + find stocks growing N days in a row
 + respect US holidays when looking for prev days
++ rename connectors
 
-- rename connectors
 - find stocks which hit N-month bottom in last X days and recovered Y %
 – find stocks with significant spikes last days
 

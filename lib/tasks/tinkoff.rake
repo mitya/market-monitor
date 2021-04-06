@@ -1,7 +1,7 @@
 namespace :tinkoff do
   desc "Adds new & updates old instruments"
   task 'instruments:sync' => :environment do
-    TinkoffConnector.sync_instruments(preview: ENV['ok'] != '1')
+    Tinkoff.sync_instruments(preview: ENV['ok'] != '1')
   end
 
 
@@ -9,7 +9,7 @@ namespace :tinkoff do
     desc "Loads day candles for missing latest days & for today"
     envtask :latest do
       Instrument.tinkoff.in_set(ENV['set']).abc.each do |inst|
-        TinkoffConnector.import_latest_day_candles(inst, today: R.true_or_nil?(:today))
+        Tinkoff.import_latest_day_candles(inst, today: R.true_or_nil?(:today))
       end
     end
 
@@ -17,7 +17,7 @@ namespace :tinkoff do
     envtask :all do
       tickers = ENV['tickers'].to_s.split(',')
       Instrument.tinkoff.where(ticker: tickers).abc.each do |inst|
-        TinkoffConnector.import_all_day_candles(inst)
+        Tinkoff.import_all_day_candles(inst)
       end
     end
   end
@@ -68,7 +68,7 @@ namespace :tinkoff do
           name:     iex_item.name,
           currency: iex_item.currency,
           figi:     iex_item.figi,
-          exchange: IexConnector::ExchangeMapping[iex_item.exchange],
+          exchange: Iex::ExchangeMapping[iex_item.exchange],
           flags:    %w[premium iex],
         )
       end

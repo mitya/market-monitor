@@ -6,7 +6,7 @@ namespace :iex do
     envtask :default do
       instruments = R.instruments_from_env || Instrument.usd
       instruments.each do |inst|
-        response = IexConnector.logo(inst.ticker)
+        response = Iex.logo(inst.ticker)
         url = response['url'].presence
         puts "Icon for #{inst.ticker}: #{url}"
         open('tmp/icons.csv', 'a') { |f| f.print CSV.generate_line([inst.ticker, url]) }
@@ -54,7 +54,7 @@ namespace :iex do
         next unless R.confirmed?
 
         with_missing_date.each do |inst|
-          IexConnector.import_day_candles inst, date: date
+          Iex.import_day_candles inst, date: date
           sleep 0.3
         end
       end
@@ -62,19 +62,19 @@ namespace :iex do
 
     %w[previous 5d 1m].each do |period|
       envtask "days:#{period}" do
-        Instrument.premium.abc.each { |inst| IexConnector.import_day_candles inst, period: period }
+        Instrument.premium.abc.each { |inst| Iex.import_day_candles inst, period: period }
       end
     end
 
     envtask 'days:today' do
-      Instrument.premium.abc.each { |inst| IexConnector.import_today_candle inst }
+      Instrument.premium.abc.each { |inst| Iex.import_today_candle inst }
     end
 
     envtask 'days:on_dates' do
       dates = ENV['dates'].to_s.split(',').map { |str| Date.parse(str) }
       Instrument.premium.abc.each do |inst|
         dates.each do |date|
-          IexConnector.import_day_candles inst, date: date
+          Iex.import_day_candles inst, date: date
         end
       end
     end
@@ -92,13 +92,13 @@ namespace :iex do
 
 
   namespace :symbols do
-    envtask(:load)      { File.write "cache/iex/symbols #{Current.date.to_s :number}.json", IexConnector.symbols.to_json }
-    envtask('otc:load') { File.write "cache/iex/symbols-otc #{Current.date.to_s :number}.json", IexConnector.otc_symbols.to_json }
+    envtask(:load)      { File.write "cache/iex/symbols #{Current.date.to_s :number}.json", Iex.symbols.to_json }
+    envtask('otc:load') { File.write "cache/iex/symbols-otc #{Current.date.to_s :number}.json", Iex.otc_symbols.to_json }
     envtask :process do
       items = JSON.parse File.read "db/data/iex-symbols-#{Current.date.to_s :number}.json"
       items.each do |item|
         if instrument = Instrument.get(item['symbol'])
-          instrument.update! exchange: IexConnector::ExchangeMapping[item['exchange']], flags: (instrument.flags + ['iex']).uniq
+          instrument.update! exchange: Iex::ExchangeMapping[item['exchange']], flags: (instrument.flags + ['iex']).uniq
         end
       end
     end

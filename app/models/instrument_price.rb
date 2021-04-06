@@ -11,7 +11,7 @@ class InstrumentPrice < ApplicationRecord
   class << self
     def refresh_from_tinkoff(instruments)
       instruments.each do |inst|
-        TinkoffConnector.update_current_price inst
+        Tinkoff.update_current_price inst
         sleep 0.3
       end
     end
@@ -19,7 +19,7 @@ class InstrumentPrice < ApplicationRecord
     def refresh_from_iex(symbols = [])
       prices = ApiCache.get "cache/iex/tops.json", skip_if: symbols.any?, ttl: 15.minutes do
         puts "Load new prices from IEX..."
-        IexConnector.tops(*symbols)
+        Iex.tops(*symbols)
       end
       prices.sort_by { |p| p['symbol'] }.each do |result|
         if instrument = Instrument[result['symbol']]
@@ -45,4 +45,4 @@ InstrumentPrice.refresh
 InstrumentPrice.refresh_premium_from_iex
 InstrumentPrice.refresh_from_iex %w[aapl msft twtr]
 
-IexConnector.tops Instrument.premium.map(&:ticker)
+Iex.tops Instrument.premium.map(&:ticker)

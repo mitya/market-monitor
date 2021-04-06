@@ -1,6 +1,6 @@
 require 'csv'
 
-class SpbConnector
+class SpbEx
   include StaticService
 
   # Row;s_level_name;e_full_name;e_INN_code;s_sec_type_name_dop;s_sec_form_name_full;s_RTS_code;s_ISIN_code;si_gos_reg_num;si_gos_reg_date;

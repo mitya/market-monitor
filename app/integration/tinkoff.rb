@@ -1,4 +1,4 @@
-class TinkoffConnector
+class Tinkoff
   include StaticService
 
   OutdatedTickers = %w[
@@ -183,10 +183,10 @@ end
 
 __END__
 
-TinkoffConnector.load_candles_to_files('AAPL')
-TinkoffConnector.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 6, 1), till: Date.new(2020, 12, 31))
-TinkoffConnector.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 1, 1), till: Date.new(2020, 12, 31))
-TinkoffConnector.update_current_price Instrument.get('AAPL')
-TinkoffConnector.import_latest_day_candles Instrument['PRGS']
-Instrument.tinkoff.each { |inst| TinkoffConnector.import_day_candles inst, since: Date.parse('2019-12-31'), till: Date.parse('2019-12-31').end_of_day }
-Instrument.tinkoff.each { |inst| TinkoffConnector.import_day_candles inst, since: Date.parse('2020-12-31'), till: Date.parse('2020-12-31').end_of_day }
+Tinkoff.load_candles_to_files('AAPL')
+Tinkoff.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 6, 1), till: Date.new(2020, 12, 31))
+Tinkoff.load_candles_to_files('AAPL', interval: 'day', since: Date.new(2020, 1, 1), till: Date.new(2020, 12, 31))
+Tinkoff.update_current_price Instrument.get('AAPL')
+Tinkoff.import_latest_day_candles Instrument['PRGS']
+Instrument.tinkoff.each { |inst| Tinkoff.import_day_candles inst, since: Date.parse('2019-12-31'), till: Date.parse('2019-12-31').end_of_day }
+Instrument.tinkoff.each { |inst| Tinkoff.import_day_candles inst, since: Date.parse('2020-12-31'), till: Date.parse('2020-12-31').end_of_day }
