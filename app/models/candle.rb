@@ -4,14 +4,16 @@ class Candle < ApplicationRecord
   scope :ongoing, -> { where ongoing: true }
   scope :final, -> { where ongoing: false }
   scope :day, -> { where interval: 'day' }
-  scope :todays, -> { where date: Current.date }
+  scope :today, -> { where date: Current.date }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
-  scope :find_date, -> date { order(date: :desc).where(date: date.to_date).take }
-  scope :find_date_before, -> date { order(date: :desc).where('date < ?', date.to_date).take }
+  def self.find_date_before(date) = order(date: :desc).where('date < ?', date.to_date).take
+  def self.find_date(date)        = for_date(date).take
 
   def final? = !ongoing?
+
   def range_high = close > open ? close : open
   def range_low  = close < open ? close : open
+
   def volatility_range = high - low
   def volatility = (high - low) / low
   def volatility_above = (high - range_high) / high
@@ -23,7 +25,17 @@ class Candle < ApplicationRecord
   def direction = up?? 'up' : 'down'
 
   def siblings = instrument.candles.where(interval: interval)
-  def previous = siblings.where(date: date.prev_weekday) || siblings.where('date < ?', date).order(:date).last
+  def previous = siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
+  def each_previous(with_self: true)
+    curr = self
+    Enumerator.new do |yielder|
+      yielder << curr if with_self
+      yielder << curr while curr = curr.previous
+    end
+  end
+
+  def >=(other) = close >= other.close # || high >= other.close
+  def <=(other) = close <= other.close # || low <= other.close
 
   class << self
     def last_loaded_date = final.maximum(:date)

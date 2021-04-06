@@ -7,6 +7,14 @@ class MarketCalendar
       date
     end
 
+    def market_open?(date)
+      date.on_weekday? && !nyse_holidays.include?(date)
+    end
+
+    def prev(date)
+      closest_weekday date.yesterday
+    end
+
     def nyse_holidays
       @nyse_holidays ||= %w[
         2021-01-01

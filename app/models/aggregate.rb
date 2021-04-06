@@ -8,6 +8,8 @@ class Aggregate < ApplicationRecord
 
   Accessors = %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" } + %w[y2021 nov06 mar23 feb19 y2020 y2019]
 
+  def days_down = days_up.to_i > 0 ? 0 : -days_up
+
   class << self
     def create_for(instrument, date)
       puts "Aggregate data on #{date} for #{instrument}"
@@ -28,6 +30,10 @@ class Aggregate < ApplicationRecord
           end
         end
       end
+
+      analyzer = CandleAnalyzer.new(instrument, date)
+      # aggregate.days_up = analyzer.days_up_count&.nonzero? || analyzer.days_down_count.to_i
+      aggregate.days_up = analyzer.green_days_count&.nonzero? || -analyzer.red_days_count.to_i
 
       aggregate.save!
       current.where('date < ?', date).update_all current: false

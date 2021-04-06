@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.float "feb19"
     t.float "y2020"
     t.float "y2019"
+    t.integer "days_up"
+    t.integer "days_down"
     t.jsonb "data", default: {}
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -61,6 +63,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.boolean "ongoing", default: false
     t.datetime "updated_at"
     t.index ["ticker", "interval", "date"], name: "index_candles_on_ticker_interval_date"
+    t.index ["ticker", "interval", "date"], name: "uniq_ticker_date_for_days", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "index_candles_on_ticker"
   end
 

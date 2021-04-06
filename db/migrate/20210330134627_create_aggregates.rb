@@ -8,6 +8,7 @@ class CreateAggregates < ActiveRecord::Migration[6.1]
         t.float "#{period.remove '_ago'}"
         t.float "#{period.remove '_ago'}_vol" if period.include?('ago')
       end
+      t.integer :days_up
       t.jsonb :data, default: {}
       t.timestamps
       t.index :ticker

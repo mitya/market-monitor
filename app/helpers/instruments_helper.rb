@@ -152,9 +152,10 @@ module InstrumentsHelper
     Aggregate::Accessors.map { |p| "aggregates.#{p.remove('_ago')}" } +
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" } +
     [
-      ['P/E',   'instrument_infos.pe desc'],
-      ['ß',     'instrument_infos.beta desc'],
-      ['Yield', 'instrument_infos.dividend_yield desc'],
+      ['P/E',     'instrument_infos.pe desc'],
+      ['ß',       'instrument_infos.beta desc'],
+      ['Yield',   'instrument_infos.dividend_yield desc'],
+      ['Days Up', 'aggregates.days_up desc'],
     ]
   end
 
@@ -240,6 +241,12 @@ module InstrumentsHelper
     days_ago = (Date.current - date).to_i
     color = days_ago > 60 ? 'bg-danger' : days_ago > 15 ? 'bg-warning text-dark' : 'bg-success'
     tag.span "#{days_ago} d", class: "badge #{color}"
+  end
+
+  def growth_badge(aggregate)
+    aggregate.days_up == 0 ? nil :
+      aggregate.days_up.to_i > 0 ? tag.span(aggregate.days_up, class: "badge bg-success") :
+      tag.span(aggregate.days_down, class: "badge bg-danger")
   end
 
   def trading_view_url(instrument)

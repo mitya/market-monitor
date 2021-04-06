@@ -80,10 +80,14 @@ class TinkoffConnector
   end
 
 
-  def update_current_price(instrument, **opts)
-    since, till = 10.minutes.ago.beginning_of_minute, 1.minute.from_now.beginning_of_minute
+  def last_minute_candles(instrument, since = 10.minutes.ago, till = 1.minute.from_now)
+    since, till = since.beginning_of_minute, till.beginning_of_minute
     response = `coffee bin/tinkoff.coffee candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}`
-    response_json = JSON.parse(response)
+    JSON.parse(response)
+  end
+
+  def update_current_price(instrument, **opts)
+    response_json = last_minute_candles instrument, 10.minutes.ago
     candle = response_json.dig 'candles', -1
     price = candle&.dig 'h'
     return puts "No response for #{instrument}: #{response_json}".red if response_json['candles'] == nil
@@ -92,7 +96,7 @@ class TinkoffConnector
   end
 
 
-  def download_candles(ticker, interval: 'day', since: Candle.last_loaded_date&.tomorrow, till: Date.today.end_of_day, delay: 0.33.second, ongoing: false)
+  def download_candles(ticker, interval: 'day', since: Candle.last_loaded_date&.tomorrow, till: Date.today.end_of_day, delay: 0.3.second, ongoing: false)
     return if since == till
     instrument = Instrument.get(ticker)
     file = Pathname("db/tinkoff-#{interval}-#{till.to_date.to_s :number}#{'-ongoing' if ongoing}/#{instrument.ticker} #{since.to_s :number} #{till.to_s :number}.json")
@@ -151,7 +155,7 @@ class TinkoffConnector
     end
   end
 
-  def import_day_candles(instrument, since:, till:, delay: 0.5)
+  def import_day_candles(instrument, since:, till:, delay: 0.3)
     data = JSON.parse `coffee bin/tinkoff.coffee candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}`
     import_candles_from_hash instrument, data
     sleep delay
@@ -161,7 +165,7 @@ class TinkoffConnector
 
   def import_latest_day_candles(instrument, today: true)
     return if instrument.candles.day.where('date > ?', 2.weeks.ago).none?
-    return if instrument.candles.day.todays.where('updated_at > ?', 3.hours.ago).exists?
+    return if instrument.candles.day.today.where('updated_at > ?', 3.hours.ago).exists?
     since = instrument.candles.day.final.last_loaded_date.tomorrow
     till = today ? Current.date.end_of_day : Current.yesterday.end_of_day
     import_day_candles instrument, since: since, till: till

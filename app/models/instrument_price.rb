@@ -9,22 +9,11 @@ class InstrumentPrice < ApplicationRecord
   end
 
   class << self
-    def refresh_from_tinkoff(set: nil)
-      Instrument.tinkoff.in_set(set).abc.each do |inst|
+    def refresh_from_tinkoff(instruments)
+      instruments.each do |inst|
         TinkoffConnector.update_current_price inst
-        sleep 0.33
+        sleep 0.3
       end
-    end
-
-    def refresh_tinkoff_exclusive
-      Instrument.where(ticker: Instrument.rub + Instrument.eur).abc.each do |inst|
-        TinkoffConnector.update_current_price inst
-        sleep 0.33
-      end
-    end
-
-    def refresh_premium_from_iex
-      refresh_from_iex Instrument.premium.map(&:ticker)
     end
 
     def refresh_from_iex(symbols = [])
@@ -39,10 +28,14 @@ class InstrumentPrice < ApplicationRecord
           last_at = Time.ms(result['lastUpdated'])
           next if instrument.price!.last_at && instrument.price!.last_at > last_at
 
-          puts "Update price for #{instrument.ticker.ljust 5} [#{last_at}] to #{price}"
+          puts "Update price for #{instrument.ticker.ljust 5} [#{last_at}] to #{price.nonzero?}"
           instrument.price!.update! value: price, last_at: last_at, source: 'iex' if price.to_f != 0
         end
       end
+    end
+
+    def refresh_premium_from_iex
+      refresh_from_iex Instrument.premium.map(&:ticker)
     end
   end
 end

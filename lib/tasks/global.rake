@@ -8,6 +8,7 @@ envtask :day do
   else
     rake 'tinkoff:prices:all'     unless R.false?(:price)
   end
+  rake 'aggregate'
 end
 
 task :prices => %w[iex:prices:all tinkoff:prices:uniq]

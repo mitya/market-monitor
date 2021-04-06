@@ -16,6 +16,7 @@ class IexConnector
   def price_target(symbol)            = stock(symbol, 'price-target')
   def estimates(symbol)               = stock(symbol, 'estimates', period: 'annual')
   def logo(symbol)                    = stock(symbol, 'logo')
+  def peers(symbol)                   = stock(symbol, 'peers')
   def company(symbol)                 = stock(symbol, 'company')
   def stats(symbol)                   = stock(symbol, 'stats')
   def advanced_stats!(symbol)         = stock(symbol, 'advanced-stats')

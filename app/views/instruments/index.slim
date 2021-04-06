@@ -90,12 +90,15 @@ main.container-fluid.mb-4
           th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
           th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
         th
+        th
+
     tbody
       - instruments = @instruments
       - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.total_in_usd.to_d }.reverse if is_portfolio
       - instruments.each do |inst|
         - price_target = inst.price_target
         - portfolio_item = inst.portfolio_item
+        - aggregate = inst.aggregate
         - info = inst.info
         - inst.current_price_selector = :last_or_open
         tr data-ticker=inst.ticker
@@ -166,5 +169,6 @@ main.container-fluid.mb-4
 
           td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
             = exchange_logo(inst.exchange_name)
+          td= growth_badge(aggregate)
 
   = paginate @instruments, window: 20

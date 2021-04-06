@@ -1,7 +1,7 @@
 class Instrument < ApplicationRecord
   self.inheritance_column = nil
 
-  has_many :candles, foreign_key: 'ticker', dependent: :delete_all
+  has_many :candles, foreign_key: 'ticker', dependent: :delete_all, inverse_of: :instrument
   has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'ticker'
   has_many :price_targets, foreign_key: 'ticker'
   has_many :recommendations, foreign_key: 'ticker'
