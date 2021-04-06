@@ -1,5 +1,7 @@
 class PriceTarget < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'ticker'
+  belongs_to :instrument, foreign_key: 'ticker', optional: true
+
+  scope :current, -> { where current: true }
 
   class << self
     def import_iex_data(item)
@@ -32,13 +34,25 @@ class PriceTarget < ApplicationRecord
       end
 
       import_iex_data data
+      set_current_for instrument.ticker
       sleep delay
-      
+
     rescue RestClient::NotFound => e
       puts "Price target load failed for #{instrument} with #{e}".red
+    end
+
+    def set_current_for(ticker)
+      *old, last = where(ticker: ticker).order(:date)
+      last.update! current: true
+      old.each { |target| target.update! current: nil }
+    end
+
+    def set_current
+      group(:ticker).pluck(:ticker).sort.each { |ticker| set_current_for ticker }
     end
   end
 end
 
 __END__
 PriceTarget.import_iex_data_from_remote 'aapl'
+PriceTarget.set_current

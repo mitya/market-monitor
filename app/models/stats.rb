@@ -1,4 +1,5 @@
-class InstrumentInfo < ApplicationRecord
+class Stats < ApplicationRecord
+  self.table_name = 'instrument_infos'
   belongs_to :instrument, foreign_key: 'ticker'
 
   scope :abc, -> { order :ticker }
@@ -74,8 +75,8 @@ __END__
 
 Instrument.premium.each &:create_info
 Instrument.get('AAPL').info.refresh
-InstrumentInfo.refresh
-InstrumentInfo.group(:industry).order(:count).count
-InstrumentInfo.pluck(:industry)
-InstrumentInfo.load_sector_codes_from_tops
+Stats.refresh
+Stats.group(:industry).order(:count).count
+Stats.pluck(:industry)
+Stats.load_sector_codes_from_tops
 Instrument['BABA'].info.refresh

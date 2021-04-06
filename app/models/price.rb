@@ -1,5 +1,4 @@
-class InstrumentPrice < ApplicationRecord
-  self.table_name = 'prices'
+class Price < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
   before_create { self.ticker ||= instrument.ticker }
@@ -41,8 +40,8 @@ class InstrumentPrice < ApplicationRecord
 end
 
 __END__
-InstrumentPrice.refresh
-InstrumentPrice.refresh_premium_from_iex
-InstrumentPrice.refresh_from_iex %w[aapl msft twtr]
+Price.refresh
+Price.refresh_premium_from_iex
+Price.refresh_from_iex %w[aapl msft twtr]
 
 Iex.tops Instrument.premium.map(&:ticker)

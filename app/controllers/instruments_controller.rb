@@ -14,7 +14,7 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.with_flag(params[:availability])                   if params[:availability].present?
     @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
-    @instruments = @instruments.order("#{params[:order].presence || 'ticker'} nulls last")
+    @instruments = @instruments.order("#{params[:order].presence || 'instruments.ticker'} nulls last")
     @instruments = @instruments.page(params[:page]).per(200)
 
     @portfolio = PortfolioItem.all

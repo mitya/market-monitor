@@ -20,8 +20,8 @@ class Iex
   def company(symbol)                 = stock(symbol, 'company')
   def stats(symbol)                   = stock(symbol, 'stats')
   def advanced_stats!(symbol)         = stock(symbol, 'advanced-stats')
-  def day_candle_on(symbol, date)     = stock(symbol, "chart/date/#{date.to_s :number}", chartByDay: true)
-  def day_candles_for(symbol, period) = stock(symbol, "chart/#{period}")
+  def day_on(symbol, date)            = stock(symbol, "chart/date/#{date.to_s :number}", chartByDay: true)
+  def days_for(symbol, period)        = stock(symbol, "chart/#{period}")
   def last(symbol)                    = get("/last?symbols=#{symbol}")
   def tops(*symbols)                  = get("/tops", { symbols: symbols.join(',').presence }.compact)
   def symbols                         = get("/ref-data/symbols")
@@ -32,9 +32,9 @@ class Iex
     return if period == 'previous' && instrument.candles.day.final.where(date: Current.yesterday).exists?
 
     candles_data =
-      date ? day_candle_on(instrument.ticker, date) :
+      date ? day_on(instrument.ticker, date) :
       period == 'previous' ? [previous(instrument.ticker)] :
-      day_candles_for(instrument.ticker, period)
+      days_for(instrument.ticker, period)
 
     return puts "No IEX data on #{date || period} for #{instrument}".light_yellow if candles_data.none?
 
@@ -95,7 +95,7 @@ Iex.company 'X'
 Iex.stats 'FANG'
 Iex.quote 'X'
 Iex.previous 'X'
-Iex.day_candle_on 'ALTO', Date.parse('2021-01-04')
+Iex.day_on 'ALTO', Date.parse('2021-01-04')
 Iex.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
 Iex.import_today_candle Instrument['PVAC']
-Iex.day_candle_on('ARCH', Date.parse('2021-03-01'))
+Iex.day_on('ARCH', Date.parse('2021-03-01'))

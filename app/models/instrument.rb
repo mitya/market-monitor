@@ -1,17 +1,18 @@
 class Instrument < ApplicationRecord
   self.inheritance_column = nil
 
-  has_many :candles, foreign_key: 'ticker', dependent: :delete_all, inverse_of: :instrument
-  has_many :day_candles, -> { where interval: 'day' }, class_name: 'Candle', foreign_key: 'ticker'
-  has_many :price_targets, foreign_key: 'ticker'
-  has_many :recommendations, foreign_key: 'ticker'
-  has_many :aggregates, foreign_key: 'ticker', dependent: :delete_all
-  has_one :recommendation, -> { where current: true }, foreign_key: 'ticker'
-  has_one :price_target, foreign_key: 'ticker'
-  has_one :aggregate, -> { where current: true }, foreign_key: 'ticker', inverse_of: :instrument
-  has_one :price, class_name: 'InstrumentPrice',  foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
-  has_one :info, class_name: 'InstrumentInfo',    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
-  has_one :portfolio_item,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_many :candles,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :aggregates,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
+  has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument
+  has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument
+
+  has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
+  has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
+  has_one :aggregate,      -> { current }, foreign_key: 'ticker', inverse_of: :instrument
+  has_one :price,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :info, class_name: 'Stats',      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :portfolio_item,                 foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
   validates_presence_of :ticker, :name
 

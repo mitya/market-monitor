@@ -129,11 +129,11 @@ module InstrumentsHelper
   end
 
   def industry_options
-    InstrumentInfo.where.not(industry: '').group(:industry).order(count: :desc).count.map { |industry, count| ["#{industry_short_name industry, length: 100} (#{count})", industry] }
+    Stats.where.not(industry: '').group(:industry).order(count: :desc).count.map { |industry, count| ["#{industry_short_name industry, length: 100} (#{count})", industry] }
   end
 
   def sector_options
-    InstrumentInfo.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
+    Stats.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
   end
 
   def sector_code_options
@@ -258,6 +258,6 @@ __END__
 InstrumentsHelper::IndustryShortNames.keys
 InstrumentsHelper::IndustryShortNames.keys.include? Instrument.get('ANIP').info.industry
 Instrument.get('ANIP').info.industry
-InstrumentInfo.group_by(&:industry)
+Stats.group_by(&:industry)
 
-InstrumentInfo.group(:industry).count.sort_by(&:second).each { |industry, count| p industry }; nil
+Stats.group(:industry).count.sort_by(&:second).each { |industry, count| p industry }; nil

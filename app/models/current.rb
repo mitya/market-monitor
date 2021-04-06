@@ -60,7 +60,7 @@ class Current < ActiveSupport::CurrentAttributes
   class PriceCache
     def initialize(instruments)
       @instruments = instruments
-      @prices = InstrumentPrice.where(ticker: instruments.map(&:ticker))
+      @prices = Price.where(ticker: instruments.map(&:ticker))
       @prices_by_ticker = @prices.index_by &:ticker
     end
 

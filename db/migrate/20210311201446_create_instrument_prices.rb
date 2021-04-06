@@ -1,4 +1,4 @@
-class CreateInstrumentPrices < ActiveRecord::Migration[6.1]
+class CreatePrices < ActiveRecord::Migration[6.1]
   def change
     create_table :prices, id: false do |t|
       t.primary_key :ticker

@@ -82,8 +82,7 @@ class Tinkoff
 
   def last_minute_candles(instrument, since = 10.minutes.ago, till = 1.minute.from_now)
     since, till = since.beginning_of_minute, till.beginning_of_minute
-    response = `coffee bin/tinkoff.coffee candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}`
-    JSON.parse(response)
+    call_js_api "candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}"
   end
 
   def update_current_price(instrument, **opts)
@@ -102,7 +101,7 @@ class Tinkoff
     file = Pathname("db/tinkoff-#{interval}-#{till.to_date.to_s :number}#{'-ongoing' if ongoing}/#{instrument.ticker} #{since.to_s :number} #{till.to_s :number}.json")
     unless file.exist?
       puts "Load Tinkoff #{interval} candles for [#{since.xmlschema} ... #{till.xmlschema}] #{instrument}"
-      response = `coffee bin/tinkoff.coffee candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}`
+      response = call_js_api "candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}", parse: false
       file.dirname.mkpath
       file.write response
       sleep delay
@@ -155,8 +154,12 @@ class Tinkoff
     end
   end
 
+  def load_day(instrument, since = Current.date, till = since.to_date.end_of_day)
+    call_js_api "candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}"
+  end
+
   def import_day_candles(instrument, since:, till:, delay: 0.3)
-    data = JSON.parse `coffee bin/tinkoff.coffee candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}`
+    data = load_day instrument, since, till
     import_candles_from_hash instrument, data
     sleep delay
   rescue
@@ -178,6 +181,12 @@ class Tinkoff
     import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day
   end
 
+  def call_js_api(command, parse: true)
+    command = "coffee bin/tinkoff.coffee #{command}"
+    puts command.purple if $log_tinkoff
+    response = `#{command}`
+    parse ? JSON.parse(response) : response
+  end
 
   delegate :logger, to: :Rails
 end

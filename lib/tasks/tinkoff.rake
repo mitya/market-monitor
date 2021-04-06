@@ -24,8 +24,8 @@ namespace :tinkoff do
 
 
   namespace :prices do
-    envtask(:all)  { InstrumentPrice.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }
-    envtask(:uniq) { InstrumentPrice.refresh_from_tinkoff Instrument.where(currency: %w[RUB EUR]).abc }
+    envtask(:all)  { Price.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }
+    envtask(:uniq) { Price.refresh_from_tinkoff Instrument.where(currency: %w[RUB EUR]).abc }
   end
   task :prices => 'prices:all'
 

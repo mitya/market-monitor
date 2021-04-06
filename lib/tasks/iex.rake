@@ -88,7 +88,7 @@ namespace :iex do
 
 
   envtask :set_sectors_from_tops do
-    InstrumentInfo.load_sector_codes_from_tops
+    Stats.load_sector_codes_from_tops
   end
 
 
@@ -107,8 +107,8 @@ namespace :iex do
 
 
   namespace :prices do
-    envtask(:uniq) { InstrumentPrice.refresh_premium_from_iex }
-    envtask(:all)  { InstrumentPrice.refresh_from_iex }
+    envtask(:uniq) { Price.refresh_premium_from_iex }
+    envtask(:all)  { Price.refresh_from_iex }
   end
   task :prices => 'prices:all'
 
