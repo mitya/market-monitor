@@ -121,9 +121,9 @@ main.container-fluid.mb-4
             td.money-cell.border-end.pe-2= number_to_percentage  info&.dividend_yield_percent, precision: 1
 
           - if params[:price_targets]
-            td.money-cell                = relative_price price_target&.low,     inst.base_price, unit: price_target&.currency, format: price_target_format
-            td.money-cell                = relative_price price_target&.average, inst.base_price, unit: price_target&.currency, format: price_target_format
-            td.money-cell.border-end.pe-2= relative_price price_target&.high,    inst.base_price, unit: price_target&.currency, format: price_target_format
+            td.money-cell                = relative_price price_target&.low_in_usd,     inst.base_price, unit: inst.currency, format: price_target_format
+            td.money-cell                = relative_price price_target&.average_in_usd, inst.base_price, unit: inst.currency, format: price_target_format
+            td.money-cell.border-end.pe-2= relative_price price_target&.high_in_usd,    inst.base_price, unit: inst.currency, format: price_target_format
 
           td.money-cell
             - if inst.price!.outdated? && inst.last

@@ -3,6 +3,10 @@ class PriceTarget < ApplicationRecord
 
   scope :current, -> { where current: true }
 
+  %w[low average high].each do |method|
+    define_method("#{method}_in_usd") { CurrencyConverter.convert send(method), currency, 'USD'  }
+  end
+
   class << self
     def import_iex_data(item)
       puts "Import price target for #{item['symbol']} on #{item['updatedDate']}"
