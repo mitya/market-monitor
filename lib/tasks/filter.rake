@@ -1,5 +1,5 @@
 namespace :filter do
-  task 'run' => :env do
+  envtask :run do
     Current.preload_day_candles_for Instrument.all
     Current.preload_prices_for Instrument.all
     instruments = Instrument.select(&:down_in_2021?)
@@ -8,7 +8,7 @@ namespace :filter do
     puts tickers.join(' ')
   end
 
-  task 'outdated' => :env do
+  envtask :outdated do
     ticker_max_dates = Candle.day.group(:ticker).maximum(:date)
     old_tickers_map = ticker_max_dates.select { |ticker, date| date < 1.month.ago }
     old_tickers_map.sort_by(&:second).each { |ticker, date| puts "#{date}: #{ticker}" }
@@ -23,6 +23,32 @@ namespace :filter do
     if ENV['ok'] == '1'
       Instrument.where(ticker: old_tickers).destroy_all
     end
+  end
+
+  envtask :bottom_gainers do
+    Current.preload_prices_for Instrument.all
+
+    falling_since = 3.months.ago
+    falling_period = falling_since..Current.date
+    low_reached_in = 3.weeks.ago
+    low_reach_period = low_reached_in.to_date..Current.date
+    gain_range = 0.05..nil
+    results = []
+
+    Instrument.includes(:info).find_each do |inst|
+      lowest_candle = inst.lowest_body_in falling_period
+      next unless lowest_candle.date.in? low_reach_period
+
+      rel_diff = inst.rel_diff_value(lowest_candle.range_low)
+      next unless rel_diff.to_f.in? gain_range
+
+      puts "#{inst.ticker.ljust 8} [#{inst.info&.sector_code.to_s.ljust 21}] since #{lowest_candle.date} #{(rel_diff * 100).to_i}% from #{lowest_candle.range_low} / #{lowest_candle.low}"
+      results << inst
+    end
+
+    puts
+    puts "Total: #{results.count}"
+    puts results.join(' ')
   end
 end
 

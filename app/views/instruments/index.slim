@@ -8,6 +8,7 @@
 - volatility_format = :percentage
 - volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
 - is_portfolio = params[:set] == 'portfolio'
+- show_low = params[:low] == '1'
 
 main.container-fluid.mb-4
   form#list-config(action=instruments_path class='my-2')
@@ -32,6 +33,7 @@ main.container-fluid.mb-4
             = bs_check_box :price_targets, 'Price targets', inline: true
             = bs_check_box :relative_price_targets, 'relative', inline: true
             = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
+            = bs_check_box :low, 'Recent low'
 
   = page_entries_block @instruments
   = paginate @instruments, window: 20
@@ -66,6 +68,11 @@ main.container-fluid.mb-4
         th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2") 2w ﹪
         th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
         th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
+
+        - if show_low
+          th Low
+          th.money-cell.border-end.pe-2
+
         - if show_volatility
           th.money-cell(title=l(Current.today,     format: :week_day)                   )    σ
           th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_vol desc") 1d σ
@@ -75,20 +82,24 @@ main.container-fluid.mb-4
           th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1_vol desc") 1w σ
           th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_vol desc") 2w σ
           th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_vol desc") 1m σ
+
         - if chart_volatility
           th.text-left Volatility
+
         - if show_volume
           th.money-cell Vol 1d
           th.money-cell Vol 2d
           th.money-cell Vol 3d
           th.money-cell Vol 1w
           th.money-cell Vol 1m
+
         - if show_historical_prices
           th.money-cell(data-sort="aggregates.nov06") Nov6 ﹪
           th.money-cell(data-sort="aggregates.mar23") Mar23 ﹪
           th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
           th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
           th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
+
         th
         th Up
 
@@ -140,6 +151,10 @@ main.container-fluid.mb-4
           td.money-cell                  = relative_price inst.month_ago_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
+          - if show_low
+            td.money-cell(title=aggregate.lowest_day_date)= time_ago_in_words aggregate.lowest_day_date
+            td.money-cell.border-end.pe-2= relative_price aggregate.lowest_day_low, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+
           - if show_volatility
             td[class=volatility_cell_class]= volatility_indicator inst, :today,     format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :d1_ago,    format: volatility_format
@@ -149,6 +164,7 @@ main.container-fluid.mb-4
             td[class=volatility_cell_class]= volatility_indicator inst, :w1_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :w2_ago,    format: volatility_format
             td[class=volatility_cell_class]= volatility_indicator inst, :month_ago, format: volatility_format
+
           - if chart_volatility
             td.volatility-chart
               - Current.last_2_weeks.each do |date|
@@ -160,6 +176,7 @@ main.container-fluid.mb-4
             td.money-cell= format_price_in_millions inst.base_price * inst.   d3_ago_volume, unit: inst.currency
             td.money-cell= format_price_in_millions inst.base_price * inst. week_ago_volume, unit: inst.currency
             td.money-cell= format_price_in_millions inst.base_price * inst.month_ago_volume, unit: inst.currency
+
           - if show_historical_prices
             td.money-cell                  = relative_price inst.     nov06_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell                  = relative_price inst.     mar23_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true

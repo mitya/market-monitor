@@ -61,7 +61,7 @@ namespace :iex do
     end
 
     %w[previous 5d 1m].each do |period|
-      envtask "days:#{period}" do
+      envtask period do
         Instrument.premium.abc.each { |inst| Iex.import_day_candles inst, period: period }
       end
     end

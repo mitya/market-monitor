@@ -75,8 +75,13 @@
 + find stocks growing N days in a row
 + respect US holidays when looking for prev days
 + rename connectors
++ find stocks which hit N-month bottom in last X days and recovered Y %
++ find notable stocks during aggregation + UI
 
-- find stocks which hit N-month bottom in last X days and recovered Y %
+- UI filter to select those which hit low in recent X days
+- UI filter to select those which gained X..Y since low
+- show low date as # of days since then
+
 – find stocks with significant spikes last days
 
 - peers
@@ -95,12 +100,13 @@
 – data aggregation into a table
 - recurring current price loading
 - recurring day candle loading
-- 5-min candles loading
+- 5-min candles & spikes tracking
 - company info list
 - russian ticker company info
 - maintain average volume for last N months
 - ticker selection & commands
 - track the first date for tickers (eg ALTO 2021-02-01)
+- parse VTB marginal list
 
 
 # Later

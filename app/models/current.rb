@@ -59,8 +59,8 @@ class Current < ActiveSupport::CurrentAttributes
 
   class PriceCache
     def initialize(instruments)
-      @instruments = instruments
-      @prices = Price.where(ticker: instruments.map(&:ticker))
+      @instruments = Instrument.normalize(instruments)
+      @prices = Price.where(ticker: @instruments.map(&:ticker))
       @prices_by_ticker = @prices.index_by &:ticker
     end
 
@@ -71,8 +71,8 @@ class Current < ActiveSupport::CurrentAttributes
     attr :candles, :candles_by_ticker
 
     def initialize(instruments, extra_dates)
-      @instruments = instruments
-      @candles = Candle.day.where(ticker: instruments.map(&:ticker), date: (SpecialDates.dates + extra_dates.to_a).uniq.sort).to_a
+      @instruments = Instrument.normalize(instruments)
+      @candles = Candle.day.where(ticker: @instruments.map(&:ticker), date: (SpecialDates.dates + extra_dates.to_a).uniq.sort).to_a
       @candles_by_ticker = @candles.group_by &:ticker
     end
 
@@ -85,11 +85,9 @@ class Current < ActiveSupport::CurrentAttributes
         @instrument, @cache = instrument, cache
       end
 
-      def find_date(date)
-        @cache.candles_by_ticker[@instrument.ticker]&.find { |candle| candle.date == date }
-      end
-
+      def find_date(date) = @cache.candles_by_ticker[@instrument.ticker]&.find { |candle| candle.date == date }
       def find_date_before(date) = find_date(MarketCalendar.closest_weekday date)
+      def find_dates_in(period) = @cache.candles_by_ticker[@instrument.ticker]&.select { |candle| candle.date.in? period }
     end
   end
 
@@ -98,22 +96,20 @@ class Current < ActiveSupport::CurrentAttributes
 
     def dates
       [
-        Date.parse('2019-01-03'),
-        Date.parse('2020-01-03'),
-        Date.parse('2020-02-19'),
-        Date.parse('2020-03-23'),
-        Date.parse('2020-11-06'),
-        Date.parse('2021-01-04'),
+        Current.y2019,
+        Current.y2020,
+        Current.feb19,
+        Current.mar23,
+        Current.nov06,
+        Current.y2021,
         Current.date,
-        Current.yesterday,
+        Current.d1_ago,
         Current.d2_ago,
         Current.d3_ago,
         Current.d4_ago,
-        Current.d5_ago,
-        Current.d6_ago,
-        Current.d7_ago,
+        Current.w1_ago,
         Current.w2_ago,
-        Current.month_ago,
+        Current.m1_ago,
       ]
     end
   end

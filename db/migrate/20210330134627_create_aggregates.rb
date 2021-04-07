@@ -10,6 +10,8 @@ class CreateAggregates < ActiveRecord::Migration[6.1]
       end
       t.integer :days_up
       t.jsonb :data, default: {}
+      t.date :lowest_day_date
+      t.float :lowest_day_gain
       t.timestamps
       t.index :ticker
       t.index [:ticker, :date], unique: true

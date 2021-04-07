@@ -1,5 +1,4 @@
 class Stats < ApplicationRecord
-  self.table_name = 'instrument_infos'
   belongs_to :instrument, foreign_key: 'ticker'
 
   scope :abc, -> { order :ticker }

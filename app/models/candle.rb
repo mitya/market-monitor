@@ -6,8 +6,10 @@ class Candle < ApplicationRecord
   scope :day, -> { where interval: 'day' }
   scope :today, -> { where date: Current.date }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
+
   def self.find_date_before(date) = order(date: :desc).where('date < ?', date.to_date).take
   def self.find_date(date)        = for_date(date).take
+  def self.find_dates_in(period)  = where(date: period)
 
   def final? = !ongoing?
 
@@ -36,6 +38,8 @@ class Candle < ApplicationRecord
 
   def >=(other) = close >= other.close # || high >= other.close
   def <=(other) = close <= other.close # || low <= other.close
+
+  def to_s = "<#{ticker}:#{interval}:#{date}>"
 
   class << self
     def last_loaded_date = final.maximum(:date)

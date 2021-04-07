@@ -25,6 +25,11 @@ class CandleAnalyzer
     candle = instrument.candles.day.find_date(date)&.previous
     candle.each_previous.each_slice(2).take_while { |curr, prev| curr && prev && curr <= prev }.count if candle
   end
+
+  def lowest_day_since(period_start)
+    falling_period = period_start.to_date .. Current.date
+    instrument.lowest_body_in falling_period
+  end
 end
 
 __END__

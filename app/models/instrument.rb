@@ -73,6 +73,13 @@ class Instrument < ApplicationRecord
     new_price / old_price - 1.0 if old_price && new_price
   end
 
+  def rel_diff_value(old_price_value, new_price = current_price_selector)
+    new_price_value = send(new_price)
+    new_price_value / old_price_value - 1.0 if old_price_value && new_price_value
+  end
+
+  alias gain_since rel_diff_value
+
   def logo_path = Pathname("public/logos/#{ticker}.png")
   def check_logo = update_column(:has_logo, logo_path.exist?)
 
@@ -88,6 +95,8 @@ class Instrument < ApplicationRecord
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase
 
+  def lowest_body_in(period) = day_candles!.find_dates_in(period).min_by(&:range_low)
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker
@@ -101,6 +110,7 @@ class Instrument < ApplicationRecord
     alias [] get
 
     def reject_missing(tickers) = Instrument.for_tickers(tickers).pluck(:ticker)
+    def normalize(records) = self === records.first ? records : records.map { |ticker| self[ticker] }.compact
   end
 
   concerning :Filters do
