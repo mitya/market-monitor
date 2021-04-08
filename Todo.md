@@ -80,6 +80,7 @@
 + show low date as # of days since then
 + UI filter to select those which hit low in recent X days
 + UI filter to select those which gained X..Y since low
++ sorting by lowest date / gain
 
 – find stocks with significant spikes last days
 – find stocks with strong growth last days
@@ -97,7 +98,6 @@
 - tinkoff ticker checking
 - country flags
 - disable stocks without any recent data
-– data aggregation into a table
 - recurring current price loading
 - recurring day candle loading
 - 5-min candles & spikes tracking
@@ -107,6 +107,7 @@
 - ticker selection & commands
 - track the first date for tickers (eg ALTO 2021-02-01)
 - parse VTB marginal list
+-
 
 
 # Later

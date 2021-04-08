@@ -81,8 +81,8 @@ main.container-fluid.mb-4
         th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
 
         - if show_low
-          th.text-end Low
-          th.money-cell.border-end.pe-2 Gain
+          th.text-end(data-sort="aggregates.lowest_day_date desc") Low
+          th.money-cell.border-end.pe-2(data-sort="aggregates.lowest_day_gain desc") Gain
 
         - if show_volatility
           th.money-cell(title=l(Current.today,     format: :week_day)                   )    σ
