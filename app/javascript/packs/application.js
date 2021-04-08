@@ -40,4 +40,7 @@ document.addEventListener("turbolinks:load", () => {
       document.querySelector('#list-config').submit()
     }
   })
+
+  let tickersInput = document.querySelector('#tickers')
+  if (tickersInput?.value) tickersInput.focus()
 })

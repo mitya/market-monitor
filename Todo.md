@@ -81,6 +81,7 @@
 + UI filter to select those which hit low in recent X days
 + UI filter to select those which gained X..Y since low
 + sorting by lowest date / gain
++ focus tickers filter on load if it it used
 
 – find stocks with significant spikes last days
 – find stocks with strong growth last days
@@ -92,7 +93,6 @@
 - find stocks with continious flat
 - portfolio: add a new ticker from UI
 - use same filters & filter logic on all pages
-- focus tickers filter on load if it it used
 - extract special dates
 - indexes & commodities
 - tinkoff ticker checking
