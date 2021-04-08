@@ -77,12 +77,12 @@
 + rename connectors
 + find stocks which hit N-month bottom in last X days and recovered Y %
 + find notable stocks during aggregation + UI
-
-- UI filter to select those which hit low in recent X days
-- UI filter to select those which gained X..Y since low
-- show low date as # of days since then
++ show low date as # of days since then
++ UI filter to select those which hit low in recent X days
++ UI filter to select those which gained X..Y since low
 
 – find stocks with significant spikes last days
+– find stocks with strong growth last days
 
 - peers
 - handle data loading on weekend

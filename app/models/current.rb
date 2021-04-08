@@ -60,7 +60,7 @@ class Current < ActiveSupport::CurrentAttributes
   class PriceCache
     def initialize(instruments)
       @instruments = Instrument.normalize(instruments)
-      @prices = Price.where(ticker: @instruments.map(&:ticker))
+      @prices = @instruments.size > 30 ? Price.all : Price.where(ticker: @instruments.map(&:ticker))
       @prices_by_ticker = @prices.index_by &:ticker
     end
 

@@ -1,4 +1,7 @@
 - params[:relative_past_prices] ||= '1'
+- params[:low_since] ||= 2.weeks.ago.to_date.to_s
+- params[:low_gain] ||= 10
+
 - past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - show_volume = params['volume'] == '1'
@@ -33,7 +36,15 @@ main.container-fluid.mb-4
             = bs_check_box :price_targets, 'Price targets', inline: true
             = bs_check_box :relative_price_targets, 'relative', inline: true
             = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
-            = bs_check_box :low, 'Recent low'
+            div
+              = bs_check_box :low, 'Recent low', inline: true
+              => label_tag :low_since, "since: "
+              => select_tag :low_since, options_for_select(recent_dates_options, params[:low_since]), class: "form-select form-select-sm d-inline w-auto me-3"
+              => label_tag :low_gain, "gained: "
+              .d-inline-block.w-auto
+                .input-group.input-group-sm
+                  = number_field_tag :low_gain, params[:low_gain], class: "form-control text-center", style: "width: 60px"
+                  .input-group-text %
 
   = page_entries_block @instruments
   = paginate @instruments, window: 20
@@ -70,8 +81,8 @@ main.container-fluid.mb-4
         th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
 
         - if show_low
-          th Low
-          th.money-cell.border-end.pe-2
+          th.text-end Low
+          th.money-cell.border-end.pe-2 Gain
 
         - if show_volatility
           th.money-cell(title=l(Current.today,     format: :week_day)                   )    σ
@@ -152,7 +163,7 @@ main.container-fluid.mb-4
           td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           - if show_low
-            td.money-cell(title=aggregate.lowest_day_date)= time_ago_in_words aggregate.lowest_day_date
+            td.money-cell(title=aggregate.lowest_day_date)= days_ago aggregate.lowest_day_date
             td.money-cell.border-end.pe-2= relative_price aggregate.lowest_day_low, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           - if show_volatility

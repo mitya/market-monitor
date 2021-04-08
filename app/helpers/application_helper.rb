@@ -19,6 +19,10 @@ module ApplicationHelper
     [['Tinkoff', 'tinkoff'], ['TInkoff Premium', 'premium']]
   end
 
+  def recent_dates_options
+    1.upto(6).map { |n| ["#{n} #{'week'.pluralize n} ago", n.weeks.ago.to_date.to_s] }
+  end
+
   def bs_radio_button(name, value, label)
     tag.div class: 'form-check form-check-inline' do
       radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'form-check-input') +
@@ -33,8 +37,8 @@ module ApplicationHelper
     end
   end
 
-  def bs_check_box(name, label, value: '1', false_value: '0', inline: false, switch: false, default: false)
-    tag.div class: class_names('form-check', 'form-check-inline': inline, 'form-switch': switch) do
+  def bs_check_box(name, label, value: '1', false_value: '0', inline: false, switch: false, default: false, **options)
+    tag.div class: class_names('form-check', options[:class], 'form-check-inline': inline, 'form-switch': switch) do
       (default ? hidden_field_tag(name, '0', id: nil) : ''.html_safe) +
       check_box_tag(name, value, params[name] == value, class: 'form-check-input') +
       label_tag(name, label, class: 'form-check-label')
@@ -60,5 +64,12 @@ module ApplicationHelper
   def decapitalize(string)
     string = string.to_s
     string.length > 10 && string.upcase == string ? string.titleize : string
+  end
+
+  def days_ago(date)
+    if date
+      days = (Current.date - date).to_i
+      "#{days} days ago"
+    end
   end
 end
