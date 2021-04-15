@@ -45,7 +45,7 @@ class Iex
         candle = instrument.candles.find_or_initialize_by interval: 'day', date: date, source: 'iex'
         candle.ticker  = instrument.ticker
         candle.time    = date.to_time :utc
-        candle.ongoing = date == Current.date
+        candle.ongoing = date == Current.date && !Current.weekend?
         candle.open    = hash['open']  # || hash['marketOpen']
         candle.close   = hash['close'] # || hash['marketClose']
         candle.high    = hash['high']  # || hash['marketHigh']

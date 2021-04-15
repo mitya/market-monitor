@@ -103,6 +103,7 @@ namespace :iex do
         end
       end
     end
+    envtask(:peers) { Stats.load_peers }
   end
 
 

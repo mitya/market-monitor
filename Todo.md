@@ -82,11 +82,14 @@
 + UI filter to select those which gained X..Y since low
 + sorting by lowest date / gain
 + focus tickers filter on load if it it used
++ peers
+
+- add new tickers (FRO ARVL)
+- custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
 
 – find stocks with significant spikes last days
 – find stocks with strong growth last days
-
-- peers
+– find stocks with slow growth last days
 - handle data loading on weekend
 - add last insider transaction to aggregate
 – find stocks with N% volatility on X previous days and high within Y%
@@ -94,7 +97,7 @@
 - portfolio: add a new ticker from UI
 - use same filters & filter logic on all pages
 - extract special dates
-- indexes & commodities
+- indexes & commodities (NUGT SLV)
 - tinkoff ticker checking
 - country flags
 - disable stocks without any recent data
@@ -107,7 +110,7 @@
 - ticker selection & commands
 - track the first date for tickers (eg ALTO 2021-02-01)
 - parse VTB marginal list
--
+- mark Kogan tickers with dates & prices
 
 
 # Later

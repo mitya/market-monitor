@@ -1,7 +1,10 @@
 envtask :main do
   rake 'iex:days:previous'
   rake 'tinkoff:days:latest'
-  if Current.us_market_open?
+  if Current.weekend?
+    rake 'iex:prices'          unless R.false?(:price)
+    rake 'iex:days:today'      unless R.false?(:today)
+  elsif Current.us_market_open?
     rake 'iex:prices'          unless R.false?(:price)
     rake 'iex:days:today'      unless R.false?(:today)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)

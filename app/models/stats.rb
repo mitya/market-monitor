@@ -47,6 +47,8 @@ class Stats < ApplicationRecord
   def dividend_yield_percent = dividend_yield && dividend_yield * 100
   def avg_10d_volume = stats['avg10Volume']
   def avg_30d_volume = stats['avg30Volume']
+  def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
+  def accessible_peers_and_self = accessible_peers + [ticker]
 
   class << self
     def refresh
@@ -65,6 +67,16 @@ class Stats < ApplicationRecord
           next unless instrument.usd?
           instrument.info&.update! sector_code: item['sector']
         end
+      end
+    end
+
+    def load_peers
+      Instrument.iex.usd.find_each do |inst|
+        next if inst.info!.peers
+        peers = Iex.peers(inst.ticker)
+        puts "Load peers for #{inst.ticker}: #{peers.join(' ')}"
+        inst.info.update! peers: peers
+        sleep 0.33
       end
     end
   end

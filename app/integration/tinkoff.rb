@@ -140,7 +140,7 @@ class Tinkoff
         candle.low     = hash['l']
         candle.volume  = hash['v']
         candle.date    = time.to_date
-        candle.ongoing = time.to_date == Current.date
+        candle.ongoing = time.to_date == Current.date && !Current.weekend?
         candle.save!
       end
     end

@@ -111,6 +111,9 @@ class Instrument < ApplicationRecord
 
     def reject_missing(tickers) = Instrument.for_tickers(tickers).pluck(:ticker)
     def normalize(records) = self === records.first ? records : records.map { |ticker| self[ticker] }.compact
+
+    def tickers = @tickers ||= pluck(:ticker).to_set
+    def defined?(ticker) = tickers.include?(ticker)
   end
 
   concerning :Filters do

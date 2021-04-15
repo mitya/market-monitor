@@ -7,10 +7,10 @@ class Current < ActiveSupport::CurrentAttributes
   end
   alias today date
 
-  def us_market_open?
-    us_time = Time.find_zone!('Eastern Time (US & Canada)').now
-    date.on_weekday? && us_time.to_s(:time) >= '16:30'
-  end
+  def us_time = Time.find_zone!('Eastern Time (US & Canada)').now
+  def us_date = us_time.to_date
+  def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '16:30'
+  def weekend? = us_date.on_weekend? || MarketCalendar.nyse_holidays.include?(us_date)
 
   def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)
   def d2_ago    = MarketCalendar.closest_weekday(yesterday.prev_weekday)
@@ -50,10 +50,11 @@ class Current < ActiveSupport::CurrentAttributes
   end
 
   def in_usd(amount, currency)
+    return unless amount
     case currency
     when 'USD' then amount
     when 'EUR' then amount * 1.2
-    when 'RUB' then amount / 76
+    when 'RUB' then amount / 77
     end
   end
 

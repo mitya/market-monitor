@@ -216,14 +216,15 @@ module InstrumentsHelper
 
   SectorCodeOptions = SectorCodeTitles.transform_values { |val| val.first }.invert
 
-  def sector_badge(instrument)
+  def sector_badge(instrument, link: true)
     info = instrument&.info
     code = info&.sector_code
     text, background = *SectorCodeTitles[code]
     text, background = ['RUS', 'light'] if instrument.rub?
     background ||= 'secondary'
     foreground = 'text-dark' if background.in?(%w[warning info light])
-    tag.span text || code, class: "badge bg-#{background} #{foreground}", title: info&.industry if text
+    badge = tag.span text || code, class: "badge bg-#{background} #{foreground}", title: info&.industry if text
+    instrument.info&.accessible_peers.present?? link_to(badge, url_for(tickers: instrument.info.accessible_peers_and_self.join(' '))) : badge
   end
 
   def sec_tx_code_desc(sec_code)
