@@ -36,7 +36,7 @@ class Tinkoff
     current_tickers = instruments.map { |hash| hash['ticker'] }.to_set
     outdated_tickers = Instrument.tinkoff.reject { |inst| inst.ticker.in? current_tickers }
     puts
-    puts "Outdated: #{outdated_tickers}"
+    puts "Outdated: #{outdated_tickers.map &:ticker}"
     puts "Problematic: #{problematic_tickers + new_tickers}"
     puts
 
@@ -166,19 +166,19 @@ class Tinkoff
     puts "Import #{instrument} failed: #{$!}"
   end
 
-  def import_latest_day_candles(instrument, today: true)
+  def import_latest_day_candles(instrument, today: true, since: nil)
     return if instrument.candles.day.where('date > ?', 2.weeks.ago).none?
     return if instrument.candles.day.today.where('updated_at > ?', 3.hours.ago).exists?
-    since = instrument.candles.day.final.last_loaded_date.tomorrow
+    since ||= instrument.candles.day.final.last_loaded_date.tomorrow
     till = today ? Current.date.end_of_day : Current.yesterday.end_of_day
     return if till < since
     import_day_candles instrument, since: since, till: till
   end
 
-  def import_all_day_candles(instrument)
-    import_day_candles instrument, since: Date.parse('2019-01-01'), till: Date.parse('2019-12-31').end_of_day
-    import_day_candles instrument, since: Date.parse('2020-01-01'), till: Date.parse('2020-12-31').end_of_day
-    import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day
+  def import_all_day_candles(instrument, years: [2019, 2020, 2021])
+    import_day_candles instrument, since: Date.parse('2019-01-01'), till: Date.parse('2019-12-31').end_of_day if years.include?(2019)
+    import_day_candles instrument, since: Date.parse('2020-01-01'), till: Date.parse('2020-12-31').end_of_day if years.include?(2020)
+    import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day if years.include?(2021)
   end
 
   def call_js_api(command, parse: true)

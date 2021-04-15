@@ -88,6 +88,7 @@ namespace :iex do
 
 
   envtask :set_sectors_from_tops do
+    ApiCache.get("cache/iex/tops.json") { Iex.tops }
     Stats.load_sector_codes_from_tops
   end
 
@@ -117,9 +118,14 @@ namespace :iex do
   envtask :stats do
     instruments = R.instruments_from_env || Instrument.all
     instruments.usd.iex.abc.each do |inst|
-      inst.info.refresh include_company: R.true?(:company)
+      inst.info!.refresh include_company: R.true?(:company)
       sleep 0.33
     end
+  end
+
+  envtask :'price_targets:missing' do
+    instruments = Instrument.usd.iex.select { | inst| inst.price_targets.none? }
+    puts "Missing price targets: #{instruments.map(&:ticker).join(' ')}"
   end
 
   envtask :insider_transactions do
@@ -130,13 +136,15 @@ namespace :iex do
   end
 
   envtask :price_targets do
-    Instrument.usd.iex.in_set(ENV['set'] || 'main').abc.each do |inst|
+    instruments = R.instruments_from_env || Instrument.main
+    instruments.usd.iex.abc.each do |inst|
       PriceTarget.import_iex_data_from_remote inst, delay: 0.1
     end
   end
 
   envtask :recommendations do
-    Instrument.usd.iex.in_set(ENV['set'] || 'main').abc.each do |inst|
+    instruments = R.instruments_from_env || Instrument.main
+    instruments.usd.iex.abc.each do |inst|
       Recommendation.import_iex_data_from_remote inst, delay: 0.33
     end
   end

@@ -75,7 +75,7 @@ class Iex
     candle.low     = data['low']                       || data['latestPrice']
     candle.volume  = data['latestVolume']
     candle.save!
-  rescue e
+  rescue => e
     puts "IEX today candle import error for #{instrument.ticker}: #{e}".red
   end
 

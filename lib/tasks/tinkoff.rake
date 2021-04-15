@@ -6,6 +6,11 @@ namespace :tinkoff do
 
 
   namespace :days do
+    envtask :missing do
+      instruments = Instrument.tinkoff.select { |inst| inst.yesterday == nil }
+      puts "Instruments without candles: #{instruments.map(&:ticker).join(' ')}"
+    end
+
     desc "Loads day candles for missing latest days & for today"
     envtask :latest do
       Instrument.tinkoff.in_set(ENV['set']).abc.each do |inst|
@@ -15,9 +20,9 @@ namespace :tinkoff do
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"
     envtask :year do
-      tickers = ENV['tickers'].to_s.split(',')
+      tickers = ENV['tickers'].to_s.split(' ')
       Instrument.tinkoff.where(ticker: tickers).abc.each do |inst|
-        Tinkoff.import_all_day_candles(inst)
+        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i) || [2021])
       end
     end
   end
@@ -56,12 +61,16 @@ namespace :tinkoff do
     end
 
     envtask :import do
+      ApiCache.get("cache/iex/symbols #{Date.current.to_s :number}.json") { Iex.symbols }
       iex_symbols_file = Pathname.glob('cache/iex/symbols *.json').last
       iex_items = JSON.parse iex_symbols_file.read, object_class: OpenStruct
+
+      iex_otc_items = JSON.parse Pathname.glob('cache/iex/symbols-otc *.json').last.read, object_class: OpenStruct
+
       tickers = ENV['tickers'].split # File.read("db/data/tinkoff-premium.txt").split.map &:upcase
       tickers.each do |ticker|
         next if Instrument.exists?(ticker: ticker)
-        iex_item = iex_items.find { |item| item.symbol == ticker }
+        iex_item = iex_items.find { |item| item.symbol == ticker } || iex_otc_items.find { |item| item.symbol == ticker }
         next puts "Skip #{ticker}" unless iex_item
         puts "Create #{ticker}"
         Instrument.create!(

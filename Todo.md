@@ -84,9 +84,9 @@
 + focus tickers filter on load if it it used
 + peers
 
-- add new tickers (FRO ARVL)
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
 
+- enter all tinkoff premium tickers
 – find stocks with significant spikes last days
 – find stocks with strong growth last days
 – find stocks with slow growth last days
@@ -118,3 +118,6 @@
 - column selection
 - terminal-based UI
 - charts
+
+
+onem ddd aten abb abeo abm accd acrx achv acrs acor admp aey acet adnt adma asnd clls kc tlk adt adws ades advm adeyn aer afmd agrx agnc api alrn atsg airfp eadsy akbty akca akba aci alec alks alna alvr aosl amr alt alto altm amrn amba amc axl aep amwl amrs ngloy au abi nly am ar apha apog apo aaoi apre aqms aqst abr mt arch arco asc aaic at1 arry apam asan asx asml asazy atnx aaww team ato attu auo acb athm avdl aveo car axnx ayro azre
