@@ -19,7 +19,7 @@ namespace :iex do
       instruments.abc.each do |inst|
         next if File.exist? "public/logos/#{inst.ticker}.png"
 
-        puts "Load #{inst.ticker}"
+        puts "Load logo for #{inst.ticker}"
         URI.open("https://storage.googleapis.com/iexcloud-hl37opg/api/logos/#{inst.ticker}.png", 'rb') do |remote_file|
           open("public/logos/#{inst.ticker}.png", 'wb') { |file| file << remote_file.read }
         end
@@ -40,7 +40,7 @@ namespace :iex do
       dates = ENV['dates'].to_s.split(',').presence           if ENV['dates']
       dates = Current.last_n_weeks(ENV['weeks'].to_i)         if ENV['weeks']
       dates = Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
-      dates = Current::SpecialDates.dates                     if R.true?('special_dates')
+      dates = Current::SpecialDates.dates                     if R.true?('special')
       dates ||= Current.last_2_weeks
       dates = dates - MarketCalendar.nyse_holidays.to_a
       dates.sort.each do |date|
@@ -57,6 +57,12 @@ namespace :iex do
           Iex.import_day_candles inst, date: date
           sleep 0.3
         end
+      end
+    end
+
+    envtask :period do
+      R.instruments_from_env.iex.usd.abc.each do |inst|
+        Iex.import_day_candles inst, period: ENV['period'] || 'ytd'
       end
     end
 

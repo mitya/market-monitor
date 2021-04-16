@@ -48,9 +48,10 @@ rake prices
 # Adding new tickers
 
 ## IEX
-export tickers='ONEM DDD ATEN ABB ABEO ABM ACCD ACRX ACHV ACRS ACOR ADMP AEY ACET ADNT ADMA ASND CLLS KC TLK ADT ADWS ADES ADVM ADEYN AER AFMD AGRX AGNC API ALRN ATSG AIRFP EADSY AKBTY AKCA AKBA ACI ALEC ALKS ALNA ALVR AOSL AMR ALT ALTO ALTM AMRN AMBA AMC AXL AEP AMWL AMRS NGLOY AU ABI NLY AM AR APHA APOG APO AAOI APRE AQMS AQST ABR MT ARCH ARCO ASC AAIC AT1 ARRY APAM ASAN ASX ASML ASAZY ATNX AAWW TEAM ATO ATTU AUO ACB ATHM AVDL AVEO CAR AXNX AYRO AZRE'
+export tickers=''
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-01-01
+rake iex:days:missing since=2021-01-01 # or
+rake iex:days:period period=ytd
 
 ## Tinkoff
 rake instruments:remove ticker=OBUV
@@ -61,6 +62,6 @@ rake tinkoff:days:year
 
 ## All
 rake iex:stats company=1
-rake iex:set_sectors_from_tops
-rake iex:logos:download
-rake iex:symbols:peers
+rake iex:set_sectors_from_tops iex:logos:download iex:symbols:peers
+rake iex:price_targets:missing
+rake iex:price_targets tickers=''

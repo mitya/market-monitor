@@ -219,7 +219,7 @@ module InstrumentsHelper
   def sector_badge(instrument, link: true)
     info = instrument&.info
     code = info&.sector_code
-    text, background = *SectorCodeTitles[code]
+    text, background = *SectorCodeTitles[code] || code || 'N/A'
     text, background = ['RUS', 'light'] if instrument.rub?
     background ||= 'secondary'
     foreground = 'text-dark' if background.in?(%w[warning info light])

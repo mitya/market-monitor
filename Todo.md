@@ -85,8 +85,14 @@
 + peers
 
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
+- highlight outdated price targets
 
-- enter all tinkoff premium tickers
+- 5-min candles loading
+- search for more than 1% in 10-min movements
+- search for above average volume in 5 min
+- alarms
+
+- enter tinkoff premium tickers after 'O'
 – find stocks with significant spikes last days
 – find stocks with strong growth last days
 – find stocks with slow growth last days
@@ -103,7 +109,6 @@
 - disable stocks without any recent data
 - recurring current price loading
 - recurring day candle loading
-- 5-min candles & spikes tracking
 - company info list
 - russian ticker company info
 - maintain average volume for last N months
