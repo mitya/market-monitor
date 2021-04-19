@@ -84,14 +84,23 @@
 + focus tickers filter on load if it it used
 + peers
 
-- custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
++ search for external bars
+- search for pin bars
+- download all day candles from IEX
+
 - highlight outdated price targets
 
-- 5-min candles loading
+- 1h candle loading
+- 1h external bars, pinbars & accelerations
+
+- 5m candles loading
 - search for more than 1% in 10-min movements
 - search for above average volume in 5 min
 - alarms
 
+- custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
+
+- convert rub-usd based on date
 - enter tinkoff premium tickers after 'O'
 – find stocks with significant spikes last days
 – find stocks with strong growth last days

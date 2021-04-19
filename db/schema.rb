@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_134627) do
+ActiveRecord::Schema.define(version: 2021_04_19_185310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,10 +40,11 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.float "y2020"
     t.float "y2019"
     t.integer "days_up"
-    t.integer "days_down"
     t.jsonb "data", default: {}
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "lowest_day_date"
+    t.float "lowest_day_gain"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
   end
@@ -87,29 +88,6 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.index ["ticker"], name: "index_insider_transactions_on_ticker"
   end
 
-  create_table "instrument_infos", primary_key: "ticker", id: :string, force: :cascade do |t|
-    t.string "name"
-    t.string "industry"
-    t.string "sector"
-    t.string "country"
-    t.bigint "marketcap"
-    t.bigint "shares"
-    t.float "beta"
-    t.float "pe"
-    t.float "dividend_yield"
-    t.date "next_earnings_date"
-    t.date "ex_divident_date"
-    t.jsonb "company"
-    t.datetime "company_updated_at"
-    t.jsonb "stats"
-    t.datetime "stats_updated_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "sector_code"
-    t.jsonb "advanced_stats"
-    t.datetime "advanced_stats_updated_at"
-  end
-
   create_table "instruments", primary_key: "ticker", id: :string, force: :cascade do |t|
     t.string "isin"
     t.string "figi"
@@ -135,6 +113,18 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "price_signals", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.date "date", null: false
+    t.date "base_date", null: false
+    t.string "kind", null: false
+    t.string "direction", null: false
+    t.boolean "exact"
+    t.float "accuracy"
+    t.jsonb "data"
+    t.datetime "created_at"
+  end
+
   create_table "price_targets", force: :cascade do |t|
     t.string "ticker", null: false
     t.date "date"
@@ -146,6 +136,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.string "source"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "current"
     t.index ["ticker", "date"], name: "index_price_targets_on_ticker_and_date", unique: true
   end
 
@@ -175,6 +166,30 @@ ActiveRecord::Schema.define(version: 2021_03_30_134627) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["current"], name: "index_recommendations_on_current"
     t.index ["ticker"], name: "index_recommendations_on_ticker"
+  end
+
+  create_table "stats", primary_key: "ticker", id: :string, force: :cascade do |t|
+    t.string "name"
+    t.string "industry"
+    t.string "sector"
+    t.string "country"
+    t.bigint "marketcap"
+    t.bigint "shares"
+    t.float "beta"
+    t.float "pe"
+    t.float "dividend_yield"
+    t.date "next_earnings_date"
+    t.date "ex_divident_date"
+    t.jsonb "company"
+    t.datetime "company_updated_at"
+    t.jsonb "stats"
+    t.datetime "stats_updated_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "sector_code"
+    t.jsonb "advanced_stats"
+    t.datetime "advanced_stats_updated_at"
+    t.string "peers", array: true
   end
 
 end

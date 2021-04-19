@@ -20,3 +20,7 @@ task :prices => %w[iex:prices tinkoff:prices:uniq]
 envtask :aggregate do
   Aggregate.create_for_all
 end
+
+envtask :analyze do
+  PriceSignal.analyze_all
+end

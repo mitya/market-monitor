@@ -43,8 +43,12 @@ module InstrumentsHelper
   def colorized_percentage(price, base_price, unit: nil, inverse: false)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: format_price(price, unit: currency_sign(unit)) do
-      number_to_percentage ratio * 100, precision: percentage_precision, delimiter: ',', format: '%n ﹪' if ratio
+      ratio_percentage ratio, precision: percentage_precision
     end
+  end
+
+  def ratio_percentage(ratio, precision: 0)
+    number_to_percentage ratio * 100, precision: precision, delimiter: ',', format: '%n ﹪' if ratio
   end
 
   def relative_price(price, base_price, unit:, format: "absolute", inverse: false)
@@ -254,6 +258,10 @@ module InstrumentsHelper
 
   def trading_view_url(instrument)
     "https://www.tradingview.com/chart/?symbol=#{instrument.exchange_ticker}"
+  end
+
+  def red_green(text, is_green)
+    tag.span text, class: is_green ? 'is-green' : 'is-red'
   end
 end
 

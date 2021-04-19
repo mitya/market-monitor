@@ -1,0 +1,41 @@
+- main_set = InstrumentSet.main
+- portfolio = InstrumentSet.portfolio
+
+main.container-fluid
+  h1.display-3 Signals
+
+  form#list-config(action=signals_path class='my-2')
+    = render 'instruments/filter_by_set'
+    = render 'instruments/filter_by_currency'
+    = render 'instruments/filter_by_tickers'
+
+  = page_entries_block @signals
+  = paginate @signals, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th
+        th
+        th Ticker
+        th Company
+        th Type
+        th.text-end Accuracy ﹪
+        th Direction
+        th Date
+        th Base
+    tbody
+      - @signals.each do |signal|
+        - instrument = signal.instrument
+        tr
+          td= instrument_logo instrument
+          td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
+          td= instrument.ticker
+          td= instrument.name
+          td= signal.kind
+          td.text-end= ratio_percentage signal.accuracy
+          td= red_green signal.direction, signal.direction == 'up'
+          td= link_to signal.date, trading_view_url(instrument), target: '_blank', tabindex: '-1'
+          td= signal.base_date
+
+  = paginate @signals, window: 20

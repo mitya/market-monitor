@@ -5,6 +5,7 @@ class Instrument < ApplicationRecord
   has_many :aggregates,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
   has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument
+  has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignal'
   has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
@@ -24,6 +25,7 @@ class Instrument < ApplicationRecord
   scope :usd, -> { where currency: 'USD' }
   scope :eur, -> { where currency: 'EUR' }
   scope :rub, -> { where currency: 'RUB' }
+  scope :non_usd, -> { where.not currency: 'USD' }
   scope :abc, -> { order :ticker }
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.symbols if key && key.to_s != 'all' }
   scope :main, -> { in_set :main }

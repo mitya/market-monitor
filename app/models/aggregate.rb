@@ -16,9 +16,7 @@ class Aggregate < ApplicationRecord
   class << self
     def create_for(instrument, date: Current.date, gains: true, analyze: true)
       puts "Aggregate data on #{date} for #{instrument}"
-      # aggregate = find_or_initialize_by instrument: instrument, date: date, current: true
-      aggregate = find_or_initialize_by instrument: instrument
-      aggregate.date = date
+      aggregate = find_or_initialize_by instrument: instrument, date: date
       aggregate.current = true
 
       if gains

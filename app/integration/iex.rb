@@ -28,7 +28,7 @@ class Iex
   def otc_symbols                     = get("/ref-data/otc/symbols")
 
   def import_day_candles(instrument, date: nil, period: nil)
-    return if date && instrument.candles.day.final.where(date: date).exists?
+    return if date && instrument.candles.day.final.where(date: date, source: 'iex').exists?
     return if period == 'previous' && instrument.candles.day.final.where(date: Current.yesterday).exists?
 
     candles_data =
@@ -42,7 +42,8 @@ class Iex
       candles_data.each do |hash|
         date = Date.parse hash['date']
         puts "Import IEX #{date} candle for #{instrument}"
-        candle = instrument.candles.find_or_initialize_by interval: 'day', date: date, source: 'iex'
+        candle = instrument.candles.find_or_initialize_by interval: 'day', date: date
+        candle.source  = 'iex'
         candle.ticker  = instrument.ticker
         candle.time    = date.to_time :utc
         candle.ongoing = date == Current.date && !Current.weekend?

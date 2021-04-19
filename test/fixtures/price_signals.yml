@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  date: 2021-04-19
+  kind: MyString
+  accuracy: 1.5
+  direction: MyString
+  data: 
+
+two:
+  ticker: MyString
+  date: 2021-04-19
+  kind: MyString
+  accuracy: 1.5
+  direction: MyString
+  data: 

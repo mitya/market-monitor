@@ -15,6 +15,11 @@ class Candle < ApplicationRecord
 
   def range_high = close > open ? close : open
   def range_low  = close < open ? close : open
+  def top_shadow_spread = high - range_high
+  def bottom_shadow_spread = range_low - low
+  def range_spread = range_high - range_low
+  def spread = high - low
+
 
   def volatility_range = high - low
   def volatility = (high - low) / low
@@ -26,8 +31,17 @@ class Candle < ApplicationRecord
   def down? = close < open
   def direction = up?? 'up' : 'down'
 
+  # def up_for?(period_count)
+  #   prev_candles = n_previous(period_count)
+  #   return unless prev_candles.size = period_count
+  #   prev_candles.each_slice(2).take_while { |curr, prev| curr && prev && curr >= prev }.count if candle
+  # end
+
+  def body_to_shadow_ratio = range_spread / (top_shadow_spread + bottom_shadow_spread)
+
   def siblings = instrument.candles.where(interval: interval)
   def previous = siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
+  def n_previous(n) = each_previous(with_self: false).take(n)
   def each_previous(with_self: true)
     curr = self
     Enumerator.new do |yielder|
@@ -40,6 +54,22 @@ class Candle < ApplicationRecord
   def <=(other) = close <= other.close # || low <= other.close
 
   def to_s = "<#{ticker}:#{interval}:#{date}>"
+
+  def absorb?(other, tolerance_ratio = 0)
+    return true if high >= other.high && low <= other.low
+
+    tolerance = other.spread * tolerance_ratio
+    return :almost if high >= other.high - tolerance && low <= other.low + tolerance
+  end
+
+  def pin_bar?(min_pin_height: 0.03)
+    return if body_to_shadow_ratio < 2
+    yesterday_aggregate = instrument.aggregates.find_by_date(MarketCalendar.prev date)
+    return if yesterday_aggregate == nil
+
+    return :top    if yesterday_aggregate.days_up   > 2 && close < yesterday.close && top > yesterday.close && ((top - yesterday.close) / yesterday.close) > min_pin_height
+    return :bottow if yesterday_aggregate.days_down > 2 && close > yesterday.close && bottom < yesterday.close && ((yesterday.close - bottom) / yesterday.close) > min_pin_height
+  end
 
   class << self
     def last_loaded_date = final.maximum(:date)

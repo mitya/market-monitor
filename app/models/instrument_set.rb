@@ -6,7 +6,7 @@ class InstrumentSet
   end
 
   def name = key ? key.to_s.humanize : 'All'
-  def symbols = Pathname("db/instrument-sets/#{key}.txt").readlines(chomp: true).map { |sym| sym.split(':').last }
+  def symbols = @symbols ||= Pathname("db/instrument-sets/#{key}.txt").readlines(chomp: true).map { |sym| sym.split(':').last }
   def missing_symbols = symbols.select { |s| !Instrument.exists?(ticker: s) }
   def instruments = Instrument.where(ticker: symbols)
   alias tickers symbols
@@ -30,6 +30,9 @@ class InstrumentSet
     def all_with_null
       [null] + all
     end
+
+    def main = new(:main)
+    def portfolio = new(:portfolio)
   end
 end
 

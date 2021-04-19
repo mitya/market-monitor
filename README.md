@@ -48,10 +48,9 @@ rake prices
 # Adding new tickers
 
 ## IEX
-export tickers=''
+export tickers='X'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-01-01 # or
-rake iex:days:period period=ytd
+rake iex:days:missing since=2021-01-01 # or rake iex:days:period period=ytd
 
 ## Tinkoff
 rake instruments:remove ticker=OBUV
@@ -62,6 +61,5 @@ rake tinkoff:days:year
 
 ## All
 rake iex:stats company=1
-rake iex:set_sectors_from_tops iex:logos:download iex:symbols:peers
+rake iex:set_sectors_from_tops iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:price_targets:missing
-rake iex:price_targets tickers=''
