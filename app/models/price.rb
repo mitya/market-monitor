@@ -11,7 +11,7 @@ class Price < ApplicationRecord
     def refresh_from_tinkoff(instruments)
       instruments.each do |inst|
         Tinkoff.update_current_price inst
-        sleep 0.3
+        sleep 0.1
       end
     end
 

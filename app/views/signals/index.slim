@@ -20,22 +20,33 @@ main.container-fluid
         th Ticker
         th Company
         th Type
-        th.text-end Accuracy ﹪
+        th.money-cell Enter
+        th.money-cell Current
+        th.money-cell ﹪
+        th.money-cell Stop
+        th.money-cell ﹪
+        th.money-cell Accuracy ﹪
         th Direction
-        th Date
-        th Base
+        th.text-end Date
+        th.text-end Base
     tbody
       - @signals.each do |signal|
         - instrument = signal.instrument
-        tr
+        - can_enter = signal.can_enter?(instrument.last)
+        tr class=(class_names 'stopped-out': signal.stop_hit?(instrument.last), 'can-enter': can_enter)
           td= instrument_logo instrument
           td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
           td= red_green instrument.ticker, signal.direction == 'up'
           td= instrument.name
           td= signal.kind
-          td.text-end= ratio_percentage signal.accuracy
-          td= red_green signal.direction, signal.direction == 'up'
-          td= link_to signal.date, trading_view_url(instrument), target: '_blank', tabindex: '-1'
-          td= signal.base_date
+          td.money-cell= red_green "#{signal.up?? 'Buy' : 'Sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
+          td.money-cell.enter-price-val class=(red_green_class(signal.up?) if can_enter) = format_price instrument.last, unit: instrument.currency
+          td.money-cell class=(red_green_class(signal.up?) if can_enter) = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1
+          td.money-cell.stop-loss-val= format_price signal.stop, unit: instrument.currency
+          td.money-cell= ratio_percentage signal.stop_size, precision: 1
+          td.money-cell= ratio_percentage signal.accuracy
+          td= red_green signal.direction, signal.up?
+          td.text-end(title=signal.date)= link_to date_in_words(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'
+          td.text-end= date_in_words signal.base_date
 
   = paginate @signals, window: 20

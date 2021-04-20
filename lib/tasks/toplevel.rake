@@ -23,5 +23,5 @@ envtask :aggregate do
 end
 
 envtask :analyze do
-  PriceSignal.analyze_all
+  PriceSignal.analyze_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.yesterday
 end

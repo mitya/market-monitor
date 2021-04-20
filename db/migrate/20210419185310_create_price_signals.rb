@@ -7,7 +7,8 @@ class CreatePriceSignals < ActiveRecord::Migration[6.1]
       t.string :kind, null: false
       t.string :direction, null: false
       t.boolean :exact
-      t.float :accuracy
+      t.decimal :enter, :stop, precision: 20, scale: 4
+      t.float :accuracy, :stop_size
       t.jsonb :data
       t.timestamp :created_at
     end

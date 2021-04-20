@@ -85,10 +85,10 @@
 + peers
 + search for external bars
 + download all day candles from IEX
++ add current, buy/sell & stop levels for each signal
 
 - search for pin bars
 - make current price relative to Yclose
-- add current, buy/sell & stop levels for each signal
 - signal filters by today/yesterday/last 3/last 5
 
 - highlight outdated price targets

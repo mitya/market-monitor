@@ -19,7 +19,7 @@ class Candle < ApplicationRecord
   def bottom_shadow_spread = range_low - low
   def range_spread = range_high - range_low
   def spread = high - low
-
+  def min = up?? low : high
 
   def volatility_range = high - low
   def volatility = (high - low) / low

@@ -72,4 +72,22 @@ module ApplicationHelper
       "#{days} days ago"
     end
   end
+
+  def sessions_ago(date)
+    %w[2 3 4 5 6 7].each do |n|
+      return "#{n} ss" if date == Current.send("d#{n}_ago")
+    end
+    nil
+  end
+
+  def date_in_words(date)
+    return unless date
+    date = date.to_date
+    case
+      when date.to_date == Current.today then 'today'
+      when date.to_date == Current.yesterday then 'yesterday'
+      when date >= Current.d7_ago then sessions_ago(date)
+      else days_ago(date)
+    end
+  end
 end

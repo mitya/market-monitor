@@ -261,7 +261,11 @@ module InstrumentsHelper
   end
 
   def red_green(text, is_green)
-    tag.span text, class: is_green ? 'is-green' : 'is-red'
+    tag.span text, class: red_green_class(is_green)
+  end
+
+  def red_green_class(is_green)
+    is_green ? 'is-green' : 'is-red'
   end
 end
 
