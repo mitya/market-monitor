@@ -82,6 +82,10 @@ class Iex
     puts "IEX today candle import error for #{instrument.ticker}: #{e}".red
   end
 
+  def symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols *.json').last.read, object_class: OpenStruct)
+  def otc_symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols-otc *.json').last.read, object_class: OpenStruct)
+  def all_symbols_cache = symbols_cache + otc_symbols_cache
+
   private
 
   def get(path, params = {})

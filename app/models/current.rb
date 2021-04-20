@@ -9,7 +9,7 @@ class Current < ActiveSupport::CurrentAttributes
 
   def us_time = Time.find_zone!('Eastern Time (US & Canada)').now
   def us_date = us_time.to_date
-  def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '16:30'
+  def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '09:30'
   def weekend? = us_date.on_weekend? || MarketCalendar.nyse_holidays.include?(us_date)
 
   def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)

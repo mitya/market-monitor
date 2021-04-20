@@ -89,6 +89,7 @@
 - search for pin bars
 - make current price relative to Yclose
 - add current, buy/sell & stop levels for each signal
+- signal filters by today/yesterday/last 3/last 5
 
 - highlight outdated price targets
 

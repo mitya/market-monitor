@@ -186,6 +186,9 @@ class Tinkoff
     puts command.purple if $log_tinkoff
     response = `#{command}`
     parse ? JSON.parse(response) : response
+  rescue => e
+    puts "Error parsing JSON for #{command}".red
+    parse ? { } : ''
   end
 
   delegate :logger, to: :Rails

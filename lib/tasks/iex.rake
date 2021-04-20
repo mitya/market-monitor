@@ -68,7 +68,7 @@ namespace :iex do
 
     %w[previous 5d 1m].each do |period|
       envtask period do
-        Instrument.usd.abc.each { |inst| Iex.import_day_candles inst, period: period }
+        Instrument.iex.abc.each { |inst| Iex.import_day_candles inst, period: period }
       end
     end
 
@@ -102,11 +102,15 @@ namespace :iex do
   namespace :symbols do
     envtask(:load)      { File.write "cache/iex/symbols #{Current.date.to_s :number}.json", Iex.symbols.to_json }
     envtask('otc:load') { File.write "cache/iex/symbols-otc #{Current.date.to_s :number}.json", Iex.otc_symbols.to_json }
-    envtask :process do
-      items = JSON.parse File.read "db/data/iex-symbols-#{Current.date.to_s :number}.json"
-      items.each do |item|
-        if instrument = Instrument.get(item['symbol'])
-          instrument.update! exchange: Iex::ExchangeMapping[item['exchange']], flags: (instrument.flags + ['iex']).uniq
+    envtask :refresh do
+      items = Iex.all_symbols_cache
+      index = items.index_by(&:symbol)
+      Instrument.all.each do |instrument|
+        item = index[instrument.ticker]
+        if item && instrument.usd?
+          instrument.update! exchange: Iex::ExchangeMapping[item.exchange], flags: instrument.flags.push('iex').uniq
+        else
+          instrument.update! flags: instrument.flags.without('iex')
         end
       end
     end
@@ -139,7 +143,7 @@ namespace :iex do
   envtask :price_targets do
     instruments = R.instruments_from_env || Instrument.main
     instruments.usd.iex.abc.each do |inst|
-      PriceTarget.import_iex_data_from_remote inst, delay: 0.1
+      PriceTarget.import_iex_data_from_remote inst
     end
   end
 
