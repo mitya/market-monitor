@@ -245,9 +245,12 @@ module InstrumentsHelper
 
   def days_old_badge(date)
     return if date.blank?
-    days_ago = (Date.current - date).to_i
-    color = days_ago > 60 ? 'bg-danger' : days_ago > 15 ? 'bg-warning text-dark' : 'bg-success'
-    tag.span "#{days_ago} d", class: "badge #{color}"
+    days_ago = (Current.date - date).to_i
+    color = days_ago > 350 ? 'bg-danger' : days_ago > 95 ? 'bg-dark' : days_ago > 35 ? 'bg-dark' : 'bg-secondary'
+    # text = Current.date == date ? 'today' : "#{days_ago} d"
+    # text = Current.date == date ? 'today' : distance_of_time_in_words(date, Current.date, scope: 'datetime.distance_in_words.short')
+    text = date.year == Current.date.year ? l(date, format: :month) : l(date, format: :month_year)
+    tag.span text, class: "badge #{color}", title: date
   end
 
   def growth_badge(aggregate)

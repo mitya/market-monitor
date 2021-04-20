@@ -21,7 +21,9 @@ class Aggregate < ApplicationRecord
 
       if gains
         Accessors.each do |accessor|
-          suffix = accessor =~ /_ago|y\d{4}/ ? 'open' : 'low'
+          suffix = 'low'
+          suffix = 'open' if accessor =~ /y\d{4}/
+          suffix = 'close' if accessor =~ /\w\d_ago/
           price = instrument.send("#{accessor}_#{suffix}")
           base_price = instrument.base_price
           if price && base_price

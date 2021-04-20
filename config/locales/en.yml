@@ -35,6 +35,49 @@ en:
   date:
     formats:
       wday_name: '%a'
-      wday: '%a, %d'      
+      wday: '%a, %d'
       week_day: '%A, %d %B %Y'
+      month_year: "%b %Y"
+      month: "%B"
       text: '%d %B %Y'
+
+  datetime:
+    distance_in_words:
+      short:
+        about_x_hours:
+          one: about 1 hour
+          other: about %{count} hours
+        about_x_months:
+          one: 1 month
+          other: "%{count} months"
+        about_x_years:
+          one: 1 year
+          other: "%{count} years"
+        almost_x_years:
+          one: almost 1 year
+          other: almost %{count} years
+        half_a_minute: half a minute
+        less_than_x_seconds:
+          one: less than 1 second
+          other: less than %{count} seconds
+        less_than_x_minutes:
+          one: less than a minute
+          other: less than %{count} minutes
+        over_x_years:
+          one: 1 year
+          other: "%{count} years"
+        x_seconds:
+          one: 1 second
+          other: "%{count} seconds"
+        x_minutes:
+          one: 1 minute
+          other: "%{count} minutes"
+        x_days:
+          one: 1 day
+          other: "%{count} days"
+        x_months:
+          one: 1 month
+          other: "%{count} months"
+        x_years:
+          one: 1 year
+          other: "%{count} years"
