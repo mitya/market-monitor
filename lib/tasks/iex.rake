@@ -68,7 +68,7 @@ namespace :iex do
 
     %w[previous 5d 1m].each do |period|
       envtask period do
-        Instrument.premium.abc.each { |inst| Iex.import_day_candles inst, period: period }
+        Instrument.usd.abc.each { |inst| Iex.import_day_candles inst, period: period }
       end
     end
 
@@ -129,15 +129,10 @@ namespace :iex do
     end
   end
 
-  envtask :'price_targets:missing' do
-    instruments = Instrument.usd.iex.select { | inst| inst.price_targets.none? }
-    puts "Missing price targets: #{instruments.map(&:ticker).join(' ')}"
-  end
-
   envtask :insider_transactions do
-    instruments = R.instruments_from_env || Instrument.main
+    instruments = R.instruments_from_env || Instrument.iex
     instruments.usd.iex.abc.each do |inst|
-      InsiderTransaction.import_iex_data_from_remote inst, delay: 0.33
+      InsiderTransaction.import_iex_data_from_remote inst
     end
   end
 
@@ -148,11 +143,22 @@ namespace :iex do
     end
   end
 
+  envtask :'price_targets:missing' do
+    instruments = Instrument.usd.iex.select { | inst| inst.price_targets.none? }
+    puts "Missing price targets: #{instruments.map(&:ticker).join(' ')}"
+  end
+
   envtask :recommendations do
     instruments = R.instruments_from_env || Instrument.main
     instruments.usd.iex.abc.each do |inst|
-      Recommendation.import_iex_data_from_remote inst, delay: 0.33
+      Recommendation.import_iex_data_from_remote inst
     end
+    Recommendation.mark_current
+  end
+
+  envtask :'recommendations:missing' do
+    instruments = Instrument.usd.iex.select { | inst| inst.recommendations.none? }
+    puts "Missing recommendations: #{instruments.map(&:ticker).join(' ')}"
   end
 end
 

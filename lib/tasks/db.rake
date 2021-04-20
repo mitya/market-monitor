@@ -3,3 +3,6 @@ namespace :db do
     sh "pg_dump trading_dev > tmp/data_#{Time.current.to_s :split_number}.sql"
   end
 end
+
+# createdb trading
+# psql -d trading < tmp/data_210420_1505.sql

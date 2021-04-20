@@ -83,10 +83,12 @@
 + sorting by lowest date / gain
 + focus tickers filter on load if it it used
 + peers
-
 + search for external bars
++ download all day candles from IEX
+
 - search for pin bars
-- download all day candles from IEX
+- make current price relative to Yclose
+- add current, buy/sell & stop levels for each signal
 
 - highlight outdated price targets
 

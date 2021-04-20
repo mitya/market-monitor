@@ -30,7 +30,7 @@ main.container-fluid
         tr
           td= instrument_logo instrument
           td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
-          td= instrument.ticker
+          td= red_green instrument.ticker, signal.direction == 'up'
           td= instrument.name
           td= signal.kind
           td.text-end= ratio_percentage signal.accuracy

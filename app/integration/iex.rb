@@ -58,6 +58,8 @@ class Iex
 
   rescue ActiveRecord::NotNullViolation => e
     puts "Missing some data when importing IEX candle for #{instrument} on #{date}: #{e}".red
+  rescue RestClient::NotFound => e
+    puts "Import IEX #{date} candle for #{instrument}: #{e}".red
   end
 
   def import_today_candle(instrument)

@@ -13,7 +13,7 @@ namespace :tinkoff do
 
     desc "Loads day candles for missing latest days & for today"
     envtask :latest do
-      Instrument.tinkoff.in_set(ENV['set']).abc.each do |inst|
+      Instrument.non_usd.in_set(ENV['set']).abc.each do |inst|
         Tinkoff.import_latest_day_candles(inst, today: R.true_or_nil?(:today))
       end
     end
