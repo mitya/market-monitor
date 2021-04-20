@@ -34,5 +34,7 @@ en:
 
   date:
     formats:
+      wday_name: '%a'
+      wday: '%a, %d'      
       week_day: '%A, %d %B %Y'
       text: '%d %B %Y'

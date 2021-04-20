@@ -7,7 +7,16 @@ main.container-fluid
   form#list-config(action=signals_path class='my-2')
     = render 'instruments/filter_by_set'
     = render 'instruments/filter_by_currency'
+    = render 'instruments/filter_by_availability'
     = render 'instruments/filter_by_tickers'
+    .col
+      .row.mt-2
+        .col-sm-2 Signal dates:
+        .col-sm-9
+          - %w[1 2 3 4 5].each do |n|
+            - value = Current.send("d#{n}_ago").to_s
+            = bs_check_box "dates[]", "#{n}d", id: "dates_#{n}", value: value, inline: true, checked: params[:dates].to_a.include?(value)
+
 
   = page_entries_block @signals
   = paginate @signals, window: 10
@@ -18,7 +27,9 @@ main.container-fluid
         th
         th
         th Ticker
+        th
         th Company
+        th Sector
         th Type
         th.money-cell Enter
         th.money-cell Current
@@ -26,7 +37,6 @@ main.container-fluid
         th.money-cell Stop
         th.money-cell ﹪
         th.money-cell Accuracy ﹪
-        th Direction
         th.text-end Date
         th.text-end Base
     tbody
@@ -37,16 +47,17 @@ main.container-fluid
           td= instrument_logo instrument
           td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
           td= red_green instrument.ticker, signal.direction == 'up'
+          td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
           td= instrument.name
+          td= sector_badge instrument
           td= signal.kind
-          td.money-cell= red_green "#{signal.up?? 'Buy' : 'Sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
+          td.money-cell= red_green "#{signal.up?? 'buy' : 'sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
           td.money-cell.enter-price-val class=(red_green_class(signal.up?) if can_enter) = format_price instrument.last, unit: instrument.currency
           td.money-cell class=(red_green_class(signal.up?) if can_enter) = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1
           td.money-cell.stop-loss-val= format_price signal.stop, unit: instrument.currency
           td.money-cell= ratio_percentage signal.stop_size, precision: 1
           td.money-cell= ratio_percentage signal.accuracy
-          td= red_green signal.direction, signal.up?
-          td.text-end(title=signal.date)= link_to date_in_words(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'
-          td.text-end= date_in_words signal.base_date
+          td.text-end(title=signal.date)= link_to date_as_wday(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'
+          td.text-end= date_as_wday signal.base_date
 
   = paginate @signals, window: 20

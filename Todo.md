@@ -86,12 +86,13 @@
 + search for external bars
 + download all day candles from IEX
 + add current, buy/sell & stop levels for each signal
-
-- search for pin bars
-- make current price relative to Yclose
-- signal filters by today/yesterday/last 3/last 5
++ signal filters by today/yesterday/last 3/last 5
 
 - highlight outdated price targets
+- search for pin bars
+- make current price relative to Yclose
+
+- average result for current page of signals by now
 
 - 1h candle loading
 - 1h external bars, pinbars & accelerations
@@ -103,6 +104,7 @@
 
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
 
+- signal results on close prices
 - convert rub-usd based on date
 - enter tinkoff premium tickers after 'O'
 – find stocks with significant spikes last days

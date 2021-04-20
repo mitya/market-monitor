@@ -128,6 +128,7 @@ main.container-fluid.mb-4
           td= inst.ticker
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if inst.premium?
           td= truncate inst.name
+
           - if is_portfolio
             td.money-cell
               input class="form-control form-control-sm lots-input" type="number" value=portfolio_item&.lots

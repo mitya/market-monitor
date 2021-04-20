@@ -37,11 +37,11 @@ module ApplicationHelper
     end
   end
 
-  def bs_check_box(name, label, value: '1', false_value: '0', inline: false, switch: false, default: false, **options)
+  def bs_check_box(name, label, value: '1', false_value: '0', inline: false, switch: false, default: false, id: name, checked: params[name] == value, **options)
     tag.div class: class_names('form-check', options[:class], 'form-check-inline': inline, 'form-switch': switch) do
       (default ? hidden_field_tag(name, '0', id: nil) : ''.html_safe) +
-      check_box_tag(name, value, params[name] == value, class: 'form-check-input') +
-      label_tag(name, label, class: 'form-check-label')
+      check_box_tag(name, value, checked, class: 'form-check-input', id: id) +
+      label_tag(name, label, class: 'form-check-label', for: id)
     end
   end
 
@@ -89,5 +89,12 @@ module ApplicationHelper
       when date >= Current.d7_ago then sessions_ago(date)
       else days_ago(date)
     end
+  end
+
+  def date_as_wday(date)
+    return if !date
+    return 'Yesterday' if date == Current.yesterday
+    return 'Today' if date == Current.today
+    "#{l date, format: :wday_name}, #{date.day.ordinalize}"
   end
 end
