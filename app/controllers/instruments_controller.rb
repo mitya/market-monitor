@@ -4,6 +4,8 @@ class InstrumentsController < ApplicationController
   end
 
   def index
+    params[:per_page] ||= '200'
+
     @instruments = Instrument.all
     @instruments = @instruments.joins(:aggregate)
     @instruments = @instruments.includes(:info, :price_target, :portfolio_item, :aggregate)
@@ -21,7 +23,7 @@ class InstrumentsController < ApplicationController
     end
 
     @instruments = @instruments.order("#{params[:order].presence || 'instruments.ticker'} nulls last")
-    @instruments = @instruments.page(params[:page]).per(200)
+    @instruments = @instruments.page(params[:page]).per(params[:per_page])
 
     @portfolio = PortfolioItem.all
 

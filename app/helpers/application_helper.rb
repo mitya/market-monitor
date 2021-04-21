@@ -27,6 +27,10 @@ module ApplicationHelper
     1.upto(6).map { |n| ["#{n} #{'week'.pluralize n} ago", n.weeks.ago.to_date.to_s] }
   end
 
+  def pagination_options
+    %w[100 200 300 400 500 1000 5000]
+  end
+
   def bs_radio_button(name, value, label)
     tag.div class: 'form-check form-check-inline' do
       radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'form-check-input') +
@@ -49,13 +53,13 @@ module ApplicationHelper
     end
   end
 
-  def bs_select(name, label, options, mb: 1, blank: true)
+  def bs_select(name, label, options, mb: 1, blank: true, select_class: nil)
     tag.div class: "row mb-#{mb}" do
       tag.div(class: 'col-sm-2') do
         label_tag name, label, class: 'col-form-label'
       end +
       tag.div(class: 'col-sm-10') do
-        select_tag name, options_for_select(options, params[name]), class: "form-select", include_blank: blank
+        select_tag name, options_for_select(options, params[name]), class: "form-select #{select_class}", include_blank: blank
       end
     end
   end

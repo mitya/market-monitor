@@ -1,5 +1,6 @@
 class InsiderTransactionsController < ApplicationController
   def index
+    params[:per_page] ||= '200'
     params[:insider] = nil if params[:tickers] && params[:tickers].split.many?
 
     @transactions = InsiderTransaction.with_price
@@ -9,7 +10,7 @@ class InsiderTransactionsController < ApplicationController
     @transactions = @transactions.market_only                        if params[:market_only] == '1'
     @transactions = @transactions.order(date: :desc, ticker: :asc)
     @transactions = @transactions.includes(:instrument)
-    @transactions = @transactions.page(params[:page]).per(200)
+    @transactions = @transactions.page(params[:page]).per(params[:per_page])
 
     Current.preload_prices_for @transactions.map &:instrument
   end
