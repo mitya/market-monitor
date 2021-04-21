@@ -1,0 +1,59 @@
+- winning = @signals.select(&:in_money?)
+- stopped = @signals.select(&:stopped_out?)
+- losing  = @signals - winning - stopped
+- total   = @signals.size
+- tx_delta = winning.size - losing.size - stopped.size
+- winning_pf = winning.map(&:profit_ratio).compact.sum
+- losing_pf  = losing .map(&:profit_ratio).compact.sum
+- stopped_pf = stopped.map(&:profit_ratio).compact.sum
+
+- if total > 0
+  table.table.table-sm.table-font-sm.w-auto.mx-auto.table-bordered
+    tbody
+      tr
+        th
+        th.text-end Count
+        th.text-end ﹪
+        th.text-end grp ﹪
+        th.text-end all ﹪
+        th.text-end lot ﹪
+      - if winning.any?
+        tr
+          th Winning
+          td.text-end= winning.size
+          td.text-end= ratio_percentage winning.size.to_f / total
+          td.text-end= ratio_percentage winning_pf / winning.size, precision: 2
+          td.text-end= ratio_percentage winning_pf / total, precision: 2
+          td.text-end= ratio_percentage winning_pf
+      - if losing.any?
+        tr
+          th Losing
+          td.text-end= losing.size
+          td.text-end= ratio_percentage losing.size.to_f / total
+          td.text-end= ratio_percentage losing_pf / losing.size, precision: 2
+          td.text-end= ratio_percentage losing_pf / total, precision: 2
+          td.text-end= ratio_percentage losing_pf
+      - if stopped.any?
+        tr
+          th Stopped
+          td.text-end= stopped.size
+          td.text-end= ratio_percentage stopped.size.to_f / total
+          td.text-end= ratio_percentage stopped_pf / stopped.size, precision: 2
+          td.text-end= ratio_percentage stopped_pf / total, precision: 2
+          td.text-end= ratio_percentage stopped_pf
+      tr
+        th ∑
+        td.text-end= total
+        td.text-end
+        td.text-end
+        td.text-end
+        td.text-end
+      tr
+        - pf_rel_cap = (winning_pf + losing_pf + stopped_pf) / @signals.size
+        - pf_rel_lot = winning_pf + losing_pf + stopped_pf
+        th ∆
+        td.text-end(class=red_green_class(tx_delta > 0))= tx_delta
+        td.text-end(class=red_green_class(tx_delta > 0))= ratio_percentage tx_delta.to_f / total
+        td.text-end
+        td.text-end(class=red_green_class(pf_rel_cap > 0))= ratio_percentage pf_rel_cap, precision: 2
+        td.text-end(class=red_green_class(pf_rel_lot > 0))= ratio_percentage pf_rel_lot

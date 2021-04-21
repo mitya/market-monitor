@@ -1,0 +1,6 @@
+.row.mt-2
+  .col-sm-2 Signal dates:
+  .col-sm-9
+    - %w[1 2 3 4 5].each do |n|
+      - date = Current.send("d#{n}_ago")
+      = bs_check_box "dates[]", date_as_wday(date), id: "dates_#{n}", value: date.to_s, inline: true, checked: params[:dates].to_a.include?(date.to_s)

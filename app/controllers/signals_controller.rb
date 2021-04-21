@@ -1,7 +1,7 @@
 class SignalsController < ApplicationController
   def index
     params[:dates] ||= [Current.yesterday.to_s]
-    params[:per_page] ||= '200'
+    params[:per_page] ||= '400'
 
     @signals = PriceSignal.all.order(:ticker, :date => :desc)
     @signals = @signals.joins(:instrument)

@@ -1,5 +1,5 @@
 .row.mb-1
-  legend class="col-form-label col-sm-2 pt-0" Signal
+  legend class="col-form-label col-sm-2 pt-0" Signal type:
   .col-sm-10
     - (all_option + options_from_keys(%w[outside-bar pin-bar])).each do |label, value|
       = bs_toggle_button :signal, value, label

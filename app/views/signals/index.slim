@@ -1,12 +1,5 @@
 - main_set = InstrumentSet.main
 - portfolio = InstrumentSet.portfolio
-- winning = @signals.select(&:in_money?)
-- stopped = @signals.select(&:stopped_out?)
-- losing  = @signals - winning - stopped
-- total   = @signals.size
-- winning_pf = winning.map(&:profit_ratio).compact.sum
-- losing_pf  = losing .map(&:profit_ratio).compact.sum
-- stopped_pf = stopped.map(&:profit_ratio).compact.sum
 
 main.container-fluid
   h1.display-3 Signals
@@ -15,68 +8,17 @@ main.container-fluid
     = render 'instruments/filter_by_set'
     = render 'instruments/filter_by_currency'
     = render 'instruments/filter_by_availability'
-    = render 'filter_by_signal'
     = render 'instruments/filter_by_tickers'
     = render 'instruments/pagination_options'
-    .col
-      .row.mt-2
-        .col-sm-2 Signal dates:
-        .col-sm-9
-          - %w[1 2 3 4 5].each do |n|
-            - date = Current.send("d#{n}_ago")
-            = bs_check_box "dates[]", date_as_wday(date), id: "dates_#{n}", value: date.to_s, inline: true, checked: params[:dates].to_a.include?(date.to_s)
-
+    = render 'filter_by_signal'
+    = render 'filter_by_date'
 
   .row
     .col-md-7.mt-4
       = page_entries_block @signals
       = paginate @signals, window: 10
     .col-md-5
-      - if total > 0
-        table.table.table-sm.table-font-sm.w-auto.mx-auto.table-bordered
-          tbody
-            tr
-              th
-              th.text-end Count
-              th.text-end grp ﹪
-              th.text-end all ﹪
-              th.text-end lot ﹪
-            - if winning.any?
-              tr
-                th Winning
-                td.text-end= winning.size
-                td.text-end= ratio_percentage winning_pf / winning.size, precision: 2
-                td.text-end= ratio_percentage winning_pf / total, precision: 2
-                td.text-end= ratio_percentage winning_pf
-            - if losing.any?
-              tr
-                th Losing
-                td.text-end= losing.size
-                td.text-end= ratio_percentage losing_pf / losing.size, precision: 2
-                td.text-end= ratio_percentage losing_pf / total, precision: 2
-                td.text-end= ratio_percentage losing_pf
-            - if stopped.any?
-              tr
-                th Stopped
-                td.text-end= stopped.size
-                td.text-end= ratio_percentage stopped_pf / stopped.size, precision: 2
-                td.text-end= ratio_percentage stopped_pf / total, precision: 2
-                td.text-end= ratio_percentage stopped_pf
-            tr
-              th ∑
-              td.text-end= winning.size + losing.size + stopped.size
-              td.text-end
-              td.text-end
-              td.text-end
-            tr
-              - tx_delta = winning.size - losing.size - stopped.size
-              - pf_rel_cap = (winning_pf + losing_pf + stopped_pf) / @signals.size
-              - pf_rel_lot = winning_pf + losing_pf + stopped_pf
-              th ∆
-              td.text-end(class=red_green_class(tx_delta > 0))= tx_delta
-              td.text-end
-              td.text-end(class=red_green_class(pf_rel_cap > 0))= ratio_percentage pf_rel_cap, precision: 2
-              td.text-end(class=red_green_class(pf_rel_lot > 0))= ratio_percentage pf_rel_lot
+      = render 'signal_stats'
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table
     thead.table-dark
