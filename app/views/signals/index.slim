@@ -23,8 +23,8 @@ main.container-fluid
         .col-sm-2 Signal dates:
         .col-sm-9
           - %w[1 2 3 4 5].each do |n|
-            - value = Current.send("d#{n}_ago").to_s
-            = bs_check_box "dates[]", "#{n}d", id: "dates_#{n}", value: value, inline: true, checked: params[:dates].to_a.include?(value)
+            - date = Current.send("d#{n}_ago")
+            = bs_check_box "dates[]", date_as_wday(date), id: "dates_#{n}", value: date.to_s, inline: true, checked: params[:dates].to_a.include?(date.to_s)
 
 
   .row
@@ -36,7 +36,7 @@ main.container-fluid
         table.table.table-sm.table-font-sm.w-auto.mx-auto.table-bordered
           tbody
             tr
-              th 
+              th
               th.text-end Count
               th.text-end grp ﹪
               th.text-end all ﹪
