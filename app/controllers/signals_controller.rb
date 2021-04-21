@@ -1,6 +1,7 @@
 class SignalsController < ApplicationController
   def index
     params[:dates] ||= [Current.yesterday.to_s]
+    params[:per_page] ||= '200'
 
     @signals = PriceSignal.all.order(:ticker, :date => :desc)
     @signals = @signals.joins(:instrument)
@@ -13,7 +14,7 @@ class SignalsController < ApplicationController
     @signals = @signals.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
     @signals = @signals.where ticker: InstrumentSet.get(params[:set]).symbols       if params[:set].present? && params[:tickers].blank?
 
-    @signals = @signals.page(params[:page]).per(200)
+    @signals = @signals.page(params[:page]).per(params[:per_page])
 
     Current.preload_prices_for @signals.map(&:instrument)
     Current.preload_day_candles_for @signals.map(&:instrument)

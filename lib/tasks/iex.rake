@@ -92,12 +92,8 @@ namespace :iex do
     end
   end
 
-
-  envtask :set_sectors_from_tops do
-    ApiCache.get("cache/iex/tops.json") { Iex.tops }
-    Stats.load_sector_codes_from_tops
-  end
-
+  envtask(:tops) { ApiCache.get("cache/iex/tops.json") { Iex.tops } }
+  envtask('tops:set_sectors' => :tops) { Stats.load_sector_codes_from_tops }
 
   namespace :symbols do
     envtask(:load)      { File.write "cache/iex/symbols #{Current.date.to_s :number}.json", Iex.symbols.to_json }

@@ -1,5 +1,12 @@
 - main_set = InstrumentSet.main
 - portfolio = InstrumentSet.portfolio
+- winning = @signals.select(&:in_money?)
+- stopped = @signals.select(&:stopped_out?)
+- losing  = @signals - winning - stopped
+- total   = @signals.size
+- winning_pf = winning.map(&:profit_ratio).compact.sum
+- losing_pf  = losing .map(&:profit_ratio).compact.sum
+- stopped_pf = stopped.map(&:profit_ratio).compact.sum
 
 main.container-fluid
   h1.display-3 Signals
@@ -10,6 +17,7 @@ main.container-fluid
     = render 'instruments/filter_by_availability'
     = render 'filter_by_signal'
     = render 'instruments/filter_by_tickers'
+    = render 'instruments/pagination_options'
     .col
       .row.mt-2
         .col-sm-2 Signal dates:
@@ -19,8 +27,56 @@ main.container-fluid
             = bs_check_box "dates[]", "#{n}d", id: "dates_#{n}", value: value, inline: true, checked: params[:dates].to_a.include?(value)
 
 
-  = page_entries_block @signals
-  = paginate @signals, window: 10
+  .row
+    .col-md-7.mt-4
+      = page_entries_block @signals
+      = paginate @signals, window: 10
+    .col-md-5
+      - if total > 0
+        table.table.table-sm.table-font-sm.w-auto.mx-auto.table-bordered
+          tbody
+            tr
+              th 
+              th.text-end Count
+              th.text-end grp ﹪
+              th.text-end all ﹪
+              th.text-end lot ﹪
+            - if winning.any?
+              tr
+                th Winning
+                td.text-end= winning.size
+                td.text-end= ratio_percentage winning_pf / winning.size, precision: 2
+                td.text-end= ratio_percentage winning_pf / total, precision: 2
+                td.text-end= ratio_percentage winning_pf
+            - if losing.any?
+              tr
+                th Losing
+                td.text-end= losing.size
+                td.text-end= ratio_percentage losing_pf / losing.size, precision: 2
+                td.text-end= ratio_percentage losing_pf / total, precision: 2
+                td.text-end= ratio_percentage losing_pf
+            - if stopped.any?
+              tr
+                th Stopped
+                td.text-end= stopped.size
+                td.text-end= ratio_percentage stopped_pf / stopped.size, precision: 2
+                td.text-end= ratio_percentage stopped_pf / total, precision: 2
+                td.text-end= ratio_percentage stopped_pf
+            tr
+              th ∑
+              td.text-end= winning.size + losing.size + stopped.size
+              td.text-end
+              td.text-end
+              td.text-end
+            tr
+              - tx_delta = winning.size - losing.size - stopped.size
+              - pf_rel_cap = (winning_pf + losing_pf + stopped_pf) / @signals.size
+              - pf_rel_lot = winning_pf + losing_pf + stopped_pf
+              th ∆
+              td.text-end(class=red_green_class(tx_delta > 0))= tx_delta
+              td.text-end
+              td.text-end(class=red_green_class(pf_rel_cap > 0))= ratio_percentage pf_rel_cap, precision: 2
+              td.text-end(class=red_green_class(pf_rel_lot > 0))= ratio_percentage pf_rel_lot
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table
     thead.table-dark
@@ -37,6 +93,7 @@ main.container-fluid
         th.money-cell ﹪
         th.money-cell Stop
         th.money-cell ﹪
+        th.money-cell PF
         th.money-cell Accuracy ﹪
         th.money-cell S/B
         th.text-end Date
@@ -45,7 +102,7 @@ main.container-fluid
       - @signals.each do |signal|
         - instrument = signal.instrument
         - can_enter = signal.can_enter?(instrument.last)
-        tr class=(class_names 'stopped-out': signal.stop_hit?(instrument.last), 'can-enter': can_enter)
+        tr class=(class_names 'stopped-out': signal.stopped_out?(instrument.last), 'can-enter': can_enter)
           td= instrument_logo instrument
           td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
           td= red_green instrument.ticker, signal.direction == 'up'
@@ -58,6 +115,7 @@ main.container-fluid
           td.money-cell class=(red_green_class(signal.up?) if can_enter) = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1
           td.money-cell.stop-loss-val= format_price signal.stop, unit: instrument.currency
           td.money-cell= ratio_percentage signal.stop_size, precision: 1
+          td.money-cell= ratio_percentage signal.profit_ratio, precision: 1
           td.money-cell= ratio_percentage signal.accuracy
           td.money-cell(title=candle_info(signal.candle))= number_with_precision signal.candle&.shadow_to_body_ratio, precision: 1
           td.text-end(title=signal.date)= link_to date_as_wday(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'

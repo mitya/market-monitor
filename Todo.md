@@ -90,8 +90,8 @@
 + highlight outdated price targets
 + make current price relative to Yclose
 + search for pin bars
++ average result for current page of signals by now
 
-- average result for current page of signals by now
 
 - 1h candle loading
 - 1h external bars, pinbars & accelerations

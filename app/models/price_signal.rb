@@ -2,8 +2,16 @@ class PriceSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
   def up? = direction == 'up'
-  def stop_hit?(price) = price && stop && (up?? price <= stop : price >= stop)
-  def can_enter?(price) = price && enter && (up?? price >= enter : price <= enter)
+  def stopped_out?(price = instrument.last) = price && stop && (up?? price <= stop : price >= stop)
+  def can_enter?(price = instrument.last) = price && enter && (up?? price >= enter : price <= enter)
+  alias in_money? can_enter?
+
+  def profit_ratio(current = instrument.last)
+    return if !current
+    return -stop_size if stopped_out?
+    ratio = (current - enter) / enter
+    in_money? ? ratio.abs : -ratio.abs
+  end
 
   def candle = instrument.day_candles!.find_date(date)
 
