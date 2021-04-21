@@ -53,11 +53,11 @@ class Aggregate < ApplicationRecord
       current.where(ticker: instrument.ticker).where('date < ?', date).update_all current: false
     end
 
-    def create_for_all
+    def create_for_all(date: Current.date)
       instruments = Instrument.all.abc
       Current.preload_prices_for instruments
       # Current.preload_day_candles_for instruments
-      instruments.each { |instrument| create_for instrument, date: Current.date }
+      instruments.each { |instrument| create_for instrument, date: date }
     end
   end
 end

@@ -8,6 +8,7 @@ main.container-fluid
     = render 'instruments/filter_by_set'
     = render 'instruments/filter_by_currency'
     = render 'instruments/filter_by_availability'
+    = render 'filter_by_signal'
     = render 'instruments/filter_by_tickers'
     .col
       .row.mt-2
@@ -37,6 +38,7 @@ main.container-fluid
         th.money-cell Stop
         th.money-cell ﹪
         th.money-cell Accuracy ﹪
+        th.money-cell S/B
         th.text-end Date
         th.text-end Base
     tbody
@@ -50,13 +52,14 @@ main.container-fluid
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
           td= instrument.name
           td= sector_badge instrument
-          td= signal.kind
+          td= signal.kind.underscore.humanize.downcase
           td.money-cell= red_green "#{signal.up?? 'buy' : 'sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
           td.money-cell.enter-price-val class=(red_green_class(signal.up?) if can_enter) = format_price instrument.last, unit: instrument.currency
           td.money-cell class=(red_green_class(signal.up?) if can_enter) = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1
           td.money-cell.stop-loss-val= format_price signal.stop, unit: instrument.currency
           td.money-cell= ratio_percentage signal.stop_size, precision: 1
           td.money-cell= ratio_percentage signal.accuracy
+          td.money-cell(title=candle_info(signal.candle))= number_with_precision signal.candle&.shadow_to_body_ratio, precision: 1
           td.text-end(title=signal.date)= link_to date_as_wday(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'
           td.text-end= date_as_wday signal.base_date
 

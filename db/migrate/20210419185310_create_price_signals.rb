@@ -3,7 +3,7 @@ class CreatePriceSignals < ActiveRecord::Migration[6.1]
     create_table :price_signals do |t|
       t.string :ticker, null: false
       t.date :date, null: false
-      t.date :base_date, null: false
+      t.date :base_date
       t.string :kind, null: false
       t.string :direction, null: false
       t.boolean :exact

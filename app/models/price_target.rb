@@ -9,8 +9,8 @@ class PriceTarget < ApplicationRecord
 
   class << self
     def import_iex_data(item)
-      puts "Import price target for #{item['symbol']} on #{item['updatedDate']}"
       target = find_or_initialize_by ticker: item['symbol'], date: item['updatedDate']
+      puts "Import price target for #{target.ticker} on #{target.date}" if target.new_record?
       target.high           = item['priceTargetHigh']
       target.low            = item['priceTargetLow']
       target.average        = item['priceTargetAverage']
@@ -42,7 +42,7 @@ class PriceTarget < ApplicationRecord
       sleep delay
 
     rescue RestClient::NotFound => e
-      puts "Price target load failed for #{instrument} with #{e}".red
+      puts "Load   price target for #{instrument.ticker} failed with #{e}".red
     end
 
     def set_current_for(ticker)
@@ -54,9 +54,14 @@ class PriceTarget < ApplicationRecord
     def set_current
       group(:ticker).pluck(:ticker).sort.each { |ticker| set_current_for ticker }
     end
+
+    def outdated(threshold: Current.date.beginning_of_year)
+      Instrument.usd.iex.abc.select { |inst| inst.price_targets.where('date > ?', threshold).none? }
+    end
   end
 end
 
 __END__
 PriceTarget.import_iex_data_from_remote 'aapl'
 PriceTarget.set_current
+PriceTarget.outdated.map(&:ticker).sort

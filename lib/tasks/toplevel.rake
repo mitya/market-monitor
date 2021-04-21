@@ -19,7 +19,7 @@ end
 task :prices => %w[iex:prices tinkoff:prices:uniq]
 
 envtask :aggregate do
-  Aggregate.create_for_all
+  Aggregate.create_for_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.date
 end
 
 envtask :analyze do

@@ -155,15 +155,15 @@ main.container-fluid.mb-4
               span.outdated-price(title="Last at #{inst.price!.last_at&.localtime}")= format_price inst.last, unit: inst.currency
             - else
               = colorized_price inst.last, inst.today_open, unit: inst.currency
-          td.money-cell.border-end.pe-2  = relative_price inst.    today_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.yesterday_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.   d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.   d3_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.   d4_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.   w1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.   w2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.month_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.border-end.pe-2  = relative_price inst.    y2021_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.border-end.pe-2  = relative_price inst.today_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.d3_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.muted-cell       = relative_price inst.d4_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.w1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.w2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           - if show_low
             td.money-cell(title=aggregate.lowest_day_date)= days_ago aggregate.lowest_day_date

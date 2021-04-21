@@ -5,6 +5,7 @@ class PriceSignal < ApplicationRecord
   def stop_hit?(price) = price && stop && (up?? price <= stop : price >= stop)
   def can_enter?(price) = price && enter && (up?? price >= enter : price <= enter)
 
+  def candle = instrument.day_candles!.find_date(date)
 
   class << self
     def analyze_all(date: Current.yesterday)
@@ -25,21 +26,19 @@ class PriceSignal < ApplicationRecord
 
       if match = today.absorb?(yesterday, 0.05)
         puts "Detect outside-bar on #{date} for #{instrument}"
-        create! instrument: instrument, date: today.date, base_date: yesterday.date,
-          kind: 'outside-bar',
-          direction: today.direction,
+        create! instrument: instrument, date: today.date, base_date: yesterday.date, kind: 'outside-bar',
           accuracy: (today.spread / yesterday.spread).to_f.round(2),
           exact: match == true,
-          enter: today.close,
-          stop: today.min,
-          stop_size: ((today.close - today.min) / today.close).abs.to_f.round(4)
+          direction: today.direction, enter: today.close, stop: today.min,
+          stop_size: today.close_min_rel.abs.to_f.round(4)
       end
 
-      # if today.pin_bar?
-      #   create! instrument: instrument, date: today.date,
-      #     kind: 'pin-bar',
-      #     direction: today.direction
-      # end
+      if pin_vector = today.pin_bar?
+        puts "Detect pin-bar on #{date} for #{instrument}"
+        create! instrument: instrument, date: today.date, kind: 'pin-bar',
+          direction: pin_vector, enter: pin_vector == 'up' ? today.high : today.low, stop: pin_vector == 'up' ? today.low : today.high,
+          stop_size: today.max_min_rel.abs.to_f.round(4)
+      end
     end
   end
 end

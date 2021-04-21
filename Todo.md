@@ -89,8 +89,7 @@
 + signal filters by today/yesterday/last 3/last 5
 + highlight outdated price targets
 + make current price relative to Yclose
-
-- search for pin bars
++ search for pin bars
 
 - average result for current page of signals by now
 

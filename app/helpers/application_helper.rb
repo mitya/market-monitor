@@ -15,6 +15,10 @@ module ApplicationHelper
     [['All', '']]
   end
 
+  def options_from_keys(keys)
+    keys.map { |key| [key.underscore.humanize.downcase, key] }
+  end
+
   def availability_options
     [['Tinkoff', 'tinkoff'], ['TInkoff Premium', 'premium']]
   end

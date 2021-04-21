@@ -56,6 +56,14 @@ module InstrumentsHelper
     send method, price, base_price, unit: unit, inverse: inverse
   end
 
+  def with_2_digits(value)
+    number_with_precision value, precision: 2
+  end
+
+  def candle_info(candle)
+    "L-H: #{with_2_digits candle.low}-#{with_2_digits candle.high}  OC: #{with_2_digits candle.open}-#{with_2_digits candle.close}" if candle
+  end
+
   def volatility_indicator(instrument, accessor_or_date, format: :bar)
     candle = accessor_or_date.is_a?(Date) ?
       instrument.day_candles!.find_date(accessor_or_date) :
