@@ -2,7 +2,7 @@ class Current < ActiveSupport::CurrentAttributes
   attribute :day_candles_cache, :prices_cache
 
   def date
-    date = Time.current.hour < 7 ? Date.yesterday : Date.current
+    date = Time.current.hour < 5 ? Date.yesterday : Date.current
     date.on_weekend?? date.prev_weekday : date
   end
   alias today date
@@ -10,6 +10,7 @@ class Current < ActiveSupport::CurrentAttributes
   def us_time = Time.find_zone!('Eastern Time (US & Canada)').now
   def us_date = us_time.to_date
   def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '09:30'
+  def uk_market_open? = date.on_weekday? && Time.current.to_s(:time) >= '11:00'
   def weekend? = us_date.on_weekend? || MarketCalendar.nyse_holidays.include?(us_date)
 
   def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)

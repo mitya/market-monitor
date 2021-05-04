@@ -4,5 +4,5 @@ namespace :db do
   end
 end
 
-# createdb trading
-# psql -d trading < tmp/data_210420_1505.sql
+# createdb trading_dev
+# psql -d trading_dev < tmp/data_210420_1505.sql

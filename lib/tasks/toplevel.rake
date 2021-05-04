@@ -6,8 +6,11 @@ envtask :main do
     rake 'iex:days:today'      unless R.false?(:today)
   elsif Current.us_market_open?
     rake 'iex:prices'          unless R.false?(:price)
-    # rake 'iex:days:today'          if R.true?(:today)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
+  elsif Current.uk_market_open?
+    rake 'iex:prices:uniq'     unless R.false?(:price)
+    rake 'tinkoff:prices'      unless R.false?(:price)
+    # rake 'iex:days:today'          if R.true?(:today)
   else
     rake 'iex:prices:uniq'     unless R.false?(:price)
     rake 'tinkoff:prices'      unless R.false?(:price)
@@ -25,3 +28,5 @@ end
 envtask :analyze do
   PriceSignal.analyze_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.yesterday
 end
+
+task :a => %w[aggregate analyze]

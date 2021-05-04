@@ -50,7 +50,7 @@ rake prices
 ## IEX
 export tickers='X'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-01-01 # or rake iex:days:period period=ytd
+rake iex:days:missing since=2021-04-17 # or rake iex:days:period period=ytd
 
 ## Tinkoff
 rake instruments:remove ticker=OBUV
