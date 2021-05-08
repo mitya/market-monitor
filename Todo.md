@@ -92,7 +92,6 @@
 + search for pin bars
 + average result for current page of signals by now
 
-
 - 1h candle loading
 - 1h external bars, pinbars & accelerations
 
@@ -103,6 +102,7 @@
 
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
 
+- improve signal list visualization
 - signal results on close prices
 - convert rub-usd based on date
 - enter tinkoff premium tickers after 'O'

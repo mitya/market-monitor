@@ -1,5 +1,7 @@
 - main_set = InstrumentSet.main
 - portfolio = InstrumentSet.portfolio
+- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 
 main.container-fluid
   h1.display-3 Signals
@@ -11,7 +13,13 @@ main.container-fluid
     = render 'instruments/filter_by_tickers'
     = render 'instruments/pagination_options'
     = render 'filter_by_signal'
+    = render 'filter_by_direction'
     = render 'filter_by_date'
+    .row
+      .col-sm-2
+      .col-sm-9
+        = bs_check_box :price_targets, 'Price targets', inline: true
+        = bs_check_box :relative_price_targets, 'relative', inline: true
 
   .row
     .col-md-7.mt-4
@@ -29,6 +37,14 @@ main.container-fluid
         th
         th Company
         th Sector
+        th.money-cell.border-end.pe-2(data-sort="capitalization") Cap (M)
+        - if params[:price_targets]
+          th.money-cell Low
+          th.money-cell Average
+          th.money-cell High
+          th.money-cell.border-end.pe-2
+          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
+          th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
         th Type
         th.money-cell Enter
         th.money-cell Current
@@ -42,16 +58,28 @@ main.container-fluid
         th.text-end Base
     tbody
       - @signals.each do |signal|
-        - instrument = signal.instrument
+        - inst = instrument = signal.instrument
+        - price_target = instrument.price_target
+        - info = instrument.info
         - can_enter = signal.can_enter?(instrument.last)
-        tr class=(class_names 'stopped-out': signal.stopped_out?(instrument.last), 'can-enter': can_enter)
+        tr class=(class_names 'stopped-out': signal.stopped_out?(instrument.last), 'can-enter': can_enter, 'non-exact': !signal.exact?)
           td= instrument_logo instrument
           td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
           td= red_green instrument.ticker, signal.direction == 'up'
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
-          td= instrument.name
+          td.instrument-name= instrument.name
           td= sector_badge instrument
-          td= signal.kind.underscore.humanize.downcase
+          td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0
+          - if params[:price_targets]
+            td.money-cell= relative_price price_target&.low_in_usd,     instrument.base_price, unit: instrument.currency, format: price_target_format
+            td.money-cell= relative_price price_target&.average_in_usd, instrument.base_price, unit: instrument.currency, format: price_target_format
+            td.money-cell= relative_price price_target&.high_in_usd,    instrument.base_price, unit: instrument.currency, format: price_target_format
+            td.money-cell.border-end.pe-2= days_old_badge price_target&.date
+            td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.signal-name
+            = signal.kind.underscore.humanize.downcase
+            = '?' if !signal.exact?
           td.money-cell= red_green "#{signal.up?? 'buy' : 'sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
           td.money-cell.enter-price-val class=(red_green_class(signal.up?) if can_enter) = format_price instrument.last, unit: instrument.currency
           td.money-cell class=(red_green_class(signal.up?) if can_enter) = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1

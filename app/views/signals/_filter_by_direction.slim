@@ -1,0 +1,5 @@
+.row.mb-1
+  legend class="col-form-label col-sm-2 pt-0" Direction:
+  .col-sm-10
+    - (all_option + options_from_keys(%w[up down])).each do |label, value|
+      = bs_toggle_button :direction, value, label

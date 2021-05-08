@@ -32,7 +32,7 @@ class PriceSignal < ApplicationRecord
       yesterday = today&.previous
       return unless today && yesterday
 
-      if match = today.absorb?(yesterday, 0.05)
+      if match = (today.absorb?(yesterday, 0.0) && today.range_spread_percent > 0.01)
         puts "Detect outside-bar on #{date} for #{instrument}"
         create! instrument: instrument, date: today.date, base_date: yesterday.date, kind: 'outside-bar',
           accuracy: (today.spread / yesterday.spread).to_f.round(2),

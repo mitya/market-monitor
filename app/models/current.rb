@@ -12,6 +12,7 @@ class Current < ActiveSupport::CurrentAttributes
   def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '09:30'
   def uk_market_open? = date.on_weekday? && Time.current.to_s(:time) >= '11:00'
   def weekend? = us_date.on_weekend? || MarketCalendar.nyse_holidays.include?(us_date)
+  def workday? = MarketCalendar.market_open?(Date.current)
 
   def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)
   def d2_ago    = MarketCalendar.closest_weekday(yesterday.prev_weekday)
@@ -29,10 +30,13 @@ class Current < ActiveSupport::CurrentAttributes
   def y2019     = Date.new(2019,  1,  3)
   def y2020     = Date.new(2020,  1,  3)
   def y2021     = Date.new(2021,  1,  4)
+  alias d0_ago today
   alias d1_ago yesterday
   alias w1_ago d5_ago
   alias w2_ago d10_ago
   alias m1_ago month_ago
+
+  def last_closed_day = work_day? ? yesterday : today
 
   def weekdays_since(date) = date.upto(Current.yesterday).to_a.select { |date| MarketCalendar.market_open?(date) }.reverse
   def last_n_weeks(n) = weekdays_since(n.weeks.ago.to_date)

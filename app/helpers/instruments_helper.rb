@@ -164,9 +164,9 @@ module InstrumentsHelper
     Aggregate::Accessors.map { |p| "aggregates.#{p.remove('_ago')}" } +
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" } +
     [
-      ['P/E',      'instrument_infos.pe desc'],
-      ['ß',        'instrument_infos.beta desc'],
-      ['Yield',    'instrument_infos.dividend_yield desc'],
+      ['P/E',      'stats.pe desc'],
+      ['ß',        'stats.beta desc'],
+      ['Yield',    'stats.dividend_yield desc'],
       ['Days Up',  'aggregates.days_up desc'],
       ['Low Date', 'aggregates.lowest_day_date desc'],
       ['Low Gain', 'aggregates.lowest_day_gain desc'],

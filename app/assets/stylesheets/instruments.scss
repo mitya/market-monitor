@@ -71,6 +71,9 @@ th[data-sort] { cursor: pointer; }
 
 input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-webkit-search-cancel-button:hover { cursor:pointer; }
 
-.stopped-out { opacity: 0.4; }
-.stopped-out .stop-loss-val { text-decoration: line-through; }
-.stopped-out .enter-price-val { color: inherit !important; }
+.stopped-out {
+  opacity: 0.4;
+  // background-color: rgba(black, 0.2);
+  .stop-loss-val, .enter-price-val, .instrument-name, .signal-name { text-decoration: line-through; }
+  .enter-price-val { color: inherit !important; }
+}

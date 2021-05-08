@@ -63,9 +63,9 @@ main.container-fluid.mb-4
         th Sector
         th.money-cell.border-end.pe-2(data-sort="capitalization") Cap (M)
         - if params[:fundamentals]
-          th.money-cell(data-sort="instrument_infos.pe desc") P/E
-          th.money-cell(data-sort="instrument_infos.beta desc") ß
-          th.money-cell.border-end.pe-2(data-sort="instrument_infos.dividend_yield desc") Yield
+          th.money-cell(data-sort="stats.pe desc") P/E
+          th.money-cell(data-sort="stats.beta desc") ß
+          th.money-cell.border-end.pe-2(data-sort="stats.dividend_yield desc") Yield
         - if params[:price_targets]
           th.money-cell Low
           th.money-cell Average

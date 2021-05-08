@@ -125,7 +125,6 @@ namespace :iex do
     instruments = R.instruments_from_env || Instrument.all
     instruments.usd.iex.abc.each do |inst|
       inst.info!.refresh include_company: R.true?(:company)
-      sleep 0.33
     end
   end
 

@@ -22,6 +22,8 @@ class Candle < ApplicationRecord
   def min = up?? low : high
   def max = up?? high : low
 
+  def range_spread_percent = range_spread.abs / close
+
   def close_min_rel = (close - min) / close
   def max_min_rel = (max - min) / max
 

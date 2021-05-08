@@ -101,8 +101,8 @@ module ApplicationHelper
 
   def date_as_wday(date)
     return if !date
-    return 'Yesterday' if date == Current.yesterday
-    return 'Today' if date == Current.today
+    # return 'Yesterday' if date == Current.yesterday
+    # return 'Today' if date == Current.today
     "#{l date, format: :wday_name}, #{date.day.ordinalize}"
   end
 end
