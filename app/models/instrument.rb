@@ -92,7 +92,7 @@ class Instrument < ApplicationRecord
   def iex? = info.present?
   def premium? = flags.include?('premium')
   def nasdaq? = exchange_name == 'NASDAQ'
-  def exchange_name = exchange || (rub?? 'MOEX' : nil)
+  def exchange_name = rub? ? 'MOEX' : exchange
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase

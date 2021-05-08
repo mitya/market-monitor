@@ -91,9 +91,9 @@
 + make current price relative to Yclose
 + search for pin bars
 + average result for current page of signals by now
++ country flags
 
 - allow hiding historical prices
-- country flags
 - sync portfolio with tinkoff
 - add last insider buy to aggregates
 

@@ -69,6 +69,13 @@ module ApplicationHelper
     image_tag "exchange-logos/#{exchange_name}.png", size: '15x15', class: 'exchange-logo' if exchange_name.in?(ExcahngesWithLogos)
   end
 
+  def country_flag(instrument)
+    country_code, country_name = instrument.info&.country_code, instrument.info&.country
+    country_code, country_name = 'rus', 'Russia' if instrument.exchange_name == 'MOEX'
+    country_code, country_name = 'deu', 'Germanu' if instrument.ticker.include? '@DE'
+    image_tag "/country-flags/#{country_code}.png", class: 'country-flag', title: country_name if country_code
+  end
+
   def decapitalize(string)
     string = string.to_s
     string.length > 10 && string.upcase == string ? string.titleize : string

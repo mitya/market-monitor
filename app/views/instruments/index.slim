@@ -54,6 +54,7 @@ main.container-fluid.mb-4
     thead.table-dark
       tr
         th
+        th
         th(data-sort="ticker") Ticker
         th
         th Name
@@ -126,6 +127,7 @@ main.container-fluid.mb-4
         - info = inst.info
         - inst.current_price_selector = :last_or_open
         tr data-ticker=inst.ticker
+          td= country_flag inst
           td= link_to instrument_logo(inst), trading_view_url(inst), target: '_blank', tabindex: '-1' if inst.has_logo?
           td= inst.ticker
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if inst.premium?
@@ -201,6 +203,6 @@ main.container-fluid.mb-4
 
           td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
             = exchange_logo(inst.exchange_name)
-          td= growth_badge(aggregate)
+          td= growth_badge aggregate
 
   = paginate @instruments, window: 20

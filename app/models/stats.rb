@@ -50,6 +50,10 @@ class Stats < ApplicationRecord
   def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
   def accessible_peers_and_self = accessible_peers + [ticker]
 
+  def country_code
+    COUNTRY_NAMES_TO_ISO3[country.to_s]
+  end
+
   class << self
     def refresh
       abc.find_each do |info|
@@ -81,6 +85,34 @@ class Stats < ApplicationRecord
     end
   end
 end
+
+COUNTRY_NAMES_TO_ISO3 = {
+  'US'               => 'usa',
+  'Argentina'        => 'arg',
+  'Australia'        => 'aus',
+  'BE'               => 'usa',
+  'Belgium'          => 'bel',
+  'Bermuda'          => 'bmu',
+  'Brazil'           => 'bra',
+  'CN'               => 'cny',
+  'Canada'           => 'can',
+  'Cayman Islands'   => 'cym',
+  'Chile'            => 'chl',
+  'China (Mainland)' => 'chn',
+  'France'           => 'fra',
+  'Germany'          => 'deu',
+  'Hong Kong'        => 'hkg',
+  'India'            => 'ind',
+  'Ireland'          => 'irl',
+  'Israel'           => 'isr',
+  'Italy'            => 'ita',
+  'Japan'            => 'jpn',
+  'Luxembourg'       => 'lux',
+  'Netherlands'      => 'nld',
+  'South Africa'     => 'zaf',
+  'Sweden'           => 'swe',
+  'Switzerland'      => 'che',
+}
 
 __END__
 
