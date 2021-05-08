@@ -20,7 +20,7 @@ class PriceSignal < ApplicationRecord
       instruments = Instrument.all.abc
       Current.preload_prices_for instruments
 
-      where(date: Current.yesterday).delete_all
+      where(date: date).delete_all
       instruments.each { |instrument| analyze instrument, date }
     end
 

@@ -45,10 +45,11 @@ rake prices
     tickers = []
     Instrument.reject_missing(tickers).join(' ')
 
+
 # Adding new tickers
 
 ## IEX
-export tickers='CBPO VIE AXE BEAT BFYT BMCH CHA CXO CY DLPH DNKN ETFC FTRE HDS HIIQ IMMU LM LOGM LVGO MINI MYL MYOK NBL PRSC VAR RUSP SERV TE TECD TRCN TSS UTX VRTU PRTK ACIA AIMT AOBC APY AGN AVP CHL ENPL TIF WYND SINA CCXI EV GSH FTR GTX IPHI MNK MTSC PS RP SAP SPB@US PLZL@GS NVTK@GS COUR OGE GSHD KAP@GS SVST@GS SGZH LKOD@GS OGZD@GS AVT NLMK@GS MGNT@GS WBS FCNCA COLD SSA@GS FTCI SR PHOR@GS FNF SLP VZIO CPNG SBER@GS LI MRVL'
+export tickers=''
 rake tinkoff:instruments:sync
 rake tinkoff:premium:import
 rake iex:days:missing since=2021-03-01 # or rake iex:days:period period=ytd

@@ -92,6 +92,11 @@
 + search for pin bars
 + average result for current page of signals by now
 
+- allow hiding historical prices
+- country flags
+- sync portfolio with tinkoff
+- add last insider buy to aggregates
+
 - 1h candle loading
 - 1h external bars, pinbars & accelerations
 
@@ -102,10 +107,8 @@
 
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
 
-- improve signal list visualization
 - signal results on close prices
 - convert rub-usd based on date
-- enter tinkoff premium tickers after 'O'
 – find stocks with significant spikes last days
 – find stocks with strong growth last days
 – find stocks with slow growth last days
@@ -118,7 +121,6 @@
 - extract special dates
 - indexes & commodities (NUGT SLV)
 - tinkoff ticker checking
-- country flags
 - disable stocks without any recent data
 - recurring current price loading
 - recurring day candle loading

@@ -36,7 +36,7 @@ class Current < ActiveSupport::CurrentAttributes
   alias w2_ago d10_ago
   alias m1_ago month_ago
 
-  def last_closed_day = work_day? ? yesterday : today
+  def last_closed_day = workday? ? yesterday : today
 
   def weekdays_since(date) = date.upto(Current.yesterday).to_a.select { |date| MarketCalendar.market_open?(date) }.reverse
   def last_n_weeks(n) = weekdays_since(n.weeks.ago.to_date)
