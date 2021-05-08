@@ -48,18 +48,19 @@ rake prices
 # Adding new tickers
 
 ## IEX
-export tickers='X'
+export tickers='CBPO VIE AXE BEAT BFYT BMCH CHA CXO CY DLPH DNKN ETFC FTRE HDS HIIQ IMMU LM LOGM LVGO MINI MYL MYOK NBL PRSC VAR RUSP SERV TE TECD TRCN TSS UTX VRTU PRTK ACIA AIMT AOBC APY AGN AVP CHL ENPL TIF WYND SINA CCXI EV GSH FTR GTX IPHI MNK MTSC PS RP SAP SPB@US PLZL@GS NVTK@GS COUR OGE GSHD KAP@GS SVST@GS SGZH LKOD@GS OGZD@GS AVT NLMK@GS MGNT@GS WBS FCNCA COLD SSA@GS FTCI SR PHOR@GS FNF SLP VZIO CPNG SBER@GS LI MRVL'
+rake tinkoff:instruments:sync
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-04-17 # or rake iex:days:period period=ytd
+rake iex:days:missing since=2021-03-01 # or rake iex:days:period period=ytd
 
 ## Tinkoff
 rake instruments:remove ticker=OBUV
 rake tinkoff:instruments:sync ok=1
 rake tinkoff:days:missing
 rake tinkoff:days:year
-// tinkoff logos
+rake tinkoff:logos:download
 
 ## All
 rake iex:stats company=1
-rake iex:set_sectors_from_tops iex:logos:download iex:symbols:peers iex:price_targets
+rake iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:price_targets:missing

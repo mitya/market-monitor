@@ -28,7 +28,7 @@ namespace :tinkoff do
     envtask :year do
       tickers = ENV['tickers'].to_s.split(' ')
       Instrument.tinkoff.where(ticker: tickers).abc.each do |inst|
-        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i) || [2021])
+        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2019, 2020, 2021])
       end
     end
   end
@@ -42,7 +42,7 @@ namespace :tinkoff do
 
 
   namespace :logos do
-    envtask :download do
+    envtask :all do
       dir = Pathname("tmp/tinkoff-logos")
       dir.mkpath
       File.readlines("db/data/tinkoff-logos.txt", chomp: true).each do |url|
@@ -54,6 +54,24 @@ namespace :tinkoff do
           open(dir / filename, 'wb') { |file| file << remote_file.read }
         end
         sleep 1
+      end
+    end
+
+    envtask :download do
+      instruments = R.instruments_from_env || Instrument.tinkoff.where(has_logo: false)
+      instruments.abc.each do |inst|
+        next if File.exist? "public/logos/#{inst.ticker}.png"
+
+        puts "Load Tinkoff logo for #{inst.ticker}"
+        URI.open("https://static.tinkoff.ru/brands/traiding/#{inst.isin}x160.png", 'rb') do |remote_file|
+          open("public/logos/#{inst.ticker}.png", 'wb') { |file| file << remote_file.read }
+        end
+
+      rescue OpenURI::HTTPError
+        puts "Miss Tinkoff logo for #{inst.ticker}".red
+      ensure
+        inst.check_logo
+        sleep 0.5
       end
     end
   end

@@ -4,7 +4,12 @@
 require_relative "config/application"
 
 def envtask(task_name, &block)
-  task task_name => :env, &block
+  deps = :env
+  if task_name.is_a?(Hash)
+    deps = task_name.values.first
+    task_name = task_name.keys.first
+  end
+  task task_name => deps, &block
 end
 
 def rake(*tasks)
