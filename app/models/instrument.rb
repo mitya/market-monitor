@@ -7,6 +7,7 @@ class Instrument < ApplicationRecord
   has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument
   has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignal'
   has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument
+  has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
@@ -121,6 +122,10 @@ class Instrument < ApplicationRecord
   concerning :Filters do
     def down_in_2021? = y2021_open_rel.to_f < 0
   end
+
+  def last_insider_buy
+    insider_transactions.buys.market_only.order(:date).last    
+  end
 end
 
 __END__
@@ -131,7 +136,6 @@ Instrument['TGC'].destroy
 
 Candle.day.where(ticker: 'BGS', date: Current.date)
 Instrument.get('BGS').day_candles.where(date: Current.date)
-puts Instrument.get('BGS').today_open
 Instrument.get('CHK').destroy
 Instrument.get('CCL').today_open
 Instrument.join(:info).count

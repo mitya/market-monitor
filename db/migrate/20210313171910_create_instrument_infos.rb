@@ -6,6 +6,7 @@ class CreateStatss < ActiveRecord::Migration[6.1]
       t.bigint :marketcap, :shares
       t.float :beta, :pe, :dividend_yield
       t.date :next_earnings_date, :ex_divident_date
+      t.float :last_insider_buy_price
       t.jsonb :company
       t.timestamp :company_updated_at
       t.jsonb :stats

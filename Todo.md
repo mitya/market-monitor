@@ -92,10 +92,10 @@
 + search for pin bars
 + average result for current page of signals by now
 + country flags
++ allow hiding historical prices
++ add last insider buy to info
 
-- allow hiding historical prices
 - sync portfolio with tinkoff
-- add last insider buy to aggregates
 
 - 1h candle loading
 - 1h external bars, pinbars & accelerations

@@ -8,10 +8,12 @@
 - chart_volatility = params['volatility'] == '1' && params['chart_volatility'] == '1'
 - show_volatility = params['volatility'] == '1' && !chart_volatility
 - show_historical_prices = !show_volume && !show_volatility && !chart_volatility
+- show_special_dates = params[:special_dates] == '1'
 - volatility_format = :percentage
 - volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
 - is_portfolio = params[:set] == 'portfolio'
 - show_low = params[:low] == '1'
+- show_last_insider_buys = params[:last_insider_buys] == '1'
 
 main.container-fluid.mb-4
   form#list-config(action=instruments_path class='my-2')
@@ -46,6 +48,8 @@ main.container-fluid.mb-4
                 .input-group.input-group-sm
                   = number_field_tag :low_gain, params[:low_gain], class: "form-control text-center", style: "width: 60px"
                   .input-group-text %
+            = bs_check_box :special_dates, 'Special dates'
+            = bs_check_box :last_insider_buys, 'Last Insider buys'
 
   = page_entries_block @instruments
   = paginate @instruments, window: 20
@@ -108,13 +112,16 @@ main.container-fluid.mb-4
           th.money-cell Vol 1m
 
         - if show_historical_prices
-          th.money-cell(data-sort="aggregates.nov06") Nov6 ﹪
-          th.money-cell(data-sort="aggregates.mar23") Mar23 ﹪
-          th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
+          - if show_special_dates
+            th.money-cell(data-sort="aggregates.nov06") Nov6 ﹪
+            th.money-cell(data-sort="aggregates.mar23") Mar23 ﹪
+            th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
           th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
           th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
 
         th
+        - if show_last_insider_buys
+          th.money-cell Insider
         th Trn
 
     tbody
@@ -195,14 +202,17 @@ main.container-fluid.mb-4
             td.money-cell= format_price_in_millions inst.base_price * inst.month_ago_volume, unit: inst.currency
 
           - if show_historical_prices
-            td.money-cell                  = relative_price inst.     nov06_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell                  = relative_price inst.     mar23_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            - if show_special_dates
+              td.money-cell                  = relative_price inst.     nov06_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+              td.money-cell                  = relative_price inst.     mar23_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+              td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell.border-end.pe-2  = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell.muted-cell       = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
             = exchange_logo(inst.exchange_name)
+          - if show_last_insider_buys
+            td.money-cell= relative_price inst.info&.last_insider_buy_price, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td= growth_badge aggregate
 
   = paginate @instruments, window: 20

@@ -25,7 +25,7 @@
 
 rake iex:stats
 rake iex:price_targets
-rake iex:insider-transactions set=main
+rake iex:insider_transactions iex:insider_transactions:cache
 rake iex:days:missing
 
 # Run daily
@@ -50,12 +50,11 @@ rake prices
 
 ## IEX
 export tickers=''
-rake tinkoff:instruments:sync
 rake tinkoff:premium:import
 rake iex:days:missing since=2021-03-01 # or rake iex:days:period period=ytd
+rake instruments:remove ticker=
 
 ## Tinkoff
-rake instruments:remove ticker=OBUV
 rake tinkoff:instruments:sync ok=1
 rake tinkoff:days:missing
 rake tinkoff:days:year

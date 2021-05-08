@@ -135,6 +135,12 @@ namespace :iex do
     end
   end
 
+  envtask :'insider_transactions:cache' do
+    Instrument.find_each do |inst|
+      inst.info&.update! last_insider_buy_price: inst.last_insider_buy&.price
+    end
+  end
+
   envtask :price_targets do
     instruments = R.instruments_from_env || Instrument.main
     instruments.usd.iex.abc.each do |inst|
