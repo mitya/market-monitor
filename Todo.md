@@ -94,8 +94,7 @@
 + country flags
 + allow hiding historical prices
 + add last insider buy to info
-
-- sync portfolio with tinkoff
++ insider buys filter
 
 - 1h candle loading
 - 1h external bars, pinbars & accelerations

@@ -50,6 +50,25 @@ namespace :filter do
     puts "Total: #{results.count}"
     puts results.join(' ')
   end
+
+  envtask :insider_buys do
+    results = {}
+    Instrument.find_each do |inst|
+      discount = 0.7
+      min_price = inst.last.to_f * 0.5
+      transactions = inst.insider_transactions.buys.market_only.where('price > ?', min_price)
+      sum = transactions.map { |tx| tx.cost.to_d }.sum
+      next if sum < 500_000
+      results[inst.ticker] = sum
+    end
+
+    results.sort_by(&:last).each do |ticker, sum|
+      puts "#{ticker.ljust 8} #{sum.round.to_s(:delimited).rjust(20)}"
+    end
+
+    puts "Total: #{results.count}"
+    puts "Tickers: #{results.keys.sort.join(' ')}"
+  end
 end
 
 
