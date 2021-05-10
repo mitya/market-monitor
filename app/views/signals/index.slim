@@ -2,6 +2,7 @@
 - portfolio = InstrumentSet.portfolio
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- is_intraday = params[:interval] != 'day'
 
 main.container-fluid
   h1.display-3 Signals
@@ -14,6 +15,7 @@ main.container-fluid
     = render 'instruments/pagination_options'
     = render 'filter_by_signal'
     = render 'filter_by_direction'
+    = render 'filter_by_interval'
     = render 'filter_by_date'
     .row
       .col-sm-2
@@ -31,6 +33,7 @@ main.container-fluid
   table.table.table-sm.table-hover.table-font-sm.tickers-table
     thead.table-dark
       tr
+        th
         th
         th
         th Ticker
@@ -63,6 +66,9 @@ main.container-fluid
         - info = instrument.info
         - can_enter = signal.can_enter?(instrument.last)
         tr class=(class_names 'stopped-out': signal.stopped_out?(instrument.last), 'can-enter': can_enter, 'non-exact': !signal.exact?)
+          td.money-cell
+            => l signal&.time.in_time_zone(Current.msk), format: '%H:%M' if is_intraday
+            = interval_badge signal.interval
           td= instrument_logo instrument
           td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
           td= red_green instrument.ticker, signal.direction == 'up'

@@ -6,6 +6,8 @@ class Candle < ApplicationRecord
   scope :day, -> { where interval: 'day' }
   scope :today, -> { where date: Current.date }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
+  scope :non_analyzed, -> { where analyzed: nil }
+  # scope :non_analyzed, -> { }
 
   def self.find_date_before(date) = order(date: :desc).where('date < ?', date.to_date).take
   def self.find_date(date)        = for_date(date).take
@@ -80,7 +82,47 @@ class Candle < ApplicationRecord
     return 'up'   if yesterday_aggregate.days_down > 2 && close > yesterday.close && low  < yesterday.close && ((yesterday.close - low ) / yesterday.close) > min_pin_height
   end
 
+  def tail_bar?(prev)
+    return if shadow_to_body_ratio <= 2.5
+    return ['up', 1 - low  / prev.low] if low  < prev.low
+    return ['down',  high / prev.high - 1] if high > prev.high
+  end
+
+  def interval_duration
+    self.class.interval_duration(interval)
+  end
+
+  def abs_to_percent(value, base)
+    close * percent
+  end
+
+
   class << self
     def last_loaded_date = final.maximum(:date)
+
+    def interval_class_for(interval)
+      { 'hour' => H1, '5min' => M5, 'day' => self }[interval]
+    end
+
+    def interval_duration(interval)
+      case interval
+        when '5min' then 5.minutes
+        when 'hour' then 1.hour
+        when 'day'  then 1.day
+      end
+    end
+  end
+
+  class Intraday < Candle
+    def siblings = self.class.where(instrument: instrument, interval: interval)
+    def previous = siblings.find_by(time: time - interval_duration)
+  end
+
+  class H1 < Intraday
+    self.table_name = "candles_h1"
+  end
+
+  class M5 < Intraday
+    self.table_name = "candles_m5"
   end
 end

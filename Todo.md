@@ -95,35 +95,36 @@
 + allow hiding historical prices
 + add last insider buy to info
 + insider buys filter
++ 1h/5m candle loading
++ background loading process (1h, 5m, last)
++ intraday candle analysys, external bars, pinbars
++ intraday signal UI
++ add last insider transaction to aggregate
 
-- 1h candle loading
-- 1h external bars, pinbars & accelerations
+- don't check Europe & Moex2 in the evenining
+- signal results on close/last prices
 
-- 5m candles loading
-- search for more than 1% in 10-min movements
-- search for above average volume in 5 min
-- alarms
+- intraday search for more than 1% in 10-min movements
+- intraday search for above average volume in 5 min
+- intraday accelerations
+- intraday alarms
 
+- check tickers with many BUY insider transactions
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
 
-- signal results on close prices
+- search for pull backs
 - convert rub-usd based on date
 – find stocks with significant spikes last days
 – find stocks with strong growth last days
 – find stocks with slow growth last days
-- handle data loading on weekend
-- add last insider transaction to aggregate
 – find stocks with N% volatility on X previous days and high within Y%
 - find stocks with continious flat
 - portfolio: add a new ticker from UI
-- use same filters & filter logic on all pages
 - extract special dates
 - indexes & commodities (NUGT SLV)
 - tinkoff ticker checking
 - disable stocks without any recent data
-- recurring current price loading
-- recurring day candle loading
-- company info list
+
 - russian ticker company info
 - maintain average volume for last N months
 - ticker selection & commands

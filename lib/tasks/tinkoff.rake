@@ -33,6 +33,16 @@ namespace :tinkoff do
     end
   end
 
+  namespace :candles do
+    envtask 'import:hour' do
+      Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, 'hour') }
+    end
+
+    envtask 'import:5min' do
+      Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, '5min') }
+    end
+  end
+
 
   namespace :prices do
     envtask(:all)  { Price.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }

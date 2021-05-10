@@ -8,6 +8,7 @@ curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/date/20210104?chartBy
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/date/20210317?chartByDay=true&token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/5d?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/delayed-quote?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/intraday-prices?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/options?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/company?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/stats?token=$IEX_SECRET_KEY" | jq
@@ -45,3 +46,6 @@ curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chart
 * 1000      EOD  /recommendation-trends
 * 3000 + 5  EOD  /advanced-stats
 * 10000     EOD  /estimates
+
+
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/1h?token=$IEX_SECRET_KEY" | jq

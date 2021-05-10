@@ -90,10 +90,18 @@ class Instrument < ApplicationRecord
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
   def info! = info || create_info
 
+  def tinkoff? = flags.include?('tinkoff')
   def iex? = info.present?
   def premium? = flags.include?('premium')
   def nasdaq? = exchange_name == 'NASDAQ'
   def exchange_name = rub? ? 'MOEX' : exchange
+  def moex? = rub?
+  def moex_2nd? = MoexSecondary.include?(ticker)
+
+  def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
+  def market_open? = market_work_period.include?(Time.current)
+
+  MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA MTLRP OKEY SIBN SMLT].to_set
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase
@@ -124,7 +132,7 @@ class Instrument < ApplicationRecord
   end
 
   def last_insider_buy
-    insider_transactions.buys.market_only.order(:date).last    
+    insider_transactions.buys.market_only.order(:date).last
   end
 end
 

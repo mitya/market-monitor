@@ -7,12 +7,25 @@ class Current < ActiveSupport::CurrentAttributes
   end
   alias today date
 
+  def msk = Time.find_zone!('Moscow')
+  def ru_time = msk.now
   def us_time = Time.find_zone!('Eastern Time (US & Canada)').now
   def us_date = us_time.to_date
   def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '09:30'
   def uk_market_open? = date.on_weekday? && Time.current.to_s(:time) >= '11:00'
   def weekend? = us_date.on_weekend? || MarketCalendar.nyse_holidays.include?(us_date)
   def workday? = MarketCalendar.market_open?(Date.current)
+
+  def us_market_open_time      = Current.us_time.change(hour:  9, min: 30)
+  def us_market_close_time     = Current.us_time.change(hour: 16, min: 00)
+  def ru_market_open_time      = Current.ru_time.change(hour: 10, min: 00)
+  def ru_market_close_time     = Current.ru_time.change(hour: 22, min: 00)
+  def ru_2nd_market_open_time  = Current.ru_time.change(hour: 10, min: 00)
+  def ru_2nd_market_close_time = Current.ru_time.change(hour: 19, min: 30)
+  def us_market_work_period     = us_market_open_time..us_market_close_time
+  def ru_market_work_period     = ru_market_open_time..ru_market_close_time
+  def ru_2nd_market_work_period = ru_2nd_market_open_time..ru_2nd_market_close_time
+
 
   def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)
   def d2_ago    = MarketCalendar.closest_weekday(yesterday.prev_weekday)

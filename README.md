@@ -38,6 +38,7 @@ rake prices
 // rake iex:prices:all tinkoff:prices:uniq
 // rake iex:prices:premium tinkoff:prices:all
 
+rake tinkoff:hours:import
 
 # Seeking Alpha
 

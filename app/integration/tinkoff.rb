@@ -127,11 +127,12 @@ class Tinkoff
 
     # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
     # puts "Import #{candles.count} #{interval} candles for #{instrument}"
-    Candle.transaction do
+    candle_class = Candle.interval_class_for(interval)
+    candle_class.transaction do
       candles.each do |hash|
         time = Time.parse hash['time']
         puts "Import Tinkoff #{time} #{interval} candle for #{instrument}"
-        candle = instrument.candles.find_or_initialize_by interval: interval, time: time
+        candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time
         candle.ticker  = instrument.ticker
         candle.source  = 'tinkoff'
         candle.open    = hash['o']
@@ -140,7 +141,7 @@ class Tinkoff
         candle.low     = hash['l']
         candle.volume  = hash['v']
         candle.date    = time.to_date
-        candle.ongoing = time.to_date == Current.date && !Current.weekend?
+        candle.ongoing = interval == 'day' && time.to_date == Current.date && !Current.weekend?
         candle.save!
       end
     end
@@ -154,11 +155,7 @@ class Tinkoff
     end
   end
 
-  def load_day(instrument, since = Current.date, till = since.to_date.end_of_day)
-    call_js_api "candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}"
-  end
-
-  def import_day_candles(instrument, since:, till:, delay: 0.3)
+  def import_day_candles(instrument, since:, till:, delay: 0.25)
     data = load_day instrument, since, till
     import_candles_from_hash instrument, data
     sleep delay
@@ -181,14 +178,37 @@ class Tinkoff
     import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day if years.include?(2021)
   end
 
-  def call_js_api(command, parse: true)
+  def import_intraday_candles(instrument, interval)
+    return if !instrument.tinkoff?
+    day_start = instrument.rub? || instrument.eur? ? Current.ru_market_open_time : Current.us_market_open_time
+    last_loaded_candle = Candle.interval_class_for(interval).where(instrument: instrument, interval: interval).where('time >= ?', day_start).order(:time).last
+    since = last_loaded_candle&.time || day_start
+    # return if last_loaded_candle.created_at > interval_duration(interval).ago
+    return if since + Candle.interval_duration(interval) > Time.current
+    return if !instrument.market_open?
+
+    data = load_intervals instrument, interval, since, Time.current + 1.minute, delay: 0.25
+    import_candles_from_hash instrument, data
+  end
+
+
+  def call_js_api(command, parse: true, delay: 0)
     command = "coffee bin/tinkoff.coffee #{command}"
     puts command.purple if $log_tinkoff
     response = `#{command}`
+    sleep delay if delay.to_f > 0
     parse ? JSON.parse(response) : response
   rescue => e
     puts "Error parsing JSON for #{command}".red
     parse ? { } : ''
+  end
+
+  def load_day(instrument, since = Current.date, till = since.to_date.end_of_day)
+    call_js_api "candles #{instrument.figi} day #{since.xmlschema} #{till.xmlschema}"
+  end
+
+  def load_intervals(instrument, interval, since, till, delay: 0)
+    call_js_api "candles #{instrument.figi} #{interval} #{since.xmlschema} #{till.xmlschema}", delay: delay
   end
 
   delegate :logger, to: :Rails

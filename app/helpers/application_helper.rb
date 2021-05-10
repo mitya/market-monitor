@@ -112,4 +112,10 @@ module ApplicationHelper
     # return 'Today' if date == Current.today
     "#{l date, format: :wday_name}, #{date.day.ordinalize}"
   end
+
+  IntervalTitles = { 'hour' => 'H1', '5min' => 'M5' }
+
+  def interval_badge(interval)
+    tag.span IntervalTitles[interval], class: 'badge bg-secondary'
+  end
 end
