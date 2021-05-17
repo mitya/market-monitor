@@ -6,7 +6,14 @@ class InstrumentSet
   end
 
   def name = key ? key.to_s.humanize : 'All'
-  def symbols = @symbols ||= Pathname("db/instrument-sets/#{key}.txt").readlines(chomp: true).map { |sym| sym.split(':').last }
+
+  def symbols
+    @symbols ||= begin
+      stored_symbols = Pathname("db/instrument-sets/#{key}.txt").readlines(chomp: true).map { |sym| sym.split(':').last }
+      key == :portfolio ? (stored_symbols + PortfolioItem.pluck(:ticker)).uniq.sort : stored_symbols
+    end
+  end
+
   def missing_symbols = symbols.select { |s| !Instrument.exists?(ticker: s) }
   def instruments = Instrument.where(ticker: symbols)
   alias tickers symbols

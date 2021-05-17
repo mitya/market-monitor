@@ -211,6 +211,22 @@ class Tinkoff
     call_js_api "candles #{instrument.figi} #{interval} #{since.xmlschema} #{till.xmlschema}", delay: delay
   end
 
+  def sync_portfolio(data, account)
+    data['positions'].each do |position|
+      ticker = position['ticker']
+      next if position['instrumentType'] == 'Currency'
+      next puts "Missing #{ticker} (used in portfolio)".red if !Instrument.get(ticker)
+      item = PortfolioItem.find_or_create_by(ticker: ticker)
+      item.update! "#{account}_lots" => position['balance']
+    end
+    PortfolioItem.where.not(ticker: data['positions'].map { |p| p['ticker'] }).update_all("#{account}_lots" => nil)
+  end
+
+  def sync_portfolios
+    sync_portfolio call_js_api("portfolio"), 'tinkoff'
+    sync_portfolio call_js_api("portfolio-iis"), 'tinkoff_iis'
+  end
+
   delegate :logger, to: :Rails
 end
 

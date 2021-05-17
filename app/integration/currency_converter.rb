@@ -2,7 +2,8 @@ class CurrencyConverter
   include StaticService
 
   ExchangeRates = {
-    CNY: 0.15
+    CNY: 0.15,
+    RUB: 75.0,
   }
 
   def convert(amount, from_currency, to_currency)

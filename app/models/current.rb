@@ -72,7 +72,7 @@ class Current < ActiveSupport::CurrentAttributes
     case currency
     when 'USD' then amount
     when 'EUR' then amount * 1.2
-    when 'RUB' then amount / 77
+    when 'RUB' then amount / 74
     end
   end
 

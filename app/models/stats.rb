@@ -84,35 +84,35 @@ class Stats < ApplicationRecord
       end
     end
   end
-end
 
-COUNTRY_NAMES_TO_ISO3 = {
-  'US'               => 'usa',
-  'Argentina'        => 'arg',
-  'Australia'        => 'aus',
-  'BE'               => 'usa',
-  'Belgium'          => 'bel',
-  'Bermuda'          => 'bmu',
-  'Brazil'           => 'bra',
-  'CN'               => 'cny',
-  'Canada'           => 'can',
-  'Cayman Islands'   => 'cym',
-  'Chile'            => 'chl',
-  'China (Mainland)' => 'chn',
-  'France'           => 'fra',
-  'Germany'          => 'deu',
-  'Hong Kong'        => 'hkg',
-  'India'            => 'ind',
-  'Ireland'          => 'irl',
-  'Israel'           => 'isr',
-  'Italy'            => 'ita',
-  'Japan'            => 'jpn',
-  'Luxembourg'       => 'lux',
-  'Netherlands'      => 'nld',
-  'South Africa'     => 'zaf',
-  'Sweden'           => 'swe',
-  'Switzerland'      => 'che',
-}
+  COUNTRY_NAMES_TO_ISO3 = {
+    'US'               => 'usa',
+    'Argentina'        => 'arg',
+    'Australia'        => 'aus',
+    'BE'               => 'usa',
+    'Belgium'          => 'bel',
+    'Bermuda'          => 'bmu',
+    'Brazil'           => 'bra',
+    'CN'               => 'cny',
+    'Canada'           => 'can',
+    'Cayman Islands'   => 'cym',
+    'Chile'            => 'chl',
+    'China (Mainland)' => 'chn',
+    'France'           => 'fra',
+    'Germany'          => 'deu',
+    'Hong Kong'        => 'hkg',
+    'India'            => 'ind',
+    'Ireland'          => 'irl',
+    'Israel'           => 'isr',
+    'Italy'            => 'ita',
+    'Japan'            => 'jpn',
+    'Luxembourg'       => 'lux',
+    'Netherlands'      => 'nld',
+    'South Africa'     => 'zaf',
+    'Sweden'           => 'swe',
+    'Switzerland'      => 'che',
+  }
+end
 
 __END__
 

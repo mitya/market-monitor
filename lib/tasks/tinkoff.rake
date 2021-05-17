@@ -1,7 +1,11 @@
 namespace :tinkoff do
   desc "Adds new & updates old instruments"
-  task 'instruments:sync' => :environment do
+  envtask 'instruments:sync' do
     Tinkoff.sync_instruments(preview: ENV['ok'] != '1')
+  end
+
+  envtask 'portfolio:sync' do
+    Tinkoff.sync_portfolios
   end
 
 

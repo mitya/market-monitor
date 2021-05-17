@@ -100,8 +100,17 @@
 + intraday candle analysys, external bars, pinbars
 + intraday signal UI
 + add last insider transaction to aggregate
++ Tinkoff / IIS / VTB / total portfolios
++ load Tinkoff portfolio
++ ideal portfolio
 
-- don't check Europe & Moex2 in the evenining
+- external signals (source, direction, date, price, score)
+
+- custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
+- comparisions to random dates
+
+
+- don't check Europe & Moex2 in the evening
 - signal results on close/last prices
 
 - intraday search for more than 1% in 10-min movements
@@ -110,7 +119,6 @@
 - intraday alarms
 
 - check tickers with many BUY insider transactions
-- custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Retail / Tech / Kogan / Elvis
 
 - search for pull backs
 - convert rub-usd based on date

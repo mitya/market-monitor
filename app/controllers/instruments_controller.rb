@@ -7,7 +7,7 @@ class InstrumentsController < ApplicationController
     params[:per_page] ||= '200'
 
     @instruments = Instrument.all
-    @instruments = @instruments.joins(:aggregate)
+    @instruments = @instruments.left_joins(:aggregate, :info)
     @instruments = @instruments.preload(:info, :price_target, :portfolio_item, :aggregate)
     @instruments = @instruments.where(info: { industry: params[:industry] })       if params[:industry].present?
     @instruments = @instruments.where(info: { sector: params[:sector] })           if params[:sector].present?
@@ -31,3 +31,7 @@ class InstrumentsController < ApplicationController
     Current.preload_prices_for @instruments.to_a
   end
 end
+
+
+__END__
+Instrument.in_set(:portfolio).map(&:ticker).sort

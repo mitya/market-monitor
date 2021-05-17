@@ -24,7 +24,7 @@ document.addEventListener("turbolinks:load", () => {
       fetch(`/portfolio/${row.dataset.ticker}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lots: input.value })
+        body: JSON.stringify({ lots: input.value, account: input.dataset.account })
       }).then(response => {
         console.log(response)
       })

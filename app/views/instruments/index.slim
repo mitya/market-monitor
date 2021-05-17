@@ -7,11 +7,12 @@
 - show_volume = params['volume'] == '1'
 - chart_volatility = params['volatility'] == '1' && params['chart_volatility'] == '1'
 - show_volatility = params['volatility'] == '1' && !chart_volatility
-- show_historical_prices = !show_volume && !show_volatility && !chart_volatility
+- is_portfolio = params[:set] == 'portfolio'
+- show_historical_prices = !show_volume && !show_volatility && !chart_volatility && !is_portfolio
+- show_recent_prices = !is_portfolio
 - show_special_dates = params[:special_dates] == '1'
 - volatility_format = :percentage
 - volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
-- is_portfolio = params[:set] == 'portfolio'
 - show_low = params[:low] == '1'
 - show_last_insider_buys = params[:last_insider_buys] == '1'
 
@@ -63,10 +64,15 @@ main.container-fluid.mb-4
         th
         th Name
         - if is_portfolio
-          th.money-cell Lots
+          th.money-cell Tinkoff
+          th.money-cell IIS
+          th.money-cell VTB
+          th.money-cell Total
           th.money-cell Cost
+          th.money-cell Ideal
+          th.money-cell Ideal Cost
         th Sector
-        th.money-cell.border-end.pe-2(data-sort="capitalization") Cap (M)
+        th.money-cell.border-end.pe-2(data-sort="stats.marketcap") Cap (M)
         - if params[:fundamentals]
           th.money-cell(data-sort="stats.pe desc") P/E
           th.money-cell(data-sort="stats.beta desc") ß
@@ -78,14 +84,15 @@ main.container-fluid.mb-4
           th.money-cell.border-end.pe-2
         th.money-cell Last
         th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
-        th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1") 1d ﹪
-        th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2") 2d ﹪
-        th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3") 3d ﹪
-        th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4") 4d ﹪
-        th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1") 1w ﹪
-        th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2") 2w ﹪
-        th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
-        th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
+        - if show_recent_prices
+          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1") 1d ﹪
+          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2") 2d ﹪
+          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3") 3d ﹪
+          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4") 4d ﹪
+          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1") 1w ﹪
+          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2") 2w ﹪
+          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
+          th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
 
         - if show_low
           th.text-end(data-sort="aggregates.lowest_day_date desc") Low
@@ -126,7 +133,7 @@ main.container-fluid.mb-4
 
     tbody
       - instruments = @instruments
-      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.total_in_usd.to_d }.reverse if is_portfolio
+      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio
       - instruments.each do |inst|
         - price_target = inst.price_target
         - portfolio_item = inst.portfolio_item
@@ -142,9 +149,17 @@ main.container-fluid.mb-4
 
           - if is_portfolio
             td.money-cell
-              input class="form-control form-control-sm lots-input" type="number" value=portfolio_item&.lots
+              input class="form-control form-control-sm lots-input" type="number" data-account="tinkoff" value=portfolio_item&.tinkoff_lots
             td.money-cell
-              = format_price portfolio_item.total_in_usd, unit: 'USD', precision: 0 if portfolio_item&.total_in_usd
+              input class="form-control form-control-sm lots-input" type="number" data-account="tinkoff_iis" value=portfolio_item&.tinkoff_iis_lots
+            td.money-cell
+              input class="form-control form-control-sm lots-input" type="number" data-account="vtb" value=portfolio_item&.vtb_lots
+            td.money-cell= number_with_delimiter portfolio_item&.total_lots
+            td.money-cell= format_price portfolio_item.cost_in_usd, unit: 'USD', precision: 0 if portfolio_item&.cost_in_usd
+            td.money-cell
+              input class="form-control form-control-sm lots-input" type="number" data-account="ideal" value=portfolio_item&.ideal_lots
+            td.money-cell= format_price portfolio_item.ideal_cost_in_usd, unit: 'USD', precision: 0 if portfolio_item&.ideal_cost_in_usd
+
 
           td= sector_badge inst
 
@@ -166,14 +181,15 @@ main.container-fluid.mb-4
             - else
               = colorized_price inst.last, inst.today_open, unit: inst.currency
           td.money-cell.border-end.pe-2  = relative_price inst.today_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.d3_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.muted-cell       = relative_price inst.d4_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.w1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.w2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          - if show_recent_prices
+            td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.d3_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.d4_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell                  = relative_price inst.w1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell                  = relative_price inst.w2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
           - if show_low
             td.money-cell(title=aggregate.lowest_day_date)= days_ago aggregate.lowest_day_date
