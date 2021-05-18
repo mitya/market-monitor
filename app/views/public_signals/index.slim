@@ -1,0 +1,67 @@
+- main_set = InstrumentSet.main
+- portfolio = InstrumentSet.portfolio
+- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- is_intraday = params[:interval] != 'day'
+- show_recent_prices = true
+- past_price_format = 'relative'
+
+main.container-fluid
+  h1.display-3 Public Signals
+
+  .row
+    .col-md-7.mt-4
+      = page_entries_block @signals
+      = paginate @signals, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th
+        th
+        th
+        th
+        th Ticker
+        th Company
+        th Source
+        th.money-cell Date
+        th.money-cell Last
+        th.money-cell Enter
+        th.money-cell Gain ﹪
+        - if show_recent_prices
+          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1") 1d ﹪
+          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2") 2d ﹪
+          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3") 3d ﹪
+          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4") 4d ﹪
+          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1") 1w ﹪
+          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2") 2w ﹪
+          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
+          th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
+    tbody
+      - @signals.each do |signal|
+        - inst = instrument = signal.instrument
+        - info = instrument.info
+        tr
+          td= country_flag inst
+          td= instrument_logo inst
+          td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
+          td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
+          td= inst.ticker
+          td.instrument-name= instrument.name
+          td= signal_source signal.source
+          td.money-cell= l signal.date, format: :long
+          td.money-cell= relative_price inst.base_price, signal.price, unit: inst.currency, format: 'absolute', inverse: false
+          td.money-cell= relative_price signal.price, inst.base_price, unit: inst.currency, format: 'absolute', inverse: true
+          td.money-cell= relative_price signal.price, inst.base_price, unit: inst.currency, format: 'relative', inverse: true
+          - if show_recent_prices
+            td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.d3_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell       = relative_price inst.d4_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell                  = relative_price inst.w1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell                  = relative_price inst.w2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+
+
+  = paginate @signals, window: 20

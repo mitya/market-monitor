@@ -17,6 +17,7 @@ envtask :main do
   end
   rake 'aggregate'
   rake 'analyze'
+  rake 'tinkoff:portfolio:sync'
 end
 
 task :prices => %w[iex:prices tinkoff:prices:uniq]

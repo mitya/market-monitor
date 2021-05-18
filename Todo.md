@@ -103,12 +103,10 @@
 + Tinkoff / IIS / VTB / total portfolios
 + load Tinkoff portfolio
 + ideal portfolio
-
-- external signals (source, direction, date, price, score)
++ external signals (source, direction, date, price, score)
 
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
 - comparisions to random dates
-
 
 - don't check Europe & Moex2 in the evening
 - signal results on close/last prices
@@ -120,6 +118,7 @@
 
 - check tickers with many BUY insider transactions
 
+- custom categories (coal / gas / ...)
 - search for pull backs
 - convert rub-usd based on date
 – find stocks with significant spikes last days

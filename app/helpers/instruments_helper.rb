@@ -27,8 +27,8 @@ module InstrumentsHelper
   end
 
   def format_price(price, unit: nil, precision: nil)
-    return unless price
-    precision ||= price > 10_000 ? 0 : price < 1 ? 4 : 2
+    return unless price.present?
+    precision ||= price > 10_000 ? 0 : price < 0.1 ? 4 : 2
     number_to_currency price, unit: currency_sign(unit), precision: precision if price
   end
 
