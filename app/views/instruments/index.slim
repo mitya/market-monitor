@@ -71,6 +71,7 @@ main.container-fluid.mb-4
           th.money-cell Cost
           th.money-cell Ideal
           th.money-cell Ideal Cost
+          th.money-cell Diff
         th Sector
         th.money-cell.border-end.pe-2(data-sort="stats.marketcap") Cap (M)
         - if params[:fundamentals]
@@ -159,6 +160,7 @@ main.container-fluid.mb-4
             td.money-cell
               input class="form-control form-control-sm lots-input" type="number" data-account="ideal" value=portfolio_item&.ideal_lots
             td.money-cell= format_price portfolio_item.ideal_cost_in_usd, unit: 'USD', precision: 0 if portfolio_item&.ideal_cost_in_usd
+            td.money-cell= colorized_diff portfolio_item.cost_in_usd, portfolio_item.ideal_cost_in_usd, unit: inst.currency, precision: 0 if portfolio_item&.ideal_cost_in_usd.to_i > 0
 
 
           td= sector_badge inst

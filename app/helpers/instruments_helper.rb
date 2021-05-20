@@ -12,9 +12,9 @@ module InstrumentsHelper
     tag.span(value_str, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
 
-  def colorize_change(value, green: nil, format: :number, title: nil, unit: nil, price: nil)
+  def colorize_change(value, green: nil, format: :number, title: nil, unit: nil, price: nil, precision: 2)
     green = value > 0 if green == nil && value.is_a?(Numeric)
-    value = number_to_currency value, unit: unit if format == :number
+    value = number_to_currency value, unit: currency_sign(unit), precision: precision if format == :number
     value = number_to_percentage value * 100, precision: percentage_precision, format: '%n ﹪' if value && format == :percentage
     title ||= number_to_currency price, unit: currency_sign(unit) if price
     tag.span(value, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
@@ -40,11 +40,16 @@ module InstrumentsHelper
     end
   end
 
-  def colorized_percentage(price, base_price, unit: nil, inverse: false)
+  def colorized_percentage(price, base_price, unit: '$', inverse: false)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: format_price(price, unit: currency_sign(unit)) do
       ratio_percentage ratio, precision: percentage_precision
     end
+  end
+
+  def colorized_diff(current, base, unit: 'USD', precision: nil)
+    return unless current && base
+    colorize_change base - current, green: current <= base, unit: 'USD', precision: precision
   end
 
   def ratio_percentage(ratio, precision: 0)

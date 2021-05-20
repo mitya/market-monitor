@@ -50,9 +50,10 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers=''
+export tickers='UNFI'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-03-01 # or rake iex:days:period period=ytd
+rake iex:days:missing since=2021-03-01 ok=1 # or rake iex:days:period period=ytd
+rake iex:days:missing special=1 ok=1
 rake instruments:remove ticker=
 
 ## Tinkoff
@@ -62,6 +63,8 @@ rake tinkoff:days:year
 rake tinkoff:logos:download
 
 ## All
-rake iex:stats company=1
-rake iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
+rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:price_targets:missing
+
+
+CLF STNG UNFI

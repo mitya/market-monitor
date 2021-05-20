@@ -1,5 +1,6 @@
 - main_set = InstrumentSet.main
 - portfolio = InstrumentSet.portfolio
+- recommendations = InstrumentSet.recommendations
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - is_intraday = params[:interval] != 'day'
@@ -35,8 +36,8 @@ main.container-fluid
       tr
         th
         th
-        th
         th Ticker
+        th
         th
         th Company
         th Sector
@@ -70,8 +71,8 @@ main.container-fluid
             => l signal&.time.in_time_zone(Current.msk), format: '%H:%M' if is_intraday
             = interval_badge signal.interval
           td= instrument_logo instrument
-          td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
           td= red_green instrument.ticker, signal.direction == 'up'
+          td= fa_icon 'star-of-life', small: true if InstrumentSet.known?(signal.ticker)
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
           td.instrument-name= instrument.name
           td= sector_badge instrument

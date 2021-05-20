@@ -183,7 +183,7 @@ rake iex:candles:days:today
 rake iex:prices:all
 
 rake iex:update
-rake iex:insider_transactions tickers=CLF
+rake iex:insider_transactions tickers=ATRA,AYX,DOCU,HRTX,FCX
 rake iex:insider_transactions set=main
 rake iex:price_targets set=all
 rake iex:recommendations set=all

@@ -20,7 +20,6 @@ main.container-fluid
         th
         th
         th
-        th
         th Ticker
         th Company
         th Source
@@ -44,7 +43,6 @@ main.container-fluid
         tr
           td= country_flag inst
           td= instrument_logo inst
-          td= fa_icon 'star-of-life', small: true if main_set.symbols.include?(signal.ticker) || portfolio.symbols.include?(signal.ticker)
           td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
           td= inst.ticker
           td.instrument-name= instrument.name

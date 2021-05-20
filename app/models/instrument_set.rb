@@ -9,8 +9,14 @@ class InstrumentSet
 
   def symbols
     @symbols ||= begin
-      stored_symbols = Pathname("db/instrument-sets/#{key}.txt").readlines(chomp: true).map { |sym| sym.split(':').last }
-      key == :portfolio ? (stored_symbols + PortfolioItem.pluck(:ticker)).uniq.sort : stored_symbols
+      file = Pathname("db/instrument-sets/#{key}.txt")
+      stored_symbols = file.exist?? file.readlines(chomp: true).map { |sym| sym.split(':').last } : []
+      virtual_symbols = case key
+        when :portfolio then PortfolioItem.pluck(:ticker)
+        when :recommendations then PublicSignal.pluck(:ticker)
+        else []
+      end
+      (stored_symbols + virtual_symbols).uniq.sort
     end
   end
 
@@ -40,6 +46,9 @@ class InstrumentSet
 
     def main = new(:main)
     def portfolio = new(:portfolio)
+    def recommendations = new(:recommendations)
+    def known_symbols = @known_symbols ||= [main, portfolio, recommendations].flat_map(&:symbols).uniq
+    def known?(symbol) = known_symbols.include?(symbol)
   end
 end
 
