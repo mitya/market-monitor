@@ -113,6 +113,7 @@ namespace :tinkoff do
           name:     iex_item.name,
           currency: iex_item.currency,
           figi:     iex_item.figi,
+          type:     Iex.convert_type(iex_item.type),
           exchange: Iex::ExchangeMapping[iex_item.exchange],
           flags:    %w[premium iex],
         )

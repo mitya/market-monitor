@@ -104,20 +104,18 @@
 + load Tinkoff portfolio
 + ideal portfolio
 + external signals (source, direction, date, price, score)
++ mark Kogan tickers with dates & prices
++ indexes & commodities (NUGT SLV)
+
+- parse VTB marginal list
 
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
-- comparisions to random dates
-
 - don't check Europe & Moex2 in the evening
 - signal results on close/last prices
-
 - intraday search for more than 1% in 10-min movements
 - intraday search for above average volume in 5 min
 - intraday accelerations
 - intraday alarms
-
-- check tickers with many BUY insider transactions
-
 - custom categories (coal / gas / ...)
 - search for pull backs
 - convert rub-usd based on date
@@ -128,16 +126,11 @@
 - find stocks with continious flat
 - portfolio: add a new ticker from UI
 - extract special dates
-- indexes & commodities (NUGT SLV)
-- tinkoff ticker checking
 - disable stocks without any recent data
-
 - russian ticker company info
 - maintain average volume for last N months
 - ticker selection & commands
 - track the first date for tickers (eg ALTO 2021-02-01)
-- parse VTB marginal list
-- mark Kogan tickers with dates & prices
 
 
 # Later
@@ -145,6 +138,3 @@
 - column selection
 - terminal-based UI
 - charts
-
-
-onem ddd aten abb abeo abm accd acrx achv acrs acor admp aey acet adnt adma asnd clls kc tlk adt adws ades advm adeyn aer afmd agrx agnc api alrn atsg airfp eadsy akbty akca akba aci alec alks alna alvr aosl amr alt alto altm amrn amba amc axl aep amwl amrs ngloy au abi nly am ar apha apog apo aaoi apre aqms aqst abr mt arch arco asc aaic at1 arry apam asan asx asml asazy atnx aaww team ato attu auo acb athm avdl aveo car axnx ayro azre

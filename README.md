@@ -50,10 +50,9 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='UNFI'
+export tickers='XLU XLK PRNT XOP XME XBI SPY DIA XLV XLI XLF XLE'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-03-01 ok=1 # or rake iex:days:period period=ytd
-rake iex:days:missing special=1 ok=1
+rake iex:days:missing since=2021-03-01 special=1 ok=1    # or rake iex:days:period period=ytd
 rake instruments:remove ticker=
 
 ## Tinkoff

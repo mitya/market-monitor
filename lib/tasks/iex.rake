@@ -37,13 +37,14 @@ namespace :iex do
 
   namespace :days do
     envtask :missing do
-      dates = ENV['dates'].to_s.split(',').presence           if ENV['dates']
-      dates = Current.last_n_weeks(ENV['weeks'].to_i)         if ENV['weeks']
-      dates = Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
-      dates = Current::SpecialDates.dates                     if R.true?('special')
-      dates ||= Current.last_2_weeks
+      dates = []
+      dates += ENV['dates'].to_s.split(',').presence           if ENV['dates']
+      dates += Current.last_n_weeks(ENV['weeks'].to_i)         if ENV['weeks']
+      dates += Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
+      dates += Current::SpecialDates.dates                     if R.true?('special')
+      dates = Current.last_2_weeks if dates.empty?
       dates = dates - MarketCalendar.nyse_holidays.to_a
-      dates.sort.each do |date|
+      dates.uniq.sort.each do |date|
         date = Date.parse(date) if String === date
         instruments = R.instruments_from_env || Instrument.premium
         with_missing_date = instruments.abc.select { |inst| inst.candles.day.final.where(date: date).none? }
@@ -143,7 +144,7 @@ namespace :iex do
 
   envtask :price_targets do
     instruments = R.instruments_from_env || Instrument.main
-    instruments.usd.iex.abc.each do |inst|
+    instruments.usd.iex.stocks.abc.each do |inst|
       PriceTarget.import_iex_data_from_remote inst
     end
   end

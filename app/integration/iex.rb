@@ -86,6 +86,10 @@ class Iex
   def otc_symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols-otc *.json').last.read, object_class: OpenStruct)
   def all_symbols_cache = symbols_cache + otc_symbols_cache
 
+  def convert_type(type)
+    TypeMapping[type.to_s.to_sym] || type
+  end
+
   private
 
   def get(path, params = {})
@@ -95,6 +99,7 @@ class Iex
   end
 
   ExchangeMapping = { NYS: 'NYSE', NAS: 'NASDAQ' }.stringify_keys.tap { |hash| hash.default_proc = -> (h, k) { k } }
+  TypeMapping = { cs: 'Stock', ps: 'Stock', et: 'Fund' }
 end
 
 __END__
