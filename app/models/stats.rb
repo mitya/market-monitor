@@ -54,6 +54,9 @@ class Stats < ApplicationRecord
     COUNTRY_NAMES_TO_ISO3[country.to_s]
   end
 
+  def vtb_long_risk = extra&.dig('vtb_long_risk')
+  def vtb_short_risk = extra&.dig('vtb_short_risk')
+
   class << self
     def refresh
       abc.find_each do |info|

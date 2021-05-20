@@ -7,8 +7,8 @@ module ApplicationHelper
     tag.span number_to_currency(amount, unit: currency_sign(unit)), class: 'money-amount'
   end
 
-  def fa_icon(name, small: false, **options)
-    tag.i class: "fas fa-#{name} #{'fa-sm' if small}".strip, **options
+  def fa_icon(name, small: false, xsmall: false, **options)
+    tag.i class: "fas fa-#{name} #{'fa-sm' if small} #{'fa-xs' if xsmall}".strip, **options
   end
 
   def all_option

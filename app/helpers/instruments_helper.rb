@@ -294,7 +294,8 @@ module InstrumentsHelper
 
   def type_icon(instrument)
     return fa_icon 'layer-group', small: true, title: 'Fund' if instrument.fund?
-    return fa_icon 'crown', small: true, title: 'Tinkoff Premium' if instrument.premium?
+    return fa_icon 'coins', small: true, title: 'Tinkoff Premium', style: 'color: #ccc'  if instrument.marginal?
+    return fa_icon 'crown', xsmall: true, title: 'Tinkoff Premium' if instrument.premium?
   end
 end
 

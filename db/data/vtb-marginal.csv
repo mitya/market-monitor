@@ -1,0 +1,724 @@
+;;;;;;;;
+ПАО «Мосэнерго»;АО;MSNG;0.38;0.38;да;да;нет;нет
+Adobe Inc.;акции;ADBE_SPB;0.405;;нет;нет;нет;да
+Alphabet Inc. Class A;акции;GOOGL_SPB;0.405;;нет;нет;нет;да
+Alphabet Inc. Class C;акции;GOOG_SPB;0.405;;нет;нет;нет;да
+Amazon.com, Inc.;акции;AMZN_SPB;0.36;;нет;нет;нет;да
+American Airlines Group;акции;AAL_SPB;0.425;;нет;нет;нет;да
+Apple Inc.;акции;AAPL_SPB;0.42;;нет;нет;нет;да
+AT&T INC.;акции;T_SPB;0.385;;нет;нет;нет;да
+Bank of America Corporation;акции;BAC_SPB;0.405;;нет;нет;нет;да
+Berkshire Hathaway Inc.;акции;BRK B_SPB;0.34;;нет;нет;нет;да
+Chevron Corporation;акции;CVX_SPB;0.434;;нет;нет;нет;да
+Caterpillar Inc.;акции;CAT_SPB;0.4;;нет;нет;нет;да
+Fidelity National Information Services, Inc.;акции;FIS_SPB;0.35;;нет;нет;нет;да
+American Tower Corporation;акции;AMT_SPB;0.35;;нет;нет;нет;да
+Danaher Corporation;акции;DHR_SPB;0.35;;нет;нет;нет;да
+Becton, Dickinson and Company;акции;BDX_SPB;0.35;;нет;нет;нет;да
+Activision Blizzard, Inc.;акции;ATVI_SPB;0.4;;нет;нет;нет;да
+Accenture plc;акции;ACN_SPB;0.35;;нет;нет;нет;да
+Applied Materials, Inc.;акции;AMAT_SPB;0.4;;нет;нет;нет;да
+Anthem, Inc.;акции;ANTM_SPB;0.35;;нет;нет;нет;да
+United Parcel Service, Inc.;акции;UPS_SPB;0.35;;нет;нет;нет;да
+Vertex Pharmaceuticals Incorporated;акции;VRTX_SPB;0.35;;нет;нет;нет;да
+Newmont Goldcorp Corporation;акции;NEM_SPB;0.4;;нет;нет;нет;да
+The TJX Companies, Inc.;акции;TJX_SPB;0.35;;нет;нет;нет;да
+The Charles Schwab Corporation;акции;SCHW_SPB;0.35;;нет;нет;нет;да
+Fiserv, Inc.;акции;FISV_SPB;0.35;;нет;нет;нет;да
+Altria Group, Inc.;акции;MO_SPB;0.35;;нет;нет;нет;да
+Philip Morris International Inc.;акции;PM_SPB;0.35;;нет;нет;нет;да
+S&P Global Inc.;акции;SPGI_SPB;0.35;;нет;нет;нет;да
+Intuitive Surgical, Inc.;акции;ISRG_SPB;0.35;;нет;нет;нет;да
+Cisco Systems, Inc.;акции;CSCO_SPB;0.36;;нет;нет;нет;да
+Citigroup Inc.;акции;C_SPB;0.37;;нет;нет;нет;да
+Delta Air Lines;акции;DAL_SPB;0.378;;нет;нет;нет;да
+EUR (евро);валюта;EUR;0.0996;0.0996;да;да;нет;нет
+Evraz Group S.A.;Е/О;XS1405775377;0.18;;да;нет;да;нет
+Expedia Group;акции;EXPE_SPB;0.374;;нет;нет;нет;да
+Exxon Mobil Corporation;акции;XOM_SPB;0.4375;;нет;нет;нет;да
+Facebook, Inc.;акции;FB_SPB;0.345;;нет;нет;нет;да
+X5 Retail Group N.V (US9837E2054);АО;FIVE;0.38;0.38;нет;да;нет;нет
+FXGD ETF;пай;FXGD;0.3;0.3;нет;да;нет;нет
+GAZ CAPITAL S.A.;Е/О;XS0191754729;0.56;;да;нет;да;нет
+GAZ CAPITAL S.A.;Е/О;XS0316524130;0.62;;да;нет;да;нет
+MMC Finance DAC;Е/О;XS1589324075;0.26;;да;нет;да;нет
+GPN Capital S.A.;Е/О;XS0830192711;0.24;;да;нет;да;нет
+GPN Capital S.A.;Е/О;XS0997544860;0.3;;да;нет;да;нет
+Intel Corporation;акции;INTC_SPB;0.39;;нет;нет;нет;да
+JD.com, Inc.;акции;JD_SPB;0.375;;нет;нет;нет;да
+Johnson & Johnson;акции;JNJ_SPB;0.385;;нет;нет;нет;да
+JPMorgan Chase & Co.;акции;JPM_SPB;0.405;;нет;нет;нет;да
+Mastercard Incorporated class A;акции;MA_SPB;0.36;;нет;нет;нет;да
+Merck & Co., Inc.;акции;MRK_SPB;0.4;;нет;нет;нет;да
+Microsoft Corporation;акции;MSFT_SPB;0.375;;нет;нет;нет;да
+MMC Finance DAC;Е/О;XS1298447019;0.24;;да;нет;да;нет
+Netflix, Inc.;акции;NFLX_SPB;0.435;;нет;нет;нет;да
+Nordstrom, Inc.;акции;JWN_SPB;0.39;;нет;нет;нет;да
+Novatek Finance DAC;Е/О;XS0864383723;0.26;;да;нет;да;нет
+NVIDIA Corporation;акции;NVDA_SPB;0.4;;нет;нет;нет;да
+Oracle Corporation;акции;ORCL_SPB;0.375;;нет;нет;нет;да
+PepsiCo, Inc.;акции;PEP_SPB;0.375;;нет;нет;нет;да
+Pfizer Inc.;акции;PFE_SPB;0.4;;нет;нет;нет;да
+Polymetal International plc;АО;POLY;0.28;0.28;да;да;нет;нет
+QUALCOMM Incorporated;акции;QCOM_SPB;0.405;;нет;нет;нет;да
+Rosneft International Finance Limited;Е/О;XS0861981180;0.2;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;XS0767472458;0.252;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;XS0971721450;0.252;;да;нет;да;нет
+Министерство Финансов РФ;E/O;RU000A0ZZVE6;0.18;;нет;нет;да;нет
+Министерство Финансов РФ;Е/О;RU000A0JWHA4;0.252;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;RU000A0JXTS9;0.252;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;XS0088543193;0.252;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;RU000A0ZYYN4;0.252;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;XS0114288789;0.25;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;XS0767473852;0.35;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;XS0971721963;0.35;;да;нет;да;нет
+Министерство Финансов РФ;Е/О;RU000A0JXU14;0.374;;да;нет;да;нет
+RUSAL plc;АО;RUAL;0.5;0.5;да;да;нет;нет
+Royal Dutch Shell plc;акции;RDS.A_SPB;0.35;;нет;нет;нет;да
+Spirit Airlines, Inc.;акции;SAVE_SPB;0.45;;нет;нет;нет;да
+Tesla, Inc.;акции;TSLA_SPB;0.35;;нет;нет;нет;да
+THE BOEING COMPANY;акции;BA_SPB;0.35;;нет;нет;нет;да
+THE COCA-COLA COMPANY;акции;KO_SPB;0.37;;нет;нет;нет;да
+The Home Depot, Inc.;акции;HD_SPB;0.4025;;нет;нет;нет;да
+The Walt Disney Company;акции;DIS_SPB;0.385;;нет;нет;нет;да
+The Goodyear Tire & Rubber Company;акции;GT_SPB;0.38;;нет;нет;нет;да
+UnitedHealth Group Incorporated;акции;UNH_SPB;0.42;;нет;нет;нет;да
+USD (доллар США);валюта;USD;0.0996;0.0996;да;да;нет;нет
+Veb Finance plc;Е/О;XS0800817073;0.22;;да;нет;да;нет
+Veb Finance plc;Е/О;XS0993162683;0.3;;да;нет;да;нет
+Veb Finance plc;Е/О;XS0559915961;0.41;;да;нет;да;нет
+VEON Ltd.;акции;VEON_SPB;0.352;;нет;нет;нет;да
+Verizon Communications Inc.;акции;VZ_SPB;0.36;;нет;нет;нет;да
+Halliburton Company;акции;HAL_SPB;0.40;;нет;нет;нет;да
+Vipshop Holdings Limited;акции;VIPS_SPB;0.396;;нет;нет;нет;да
+Visa Inc.;акции;V_SPB;0.375;;нет;нет;нет;да
+VTB Eurasia DAC;Е/О;XS0810596832;0.5;;да;нет;да;нет
+VTBA ETF;пай;VTBA;0.3045;0.3045;да;да;нет;нет
+VTBB ETF;пай;VTBB;0.25;;да;нет;нет;нет
+Walmart Inc.;акции;WMT_SPB;0.4025;;нет;нет;нет;да
+Wells Fargo & Company;акции;WFC_SPB;0.36;;нет;нет;нет;да
+Woodward, Inc.;акции;WWD_SPB;0.315;;нет;нет;нет;да
+Yandex N.V.;АО;YNDX;0.21;0.21;да;да;нет;нет
+АК «АЛРОСА» (ПАО);АО;ALRS;0.2;0.2;да;да;нет;нет
+ПАО «Аэрофлот»;АО;AFLT;0.35;0.35;да;да;нет;нет
+ПАО АНК «Башнефть»;АО;BANE;0.38;0.38;да;да;нет;нет
+ПАО АНК «Башнефть»;АП;BANEP;0.38;0.38;да;да;нет;нет
+ПАО Банк ВТБ;АО;VTBR;0.22;0.32;да;да;нет;нет
+Банк ВТБ (ПАО) Б-1-8;Облигации;RU000A0ZZH84;0.4;;да;нет;да;нет
+Банк ВТБ (ПАО) БО-30;Облигации;RU000A0JV3Q3;0.4;;да;нет;да;нет
+Банк ВТБ (ПАО) БО-43;Облигации;RU000A0JU773;0.27;;да;нет;да;нет
+ПАО «Газпром нефть»;АО;SIBN;0.38;0.38;да;да;нет;нет
+ПАО «Газпром»;АО;GAZP;0.2;0.2;да;да;нет;нет
+ПАО «ГМК «Норильский Никель»;АО;GMKN;0.2;0.2;да;да;нет;нет
+"ПАО ""Детский мир""";АО;DSKY;0.5;0.5;да;да;нет;нет
+ПАО «Интер РАО»;АО;IRAO;0.34;0.34;да;да;нет;нет
+Лента (US52634T2006);АО;LNTA;0.5;0.5;нет;да;нет;нет
+"ПАО ""Ленэнерго""";АО;LSNG;0.6;0.6;да;да;нет;нет
+ПАО «Группа ЛСР»;АО;LSRG;0.5;0.5;да;да;нет;нет
+ПАО «ЛУКОЙЛ»;АО;LKOH;0.2;0.2;да;да;нет;нет
+"ПАО ""М.видео""";АО;MVID;0.5;0.5;да;да;нет;нет
+ПАО «Магнит»;АО;MGNT;0.2;0.2;да;да;нет;нет
+ПАО «Мечел»;АО;MTLR;0.75;0.75;да;да;нет;нет
+ПАО «Мечел»;АП;MTLRP;0.7;0.7;да;да;нет;нет
+"ПАО ""МОСКОВСКИЙ КРЕДИТНЫЙ БАНК""";АО;CBOM;0.38;0.38;да;да;нет;нет
+ПАО «ММК»;АО;MAGN;0.2;0.2;да;да;нет;нет
+ПАО Московская Биржа;АО;MOEX;0.2;0.2;да;да;нет;нет
+ПАО «МОЭСК»;АО;MSRS;0.5;;да;нет;нет;нет
+"ПАО ""МРСК Центра и Приволжья""";АО;MRKP;0.6;0.6;да;да;нет;нет
+ПАО «Мобильные ТелеСистемы»;АО;MTSS;0.2;0.2;да;да;нет;нет
+ПАО «НЛМК»;АО;NLMK;0.2;0.2;да;да;нет;нет
+ПАО «НОВАТЭК»;АО;NVTK;0.2;0.2;да;да;нет;нет
+ПАО «ОГК-2»;АО;OGKB;0.38;0.38;да;да;нет;нет
+Министерство Финансов РФ;ОФЗ;SU24020RMFS8;0.15;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU25083RMFS5;0.1;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26207RMFS9;0.09;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26209RMFS5;0.08;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26211RMFS1;0.08;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26212RMFS9;0.105;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26215RMFS2;0.1;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26217RMFS8;0.1;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26218RMFS6;0.12;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26219RMFS4;0.09;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26220RMFS2;0.08;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26221RMFS0;0.135;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26222RMFS8;0.1;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26223RMFS6;0.1;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26224RMFS4;0.16;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26225RMFS1;0.2;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26226RMFS9;0.12;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26227RMFS7;0.12;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26228RMFS5;0.16;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26229RMFS3;0.12;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26230RMFS1;0.204;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU26232RMFS7;0.152;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU29006RMFS2;0.12;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU29007RMFS0;0.16;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU29008RMFS8;0.16;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU29009RMFS6;0.16;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU29010RMFS4;0.16;;да;нет;да;нет
+Министерство Финансов РФ;ОФЗ;SU29012RMFS0;0.135;;да;нет;да;нет
+"ПАО ""Группа Компаний ПИК""";АО;PIKK;0.38;0.38;да;да;нет;нет
+ПАО «Полюс»;АО;PLZL;0.38;0.38;да;да;нет;да
+ПАО «Распадская»;АО;RASP;0.5;0.5;да;да;нет;нет
+ПАО «НК «Роснефть»;АО;ROSN;0.2;0.2;да;да;нет;нет
+ПАО «Россети»;АО;RSTI;0.34;0.34;да;да;нет;нет
+ПАО «Ростелеком»;АО;RTKM;0.4;0.4;да;да;нет;нет
+ПАО «Ростелеком»;АП;RTKMP;0.38;0.38;да;да;нет;нет
+ПАО «РусГидро»;АО;HYDR;0.21;0.21;да;да;нет;нет
+ПАО «Сбербанк России»;АП;SBERP;0.2;0.2;да;да;нет;нет
+ПАО «Сбербанк России»;АО;SBER;0.2;0.2;да;да;нет;нет
+ПАО «Северсталь»;АО;CHMF;0.2;0.2;да;да;нет;нет
+ПАО «АФК «Система»;АО;AFKS;0.38;0.38;да;да;нет;нет
+ОАО «Сургутнефтегаз»;АП;SNGSP;0.2;0.2;да;да;нет;нет
+ОАО «Сургутнефтегаз»;АО;SNGS;0.26;0.26;да;да;нет;нет
+ПАО «Татнефть» им. В.Д.Шашина;АО;TATN;0.22;0.22;да;да;нет;нет
+ПАО «Татнефть» им. В.Д.Шашина;АП;TATNP;0.38;0.38;да;да;нет;нет
+ПАО «АК «Транснефть»;АП;TRNFP;0.2;0.2;да;да;нет;нет
+ПАО «ФосАгро»;АО;PHOR;0.38;0.38;да;да;нет;нет
+ПАО «ФСК ЕЭС»;АО;FEES;0.27;0.27;да;да;нет;нет
+"ПАО ""Энел Россия""";АО;ENRU;0.35;0.35;да;да;нет;нет
+ПАО «Юнипро»;АО;UPRO;0.38;0.38;да;да;нет;нет
+Банк ВТБ (ПАО) Т2-3;Облигации;RU000A1014J2;0.4;;да;нет;да;нет
+Advanced Micro Devices, Inc.;акции;AMD_SPB;0.4;;нет;нет;нет;да
+GILEAD SCIENCES, INC.;акции;GILD_SPB;0.35;;нет;нет;нет;да
+Micron Technology, Inc.;акции;MU_SPB;0.4;;нет;нет;нет;да
+salesforce.com, inc.;акции;CRM_SPB;0.35;;нет;нет;нет;да
+The Procter & Gamble Company;акции;PG_SPB;0.35;;нет;нет;нет;да
+PayPal Holdings, Inc.;акции;PYPL_SPB;0.4;;нет;нет;нет;да
+Comcast Corporation;акции;CMCSA_SPB;0.35;;нет;нет;нет;да
+Booking Holdings Inc.;акции;BKNG_SPB;0.35;;нет;нет;нет;да
+Costco Wholesale Corporation;акции;COST_SPB;0.35;;нет;нет;нет;да
+Bristol-Myers Squibb Company;акции;BMY_SPB;0.4;;нет;нет;нет;да
+AbbVie Inc.;акции;ABBV_SPB;0.35;;нет;нет;нет;да
+Starbucks Corporation;акции;SBUX_SPB;0.35;;нет;нет;нет;да
+Square, Inc.;акции;SQ_SPB;0.4;;нет;нет;нет;да
+McDonald's Corporation;акции;MCD_SPB;0.35;;нет;нет;нет;да
+Broadcom Inc.;акции;AVGO_SPB;0.35;;нет;нет;нет;да
+International Business Machines Corporation;акции;IBM_SPB;0.35;;нет;нет;нет;да
+The Goldman Sachs Group, Inc.;акции;GS_SPB;0.35;;нет;нет;нет;да
+NIKE, Inc.;акции;NKE_SPB;0.35;;нет;нет;нет;да
+Charter Communications, Inc.;акции;CHTR_SPB;0.35;;нет;нет;нет;да
+Abbott Laboratories;акции;ABT_SPB;0.35;;нет;нет;нет;да
+Texas Instruments Incorporated;акции;TXN_SPB;0.35;;нет;нет;нет;да
+NextEra Energy, Inc.;акции;NEE_SPB;0.35;;нет;нет;нет;да
+Morgan Stanley;акции;MS_SPB;0.4;;нет;нет;нет;да
+Amgen Inc.;акции;AMGN_SPB;0.35;;нет;нет;нет;да
+Target Corporation;акции;TGT_SPB;0.4;;нет;нет;нет;да
+Regeneron Pharmaceuticals, Inc.;акции;REGN_SPB;0.35;;нет;нет;нет;да
+3M Company;акции;MMM_SPB;0.35;;нет;нет;нет;да
+Union Pacific Corporation;акции;UNP_SPB;0.35;;нет;нет;нет;да
+Medtronic Public Limited Company;акции;MDT_SPB;0.35;;нет;нет;нет;да
+Lockheed Martin Corporation;акции;LMT_SPB;0.35;;нет;нет;нет;да
+Lowe's Companies, Inc.;акции;LOW_SPB;0.35;;нет;нет;нет;да
+American Express Company;акции;AXP_SPB;0.4;;нет;нет;нет;да
+Eli Lilly and Company;акции;LLY_SPB;0.35;;нет;нет;нет;да
+Lam Research Corporation;акции;LRCX_SPB;0.4;;нет;нет;нет;да
+CVS Health Corporation;акции;CVS_SPB;0.4;;нет;нет;нет;да
+Thermo Fisher Scientific Inc.;акции;TMO_SPB;0.35;;нет;нет;нет;да
+Biogen Inc.;акции;BIIB_SPB;0.4;;нет;нет;нет;да
+Ecolab Inc.;акции;ECL_SPB;0.35;;нет;нет;нет;да
+BlackRock, Inc.;акции;BLK_SPB;0.35;;нет;нет;нет;да
+Honeywell International Inc.;акции;HON_SPB;0.35;;нет;нет;нет;да
+Humana Inc.;акции;HUM_SPB;0.35;;нет;нет;нет;да
+Mondelez International, Inc.;акции;MDLZ_SPB;0.35;;нет;нет;нет;да
+Dollar General Corporation;акции;DG_SPB;0.35;;нет;нет;нет;да
+ConocoPhillips;акции;COP_SPB;0.35;;нет;нет;нет;да
+CME Group Inc.;акции;CME_SPB;0.35;;нет;нет;нет;да
+Intuit Inc.;акции;INTU_SPB;0.35;;нет;нет;нет;да
+U.S. Bancorp;акции;USB_SPB;0.4;;нет;нет;нет;да
+The Estee Lauder Companies Inc.;акции;EL_SPB;0.35;;нет;нет;нет;да
+Illumina, Inc.;акции;ILMN_SPB;0.35;;нет;нет;нет;да
+Automatic Data Processing, Inc.;акции;ADP_SPB;0.35;;нет;нет;нет;да
+Stryker Corporation;акции;SYK_SPB;0.35;;нет;нет;нет;да
+Northrop Grumman Corporation;акции;NOC_SPB;0.35;;нет;нет;нет;да
+Crown Castle International Corp.;акции;CCI_SPB;0.35;;нет;нет;нет;да
+Autodesk, Inc.;акции;ADSK_SPB;0.4;;нет;нет;нет;да
+Equinix, Inc.;акции;EQIX_SPB;0.35;;нет;нет;нет;да
+Global Payments Inc.;акции;GPN_SPB;0.35;;нет;нет;нет;да
+Colgate-Palmolive Company;акции;CL_SPB;0.35;;нет;нет;нет;да
+The PNC Financial Services Group, Inc.;акции;PNC_SPB;0.4;;нет;нет;нет;да
+GAZ-30;Е/О;XS2124187571;0.52;;да;нет;да;нет
+LUK-30;Е/О;XS2159874002;0.52;;да;нет;да;нет
+ВТБ Б-1-30;Облигации;RU000A100EN9;0.4;;да;нет;да;нет
+ВТБ Б-1-47;Облигации;RU000A101491;0.4;;да;нет;да;нет
+ВТБ Б-1-51;Облигации;RU000A101F52;0.4;;да;нет;да;нет
+ВТБ Б-1-55;Облигации;RU000A101GV5;0.4;;да;нет;да;нет
+ВТБ Б-1-56;Облигации;RU000A101GX1;0.4;;да;нет;да;нет
+ВТБ Б-1-58;Облигации;RU000A101J90;0.4;;да;нет;да;нет
+ВТБ Б-1-59;Облигации;RU000A101JA3;0.4;;да;нет;да;нет
+ВТБ Б-1-60;Облигации;RU000A101KC7;0.4;;да;нет;да;нет
+ВТБ Б-1-61;Облигации;RU000A101LL6;0.4;;да;нет;да;нет
+ВТБ Б-1-65;Облигации;RU000A101KE3;0.4;;да;нет;да;нет
+ВТБ Б-1-66;Облигации;RU000A101MW1;0.4;;да;нет;да;нет
+ВТБ Б-1-67;Облигации;RU000A101MY7;0.4;;да;нет;да;нет
+ВТБ Б-1-68;Облигации;RU000A101NX7;0.4;;да;нет;да;нет
+ВТБ Б-1-69;Облигации;RU000A101P01;0.4;;да;нет;да;нет
+ВТБ Б-1-70;Облигации;RU000A101PR4;0.4;;да;нет;да;нет
+ВТБ Б-1-71;Облигации;RU000A101PS2;0.4;;да;нет;да;нет
+ВТБ Б-1-72;Облигации;RU000A101PW4;0.4;;да;нет;да;нет
+ВТБ Б-1-73;Облигации;RU000A101PX2;0.4;;да;нет;да;нет
+ВТБ Б-1-74;Облигации;RU000A101S57;0.4;;да;нет;да;нет
+ВТБ Б-1-75;Облигации;RU000A101S65;0.4;;да;нет;да;нет
+ВТБ Б-1-76;Облигации;RU000A101SK3;0.4;;да;нет;да;нет
+ВТБ Б-1-77;Облигации;RU000A101SL1;0.4;;да;нет;да;нет
+ВТБ Б-1-78;Облигации;RU000A101SJ5;0.4;;да;нет;да;нет
+ВТБ Б-1-79;Облигации;RU000A101SN7;0.4;;да;нет;да;нет
+ВТБ Б-1-80;Облигации;RU000A101SP2;0.4;;да;нет;да;нет
+ВТБ Б-1-81;Облигации;RU000A101TF1;0.4;;да;нет;да;нет
+ВТБ Б-1-82;Облигации;RU000A101TG9;0.4;;да;нет;да;нет
+ВТБ Б-1-83;Облигации;RU000A101TH7;0.4;;да;нет;да;нет
+ВТБ Б-1-84;Облигации;RU000A101TJ3;0.4;;да;нет;да;нет
+ВТБ Б-1-86;Облигации;RU000A101TN5;0.4;;да;нет;да;нет
+ВТБ Б-1-88;Облигации;RU000A101V78;0.4;;да;нет;да;нет
+ВТБ Б-1-89;Облигации;RU000A101V86;0.4;;да;нет;да;нет
+ВТБ Б-1-87;Облигации;RU000A101TM7;0.4;;да;нет;да;нет
+ВТБ Б-1-90;Облигации;RU000A101V94;0.4;;да;нет;да;нет
+ВТБ Б-1-92;Облигации;RU000A101VB6;0.4;;да;нет;да;нет
+ВТБ Б-1-91;Облигации;RU000A101VA8;0.4;;да;нет;да;нет
+Royal Caribbean Cruises Ltd.;акции;RCL_SPB;0.45;;нет;нет;нет;да
+Harley-Davidson, Inc.;акции;HOG_SPB;0.4;;нет;нет;нет;да
+Ralph Lauren Corporation Class A;акции;RL_SPB;0.4;;нет;нет;нет;да
+ВТБ ИП «RUSAL» (СФОВТБИП03);Облигации;RU000A101ZJ0;0,55;;да;нет;да;нет
+ВТБ Б-1-94;Облигации;RU000A101VD2;0,4;;да;нет;да;нет
+ВТБ Б-1-93;Облигации;RU000A101VC4;0,4;;да;нет;да;нет
+ВТБ Б-1-101;Облигации;RU000A101XX6;0,4;;да;нет;да;нет
+ВТБ Б-1-100;Облигации;RU000A101XW8;0,4;;да;нет;да;нет
+The Gap, Inc.;акции;GPS_SPB;0.45;;нет;нет;нет;да
+Marriott International, Inc. Class A;акции;MAR_SPB;0.4;;нет;нет;нет;да
+VTBM ETF;пай;VTBM;0.2;;да;нет;нет;нет
+VTBU ETF;пай;VTBU;0.39;1;да;да;нет;нет
+ВТБ Б-1-103;Облигации;RU000A101XZ1;0.4;;да;нет;да;нет
+ВТБ Б-1-104;Облигации;RU000A101Y00;0.4;;да;нет;да;нет
+Bayerische Motoren Werke Aktiengesellschaft;акции;BMW@DE;0.35;;нет;нет;нет;да
+Infineon Technologies AG;акции;IFX@DE;0.35;;нет;нет;нет;да
+MERCK Kommanditgesellschaft auf Aktien;акции;MRK@DE;0.35;;нет;нет;нет;да
+Henkel AG & Co. KGaA;акции;HEN3@DE;0.35;;нет;нет;нет;да
+Carl Zeiss Meditec AG;акции;AFX@DE;0.35;;нет;нет;нет;да
+GAZ-24 EUR (расч. в EUR);Е/О;XS1721463500;0.26;;да;нет;да;нет
+GAZ-25 EU2 (расч. в EUR);Е/О;XS2157526315;0.26;;да;нет;да;нет
+GAZ-27_2 (расч. в USD);Е/О;XS2196334671;0.3;;да;нет;да;нет
+Сбер Sb15R;Облигации;RU000A101C89;0.45;;да;нет;да;нет
+ВТБ Б-1-107;Облигации;RU000A101Y42;0.4;;да;нет;да;нет
+ВТБ Б-1-106;Облигации;RU000A101Y34;0.4;;да;нет;да;нет
+ВТБ Б-1-105;Облигации;RU000A101Y26;0.4;;да;нет;да;нет
+ВТБ Б-1-108;Облигации;RU000A101Y59;0.4;;да;нет;да;нет
+ВТБ Б-1-120;Облигации;RU000A0NH269;0.4;;да;нет;да;нет
+United Airlines Holdings, Inc.;акции;UAL_SPB;0.5;;нет;нет;нет;да
+ВТБ Б-1-110;Облигации;RU000A0NH1W7;0.4;;да;нет;да;нет
+ВТБ Б-1-98;Облигации;RU000A101YR6;0.24;;да;нет;да;нет
+ВТБ Б-1-99;Облигации;RU000A1022J5;0.24;;да;нет;да;нет
+ВТБ Б-1-121;Облигации;RU000A0NH277;0.4;;да;нет;да;нет
+ВТБ Б-1-122;Облигации;RU000A0NH285;0.4;;да;нет;да;нет
+ВТБ Б-1-111;Облигации;RU000A0NH1X5;0.4;;да;нет;да;нет
+ВТБ Б-1-112;Облигации;RU000A0NH1Y3;0.4;;да;нет;да;нет
+RUS-35;Облигации;RU000A1006S9;0.3;;да;нет;да;нет
+Bayer Aktiengesellschaft;акции;BAYN@DE_SPB;0.4;;нет;нет;нет;да
+adidas AG;акции;ADS@DE_SPB;0.4;;нет;нет;нет;да
+Deutsche Telekom AG;акции;DTE@DE_SPB;0.4;;нет;нет;нет;да
+Deutsche Boerse Aktiengesellschaft;акции;DB1@DE_SPB;0.4;;нет;нет;нет;да
+r Ruckversicherungs-Gesellschaft Aktiengesellschaft in Munchen;акции;MUV2@DE_SPB;0.4;;нет;нет;нет;да
+VTBE ETF;пай;VTBE;0.35;0.35;да;да;нет;нет
+VTBG ETF;пай;VTBG;0.31;1;да;да;нет;нет
+VTBH ETF;пай;VTBH;0.3;0.3;да;да;нет;нет
+VTBX ETF;пай;VTBX;0.3;;да;нет;нет;нет
+Coty Inc. Class A;акции;COTY_SPB;0.45;;нет;нет;нет;да
+ВТБСУБТ2-1;облигации;RU000A102879;0.4;;да;нет;да;нет
+ВТБСУБТ2-2;облигации;RU000A102887;0.4;;да;нет;да;нет
+ВТБ Б1-115;облигации;RU000A0NH210;0.4;;да;нет;да;нет
+ВТБ Б1-117;облигации;RU000A0NH236;0.4;;да;нет;да;нет
+Hyatt Hotels Corporation ClassA;акции;H_SPB;0.45;;нет;нет;нет;да
+Nokia Corporation;акции;NOK_SPB;0.4;;нет;нет;нет;да
+ВТБ Б1-124;облигации;RU000A0NH2A1;0.4;;да;нет;да;нет
+ВТБ Б1-126;облигации;RU000A0NH2C7;0.4;;да;нет;да;нет
+ВТБ Б1-127;облигации;RU000A0NH2D5;0.4;;да;нет;да;нет
+ВТБ Б1-128;облигации;RU000A0NH2E3;0.4;;да;нет;да;нет
+ВТБ Б-1-133;облигации;RU000A102739;0.4;;да;нет;да;нет
+ВТБ Б-1-119;облигации;RU000A0NH251;0.4;;да;нет;да;нет
+ВТБ Б-1-143;облигации;RU000A1027M8;0.4;;да;нет;да;нет
+Mail.ru Group Limited;акции;MAIL;0.38;0.38;нет;да;нет;нет
+OZON-адр;акции;OZON;0.8;0.8;нет;да;нет;нет
+Franklin Resources, Inc.;акции;BEN_SPB;0.4;;нет;нет;нет;да
+Ferrari N.V.;акции;RACE_SPB;0.4;;нет;нет;нет;да
+Twitter, Inc.;акции;TWTR_SPB;0.4;;нет;нет;нет;да
+Alcoa Corporation;акции;AA_SPB;0.4;;нет;нет;нет;да
+General Electric Company;акции;GE_SPB;0.4;;нет;нет;нет;да
+Energy Transfer LP;акции;ET_SPB;0.5;;нет;нет;нет;да
+Apache Corporation;акции;APA_SPB;0.5;;нет;нет;нет;да
+Alibaba Group Holding Limited;акции;BABA_SPB;0.36;;нет;нет;нет;да
+Carnival Corporation;акции;CCL_SPB;0.5;;нет;нет;нет;да
+Electronic Arts Inc.;акции;EA_SPB;0.35;;нет;нет;нет;да
+The Kraft Heinz Company;акции;KHC_SPB;0.35;;нет;нет;нет;да
+BorgWarner Inc.;акции;BWA_SPB;0.4;;нет;нет;нет;да
+Boston Properties, Inc.;акции;BXP_SPB;0.4;;нет;нет;нет;да
+BioMarin Pharmaceutical Inc.;акции;BMRN_SPB;0.4;;нет;нет;нет;да
+Alexion Pharmaceuticals Inc;акции;ALXN_SPB;0.4;;нет;нет;нет;да
+Baidu, Inc.;акции;BIDU_SPB;0.4;;нет;нет;нет;да
+British American Tobacco p.l.c.;акции;BTI_SPB;0.4;;нет;нет;нет;да
+Cabot Oil & Gas Corporation;акции;COG_SPB;0.4;;нет;нет;нет;да
+Citrix Systems, Inc.;акции;CTXS_SPB;0.4;;нет;нет;нет;да
+Essex Property Trust, Inc.;акции;ESS_SPB;0.4;;нет;нет;нет;да
+Everest Re Group, Ltd.;акции;RE_SPB;0.4;;нет;нет;нет;да
+Exelon Corporation;акции;EXC_SPB;0.4;;нет;нет;нет;да
+Ford Motor Company;акции;F_SPB;0.35;;нет;нет;нет;да
+General Motors Company;акции;GM_SPB;0.4;;нет;нет;нет;да
+HP Inc.;акции;HPQ_SPB;0.35;;нет;нет;нет;да
+Hasbro, Inc.;акции;HAS_SPB;0.4;;нет;нет;нет;да
+Invesco Ltd.;акции;IVZ_SPB;0.4;;нет;нет;нет;да
+Jacobs Engineering Group Inc.;акции;J_SPB;0.4;;нет;нет;нет;да
+Linde plc;акции;LIN_SPB;0.4;;нет;нет;нет;да
+Nasdaq, Inc.;акции;NDAQ_SPB;0.4;;нет;нет;нет;да
+Schlumberger Limited;акции;SLB_SPB;0.4;;нет;нет;нет;да
+The AES Corporation;акции;AES_SPB;0.4;;нет;нет;нет;да
+Tyson Foods, Inc. Class A;акции;TSN_SPB;0.4;;нет;нет;нет;да
+Vulcan Materials Company;акции;VMC_SPB;0.4;;нет;нет;нет;да
+Spirit AeroSystems Holdings, Inc. ClassA;акции;SPR_SPB;0.5;;нет;нет;нет;да
+Hewlett Packard Enterprise Compa;акции;HPE_SPB;0.5;;нет;нет;нет;да
+Occidental Petroleum Corporation;акции;OXY_SPB;0.5;;нет;нет;нет;да
+Western Digital Corporation;акции;WDC_SPB;0.5;;нет;нет;нет;да
+Agilent Technologies, Inc.;акции;A_SPB;0.35;;нет;нет;нет;да
+Advance Auto Parts, Inc.;акции;AAP_SPB;0.4;;нет;нет;нет;да
+Archer-Daniels-Midland Company;акции;ADM_SPB;0.4;;нет;нет;нет;да
+Alliance Data Systems Corporation;акции;ADS_SPB;0.5;;нет;нет;нет;да
+Ameren Corporation;акции;AEE_SPB;0.4;;нет;нет;нет;да
+Aflac Incorporated;акции;AFL_SPB;0.5;;нет;нет;нет;да
+American International Group, Inc.;акции;AIG_SPB;0.5;;нет;нет;нет;да
+Akamai Technologies, Inc.;акции;AKAM_SPB;0.4;;нет;нет;нет;да
+Align Technology, Inc.;акции;ALGN_SPB;0.4;;нет;нет;нет;да
+Alaska Air Group, Inc.;акции;ALK_SPB;0.5;;нет;нет;нет;да
+The Allstate Corporation;акции;ALL_SPB;0.4;;нет;нет;нет;да
+AMETEK, Inc.;акции;AME_SPB;0.4;;нет;нет;нет;да
+Ameriprise Financial, Inc.;акции;AMP_SPB;0.5;;нет;нет;нет;да
+Amphenol Corporation;акции;APH_SPB;0.4;;нет;нет;нет;да
+Aptiv PLC;акции;APTV_SPB;0.4;;нет;нет;нет;да
+Alexandria Real Estate Equities, Inc.;акции;ARE_SPB;0.4;;нет;нет;нет;да
+AvalonBay Communities, Inc.;акции;AVB_SPB;0.4;;нет;нет;нет;да
+AutoZone, Inc.;акции;AZO_SPB;0.4;;нет;нет;нет;да
+Baxter International Inc.;акции;BAX_SPB;0.4;;нет;нет;нет;да
+Best Buy Co., Inc.;акции;BBY_SPB;0.4;;нет;нет;нет;да
+The Bank of New York Mellon Corporation;акции;BK_SPB;0.4;;нет;нет;нет;да
+Baker Hughes Company;акции;BKR_SPB;0.4;;нет;нет;нет;да
+Ball Corporation;акции;BLL_SPB;0.4;;нет;нет;нет;да
+The Bank of New York Mellon;акции;BUD_SPB;0.4;;нет;нет;нет;да
+Conagra Brands, Inc.;акции;CAG_SPB;0.4;;нет;нет;нет;да
+Cardinal Health, Inc.;акции;CAH_SPB;0.4;;нет;нет;нет;да
+CBRE Group, Inc.;акции;CBRE_SPB;0.5;;нет;нет;нет;да
+Cerner Corporation;акции;CERN_SPB;0.4;;нет;нет;нет;да
+CF Industries Holdings, Inc.;акции;CF_SPB;0.4;;нет;нет;нет;да
+Citizens Financial Group, Inc.;акции;CFG_SPB;0.5;;нет;нет;нет;да
+Church & Dwight Co., Inc.;акции;CHD_SPB;0.4;;нет;нет;нет;да
+C.H. Robinson Worldwide, Inc.;акции;CHRW_SPB;0.4;;нет;нет;нет;да
+Cleveland-Cliffs Inc.;акции;CLF_SPB;0.5;;нет;нет;нет;да
+The Clorox Company;акции;CLX_SPB;0.4;;нет;нет;нет;да
+Comerica Incorporated;акции;CMA_SPB;0.5;;нет;нет;нет;да
+Chipotle Mexican Grill, Inc.;акции;CMG_SPB;0.4;;нет;нет;нет;да
+Cummins Inc.;акции;CMI_SPB;0.4;;нет;нет;нет;да
+CMS Energy Corporation;акции;CMS_SPB;0.4;;нет;нет;нет;да
+Centene Corporation;акции;CNC_SPB;0.4;;нет;нет;нет;да
+CenterPoint Energy, Inc.;акции;CNP_SPB;0.5;;нет;нет;нет;да
+Capital One Financial Corporation;акции;COF_SPB;0.45;;нет;нет;нет;да
+Cognizant Technology Solutions Corporation;акции;CTSH_SPB;0.4;;нет;нет;нет;да
+Discover Financial Services;акции;DFS_SPB;0.45;;нет;нет;нет;да
+Quest Diagnostics Incorporated;акции;DGX_SPB;0.4;;нет;нет;нет;да
+D.R. Horton, Inc.;акции;DHI_SPB;0.4;;нет;нет;нет;да
+Discovery, Inc.;акции;DISCA_SPB;0.4;;нет;нет;нет;да
+Digital Realty Trust, Inc.;акции;DLR_SPB;0.4;;нет;нет;нет;да
+Dollar Tree, Inc.;акции;DLTR_SPB;0.4;;нет;нет;нет;да
+Dover Corporation;акции;DOV_SPB;0.4;;нет;нет;нет;да
+Darden Restaurants, Inc.;акции;DRI_SPB;0.5;;нет;нет;нет;да
+DaVita Inc.;акции;DVA_SPB;0.4;;нет;нет;нет;да
+Devon Energy Corporation;акции;DVN_SPB;0.5;;нет;нет;нет;да
+DXC Technology Company;акции;DXC_SPB;0.5;;нет;нет;нет;да
+eBay Inc.;акции;EBAY_SPB;0.35;;нет;нет;нет;да
+Consolidated Edison, Inc.;акции;ED_SPB;0.4;;нет;нет;нет;да
+Edison International;акции;EIX_SPB;0.4;;нет;нет;нет;да
+Eastman Chemical Company;акции;EMN_SPB;0.4;;нет;нет;нет;да
+Emerson Electric Co.;акции;EMR_SPB;0.4;;нет;нет;нет;да
+EOG Resources, Inc.;акции;EOG_SPB;0.5;;нет;нет;нет;да
+EQT Corporation;акции;EQT_SPB;0.5;;нет;нет;нет;да
+Eversource Energy;акции;ES_SPB;0.4;;нет;нет;нет;да
+Eaton Corporation plc;акции;ETN_SPB;0.4;;нет;нет;нет;да
+Extra Space Storage Inc.;акции;EXR_SPB;0.4;;нет;нет;нет;да
+Lumentum Holdings Inc.;акции;LITE_SPB;0.4;;нет;нет;нет;да
+Allscripts Healthcare Solutions Inc.;акции;MDRX_SPB;0.4;;нет;нет;нет;да
+Palo Alto Networks, Inc.;акции;PANW_SPB;0.4;;нет;нет;нет;да
+Bio-Rad Laboratories, Inc. ClassA;акции;BIO_SPB;0.4;;нет;нет;нет;да
+Fastenal Company;акции;FAST_SPB;0.4;;нет;нет;нет;да
+Freeport-McMoRan Inc.;акции;FCX_SPB;0.45;;нет;нет;нет;да
+FedEx Corporation;акции;FDX_SPB;0.4;;нет;нет;нет;да
+F5 Networks, Inc.;акции;FFIV_SPB;0.4;;нет;нет;нет;да
+Fifth Third Bancorp;акции;FITB_SPB;0.5;;нет;нет;нет;да
+Foot Locker, Inc.;акции;FL_SPB;0.4;;нет;нет;нет;да
+FMC Corporation;акции;FMC_SPB;0.4;;нет;нет;нет;да
+TechnipFMC plc;акции;FTI_SPB;0.5;;нет;нет;нет;да
+Fortive Corporation;акции;FTV_SPB;0.4;;нет;нет;нет;да
+General Mills, Inc.;акции;GIS_SPB;0.35;;нет;нет;нет;да
+Corning Incorporated;акции;GLW_SPB;0.4;;нет;нет;нет;да
+Genuine Parts Company;акции;GPC_SPB;0.4;;нет;нет;нет;да
+W.W. Grainger, Inc.;акции;GWW_SPB;0.4;;нет;нет;нет;да
+Huntington Bancshares Incorporated;акции;HBAN_SPB;0.4;;нет;нет;нет;да
+HCA Healthcare, Inc.;акции;HCA_SPB;0.4;;нет;нет;нет;да
+Hess Corporation;акции;HES_SPB;0.45;;нет;нет;нет;да
+The Hartford Financial Services Group, Inc.;акции;HIG_SPB;0.4;;нет;нет;нет;да
+Hilton Worldwide Holdings Inc.;акции;HLT_SPB;0.4;;нет;нет;нет;да
+Hologic, Inc.;акции;HOLX_SPB;0.4;;нет;нет;нет;да
+Helmerich & Payne, Inc.;акции;HP_SPB;0.5;;нет;нет;нет;да
+Hormel Foods Corporation;акции;HRL_SPB;0.35;;нет;нет;нет;да
+The Hershey Company;акции;HSY_SPB;0.4;;нет;нет;нет;да
+IDEXX Laboratories, Inc.;акции;IDXX_SPB;0.35;;нет;нет;нет;да
+Incyte Corporation;акции;INCY_SPB;0.4;;нет;нет;нет;да
+IHS Markit Ltd.;акции;INFO_SPB;0.4;;нет;нет;нет;да
+International Paper Company;акции;IP_SPB;0.4;;нет;нет;нет;да
+J.B. Hunt Transport Services, Inc.;акции;JBHT_SPB;0.35;;нет;нет;нет;да
+Johnson Controls International plc;акции;JCI_SPB;0.35;;нет;нет;нет;да
+Juniper Networks, Inc.;акции;JNPR_SPB;0.35;;нет;нет;нет;да
+Kellogg Company;акции;K_SPB;0.35;;нет;нет;нет;да
+KeyCorp;акции;KEY_SPB;0.5;;нет;нет;нет;да
+Kimco Realty Corporation;акции;KIM_SPB;0.45;;нет;нет;нет;да
+KLA Corporation;акции;KLAC_SPB;0.5;;нет;нет;нет;да
+Kinder Morgan, Inc.;акции;KMI_SPB;0.4;;нет;нет;нет;да
+CarMax, Inc.;акции;KMX_SPB;0.4;;нет;нет;нет;да
+The Kroger Co.;акции;KR_SPB;0.35;;нет;нет;нет;да
+Kansas City Southern;акции;KSU_SPB;0.4;;нет;нет;нет;да
+L Brands, Inc.;акции;LB_SPB;0.5;;нет;нет;нет;да
+Lennar Corporation;акции;LEN_SPB;0.5;;нет;нет;нет;да
+Laboratory Corporation of America Holdings;акции;LH_SPB;0.5;;нет;нет;нет;да
+Southwest Airlines Co.;акции;LUV_SPB;0.45;;нет;нет;нет;да
+LyondellBasell Industries N.V.;акции;LYB_SPB;0.5;;нет;нет;нет;да
+Macy's, Inc.;акции;M_SPB;0.5;;нет;нет;нет;да
+Masco Corporation;акции;MAS_SPB;0.35;;нет;нет;нет;да
+Microchip Technology Incorporated;акции;MCHP_SPB;0.4;;нет;нет;нет;да
+MetLife, Inc.;акции;MET_SPB;0.5;;нет;нет;нет;да
+Mohawk Industries, Inc.;акции;MHK_SPB;0.4;;нет;нет;нет;да
+McCormick & Company, Incorporated;акции;MKC_SPB;0.4;;нет;нет;нет;да
+Martin Marietta Materials, Inc.;акции;MLM_SPB;0.4;;нет;нет;нет;да
+Monster Beverage Corporation;акции;MNST_SPB;0.35;;нет;нет;нет;да
+The Mosaic Company;акции;MOS_SPB;0.5;;нет;нет;нет;да
+Marathon Petroleum Corporation;акции;MPC_SPB;0.5;;нет;нет;нет;да
+Marathon Oil Corporation;акции;MRO_SPB;0.5;;нет;нет;нет;да
+Motorola Solutions, Inc.;акции;MSI_SPB;0.35;;нет;нет;нет;да
+M&T Bank Corporation;акции;MTB_SPB;0.4;;нет;нет;нет;да
+Mettler-Toledo International Inc.;акции;MTD_SPB;0.4;;нет;нет;нет;да
+Nielsen Holdings plc;акции;NLSN_SPB;0.4;;нет;нет;нет;да
+NRG Energy, Inc.;акции;NRG_SPB;0.4;;нет;нет;нет;да
+NetApp, Inc.;акции;NTAP_SPB;0.35;;нет;нет;нет;да
+Northern Trust Corporation;акции;NTRS_SPB;0.4;;нет;нет;нет;да
+Nucor Corporation;акции;NUE_SPB;0.4;;нет;нет;нет;да
+Newell Brands Inc.;акции;NWL_SPB;0.4;;нет;нет;нет;да
+Realty Income Corporation;акции;O_SPB;0.4;;нет;нет;нет;да
+ONEOK, Inc.;акции;OKE_SPB;0.5;;нет;нет;нет;да
+Omnicom Group Inc.;акции;OMC_SPB;0.4;;нет;нет;нет;да
+O'Reilly Automotive, Inc.;акции;ORLY_SPB;0.35;;нет;нет;нет;да
+PACCAR Inc;акции;PCAR_SPB;0.35;;нет;нет;нет;да
+PG&E Corporation;акции;PCG_SPB;0.5;;нет;нет;нет;да
+Public Service Enterprise Group Incorporated;акции;PEG_SPB;0.35;;нет;нет;нет;да
+Principal Financial Group, Inc.;акции;PFG_SPB;0.5;;нет;нет;нет;да
+Parker-Hannifin Corporation;акции;PH_SPB;0.4;;нет;нет;нет;да
+PulteGroup, Inc.;акции;PHM_SPB;0.5;;нет;нет;нет;да
+PPG Industries, Inc.;акции;PPG_SPB;0.35;;нет;нет;нет;да
+PPL Corporation;акции;PPL_SPB;0.4;;нет;нет;нет;да
+Prudential Financial, Inc.;акции;PRU_SPB;0.5;;нет;нет;нет;да
+Public Storage;акции;PSA_SPB;0.35;;нет;нет;нет;да
+ВТБ Б1-32;облигация;RU000A102LV3;0.4;;да;нет;да;нет
+Phillips 66;акции;PSX_SPB;0.4;;нет;нет;нет;да
+PVH Corp.;акции;PVH_SPB;0.5;;нет;нет;нет;да
+Pioneer Natural Resources Company;акции;PXD_SPB;0.5;;нет;нет;нет;да
+Qorvo, Inc.;акции;QRVO_SPB;0.4;;нет;нет;нет;да
+Regions Financial Corporation;акции;RF_SPB;0.5;;нет;нет;нет;да
+Rockwell Automation, Inc.;акции;ROK_SPB;0.4;;нет;нет;нет;да
+Roper Technologies, Inc.;акции;ROP_SPB;0.3;;нет;нет;нет;да
+Ross Stores, Inc.;акции;ROST_SPB;0.4;;нет;нет;нет;да
+Range Resources Corporation;акции;RRC_SPB;0.5;;нет;нет;нет;да
+Sealed Air Corporation;акции;SEE_SPB;0.35;;нет;нет;нет;да
+The J.M. Smucker Company;акции;SJM_SPB;0.35;;нет;нет;нет;да
+Snap-on Incorporated;акции;SNA_SPB;0.35;;нет;нет;нет;да
+Simon Property Group, Inc.;акции;SPG_SPB;0.5;;нет;нет;нет;да
+Splunk Inc.;акции;SPLK_SPB;0.45;;нет;нет;нет;да
+Sempra Energy;акции;SRE_SPB;0.4;;нет;нет;нет;да
+State Street Corporation;акции;STT_SPB;0.4;;нет;нет;нет;да
+Seagate Technology Public Limited Company;акции;STX_SPB;0.4;;нет;нет;нет;да
+Constellation Brands, Inc.;акции;STZ_SPB;0.4;;нет;нет;нет;да
+Stanley Black & Decker, Inc.;акции;SWK_SPB;0.45;;нет;нет;нет;да
+Skyworks Solutions, Inc.;акции;SWKS_SPB;0.4;;нет;нет;нет;да
+Synchrony Financial;акции;SYF_SPB;0.45;;нет;нет;нет;да
+Sysco Corporation;акции;SYY_SPB;0.5;;нет;нет;нет;да
+Molson Coors Brewing Company;акции;TAP_SPB;0.35;;нет;нет;нет;да
+TransDigm Group Incorporated;акции;TDG_SPB;0.45;;нет;нет;нет;да
+TE Connectivity Ltd.;акции;TEL_SPB;0.4;;нет;нет;нет;да
+Total SE;акции;TOT_SPB;0.45;;нет;нет;нет;да
+Tapestry, Inc.;акции;TPR_SPB;0.45;;нет;нет;нет;да
+TripAdvisor, Inc.;акции;TRIP_SPB;0.5;;нет;нет;нет;да
+T. Rowe Price Group, Inc.;акции;TROW_SPB;0.4;;нет;нет;нет;да
+The Travelers Companies, Inc.;акции;TRV_SPB;0.4;;нет;нет;нет;да
+Tractor Supply Company;акции;TSCO_SPB;0.4;;нет;нет;нет;да
+Universal Health Services, Inc.;акции;UHS_SPB;0.4;;нет;нет;нет;да
+Ulta Beauty, Inc.;акции;ULTA_SPB;0.5;;нет;нет;нет;да
+United Rentals, Inc.;акции;URI_SPB;0.5;;нет;нет;нет;да
+Varian Medical Systems, Inc.;акции;VAR_SPB;0.4;;нет;нет;нет;да
+V.F. Corporation;акции;VFC_SPB;0.4;;нет;нет;нет;да
+Valero Energy Corporation;акции;VLO_SPB;0.5;;нет;нет;нет;да
+Vornado Realty Trust;акции;VNO_SPB;0.4;;нет;нет;нет;да
+VeriSign, Inc.;акции;VRSN_SPB;0.4;;нет;нет;нет;да
+Waters Corporation;акции;WAT_SPB;0.4;;нет;нет;нет;да
+Walgreens Boots Alliance, Inc.;акции;WBA_SPB;0.4;;нет;нет;нет;да
+WEC Energy Group, Inc.;акции;WEC_SPB;0.4;;нет;нет;нет;да
+Welltower Inc.;акции;WELL_SPB;0.5;;нет;нет;нет;да
+Whirlpool Corporation;акции;WHR_SPB;0.4;;нет;нет;нет;да
+Willis Towers Watson Public Limited Company;акции;WLTW_SPB;0.4;;нет;нет;нет;да
+Waste Management, Inc.;акции;WM_SPB;0.4;;нет;нет;нет;да
+The Williams Companies, Inc.;акции;WMB_SPB;0.5;;нет;нет;нет;да
+WestRock Company;акции;WRK_SPB;0.45;;нет;нет;нет;да
+The Western Union Company;акции;WU_SPB;0.4;;нет;нет;нет;да
+Wynn Resorts, Limited;акции;WYNN_SPB;0.5;;нет;нет;нет;да
+Cimarex Energy Co.;акции;XEC_SPB;0.5;;нет;нет;нет;да
+Xcel Energy Inc.;акции;XEL_SPB;0.4;;нет;нет;нет;да
+Xilinx, Inc.;акции;XLNX_SPB;0.4;;нет;нет;нет;да
+Yum! Brands, Inc.;акции;YUM_SPB;0.4;;нет;нет;нет;да
+Zimmer Biomet Holdings, Inc.;акции;ZBH_SPB;0.4;;нет;нет;нет;да
+Zions Bancorporation;акции;ZION_SPB;0.4;;нет;нет;нет;да
+Entergy Corporation;акции;ETR_SPB;0.4;;нет;нет;нет;да
+McKesson Corporation;акции;MCK_SPB;0.4;;нет;нет;нет;да
+Hanesbrands Inc.;акции;HBI_SPB;0.4;;нет;нет;нет;да
+Expeditors International of Washington, Inc.;акции;EXPD_SPB;0.35;;нет;нет;нет;да
+Campbell Soup Company;акции;CPB_SPB;0.35;;нет;нет;нет;да
+The Interpublic Group of Companies, Inc.;акции;IPG_SPB;0.4;;нет;нет;нет;да
+Deutsche Bank Trust Company Americas;акции;IBN_SPB;0.4;;нет;нет;нет;да
+Mid-America Apartment Communities, Inc.;акции;MAA_SPB;0.4;;нет;нет;нет;да
+Cintas Corporation;акции;CTAS_SPB;0.4;;нет;нет;нет;да
+Verisk Analytics, Inc.;акции;VRSK_SPB;0.4;;нет;нет;нет;да
+Republic Services, Inc.;акции;RSG_SPB;0.4;;нет;нет;нет;да
+Gartner, Inc.;акции;IT_SPB;0.4;;нет;нет;нет;да
+Deutsche Bank Trust Company Americas;акции;MLCO_SPB;0.4;;нет;нет;нет;да
+The Macerich Company;акции;MAC_SPB;0.5;;нет;нет;нет;да
+Regency Centers Corporation;акции;REG_SPB;0.4;;нет;нет;нет;да
+Henry Schein, Inc.;акции;HSIC_SPB;0.4;;нет;нет;нет;да
+Albemarle Corporation;акции;ALB_SPB;0.4;;нет;нет;нет;да
+Xylem Inc.;акции;XYL_SPB;0.4;;нет;нет;нет;да
+Urban Outfitters, Inc.;акции;URBN_SPB;0.4;;нет;нет;нет;да
+Under Armour, Inc.;акции;UAA_SPB;0.4;;нет;нет;нет;да
+Affiliated Managers Group, Inc.;акции;AMG_SPB;0.45;;нет;нет;нет;да
+Murphy Oil Corporation;акции;MUR_SPB;0.5;;нет;нет;нет;да
+Avery Dennison Corporation;акции;AVY_SPB;0.4;;нет;нет;нет;да
+Synopsys, Inc.;акции;SNPS_SPB;0.4;;нет;нет;нет;да
+The Cooper Companies, Inc.;акции;COO_SPB;0.4;;нет;нет;нет;да
+DENTSPLY SIRONA Inc.;акции;XRAY_SPB;0.4;;нет;нет;нет;да
+Garmin Ltd.;акции;GRMN_SPB;0.4;;нет;нет;нет;да
+ВТБ Б1-34;облигации;RU000A102PB6;0.4;;да;нет;да;нет
+Allogene Therapeutics, Inc.;акции;ALLO_SPB;0.5;;нет;нет;нет;да
+ВТБСУБТ1-1;облигации;RU000A102QJ7;0.3;;нет;нет;да;нет
+ВТБСУБТ1-2;облигации;RU000A102QL3;0.3;;нет;нет;да;нет
+ОФЗ 26234;облигации;RU000A101QE0;0.12;;да;нет;да;нет
+ОФЗ 26235;облигации;RU000A1028E3;0.2;;да;нет;да;нет
+ОФЗ 26236;облигации;RU000A102BT8;0.2;;да;нет;да;нет
+ОФЗ 26233;облигации;RU000A101F94;0.2;;да;нет;да;нет
+Virgin Galactic Holdings;акции;SPCE_SPB;0.5;;нет;нет;нет;да
+ВТБ Б-1-95;Облигации;RU000A101VE0;0,4;;да;нет;да;нет
+ВТБ Б1-102;Облигации;RU000A101XY4;0,4;;да;нет;да;нет
+ВТБ Б1-109;Облигации;RU000A101Y67;0,4;;да;нет;да;нет
+ВТБ Б1-113;Облигации;RU000A0NH1Z0;0,4;;да;нет;да;нет
+ВТБ Б1-123;Облигации;RU000A0NH293;0,4;;да;нет;да;нет
+ВТБ Б1-129;Облигации;RU000A0NH2F0;0,4;;да;нет;да;нет
+ВТБ Б1-136;Облигации;RU000A102762;0,4;;да;нет;да;нет
+ВТБ Б1-137;Облигации;RU000A1027F2;0,4;;да;нет;да;нет
+ВТБ Б1-138;Облигации;RU000A1027G0;0,4;;да;нет;да;нет
+ВТБ Б1-141;Облигации;RU000A1027K2;0,4;;да;нет;да;нет
+ВТБ Б1-142;Облигации;RU000A1027L0;0,4;;да;нет;да;нет
+ВТБ Б1-148;Облигации;RU000A1027T3;0,4;;да;нет;да;нет
+ВТБ Б1-149;Облигации;RU000A1027U1;0,4;;да;нет;да;нет
+ВТБ Б1-152;Облигации;RU000A1027X5;0,4;;да;нет;да;нет
+ВТБ Б1-153;Облигации;RU000A102EH7;0,4;;да;нет;да;нет
+ВТБ Б1-154;Облигации;RU000A102EJ3;0,4;;да;нет;да;нет
+ВТБ Б1-157;Облигации;RU000A102EP0;0,4;;да;нет;да;нет
+ВТБ Б1-158;Облигации;RU000A102FA9;0,4;;да;нет;да;нет
+ВТБ Б1-159;Облигации;RU000A102ER6;0,4;;да;нет;да;нет
+ВТБ Б1-162;Облигации;RU000A102EV8;0,4;;да;нет;да;нет
+ВТБ Б1-165;Облигации;RU000A102EC8;0,4;;да;нет;да;нет
+ВТБ Б1-166;Облигации;RU000A102ED6;0,4;;да;нет;да;нет
+ВТБ Б1-167;Облигации;RU000A102EW6;0,4;;да;нет;да;нет
+ВТБ Б1-168;Облигации;RU000A102EX4;0,4;;да;нет;да;нет
+ВТБ Б1-173;Облигации;RU000A102HJ6;0,4;;да;нет;да;нет
+ВТБ Б1-174;Облигации;RU000A102HL2;0,4;;да;нет;да;нет
+ВТБ Б1-175;Облигации;RU000A102HM0;0,4;;да;нет;да;нет
+ВТБ Б1-177;Облигации;RU000A102HQ1;0,4;;да;нет;да;нет
+ВТБ Б1-178;Облигации;RU000A0NNE02;0,4;;да;нет;да;нет
+Allianz SE;акции;ALV@DE_SPB;0.35;;нет;нет;нет;да
+BASF SE;акции;BAS@DE_SPB;0.35;;нет;нет;нет;да
+Borussia Dortmund GmbH & Co. Kommanditgesellschaft auf Aktien;акции;BVB@DE_SPB;0.4;;нет;нет;нет;да
+Continental Aktiengesellschaft;акции;CON@DE_SPB;0.35;;нет;нет;нет;да
+Covestro AG;акции;1COV@DE_SPB;0.35;;нет;нет;нет;да
+Delivery Hero SE;акции;DHER@DE_SPB;0.35;;нет;нет;нет;да
+Deutsche Bank Aktiengesellschaft;акции;DBK@DE_SPB;0.35;;нет;нет;нет;да
+Deutsche Lufthansa Aktiengesellschaft;акции;LHA@DE_SPB;0.35;;нет;нет;нет;да
+Deutsche Post AG;акции;DPW@DE_SPB;0.35;;нет;нет;нет;да
+Deutsche Wohnen SE;акции;DWNI@DE_SPB;0.35;;нет;нет;нет;да
+E.ON SE;акции;EOAN@DE_SPB;0.35;;нет;нет;нет;да
+Evonik Industries AG;акции;EVK@DE_SPB;0.35;;нет;нет;нет;да
+Evotec SE;акции;EVT@DE_SPB;0.35;;нет;нет;нет;да
+Fresenius Medical Care AG & Co. KGaA;акции;FME@DE_SPB;0.35;;нет;нет;нет;да
+Fresenius SE & Co. KGaA;акции;FRE@DE_SPB;0.35;;нет;нет;нет;да
+HeidelbergCement AG;акции;HEI@DE_SPB;0.35;;нет;нет;нет;да
+HOCHTIEF Aktiengesellschaft;акции;HOT@DE_SPB;0.35;;нет;нет;нет;да
+HUGO BOSS AG;акции;BOSS@DE_SPB;0.35;;нет;нет;нет;да
+MTU Aero Engines AG;акции;MTX@DE_SPB;0.35;;нет;нет;нет;да
+Puma SE;акции;PUM@DE_SPB;0.35;;нет;нет;нет;да
+Rheinmetall Aktiengesellschaft;акции;RHM@DE_SPB;0.35;;нет;нет;нет;да
+RWE Aktiengesellschaft;акции;RWE@DE_SPB;0.35;;нет;нет;нет;да
+Siemens Aktiengesellschaft;акции;SIE@DE_SPB;0.35;;нет;нет;нет;да
+Siemens Healthineers AG;акции;SHL@DE_SPB;0.35;;нет;нет;нет;да
+VOLKSWAGEN AKTIENGESELLSCHAFT;акции;VOW3@DE_SPB;0.35;;нет;нет;нет;да
+Vonovia SE;акции;VNA@DE_SPB;0.35;;нет;нет;нет;да
+Toyota Motor Corporation;акции;TM_SPB;0.35;;нет;нет;нет;да
+Sony Corporation;акции;SNE_SPB;0.35;;нет;нет;нет;да
+Novartis AG;акции;NVS_SPB;0.35;;нет;нет;нет;да
+Palantir Technologies Inc. Class A;акции;PLTR_SPB;0.5;;нет;нет;нет;да
+Alteryx, Inc.;акции;AYX_SPB;0.5;;нет;нет;нет;да
+GAZ-22;облигации;XS0290580595;0.24;;нет;нет;да;нет
+GMKN-25;облигации;XS2134628069;0.26;;нет;нет;да;нет
+LUK-26;облигации;XS1514045886;0.28;;нет;нет;да;нет
+NLMK-26;облигации;XS1843435337;0.28;;нет;нет;да;нет
+RZD-23 EUR;облигации;XS1041815116;0.26;;нет;нет;да;нет
+The Sherwin-Williams Company;акции;SHW_SPB;0.35;;нет;нет;нет;да
+Chubb Limited;акции;CB_SPB;0.35;;нет;нет;нет;да
+Intercontinental Exchange, Inc.;акции;ICE_SPB;0.35;;нет;нет;нет;да
+The Southern Company;акции;SO_SPB;0.35;;нет;нет;нет;да
+Zoetis Inc.;акции;ZTS_SPB;0.35;;нет;нет;нет;да
+Norfolk Southern Corporation;акции;NSC_SPB;0.4;;нет;нет;нет;да
+Edwards Lifesciences Corporation;акции;EW_SPB;0.4;;нет;нет;нет;да
+Analog Devices, Inc.;акции;ADI_SPB;0.4;;нет;нет;нет;да
+General Dynamics Corporation;акции;GD_SPB;0.4;;нет;нет;нет;да
+Citibank, N.A.;акции;VALE_SPB;0.4;;нет;нет;нет;да
+Deere & Company;акции;DE_SPB;0.4;;нет;нет;нет;да
+Air Products & Chemicals, Inc.;акции;APD_SPB;0.4;;нет;нет;нет;да
+The Progressive Corporation;акции;PGR_SPB;0.4;;нет;нет;нет;да
+Kimberly-Clark Corporation;акции;KMB_SPB;0.4;;нет;нет;нет;да
+Illinois Tool Works Inc.;акции;ITW_SPB;0.4;;нет;нет;нет;да
+Marsh & McLennan Companies, Inc.;акции;MMC_SPB;0.4;;нет;нет;нет;да
+Moody's Corporation;акции;MCO_SPB;0.4;;нет;нет;нет;да
+Fix Price Group Ltd;акции;FIXP;0.5;;нет;нет;нет;нет
+Reliance Steel & Aluminum Co;акции;RS_SPB;0.35;;нет;нет;нет;да
+ВТБСУБТ1-3;облигации;RU000A102QM1;0.35;;да;нет;да;нет
+ВТБ Б1-179;облигации;RU000A0NNE10;0.4;;да;нет;да;нет
+ВТБ Б1-180;облигации;RU000A0NNE28;0.4;;да;нет;да;нет
+ВТБ Б1-181;облигации;RU000A0NNE36;0.4;;да;нет;да;нет
+ВТБ Б1-182;облигации;RU000A0NNE44;0.4;;да;нет;да;нет
+ВТБ Б1-203;облигации;RU000A102SZ9;0.26;;да;нет;да;нет
+ALRS-27;облигации;XS2010030919;0.28;;нет;нет;да;нет
+GAZ-26;облигации;XS1951084471;0.26;;нет;нет;да;нет
+STL-24;облигации;XS2046736919;0.24;;нет;нет;да;нет
+ЕАБР 1P-07;облигации;RU000A101PK9;0.4;;да;нет;да;нет
+ЕАБР 1Р-04;облигации;RU000A100JC1;0.35;;да;нет;да;нет
+ЕАБР 1Р-05;облигации;RU000A101574;0.35;;да;нет;да;нет
+ЕАБР11;облигации;RU000A0JS934;0.35;;да;нет;да;нет
+РСХБ Б03RP;облигации;RU000A101WQ2;0.26;;да;нет;да;нет
+ВТБ Б1-169;облигации;RU000A102EY2;0.4;;да;нет;да;нет
+ВТБ Б1-183;облигации;RU000A0NNE51;0.4;;да;нет;да;нет
+ВТБ Б1-184;облигации;RU000A0NNE69;0.4;;да;нет;да;нет
+ВТБ Б1-185;облигации;RU000A0NNE77;0.4;;да;нет;да;нет
+ВТБ Б1-204;облигации;RU000A102XD6;0.26;;да;нет;да;нет
+ETLN-гдр;акции;ETLN;0.6;1;нет;да;нет;нет
+Совкомфлот;акции;FLOT;0.6;0.6;да;да;нет;нет
+Boston Scientific Corporation;акции;BSX_SPB;0.35;;нет;нет;нет;да
+ВТБ Б1-188;облигации;RU000A0NNEA2;0.4;;да;нет;да;нет
+ВТБ Б1-189;облигации;RU000A0NNEB0;0.4;;да;нет;да;нет
+ВТБ Б1-205;облигации;RU000A1032H8;0.26;;да;нет;да;нет
+ВТБ Б1-170;облигации;RU000A102EZ9;0.4;;да;нет;да;нет
+ВТБ Б1-171;облигации;RU000A102F02;0.4;;да;нет;да;нет

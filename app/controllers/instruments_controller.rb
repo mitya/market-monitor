@@ -18,6 +18,8 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
 
+    # @instruments = @instruments.vtb_spb_long
+
     if params[:low] == '1'
       @instruments = @instruments.where('aggregates.lowest_day_date >= ?', params[:low_since]) if params[:low_since].present?
       @instruments = @instruments.where('aggregates.lowest_day_gain >= ?', params[:low_gain].to_f / 100) if params[:low_gain ].present?

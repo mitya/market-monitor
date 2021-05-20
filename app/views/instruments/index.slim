@@ -16,6 +16,7 @@
 - volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
 - show_low = params[:low] == '1'
 - show_last_insider_buys = params[:last_insider_buys] == '1'
+- vtb_marginal_info = false
 
 main.container-fluid.mb-4
   form#list-config(action=instruments_path class='my-2')
@@ -77,6 +78,9 @@ main.container-fluid.mb-4
           th.money-cell(data-sort="portfolio.cost_diff") Diff
         th Sector
         th.money-cell.border-end.pe-2(data-sort="stats.marketcap") Cap (M)
+        - if vtb_marginal_info
+          th.money-cell Ln
+          th.money-cell Sh
         - if params[:fundamentals]
           th.money-cell(data-sort="stats.pe desc") P/E
           th.money-cell(data-sort="stats.beta desc") ß
@@ -137,9 +141,10 @@ main.container-fluid.mb-4
 
     tbody
       - instruments = @instruments
-      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_in_usd'
-      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
-      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_diff'
+      - instruments = @instruments.sort_by { |inst| inst.info&.vtb_long_risk.to_f } if vtb_marginal_info
+      - instruments = @instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_in_usd'
+      - instruments = @instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
+      - instruments = @instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_diff'
       - instruments.each do |inst|
         - price_target = inst.price_target
         - portfolio_item = inst.portfolio_item
@@ -171,6 +176,9 @@ main.container-fluid.mb-4
           td= sector_badge inst
 
           td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+          - if vtb_marginal_info
+            td.money-cell= number_with_precision inst.info&.vtb_long_risk, precision: 2
+            td.money-cell= number_with_precision inst.info&.vtb_short_risk, precision: 2
           - if params[:fundamentals]
             td.money-cell                = number_with_precision info&.pe, precision: 0
             td.money-cell                = number_with_precision info&.beta, precision: 1

@@ -35,6 +35,10 @@ class Instrument < ApplicationRecord
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
 
+  scope :vtb_spb_long, -> { where "stats.extra->>'vtb_list_2' = 'true'" }
+  scope :vtb_moex_short, -> { where "stats.extra->>'vtb_can_short' = 'true'" }
+  scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
+
   DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d6 d7 w1 w2 m1 week month].map { |period| "#{period}_ago" }
 
   DateSelectors.each do |selector|
@@ -101,6 +105,7 @@ class Instrument < ApplicationRecord
   def exchange_name = rub? ? 'MOEX' : exchange
   def moex? = rub?
   def moex_2nd? = MoexSecondary.include?(ticker)
+  def marginal? = info&.vtb_long_risk != nil
 
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)

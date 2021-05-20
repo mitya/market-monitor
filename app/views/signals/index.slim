@@ -72,7 +72,7 @@ main.container-fluid
             = interval_badge signal.interval
           td= instrument_logo instrument
           td= red_green instrument.ticker, signal.direction == 'up'
-          td= fa_icon 'star-of-life', small: true if InstrumentSet.known?(signal.ticker)
+          td= fa_icon 'star-of-life', xsmall: true if InstrumentSet.known?(signal.ticker)
           td= type_icon instrument
           td.instrument-name= instrument.name
           td= sector_badge instrument

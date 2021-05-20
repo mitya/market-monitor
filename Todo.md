@@ -107,8 +107,8 @@
 + mark Kogan tickers with dates & prices
 + indexes & commodities (NUGT SLV)
 + add premium tickers to Tinkoff portfolio
++ parse VTB marginal list
 
-- parse VTB marginal list
 - show signal results in bars
 - sort signals by current result
 
@@ -134,7 +134,6 @@
 - maintain average volume for last N months
 - ticker selection & commands
 - track the first date for tickers (eg ALTO 2021-02-01)
-
 
 # Later
 – comparision to a random date
