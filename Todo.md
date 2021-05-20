@@ -106,8 +106,11 @@
 + external signals (source, direction, date, price, score)
 + mark Kogan tickers with dates & prices
 + indexes & commodities (NUGT SLV)
++ add premium tickers to Tinkoff portfolio
 
 - parse VTB marginal list
+- show signal results in bars
+- sort signals by current result
 
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
 - don't check Europe & Moex2 in the evening

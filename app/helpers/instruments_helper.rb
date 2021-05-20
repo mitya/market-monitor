@@ -153,6 +153,10 @@ module InstrumentsHelper
     Stats.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
   end
 
+  def type_options
+    [%w[Stock Stock], %w[Fund Fund]]
+  end
+
   def sector_code_options
     SectorCodeOptions
   end
@@ -176,6 +180,9 @@ module InstrumentsHelper
       ['Days Up',  'aggregates.days_up desc'],
       ['Low Date', 'aggregates.lowest_day_date desc'],
       ['Low Gain', 'aggregates.lowest_day_gain desc'],
+      ['Portfolio Cost',       'portfolio.cost_in_usd'],
+      ['Portfolio Cost Ideal', 'portfolio.ideal_cost_in_usd'],
+      ['Portfolio Cost Diff',  'portfolio.cost_diff'],
     ]
   end
 
@@ -283,6 +290,11 @@ module InstrumentsHelper
 
   def red_green_class(is_green)
     is_green ? 'is-green' : 'is-red'
+  end
+
+  def type_icon(instrument)
+    return fa_icon 'layer-group', small: true, title: 'Fund' if instrument.fund?
+    return fa_icon 'crown', small: true, title: 'Tinkoff Premium' if instrument.premium?
   end
 end
 

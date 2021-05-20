@@ -73,7 +73,7 @@ main.container-fluid
           td= instrument_logo instrument
           td= red_green instrument.ticker, signal.direction == 'up'
           td= fa_icon 'star-of-life', small: true if InstrumentSet.known?(signal.ticker)
-          td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
+          td= type_icon instrument
           td.instrument-name= instrument.name
           td= sector_badge instrument
           td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0

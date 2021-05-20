@@ -1,4 +1,5 @@
 - params[:relative_past_prices] ||= '1'
+- params[:recent_prices] ||= '1'
 - params[:low_since] ||= 2.weeks.ago.to_date.to_s
 - params[:low_gain] ||= 10
 
@@ -9,7 +10,7 @@
 - show_volatility = params['volatility'] == '1' && !chart_volatility
 - is_portfolio = params[:set] == 'portfolio'
 - show_historical_prices = !show_volume && !show_volatility && !chart_volatility && !is_portfolio
-- show_recent_prices = !is_portfolio
+- show_recent_prices = params[:recent_prices] == '1'
 - show_special_dates = params[:special_dates] == '1'
 - volatility_format = :percentage
 - volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
@@ -23,6 +24,7 @@ main.container-fluid.mb-4
         = render 'filter_by_set'
         = render 'filter_by_currency'
         = render 'filter_by_availability'
+        = render 'filter_by_type'
         = render 'filter_by_tickers'
         = render 'filter_by_sector'
         = render 'filter_by_sector_code'
@@ -40,6 +42,7 @@ main.container-fluid.mb-4
             = bs_check_box :price_targets, 'Price targets', inline: true
             = bs_check_box :relative_price_targets, 'relative', inline: true
             = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
+            = bs_check_box :recent_prices, 'Recent prices', default: true
             div
               = bs_check_box :low, 'Recent low', inline: true
               => label_tag :low_since, "since: "
@@ -68,10 +71,10 @@ main.container-fluid.mb-4
           th.money-cell IIS
           th.money-cell VTB
           th.money-cell Total
-          th.money-cell Cost
+          th.money-cell(data-sort="portfolio.cost_in_usd") Cost
           th.money-cell Ideal
-          th.money-cell Ideal Cost
-          th.money-cell Diff
+          th.money-cell(data-sort="portfolio.ideal_cost_in_usd") Ideal Cost
+          th.money-cell(data-sort="portfolio.cost_diff") Diff
         th Sector
         th.money-cell.border-end.pe-2(data-sort="stats.marketcap") Cap (M)
         - if params[:fundamentals]
@@ -134,7 +137,9 @@ main.container-fluid.mb-4
 
     tbody
       - instruments = @instruments
-      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio
+      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_in_usd'
+      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
+      - instruments = @instruments.sort_by  { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_diff'
       - instruments.each do |inst|
         - price_target = inst.price_target
         - portfolio_item = inst.portfolio_item
@@ -145,7 +150,7 @@ main.container-fluid.mb-4
           td= country_flag inst
           td= link_to instrument_logo(inst), trading_view_url(inst), target: '_blank', tabindex: '-1' if inst.has_logo?
           td= inst.ticker
-          td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if inst.premium?
+          td= type_icon inst
           td= truncate inst.name
 
           - if is_portfolio

@@ -95,6 +95,8 @@ class Instrument < ApplicationRecord
   def tinkoff? = flags.include?('tinkoff')
   def iex? = info.present?
   def premium? = flags.include?('premium')
+  def fund? = type == 'Fund'
+  def stock? = type == 'Stock'
   def nasdaq? = exchange_name == 'NASDAQ'
   def exchange_name = rub? ? 'MOEX' : exchange
   def moex? = rub?

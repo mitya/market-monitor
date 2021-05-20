@@ -43,7 +43,7 @@ main.container-fluid
         tr
           td= country_flag inst
           td= instrument_logo inst
-          td= fa_icon :crown, small: true, title: 'Tinkoff Premium' if instrument.premium?
+          td= type_icon instrument
           td= inst.ticker
           td.instrument-name= instrument.name
           td= signal_source signal.source

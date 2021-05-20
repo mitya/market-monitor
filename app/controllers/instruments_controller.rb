@@ -13,6 +13,7 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.where(info: { sector: params[:sector] })           if params[:sector].present?
     @instruments = @instruments.where(info: { sector_code: params[:sector_code] }) if params[:sector_code].present?
     @instruments = @instruments.where(currency: params[:currency])                 if params[:currency].present?
+    @instruments = @instruments.where(type: params[:type])                         if params[:type].present?
     @instruments = @instruments.with_flag(params[:availability])                   if params[:availability].present?
     @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
@@ -22,7 +23,8 @@ class InstrumentsController < ApplicationController
       @instruments = @instruments.where('aggregates.lowest_day_gain >= ?', params[:low_gain].to_f / 100) if params[:low_gain ].present?
     end
 
-    @instruments = @instruments.order("#{params[:order].presence || 'instruments.ticker'} nulls last")
+    order = params[:order].blank? || params[:order].include?('portfolio') ? 'instruments.ticker' : params[:order]
+    @instruments = @instruments.order("#{order} nulls last")
     @instruments = @instruments.page(params[:page]).per(params[:per_page])
 
     @portfolio = PortfolioItem.all

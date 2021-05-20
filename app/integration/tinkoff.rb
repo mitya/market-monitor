@@ -219,12 +219,21 @@ class Tinkoff
       item = PortfolioItem.find_or_create_by(ticker: ticker)
       item.update! "#{account}_lots" => position['balance']
     end
-    PortfolioItem.where.not(ticker: data['positions'].map { |p| p['ticker'] }).update_all("#{account}_lots" => nil)
+    PortfolioItem.where.not(ticker: data['positions'].map { |p| p['ticker'] }).find_each do |item|
+      puts "Missing #{item.instrument} (which is in portfolio)".red unless item.instrument
+      next if item.instrument&.premium?
+      item.update! "#{account}_lots" => nil
+    end
   end
 
   def sync_portfolios
     sync_portfolio call_js_api("portfolio"), 'tinkoff'
     sync_portfolio call_js_api("portfolio-iis"), 'tinkoff_iis'
+    cleanup_portfolio
+  end
+
+  def cleanup_portfolio
+    PortfolioItem.find_each.select { |pi| pi.total_lots == 0 }.each &:destroy
   end
 
   delegate :logger, to: :Rails

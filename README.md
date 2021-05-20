@@ -50,10 +50,9 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='XLU XLK PRNT XOP XME XBI SPY DIA XLV XLI XLF XLE'
+export tickers='GOTU'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-03-01 special=1 ok=1    # or rake iex:days:period period=ytd
-rake instruments:remove ticker=
+rake iex:days:missing since=2021-03-01 special=1 ok=1
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1
@@ -63,7 +62,8 @@ rake tinkoff:logos:download
 
 ## All
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
+
+## Optional
+rake iex:days:period period=ytd
 rake iex:price_targets:missing
-
-
-CLF STNG UNFI
+rake instruments:remove ticker=GWPH
