@@ -80,3 +80,9 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 }
 
 .opacity-05 { opacity: 0.5; }
+
+.percentage-bar { display: inline-block; width: 4px; margin-right: 2px; }
+.percentage-bars { height: 20px; }
+.percentage-bar { background-color: gray; }
+.is-green .percentage-bar { background-color: green; }
+.is-red .percentage-bar { background-color: red; }

@@ -45,7 +45,7 @@ class InstrumentSet
     end
 
     def main = new(:main)
-    def portfolio = new(:portfolio)
+    def portfolio = @portfolio ||= new(:portfolio)
     def recommendations = new(:recommendations)
     def known_symbols = @known_symbols ||= [main, portfolio, recommendations].flat_map(&:symbols).uniq
     def known?(symbol) = known_symbols.include?(symbol)

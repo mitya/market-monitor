@@ -186,6 +186,13 @@ module InstrumentsHelper
     ]
   end
 
+  def signal_order_options
+    [
+      ['Ticker', 'ticker'],
+      ['Delta', 'delta'],
+    ]
+  end
+
   Sec4TransactionCodesDescriptions = {
     'P' => "Open market or private purchase of securities",
     'S' => "Open market or private sale of securities",
@@ -296,6 +303,11 @@ module InstrumentsHelper
     return fa_icon 'layer-group', small: true, title: 'Fund' if instrument.fund?
     return fa_icon 'coins', small: true, title: 'Tinkoff Premium', style: 'color: #ccc'  if instrument.marginal?
     return fa_icon 'crown', xsmall: true, title: 'Tinkoff Premium' if instrument.premium?
+  end
+
+  def known_icon(instrument)
+    return fa_icon 'briefcase', xsmall: true if InstrumentSet.portfolio.symbols.include?(instrument.ticker)
+    return fa_icon 'glasses', xsmall: true if InstrumentSet.known?(instrument.ticker)
   end
 end
 

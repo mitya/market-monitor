@@ -108,16 +108,17 @@
 + indexes & commodities (NUGT SLV)
 + add premium tickers to Tinkoff portfolio
 + parse VTB marginal list
++ show signal results in bars
++ sort signals by current result
 
-- show signal results in bars
-- sort signals by current result
-
+- search for spike-bars
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
+
 - don't check Europe & Moex2 in the evening
 - signal results on close/last prices
+- intraday accelerations
 - intraday search for more than 1% in 10-min movements
 - intraday search for above average volume in 5 min
-- intraday accelerations
 - intraday alarms
 - custom categories (coal / gas / ...)
 - search for pull backs

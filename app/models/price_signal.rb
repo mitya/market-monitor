@@ -12,14 +12,17 @@ class PriceSignal < ApplicationRecord
   def can_enter?(price = instrument.last) = price && enter && (up?? price >= enter : price <= enter)
   alias in_money? can_enter?
 
-  def profit_ratio(current = instrument.last)
+  def profit_ratio(current = instrument.last, use_stop: true)
     return if !current
-    return -stop_size if stopped_out?
+    return -stop_size if stopped_out? && use_stop
     ratio = (current - enter) / enter
     in_money? ? ratio.abs : -ratio.abs
   end
 
   def candle = instrument.day_candles!.find_date(date)
+
+  def current = instrument.last
+  def enter_to_current_ratio = (current && enter ? current / enter - 1.0 : 0)
 
   class << self
     def analyze_all(date: Current.yesterday, interval: 'day')
@@ -83,6 +86,8 @@ class PriceSignal < ApplicationRecord
           stop_size: curr.max_min_rel.abs.to_f.round(4),
           accuracy: ratio.to_f.round(4)
       end
+
+      # spike
     end
   end
 end

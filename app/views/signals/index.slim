@@ -18,6 +18,7 @@ main.container-fluid
     = render 'filter_by_direction'
     = render 'filter_by_interval'
     = render 'filter_by_date'
+    = bs_select :order, 'Sort By:', signal_order_options, style: 'width: auto'
     .row
       .col-sm-2
       .col-sm-9
@@ -36,7 +37,8 @@ main.container-fluid
       tr
         th
         th
-        th Ticker
+        th(data-sort="ticker") Ticker
+        th.money-cell Enter
         th
         th
         th Company
@@ -50,9 +52,9 @@ main.container-fluid
           th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
           th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
         th Type
-        th.money-cell Enter
         th.money-cell Current
         th.money-cell ﹪
+        th(data-sort="delta") ∆
         th.money-cell Stop
         th.money-cell ﹪
         th.money-cell PF
@@ -61,7 +63,9 @@ main.container-fluid
         th.text-end Date
         th.text-end Base
     tbody
-      - @signals.each do |signal|
+      - signals = @signals
+      - signals = @signals.sort_by { |s| s.profit_ratio(use_stop: false).to_d }.reverse if params[:order] == 'delta'
+      - signals.each do |signal|
         - inst = instrument = signal.instrument
         - price_target = instrument.price_target
         - info = instrument.info
@@ -72,7 +76,8 @@ main.container-fluid
             = interval_badge signal.interval
           td= instrument_logo instrument
           td= red_green instrument.ticker, signal.direction == 'up'
-          td= fa_icon 'star-of-life', xsmall: true if InstrumentSet.known?(signal.ticker)
+          td.money-cell= red_green "#{signal.up?? 'buy' : 'sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
+          td= known_icon instrument
           td= type_icon instrument
           td.instrument-name= instrument.name
           td= sector_badge instrument
@@ -87,9 +92,9 @@ main.container-fluid
           td.signal-name
             = signal.kind.underscore.humanize.downcase
             = '?' if !signal.exact?
-          td.money-cell= red_green "#{signal.up?? 'buy' : 'sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
           td.money-cell.enter-price-val class=(red_green_class(signal.up?) if can_enter) = format_price instrument.last, unit: instrument.currency
           td.money-cell class=(red_green_class(signal.up?) if can_enter) = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1
+          td[class=(red_green_class(signal.up?) if can_enter)]= percentage_bar price_ratio(instrument.last, signal.enter)
           td.money-cell.stop-loss-val= format_price signal.stop, unit: instrument.currency
           td.money-cell= ratio_percentage signal.stop_size, precision: 1
           td.money-cell= ratio_percentage signal.profit_ratio, precision: 1

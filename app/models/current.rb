@@ -2,7 +2,7 @@ class Current < ActiveSupport::CurrentAttributes
   attribute :day_candles_cache, :prices_cache
 
   def date
-    date = Time.current.hour < 5 ? Date.yesterday : Date.current
+    date = Time.current.hour < 4 ? Date.yesterday : Date.current
     date.on_weekend?? date.prev_weekday : date
   end
   alias today date

@@ -53,13 +53,13 @@ module ApplicationHelper
     end
   end
 
-  def bs_select(name, label, options, mb: 1, blank: true, select_class: nil)
+  def bs_select(name, label, options, mb: 1, blank: true, select_class: nil, style: nil)
     tag.div class: "row mb-#{mb}" do
       tag.div(class: 'col-sm-2') do
         label_tag name, label, class: 'col-form-label'
       end +
       tag.div(class: 'col-sm-10') do
-        select_tag name, options_for_select(options, params[name]), class: "form-select #{select_class}", include_blank: blank
+        select_tag name, options_for_select(options, params[name]), class: "form-select #{select_class}", include_blank: blank, style: style
       end
     end
   end
@@ -117,5 +117,16 @@ module ApplicationHelper
 
   def interval_badge(interval)
     tag.span IntervalTitles[interval], class: 'badge bg-secondary'
+  end
+
+  def percentage_bar(value)
+    value = (value.to_f.abs * 100).round(3)
+    full_percents = value.to_i
+    last_percent = (value % 1 * 100).to_i
+    tag.div class: 'percentage-bars' do
+      (full_percents).times.map do |n|
+        tag.span class: "percentage-bar", style: "height: 100%"
+      end.join.html_safe + tag.span(class: "percentage-bar", style: "height: #{last_percent}%")
+    end
   end
 end
