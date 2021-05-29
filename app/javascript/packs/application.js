@@ -56,10 +56,12 @@ document.addEventListener("turbolinks:load", () => {
 })
 
 let chart = null
+let volumeChart = null
 
 function renderChart(ticker) {
   fetch(`/instruments/${ticker}/candles`, { headers: { 'Content-Type': 'application/json' } }).then(response => response.json()).then(response => {
     document.querySelector('#chart-modal .tv-link').href = response.trading_view_url
+    document.querySelector('#chart-modal .modal-title').innerText = response.name
 
     if (chart) chart.destroy()
     chart = new ApexCharts(document.querySelector("#the-chart"), {
@@ -71,16 +73,118 @@ function renderChart(ticker) {
         height: 400,
         toolbar: { autoSelected: 'pan' },
         animations: { enabled: false },
+        id: 'candles',
+        group: 'main',
       },
-      title: { text: response.name, align: 'left' },
+      title: { text: response.ticker, align: 'left' },
       xaxis: {
         type: 'datetime',
         labels: {
           format: 'MMM dd',
         }
+        // type: 'category',
+        // labels: {
+        //   formatter: function(ms) {
+        //     let date = new Date(ms)
+        //     return `${date.getMonth()}/${date.getDate()} this year`
+        //   }
+        // }
       },
-      yaxis: { tooltip: { enabled: true } }
+      yaxis: {
+        tooltip: { enabled: true },
+        minWidth: 40
+      },
+      // annotations: {
+      //   xaxis: [
+      //     {
+      //       x: 'Oct 06 14:00',
+      //       borderColor: '#00E396',
+      //       label: {
+      //         borderColor: '#00E396',
+      //         style: {
+      //           fontSize: '12px',
+      //           color: '#fff',
+      //           background: '#00E396'
+      //         },
+      //         orientation: 'horizontal',
+      //         offsetY: 7,
+      //         text: 'Annotation Test'
+      //       }
+      //     }
+      //   ]
+      // },
     })
     chart.render()
+
+    if (volumeChart) volumeChart.destroy()
+    volumeChart = new ApexCharts(document.querySelector("#volume-chart"), {
+      series: [{
+        name: 'volume',
+        data: response.candles.map( ({ date, volume }) => [ Date.parse(date), volume ] )
+      }],
+      chart: {
+        height: 160,
+        type: 'bar',
+        toolbar: { autoSelected: 'pan' },
+        animations: { enabled: false },
+        // group: 'main',
+        // id: 'volume',
+        // brush: {
+        //   enabled: true,
+        //   target: 'candles'
+        // },
+        // selection: {
+        //   enabled: true,
+        //   xaxis: {
+        //     min: new Date('20 Jan 2017').getTime(),
+        //     max: new Date('10 Dec 2017').getTime()
+        //   },
+        //   fill: {
+        //     color: '#ccc',
+        //     opacity: 0.4
+        //   },
+        //   stroke: {
+        //     color: '#0D47A1',
+        //   }
+        // },
+      },
+      dataLabels: {
+        enabled: false
+      },
+
+      // plotOptions: {
+      //   bar: {
+      //     columnWidth: '80%',
+      //     colors: {
+      //       ranges: [{
+      //         from: -1000,
+      //         to: 0,
+      //         color: '#F15B46'
+      //       }, {
+      //         from: 1,
+      //         to: 10000,
+      //         color: '#FEB019'
+      //       }],
+      //
+      //     },
+      //   }
+      // },
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          format: 'MMM dd',
+        }        
+        // axisBorder: { offsetX: 20 }
+      },
+      yaxis: {
+        labels: {
+          formatter: vol => vol.toLocaleString(),
+          minWidth: 40,
+          // tooltip: { enabled: false },
+        }
+      }
+    })
+
+    volumeChart.render()
   })
 }
