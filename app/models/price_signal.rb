@@ -24,6 +24,12 @@ class PriceSignal < ApplicationRecord
   def current = instrument.last
   def enter_to_current_ratio = (current && enter ? current / enter - 1.0 : 0)
 
+  def tail_range = data&.dig('tail_range')
+  def outside_range = data&.dig('outside_range')
+  def vector = data&.dig('vector')
+
+  def outside_bar? = kind == 'outside-bar'
+
   class << self
     def analyze_all(date: Current.yesterday, interval: 'day')
       instruments = Instrument.all.abc
@@ -37,9 +43,12 @@ class PriceSignal < ApplicationRecord
       instrument = Instrument[instrument]
       date = date.to_date
 
-      today = instrument.candles.day.find_date(date)
-      yesterday = today&.previous
+      curr = today = instrument.candles.day.find_date(date)
+      prev = yesterday = today&.previous
       return unless today && yesterday
+
+      pt = curr.open / 100.0
+      signal_attrs = { instrument: curr.instrument, date: curr.date, base_date: prev.date, interval: curr.interval }
 
       if match = (today.absorb?(yesterday, 0.0) && today.range_spread_percent > 0.01)
         puts "Detect outside-bar on #{date} for #{instrument}"
@@ -55,6 +64,34 @@ class PriceSignal < ApplicationRecord
         create! instrument: instrument, date: today.date, kind: 'pin-bar',
           direction: pin_vector, enter: pin_vector == 'up' ? today.high : today.low, stop: pin_vector == 'up' ? today.low : today.high,
           stop_size: today.max_min_rel.abs.to_f.round(4)
+      end
+
+      outside_range = prev.body_low - curr.low
+      if curr.bottom_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
+        puts "Detect spike-down on #{curr.date} for #{curr.instrument}"
+        bullish = curr.close > prev.close || curr.up?
+        create! signal_attrs.merge kind: 'spike-down',
+          direction: bullish ? 'up' : 'down',
+          enter: bullish ? curr.range_high : curr.range_low,
+          data: {
+            tail_range: curr.bottom_tail_range.to_f.round(2),
+            outside_range: (outside_range / pt / 100.0).to_f.round(2),
+            vector: 'down'
+          }
+      end
+
+      outside_range = curr.high - prev.body_high
+      if curr.top_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
+        puts "Detect spike-up on #{curr.date} for #{curr.instrument}"
+        bullish = curr.close > prev.close || curr.up?
+        create! signal_attrs.merge kind: 'spike-up',
+          direction: bullish ? 'up' : 'down',
+          enter: bullish ? curr.range_high : curr.range_low,
+          data: {
+            tail_range: curr.top_tail_range.to_f.round(2),
+            outside_range: (outside_range / pt / 100.0).to_f.round(2),
+            vector: 'up'
+          }
       end
     end
 
@@ -86,8 +123,6 @@ class PriceSignal < ApplicationRecord
           stop_size: curr.max_min_rel.abs.to_f.round(4),
           accuracy: ratio.to_f.round(4)
       end
-
-      # spike
     end
   end
 end
@@ -97,3 +132,5 @@ __END__
 
 Candle::H1.update_all analyzed: nil
 Candle::M5.update_all analyzed: nil
+rake analyze
+rake analyze date=2021-05-27

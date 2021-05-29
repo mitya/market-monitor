@@ -60,11 +60,14 @@ main.container-fluid
         th.money-cell PF
         th.money-cell Accuracy ﹪
         th.money-cell S/B
+        th.money-cell T
+        th.money-cell M
+        th.money-cell V
         th.text-end Date
-        th.text-end Base
     tbody
       - signals = @signals
       - signals = @signals.sort_by { |s| s.profit_ratio(use_stop: false).to_d }.reverse if params[:order] == 'delta'
+      - signals = @signals.sort_by { |s| s.profit_ratio(use_stop: false).to_d }.reverse if params[:order] == 'outside_range'
       - signals.each do |signal|
         - inst = instrument = signal.instrument
         - price_target = instrument.price_target
@@ -91,7 +94,7 @@ main.container-fluid
             td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.signal-name
             = signal.kind.underscore.humanize.downcase
-            = '?' if !signal.exact?
+            = '?' if signal.outside_bar? && !signal.exact?
           td.money-cell.enter-price-val class=(red_green_class(signal.up?) if can_enter) = format_price instrument.last, unit: instrument.currency
           td.money-cell class=(red_green_class(signal.up?) if can_enter) = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1
           td[class=(red_green_class(signal.up?) if can_enter)]= percentage_bar price_ratio(instrument.last, signal.enter)
@@ -100,7 +103,9 @@ main.container-fluid
           td.money-cell= ratio_percentage signal.profit_ratio, precision: 1
           td.money-cell= ratio_percentage signal.accuracy
           td.money-cell(title=candle_info(signal.candle))= number_with_precision signal.candle&.shadow_to_body_ratio, precision: 1
-          td.text-end(title=signal.date)= link_to date_as_wday(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'
-          td.text-end= date_as_wday signal.base_date
+          td.money-cell= ratio_percentage signal.tail_range
+          td.money-cell= ratio_percentage signal.outside_range
+          td.money-cell= signal.vector
+          td.text-end(title="#{signal.date} to #{signal.base_date}")= link_to date_as_wday(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'
 
   = paginate @signals, window: 20

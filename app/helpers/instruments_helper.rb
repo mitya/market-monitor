@@ -176,7 +176,7 @@ module InstrumentsHelper
       ['P/E',      'stats.pe desc'],
       ['ß',        'stats.beta desc'],
       ['Yield',    'stats.dividend_yield desc'],
-      ['Capitalization',    'stats.marketcap'],
+      ['Capitalization',    'stats.marketcap desc'],
       ['Days Up',  'aggregates.days_up desc'],
       ['Low Date', 'aggregates.lowest_day_date desc'],
       ['Low Gain', 'aggregates.lowest_day_gain desc'],

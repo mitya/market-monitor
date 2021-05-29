@@ -15,6 +15,7 @@ class Candle < ApplicationRecord
 
   def final? = !ongoing?
 
+  def range = low..high
   def range_high = close > open ? close : open
   def range_low  = close < open ? close : open
   def top_shadow_spread = high - range_high
@@ -23,6 +24,8 @@ class Candle < ApplicationRecord
   def spread = high - low
   def min = up?? low : high
   def max = up?? high : low
+  alias body_low range_low
+  alias body_high range_high
 
   def range_spread_percent = range_spread.abs / close
 
@@ -34,6 +37,9 @@ class Candle < ApplicationRecord
   def volatility_above = (high - range_high) / high
   def volatility_below = (range_low - low) / range_low
   def volatility_body  = (range_high - range_low) / range_low
+  alias bottom_tail_range volatility_below
+  alias top_tail_range volatility_above
+
 
   def up? = close >= open
   def down? = close < open
@@ -72,6 +78,8 @@ class Candle < ApplicationRecord
     return :almost if high >= other.high - tolerance && low <= other.low + tolerance
   end
 
+  def overlaps?(other) = range.overlaps?(other.range)
+
   def pin_bar?(min_pin_height: 0.03)
     return if shadow_to_body_ratio <= 2.5
     yesterday = previous
@@ -88,13 +96,8 @@ class Candle < ApplicationRecord
     return ['down',  high / prev.high - 1] if high > prev.high
   end
 
-  def interval_duration
-    self.class.interval_duration(interval)
-  end
-
-  def abs_to_percent(value, base)
-    close * percent
-  end
+  def interval_duration = self.class.interval_duration(interval)
+  def abs_to_percent(value, base) = close * percent
 
 
   class << self

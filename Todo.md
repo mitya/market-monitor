@@ -111,8 +111,11 @@
 + show signal results in bars
 + sort signals by current result
 
-- search for spike-bars
++ search for spike-bars
+- fix pin bars
+- search for retests
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
+- current row selection
 
 - don't check Europe & Moex2 in the evening
 - signal results on close/last prices

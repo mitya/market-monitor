@@ -50,7 +50,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='GOTU'
+export tickers='MTX ZIP'
 rake tinkoff:premium:import
 rake iex:days:missing since=2021-03-01 special=1 ok=1
 
