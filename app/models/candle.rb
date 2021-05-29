@@ -20,6 +20,7 @@ class Candle < ApplicationRecord
   def range_low  = close < open ? close : open
   def top_shadow_spread = high - range_high
   def bottom_shadow_spread = range_low - low
+  def shadows_spread = top_shadow_spread + bottom_shadow_spread
   def range_spread = range_high - range_low
   def spread = high - low
   def min = up?? low : high
@@ -27,10 +28,14 @@ class Candle < ApplicationRecord
   alias body_low range_low
   alias body_high range_high
 
+  def ohlc_row = [open, high, low, close]
+
   def range_spread_percent = range_spread.abs / close
 
   def close_min_rel = (close - min) / close
   def max_min_rel = (max - min) / max
+
+  def range_s = "LH #{low}-#{high} OC #{open}-#{close}"
 
   def volatility_range = high - low
   def volatility = (high - low) / low
@@ -52,8 +57,8 @@ class Candle < ApplicationRecord
   #   prev_candles.each_slice(2).take_while { |curr, prev| curr && prev && curr >= prev }.count if candle
   # end
 
-  def body_to_shadow_ratio = range_spread / (top_shadow_spread + bottom_shadow_spread)
-  def shadow_to_body_ratio = (top_shadow_spread + bottom_shadow_spread) / range_spread
+  def body_to_shadow_ratio = range_spread / shadows_spread
+  def shadow_to_body_ratio = shadows_spread / range_spread
 
   def siblings = instrument.candles.where(interval: interval)
   def previous = siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
@@ -81,13 +86,15 @@ class Candle < ApplicationRecord
   def overlaps?(other) = range.overlaps?(other.range)
 
   def pin_bar?(min_pin_height: 0.03)
-    return if shadow_to_body_ratio <= 2.5
+    return if shadow_to_body_ratio <= 2
     yesterday = previous
     yesterday_aggregate = instrument.aggregates.find_by_date(yesterday.date)
     return if !yesterday_aggregate || !yesterday
 
-    return 'down' if yesterday_aggregate.days_up   > 2 && close < yesterday.close && high > yesterday.close && ((high - yesterday.close) / yesterday.close) > min_pin_height
-    return 'up'   if yesterday_aggregate.days_down > 2 && close > yesterday.close && low  < yesterday.close && ((yesterday.close - low ) / yesterday.close) > min_pin_height
+    # printf "%8s %10.2f %i %i\n", ticker, shadow_to_body_ratio, yesterday_aggregate.days_up, yesterday_aggregate.days_down
+
+    return 'down' if yesterday_aggregate.days_up   >= 2 && close < yesterday.close && high > yesterday.body_high && ((high - yesterday.close) / yesterday.close) > min_pin_height
+    return 'up'   if yesterday_aggregate.days_down >= 2 && close > yesterday.close && low  < yesterday.body_low && ((yesterday.close - low ) / yesterday.close) > min_pin_height
   end
 
   def tail_bar?(prev)

@@ -267,8 +267,8 @@ module InstrumentsHelper
     Sec4TransactionCodesNames[sec_code] || sec_code
   end
 
-  def instrument_logo(instrument)
-    image_tag "#{instrument.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if instrument.has_logo?
+  def instrument_logo(instrument, **options)
+    image_tag "#{instrument.logo_path.sub('public', '')}", size: '19x19', class: 'rounded', **options if instrument.has_logo?
   end
 
   def days_old_badge(date)

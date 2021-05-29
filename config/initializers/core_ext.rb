@@ -14,4 +14,8 @@ class Date
   def self.ms(milliseconds)
     Time.ms(milliseconds)&.to_date
   end
+
+  def ms
+    to_time.to_i * 1000
+  end
 end

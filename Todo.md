@@ -110,10 +110,14 @@
 + parse VTB marginal list
 + show signal results in bars
 + sort signals by current result
-
 + search for spike-bars
-- fix pin bars
++ in-app charts
+
+- volume on charts
+- link chart from all pages
+- fix pin bars & trend days count
 - search for retests
+
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
 - current row selection
 

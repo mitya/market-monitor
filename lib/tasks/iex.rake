@@ -134,6 +134,7 @@ namespace :iex do
     instruments.usd.iex.abc.each do |inst|
       InsiderTransaction.import_iex_data_from_remote inst
     end
+    rake 'iex:insider_transactions:cache'
   end
 
   envtask :'insider_transactions:cache' do

@@ -41,7 +41,8 @@ class Aggregate < ApplicationRecord
 
       if analyze
         analyzer = CandleAnalyzer.new(instrument, date)
-        aggregate.days_up = analyzer.green_days_count&.nonzero? || -analyzer.red_days_count.to_i
+        # aggregate.days_up = analyzer.green_days_count&.nonzero? || -analyzer.red_days_count.to_i
+        aggregate.days_up = analyzer.days_up_count&.nonzero? || -analyzer.days_down_count.to_i
 
         if lowest_day = analyzer.lowest_day_since(3.months.ago)
           aggregate.lowest_day_date = lowest_day.date
