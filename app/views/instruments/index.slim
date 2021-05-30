@@ -153,8 +153,7 @@ main.container-fluid.mb-4
         - inst.current_price_selector = :last_or_open
         tr data-ticker=inst.ticker
           td= country_flag inst
-          / td= link_to instrument_logo(inst), trading_view_url(inst), target: '_blank', tabindex: '-1', class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
-          td= instrument_logo inst, class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
+          td= instrument_logo_button inst
           td= inst.ticker
           td= type_icon inst
           td= truncate inst.name
@@ -248,4 +247,3 @@ main.container-fluid.mb-4
           td= growth_badge aggregate
 
   = paginate @instruments, window: 20
-  = render "common/chart_modal"

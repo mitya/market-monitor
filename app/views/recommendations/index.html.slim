@@ -37,7 +37,7 @@ main.container-fluid
         - instrument = rec.instrument
         - price_target = instrument.price_target
         tr
-          td= instrument_logo instrument
+          td= instrument_logo_button instrument
           td= instrument.ticker
           td= instrument.name
           td.money-cell= price_span instrument.last || instrument.today_close, unit: instrument.currency

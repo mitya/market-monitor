@@ -309,6 +309,11 @@ module InstrumentsHelper
     return fa_icon 'briefcase', xsmall: true if InstrumentSet.portfolio.symbols.include?(instrument.ticker)
     return fa_icon 'glasses', xsmall: true if InstrumentSet.known?(instrument.ticker)
   end
+
+  def instrument_logo_button(inst)
+    # link_to instrument_logo(inst), trading_view_url(inst), target: '_blank', tabindex: '-1', class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
+    instrument_logo inst, class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
+  end
 end
 
 __END__

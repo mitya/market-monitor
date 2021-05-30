@@ -113,9 +113,9 @@
 + search for spike-bars
 + in-app charts
 + volume on charts
++ link chart from all pages
 
 - fix volume chart alignment
-- link chart from all pages
 - fix pin bars & trend days count
 - search for retests
 

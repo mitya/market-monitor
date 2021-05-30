@@ -73,9 +73,16 @@ class Recommendation < ApplicationRecord
         end
       end
     end
+
+    def cleanup
+      find_each do |recommedation|
+        recommedation.destroy if recommedation.instrument.nil?
+      end
+    end
   end
 end
 
 __END__
 Recommendation.import_iex_data_from_remote('aapl')
 Recommendation.mark_current
+Recommendation.cleanup

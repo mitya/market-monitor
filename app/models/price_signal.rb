@@ -50,14 +50,14 @@ class PriceSignal < ApplicationRecord
       pt = curr.open / 100.0
       signal_attrs = { instrument: curr.instrument, date: curr.date, base_date: prev.date, interval: curr.interval }
 
-      # if match = (today.absorb?(yesterday, 0.0) && today.range_spread_percent > 0.01)
-      #   puts "Detect outside-bar on #{date} for #{instrument}"
-      #   create! instrument: instrument, date: today.date, base_date: yesterday.date, kind: 'outside-bar',
-      #     accuracy: (today.spread / yesterday.spread).to_f.round(2),
-      #     exact: match == true,
-      #     direction: today.direction, enter: today.close, stop: today.min,
-      #     stop_size: today.close_min_rel.abs.to_f.round(4)
-      # end
+      if match = (today.absorb?(yesterday, 0.0) && today.range_spread_percent > 0.01)
+        puts "Detect outside-bar on #{date} for #{instrument}"
+        create! instrument: instrument, date: today.date, base_date: yesterday.date, kind: 'outside-bar',
+          accuracy: (today.spread / yesterday.spread).to_f.round(2),
+          exact: match == true,
+          direction: today.direction, enter: today.close, stop: today.min,
+          stop_size: today.close_min_rel.abs.to_f.round(4)
+      end
 
       if pin_vector = today.pin_bar?
         puts "Detect pin-bar on #{date} for #{instrument}"
@@ -66,33 +66,33 @@ class PriceSignal < ApplicationRecord
           stop_size: today.max_min_rel.abs.to_f.round(4)
       end
 
-      # outside_range = prev.body_low - curr.low
-      # if curr.bottom_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
-      #   puts "Detect spike-down on #{curr.date} for #{curr.instrument}"
-      #   bullish = curr.close > prev.close || curr.up?
-      #   create! signal_attrs.merge kind: 'spike-down',
-      #     direction: bullish ? 'up' : 'down',
-      #     enter: bullish ? curr.range_high : curr.range_low,
-      #     data: {
-      #       tail_range: curr.bottom_tail_range.to_f.round(2),
-      #       outside_range: (outside_range / pt / 100.0).to_f.round(2),
-      #       vector: 'down'
-      #     }
-      # end
-      #
-      # outside_range = curr.high - prev.body_high
-      # if curr.top_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
-      #   puts "Detect spike-up on #{curr.date} for #{curr.instrument}"
-      #   bullish = curr.close > prev.close || curr.up?
-      #   create! signal_attrs.merge kind: 'spike-up',
-      #     direction: bullish ? 'up' : 'down',
-      #     enter: bullish ? curr.range_high : curr.range_low,
-      #     data: {
-      #       tail_range: curr.top_tail_range.to_f.round(2),
-      #       outside_range: (outside_range / pt / 100.0).to_f.round(2),
-      #       vector: 'up'
-      #     }
-      # end
+      outside_range = prev.body_low - curr.low
+      if curr.bottom_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
+        puts "Detect spike-down on #{curr.date} for #{curr.instrument}"
+        bullish = curr.close > prev.close || curr.up?
+        create! signal_attrs.merge kind: 'spike-down',
+          direction: bullish ? 'up' : 'down',
+          enter: bullish ? curr.range_high : curr.range_low,
+          data: {
+            tail_range: curr.bottom_tail_range.to_f.round(2),
+            outside_range: (outside_range / pt / 100.0).to_f.round(2),
+            vector: 'down'
+          }
+      end
+
+      outside_range = curr.high - prev.body_high
+      if curr.top_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
+        puts "Detect spike-up on #{curr.date} for #{curr.instrument}"
+        bullish = curr.close > prev.close || curr.up?
+        create! signal_attrs.merge kind: 'spike-up',
+          direction: bullish ? 'up' : 'down',
+          enter: bullish ? curr.range_high : curr.range_low,
+          data: {
+            tail_range: curr.top_tail_range.to_f.round(2),
+            outside_range: (outside_range / pt / 100.0).to_f.round(2),
+            vector: 'up'
+          }
+      end
     end
 
     def analyze_intraday(candle)

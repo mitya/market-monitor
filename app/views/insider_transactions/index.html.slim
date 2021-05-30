@@ -52,7 +52,7 @@ main.container-fluid
       - @transactions.each do |tx|
         - inst = tx.instrument
         tr
-          td= image_tag "#{tx.instrument.logo_path.sub('public', '')}", size: '19x19', class: 'rounded' if tx.instrument.has_logo?
+          td= instrument_logo_button inst
           td= link_to tx.instrument.ticker, insider_transactions_path(tickers: tx.instrument), tabindex: '-1'
           td= truncate tx.instrument.name
           td.money-cell= "#{l(tx.date, format: :long)} ago +#{tx.date_gap}"

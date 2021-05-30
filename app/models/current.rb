@@ -90,7 +90,7 @@ class Current < ActiveSupport::CurrentAttributes
     attr :candles, :candles_by_ticker
 
     def initialize(instruments, extra_dates)
-      @instruments = Instrument.normalize(instruments)
+      @instruments = Instrument.normalize(instruments).compact
       @candles = Candle.day.where(ticker: @instruments.map(&:ticker), date: (SpecialDates.dates + extra_dates.to_a).uniq.sort).to_a
       @candles_by_ticker = @candles.group_by &:ticker
     end

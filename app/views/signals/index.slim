@@ -77,7 +77,7 @@ main.container-fluid
           td.money-cell
             => l signal&.time.in_time_zone(Current.msk), format: '%H:%M' if is_intraday
             = interval_badge signal.interval
-          td= instrument_logo instrument
+          td= instrument_logo_button inst
           td= red_green instrument.ticker, signal.direction == 'up'
           td.money-cell= red_green "#{signal.up?? 'buy' : 'sell'} #{format_price(signal.enter, unit: instrument.currency)}", signal.up?
           td= known_icon instrument

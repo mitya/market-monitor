@@ -15,44 +15,46 @@ Turbolinks.start()
 ActiveStorage.start()
 
 document.addEventListener("turbolinks:load", () => {
-  document.querySelector('#list-config').addEventListener("change", e => {
+  document.querySelector('#list-config')?.addEventListener("change", e => {
     e.target.closest('form').submit()
   })
 
   let tickersTable = document.querySelector('.tickers-table')
+  if (tickersTable) {
+    tickersTable.addEventListener("change", e => {
+      if (e.target.matches('.lots-input')) {
+        let input = e.target
+        let row = input.closest('tr')
+        fetch(`/portfolio/${row.dataset.ticker}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lots: input.value, account: input.dataset.account })
+        }).then(response => {
+          console.log(response)
+        })
+      }
+    })
 
-  tickersTable.addEventListener("change", e => {
-    if (e.target.matches('.lots-input')) {
-      let input = e.target
-      let row = input.closest('tr')
-      fetch(`/portfolio/${row.dataset.ticker}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lots: input.value, account: input.dataset.account })
-      }).then(response => {
-        console.log(response)
-      })
-    }
-  })
+    tickersTable.addEventListener("click", e => {
+      if (e.target.matches('[data-sort]')) {
+        let th = e.target
+        let sortKey = th.dataset.sort == 'ticker' ? '' : th.dataset.sort
+        document.querySelector('#order').value = sortKey
+        document.querySelector('#list-config').submit()
+      } else if (e.target.matches('.open-chart')) {
+        e.stopPropagation()
+        let link = e.target
 
-  tickersTable.addEventListener("click", e => {
-    if (e.target.matches('[data-sort]')) {
-      let th = e.target
-      let sortKey = th.dataset.sort == 'ticker' ? '' : th.dataset.sort
-      document.querySelector('#order').value = sortKey
-      document.querySelector('#list-config').submit()
-    } else if (e.target.matches('.open-chart')) {
-      e.stopPropagation()
-      let link = e.target
-
-      let modal = new Modal(document.getElementById('chart-modal'))
-      modal.show()
-      renderChart(link.dataset.ticker)
-    }
-  })
+        let modal = new Modal(document.getElementById('chart-modal'))
+        modal.show()
+        renderChart(link.dataset.ticker)
+      }
+    })
+  }
 
   let tickersInput = document.querySelector('#tickers')
-  if (tickersInput?.value) tickersInput.focus()
+  if (tickersInput?.value)
+    tickersInput.focus()
 })
 
 let chart = null
@@ -173,7 +175,7 @@ function renderChart(ticker) {
         type: 'datetime',
         labels: {
           format: 'MMM dd',
-        }        
+        }
         // axisBorder: { offsetX: 20 }
       },
       yaxis: {
