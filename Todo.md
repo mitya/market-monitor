@@ -114,8 +114,8 @@
 + in-app charts
 + volume on charts
 + link chart from all pages
++ fix volume chart alignment
 
-- fix volume chart alignment
 - fix pin bars & trend days count
 - search for retests
 

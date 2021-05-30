@@ -65,6 +65,8 @@ function renderChart(ticker) {
     document.querySelector('#chart-modal .tv-link').href = response.trading_view_url
     document.querySelector('#chart-modal .modal-title').innerText = response.name
 
+    const Y_LABELS_WIDTH = 80
+
     if (chart) chart.destroy()
     chart = new ApexCharts(document.querySelector("#the-chart"), {
       series: [{
@@ -78,7 +80,10 @@ function renderChart(ticker) {
         id: 'candles',
         group: 'main',
       },
-      title: { text: response.ticker, align: 'left' },
+      title: {
+        text: `${response.ticker} — ${response.formatted_last_price}`,
+        align: 'left'
+      },
       xaxis: {
         type: 'datetime',
         labels: {
@@ -94,7 +99,7 @@ function renderChart(ticker) {
       },
       yaxis: {
         tooltip: { enabled: true },
-        minWidth: 40
+        labels: { minWidth: Y_LABELS_WIDTH, maxWidth: Y_LABELS_WIDTH }
       },
       // annotations: {
       //   xaxis: [
@@ -181,7 +186,7 @@ function renderChart(ticker) {
       yaxis: {
         labels: {
           formatter: vol => vol.toLocaleString(),
-          minWidth: 40,
+          minWidth: Y_LABELS_WIDTH, maxWidth: Y_LABELS_WIDTH,
           // tooltip: { enabled: false },
         }
       }

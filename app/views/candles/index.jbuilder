@@ -5,3 +5,4 @@ json.candles @candles do |candle|
   json.ohlc candle.ohlc_row
   json.volume candle.volume
 end
+json.formatted_last_price format_price(@instrument.last, unit: @instrument.currency)
