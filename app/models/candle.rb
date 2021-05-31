@@ -10,6 +10,7 @@ class Candle < ApplicationRecord
   # scope :non_analyzed, -> { }
 
   def self.find_date_before(date) = order(date: :desc).where('date < ?', date.to_date).take
+  def self.find_date_or_before(date) = order(date: :desc).where('date <= ?', date.to_date).take
   def self.find_date(date)        = for_date(date).take
   def self.find_dates_in(period)  = where(date: period)
 
@@ -51,6 +52,12 @@ class Candle < ApplicationRecord
   def direction = up?? 'up' : 'down'
   def direction_rev = up?? 'down' : 'up'
 
+  def trend_up? = previous && close >= previous.close
+  def trend_down? = previous && close <= previous.close
+  def days_up = trend_up? ? 1 + previous.days_up : 0
+  def days_down = trend_down? ? 1 + previous.days_down : 0
+
+
   # def up_for?(period_count)
   #   prev_candles = n_previous(period_count)
   #   return unless prev_candles.size = period_count
@@ -61,7 +68,7 @@ class Candle < ApplicationRecord
   def shadow_to_body_ratio = shadows_spread / range_spread
 
   def siblings = instrument.candles.where(interval: interval)
-  def previous = siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
+  def previous = @previous ||= siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
   def n_previous(n) = each_previous(with_self: false).take(n)
   def each_previous(with_self: true)
     curr = self

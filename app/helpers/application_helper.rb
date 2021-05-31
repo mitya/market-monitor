@@ -123,10 +123,15 @@ module ApplicationHelper
     value = (value.to_f.abs * 100).round(3)
     full_percents = value.to_i
     last_percent = (value % 1 * 100).to_i
+    last_bar = last_percent.nonzero?? tag.span(class: "percentage-bar", style: "height: #{last_percent}%") : ''
     tag.div class: 'percentage-bars' do
       (full_percents).times.map do |n|
         tag.span class: "percentage-bar", style: "height: 100%"
-      end.join.html_safe + tag.span(class: "percentage-bar", style: "height: #{last_percent}%")
+      end.join.html_safe + last_bar
     end
+  end
+
+  def count_bar(value)
+    percentage_bar value / 100.0
   end
 end

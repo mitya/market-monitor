@@ -4,26 +4,23 @@ class CandleAnalyzer
   def initialize(instrument, date)
     @instrument = Instrument[instrument]
     @date = date.to_date
+    @candle = instrument.candles.day.find_date_before(date)
   end
 
   def green_days_count
-    candle = instrument.candles.day.find_date(date)&.previous
-    candle.each_previous.take_while { |cndl| cndl.up? }.count if candle
+    @candle.each_previous.take_while { |cndl| cndl.up? }.count if @candle
   end
 
   def red_days_count
-    candle = instrument.candles.day.find_date(date)&.previous
-    candle.each_previous.take_while { |cndl| cndl.down? }.count if candle
+    @candle.each_previous.take_while { |cndl| cndl.down? }.count if @candle
   end
 
   def days_up_count
-    candle = instrument.candles.day.find_date(date)&.previous
-    candle.each_previous.each_slice(2).take_while { |curr, prev| curr && prev && curr >= prev }.count if candle
+     @candle&.days_up
   end
 
   def days_down_count
-    candle = instrument.candles.day.find_date(date)&.previous
-    candle.each_previous.each_slice(2).take_while { |curr, prev| curr && prev && curr <= prev }.count if candle
+    @candle&.days_down
   end
 
   def lowest_day_since(period_start)
