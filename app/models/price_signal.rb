@@ -66,7 +66,7 @@ class PriceSignal < ApplicationRecord
           stop_size: today.max_min_rel.abs.to_f.round(4)
       end
 
-      outside_range = prev.body_low - curr.low
+      outside_range = prev.close - curr.low
       if curr.bottom_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
         puts "Detect spike-down on #{curr.date} for #{curr.instrument}"
         bullish = curr.close > prev.close || curr.up?
@@ -80,7 +80,7 @@ class PriceSignal < ApplicationRecord
           }
       end
 
-      outside_range = curr.high - prev.body_high
+      outside_range = curr.high - prev.close
       if curr.top_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
         puts "Detect spike-up on #{curr.date} for #{curr.instrument}"
         bullish = curr.close > prev.close || curr.up?

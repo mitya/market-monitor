@@ -116,10 +116,9 @@
 + link chart from all pages
 + fix volume chart alignment
 + improve trend days count
++ fix pin bars
 
 - search for retests
-- fix pin bars
-
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
 - current row selection
 

@@ -1,5 +1,5 @@
 .row.mb-1
   legend class="col-form-label col-sm-2 pt-0" Signal type:
   .col-sm-10
-    - (all_option + options_from_keys(%w[outside-bar pin-bar tail-bar spike-up spike-down])).each do |label, value|
+    - (all_option + options_from_keys(%w[outside-bar pin-bar spike-up spike-down])).each do |label, value|
       = bs_toggle_button :signal, value, label
