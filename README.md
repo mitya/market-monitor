@@ -52,7 +52,8 @@ rake tinkoff:hours:import
 ## IEX
 export tickers='MTX ZIP'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-03-01 special=1 ok=1
+rake iex:days:missing since=2021-04-01 special=1 ok=1
+rake iex:days:missing dates=2021-04-21
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1

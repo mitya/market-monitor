@@ -117,10 +117,12 @@
 + fix volume chart alignment
 + improve trend days count
 + fix pin bars
++ current row selection
 
-- search for retests
 - custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
-- current row selection
+- search for retests / levels
+
+@@@
 
 - don't check Europe & Moex2 in the evening
 - signal results on close/last prices

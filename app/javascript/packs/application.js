@@ -48,6 +48,12 @@ document.addEventListener("turbolinks:load", () => {
         let modal = new Modal(document.getElementById('chart-modal'))
         modal.show()
         renderChart(link.dataset.ticker)
+      } else if (e.target.matches('.instrument-name')) {
+        let row = e.target.closest('tr')
+        for (let other of row.parentNode.querySelectorAll('tr')) {
+          other.classList.remove('selected-row')
+        }
+        row.classList.add('selected-row')
       }
     })
   }

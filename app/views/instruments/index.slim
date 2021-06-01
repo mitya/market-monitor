@@ -156,7 +156,7 @@ main.container-fluid.mb-4
           td= instrument_logo_button inst
           td= inst.ticker
           td= type_icon inst
-          td= truncate inst.name
+          td.instrument-name= truncate inst.name
 
           - if is_portfolio
             td.money-cell

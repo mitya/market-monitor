@@ -88,3 +88,6 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .is-red .percentage-bar { background-color: red; }
 
 .open-chart { cursor: pointer; }
+
+.instrument-name { cursor: pointer; }
+.selected-row .instrument-name { color: blue; font-weight: bold; }
