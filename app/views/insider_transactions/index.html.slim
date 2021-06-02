@@ -32,8 +32,12 @@ main.container-fluid
     thead.table-dark
       tr
         th
+        th
         th Ticker
+        th
+        th
         th Company
+        th Cap
         th Date
         th.money-cell Last
         th.money-cell Last ﹪
@@ -53,21 +57,25 @@ main.container-fluid
         - inst = tx.instrument
         tr
           td= instrument_logo_button inst
+          td= tx.source.upcase
           td= link_to tx.instrument.ticker, insider_transactions_path(tickers: tx.instrument), tabindex: '-1'
+          td= known_icon inst
+          td= type_icon inst
           td= truncate tx.instrument.name
+          td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           td.money-cell= "#{l(tx.date, format: :long)} ago +#{tx.date_gap}"
           td.money-cell.opacity-05(class=red_green_class(inst.base_price > tx.price))= number_to_currency inst.base_price, unit: currency_span(inst.currency)
           td.money-cell.opacity-05= colorized_percentage tx.price, inst.base_price, unit: inst.currency, inverse: true
           td.money-cell(class=red_green_class(tx.buy?))= number_to_currency tx.price, unit: currency_span(inst.currency)
-          td.money-cell(class=red_green_class(tx.buy?))= number_to_currency tx.cost, unit: currency_span(inst.currency), precision: 0
+          td.money-cell(class=red_green_class(tx.buy?))= number_to_currency tx.full_cost, unit: currency_span(inst.currency), precision: 0
           td.money-cell(class=red_green_class(tx.buy?))= number_with_delimiter tx.shares
           td.money-cell(class=red_green_class(tx.buy?))= number_to_percentage tx.shares_percent, precision: 1
           td.money-cell(class=red_green_class(tx.buy?))= number_with_delimiter tx.shares_final
           td= truncate decapitalize(tx.insider_name), length: 25
           td= truncate decapitalize(tx.insider_title), length: 25
-          td= tx.data['directIndirect']
+          td= tx.directness
           td(title=sec_tx_code_desc(tx.sec_code))= sec_tx_code_name tx.sec_code
-          td= number_to_currency tx.data['conversionOrExercisePrice']
+          td= number_to_currency tx.exercise_price
           td= link_to exchange_logo(inst.exchange_name), tx.nasdaq_url, target: '_blank', tabindex: '-1' if inst.nasdaq?
 
   = paginate @transactions, window: 20

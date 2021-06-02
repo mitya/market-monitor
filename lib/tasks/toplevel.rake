@@ -36,3 +36,7 @@ envtask :analyze do
 end
 
 task :a => %w[aggregate analyze]
+
+envtask :gurufocus do
+  InsiderTransaction.parse_guru_focus
+end

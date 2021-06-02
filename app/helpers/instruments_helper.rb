@@ -166,7 +166,7 @@ module InstrumentsHelper
   end
 
   def insider_options_for(ticker)
-    InsiderTransaction.for_ticker(ticker).pluck(:insider_name).uniq.sort.map { |name| [name.titleize, name] }
+    InsiderTransaction.for_ticker(ticker).pluck(:insider_name).uniq.compact.sort.map { |name| [name.titleize, name] }
   end
 
   def instrument_order_options

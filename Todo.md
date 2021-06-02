@@ -118,9 +118,18 @@
 + improve trend days count
 + fix pin bars
 + current row selection
++ custom lists for Bigtech / Biotech / Tech
++ parse gurufocus transactions
++ add gf companies < 500M
++ download april from GF
 
-- custom lists for Oil&Gas / Minerals / Bigtech / Biotech / Tech / Kogan / Elvis / Interesting
-- search for retests / levels
+- parse SA pages
+- aggregate insider buys into a list with (1/2/3/4m buys/sells)
+- mark tickers with insider buys
+
+
+- buy something insider
+- search for retests / levels / breakouts
 
 @@@
 

@@ -1,0 +1,7 @@
+COG
+EQT
+ET
+GAZP
+NVTK
+RRC
+SWN
