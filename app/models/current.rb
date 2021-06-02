@@ -106,6 +106,7 @@ class Current < ActiveSupport::CurrentAttributes
 
       def find_date(date) = @cache.candles_by_ticker[@instrument.ticker]&.find { |candle| candle.date == date }
       def find_date_before(date) = find_date(MarketCalendar.closest_weekday date)
+      alias find_date_or_before find_date_before
       def find_dates_in(period) = @cache.candles_by_ticker[@instrument.ticker]&.select { |candle| candle.date.in? period }
     end
   end

@@ -87,6 +87,9 @@ class Instrument < ApplicationRecord
     new_price_value / old_price_value - 1.0 if old_price_value && new_price_value
   end
 
+  def price_on(date) = day_candles!.find_date_before(date)
+  def price_on_or_before(date) = day_candles!.find_date_or_before(date)
+
   alias gain_since rel_diff_value
 
   def logo_path = Pathname("public/logos/#{ticker}.png")

@@ -122,8 +122,9 @@
 + parse gurufocus transactions
 + add gf companies < 500M
 + download april from GF
++ parse SA pages
 
-- parse SA pages
+- add score & source filter to public signals
 - aggregate insider buys into a list with (1/2/3/4m buys/sells)
 - mark tickers with insider buys
 
