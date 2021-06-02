@@ -316,6 +316,7 @@ module InstrumentsHelper
 
   def known_icon(instrument)
     return fa_icon 'briefcase', xsmall: true if InstrumentSet.portfolio.symbols.include?(instrument.ticker)
+    return fa_icon 'user', xsmall: true if InstrumentSet.insiders.symbols.include?(instrument.ticker)
     return fa_icon 'glasses', xsmall: true if InstrumentSet.known?(instrument.ticker)
   end
 
@@ -327,21 +328,6 @@ module InstrumentsHelper
   def tickers_copy_list(records)
     tickers = records.map(&:ticker)
     tag.p(tickers.join(' '), class: 'text-muted text-center', style: 'font-size: 0.5rem')
-  end
-
-  def seeking_alpha_badge(inst, score, price, format: 'relative')
-    return unless score
-
-    link_to seeking_alpha_url(inst), target: '_blank' do
-      tag.span class: "badge sa-badge sa-badge-#{score}" do
-        if price
-          relative_price inst.base_price, price.to_d, unit: inst.currency, format: format
-        else
-          '—'
-        end
-      end
-    end
-
   end
 end
 

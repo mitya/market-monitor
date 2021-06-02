@@ -124,9 +124,8 @@
 + download april from GF
 + parse SA pages
 + aggregate insider buys into a list with (1/2/3/4m buys/sells)
-
-- add score & source filter to public signals
-- mark tickers with insider buys
++ mark tickers with insider buys
++ add score & source filter to public signals
 
 
 - buy something insider

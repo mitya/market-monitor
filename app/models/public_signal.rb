@@ -56,14 +56,6 @@ class PublicSignal < ApplicationRecord
       SA_RATINGS[rating_string]
     end
 
-    SA_RATINGS = {
-      'Very Bullish' => 5,
-      'Bullish' => 4,
-      'Neutral' => 3,
-      'Bearish' => 2,
-      'Very Bearish' => 1,
-    }
-
     def load_missing_sa_prices
       where(price: nil).find_each &:load_price_if_missing
     end
@@ -76,6 +68,15 @@ class PublicSignal < ApplicationRecord
       end
     end
   end
+
+  SA_RATINGS = {
+    'Very Bullish' => 5,
+    'Bullish' => 4,
+    'Neutral' => 3,
+    'Bearish' => 2,
+    'Very Bearish' => 1,
+  }
+  SA_RATINGS_INV = SA_RATINGS.invert
 end
 
 

@@ -50,7 +50,7 @@ main.container-fluid
           td.money-cell= link_to fa_icon('chart-bar'), trading_view_url(inst), target: '_blank'
           - [1, 2, 3].each do |index|
             td.money-cell
-              = seeking_alpha_badge inst, aggr.send("sa_#{index}_score"), aggr.send("sa_#{index}_price"), format: price_format
+              = seeking_alpha_price_badge inst, aggr.send("sa_#{index}_score"), aggr.send("sa_#{index}_price"), format: price_format
 
   = paginate @aggregates, window: 20
   = tickers_copy_list @aggregates

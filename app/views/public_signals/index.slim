@@ -9,6 +9,9 @@
 main.container-fluid
   h1.display-3 Public Signals
 
+  form#list-config(action=public_signals_path class='my-2')
+    = render 'filter_by_source'
+
   .row
     .col-md-7.mt-4
       = page_entries_block @signals
@@ -20,9 +23,11 @@ main.container-fluid
         th
         th
         th
+        th
         th Ticker
         th Company
         th Source
+        th Score
         th.money-cell Date
         th.money-cell Last
         th.money-cell Enter
@@ -43,10 +48,12 @@ main.container-fluid
         tr
           td= country_flag inst
           td= instrument_logo_button inst
+          td= known_icon instrument
           td= type_icon instrument
           td= inst.ticker
           td.instrument-name= instrument.name
           td= signal_source signal.source
+          td= signal_score_badge signal
           td.money-cell= l signal.date, format: :long
           td.money-cell= relative_price inst.base_price, signal.price, unit: inst.currency, format: 'absolute', inverse: false
           td.money-cell= relative_price signal.price, inst.base_price, unit: inst.currency, format: 'absolute', inverse: true
