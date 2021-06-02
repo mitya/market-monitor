@@ -47,10 +47,12 @@ main.container-fluid
           td.money-cell(class=red_green_class(false))= relative_price inst.base_price, aggr.send("m#{period_index}_sells_avg"), unit: inst.currency, format: price_format
 
           td.money-cell= link_to fa_icon(:font), seeking_alpha_url(inst), target: '_blank'
+
           td.money-cell= link_to fa_icon('chart-bar'), trading_view_url(inst), target: '_blank'
-          - [1, 2, 3].each do |index|
-            td.money-cell
-              = seeking_alpha_price_badge inst, aggr.send("sa_#{index}_score"), aggr.send("sa_#{index}_price"), format: price_format
+          = render "instruments/seeking_alpha_fields", instrument: inst, aggregate: aggr, format: price_format
+          / - [1, 2, 3].each do |index|
+          /   td.money-cell
+          /     = seeking_alpha_price_badge inst, aggr.send("sa_#{index}_score"), aggr.send("sa_#{index}_price"), format: price_format
 
   = paginate @aggregates, window: 20
   = tickers_copy_list @aggregates

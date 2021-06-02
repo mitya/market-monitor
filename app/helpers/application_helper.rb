@@ -123,11 +123,18 @@ module ApplicationHelper
     value = (value.to_f.abs * 100).round(3)
     full_percents = value.to_i
     last_percent = (value % 1 * 100).to_i
+
+    if full_percents > 20
+      full_percents = 20
+      last_percent = 0
+      too_much = true
+    end
+
     last_bar = last_percent.nonzero?? tag.span(class: "percentage-bar", style: "height: #{last_percent}%") : ''
     tag.div class: 'percentage-bars' do
       (full_percents).times.map do |n|
         tag.span class: "percentage-bar", style: "height: 100%"
-      end.join.html_safe + last_bar
+      end.join.html_safe + last_bar + (too_much ? '!!!!' : '')
     end
   end
 

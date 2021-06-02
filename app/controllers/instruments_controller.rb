@@ -8,7 +8,7 @@ class InstrumentsController < ApplicationController
 
     @instruments = Instrument.all
     @instruments = @instruments.left_joins(:aggregate, :info)
-    @instruments = @instruments.preload(:info, :price_target, :portfolio_item, :aggregate)
+    @instruments = @instruments.preload(:info, :price_target, :portfolio_item, :aggregate, :insider_aggregate)
     @instruments = @instruments.where(info: { industry: params[:industry] })       if params[:industry].present?
     @instruments = @instruments.where(info: { sector: params[:sector] })           if params[:sector].present?
     @instruments = @instruments.where(info: { sector_code: params[:sector_code] }) if params[:sector_code].present?

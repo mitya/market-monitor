@@ -10,6 +10,7 @@ main.container-fluid
   h1.display-3 Public Signals
 
   form#list-config(action=public_signals_path class='my-2')
+    = render 'instruments/filter_by_tickers'
     = render 'filter_by_source'
 
   .row

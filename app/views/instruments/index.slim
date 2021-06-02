@@ -17,6 +17,7 @@
 - show_low = params[:low] == '1'
 - show_last_insider_buys = params[:last_insider_buys] == '1'
 - vtb_marginal_info = false
+- show_sa = params[:sa] == '1'
 
 main.container-fluid.mb-4
   form#list-config(action=instruments_path class='my-2')
@@ -44,6 +45,7 @@ main.container-fluid.mb-4
             = bs_check_box :relative_price_targets, 'relative', inline: true
             = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
             = bs_check_box :recent_prices, 'Recent prices', default: true
+            = bs_check_box :sa, 'Seeking Alpha', default: false
             div
               = bs_check_box :low, 'Recent low', inline: true
               => label_tag :low_since, "since: "
@@ -101,6 +103,12 @@ main.container-fluid.mb-4
           th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2") 2w ﹪
           th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
           th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
+
+        - if show_sa
+          th.money-cell SA
+          th
+          th
+
 
         - if show_low
           th.text-end(data-sort="aggregates.lowest_day_date desc") Low
@@ -206,6 +214,9 @@ main.container-fluid.mb-4
             td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 
+          - if show_sa
+            = render "instruments/seeking_alpha_fields", instrument: inst, aggregate: inst.insider_aggregate, format: past_price_format
+
           - if show_low
             td.money-cell(title=aggregate.lowest_day_date)= days_ago aggregate.lowest_day_date
             td.money-cell.border-end.pe-2= relative_price aggregate.lowest_day_low, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
@@ -247,3 +258,4 @@ main.container-fluid.mb-4
           td= growth_badge aggregate
 
   = paginate @instruments, window: 20
+  = tickers_copy_list @instruments

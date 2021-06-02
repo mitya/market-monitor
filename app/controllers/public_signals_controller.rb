@@ -13,6 +13,8 @@ class PublicSignalsController < ApplicationController
       @signals = @signals.where(source: params[:source])
     end
 
+    @signals = @signals.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
+
     @signals = @signals.page(params[:page]).per(params[:per_page])
     @signals = @signals.order('date desc')
 

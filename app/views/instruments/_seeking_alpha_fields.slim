@@ -1,0 +1,4 @@
+- [1, 2, 3].each do |index|
+  td.money-cell
+    - if aggregate
+      = seeking_alpha_price_badge instrument, aggregate.send("sa_#{index}_score"), aggregate.send("sa_#{index}_price"), format: format

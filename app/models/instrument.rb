@@ -15,6 +15,7 @@ class Instrument < ApplicationRecord
   has_one :price,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :info, class_name: 'Stats',      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :portfolio_item,                 foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :insider_aggregate,              foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
   validates_presence_of :ticker, :name
 
