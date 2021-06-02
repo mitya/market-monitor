@@ -296,6 +296,10 @@ module InstrumentsHelper
     "https://www.tradingview.com/chart/?symbol=#{instrument.exchange_ticker}"
   end
 
+  def seeking_alpha_url(instrument)
+    "https://seekingalpha.com/symbol/#{instrument.ticker}"
+  end
+
   def red_green(text, is_green)
     tag.span text, class: red_green_class(is_green)
   end
@@ -318,6 +322,26 @@ module InstrumentsHelper
   def instrument_logo_button(inst)
     # link_to instrument_logo(inst), trading_view_url(inst), target: '_blank', tabindex: '-1', class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
     instrument_logo inst, class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
+  end
+
+  def tickers_copy_list(records)
+    tickers = records.map(&:ticker)
+    tag.p(tickers.join(' '), class: 'text-muted text-center', style: 'font-size: 0.5rem')
+  end
+
+  def seeking_alpha_badge(inst, score, price, format: 'relative')
+    return unless score
+
+    link_to seeking_alpha_url(inst), target: '_blank' do
+      tag.span class: "badge sa-badge sa-badge-#{score}" do
+        if price
+          relative_price inst.base_price, price.to_d, unit: inst.currency, format: format
+        else
+          '—'
+        end
+      end
+    end
+
   end
 end
 

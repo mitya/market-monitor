@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :candles, only: :index
   end
   resources :insider_transactions, path: 'insider-transactions'
+  resources :insider_aggregates, path: 'insider-aggregates'
   resources :recommendations
   resources :signals
   resources :public_signals

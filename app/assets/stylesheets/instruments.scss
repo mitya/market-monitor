@@ -91,3 +91,14 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 .instrument-name { cursor: pointer; }
 .selected-row .instrument-name { color: blue; font-weight: bold; }
+
+.sa-badge { width: 3rem; display: inline-block; text-align: right; }
+.sa-badge .changebox-red, .sa-badge .changebox-green { color: black; font-size: .75rem; }
+
+.sa-badge-1 { background-color: maroon; }
+.sa-badge-2 { background-color: red; }
+.sa-badge-2 .changebox-green, .sa-badge-2 .changebox-red { color: white; }
+.sa-badge-3 { background-color: gold; }
+.sa-badge-4 { background-color: #32CD32; }
+.sa-badge-5 { background-color: green; }
+.sa-badge-5 .changebox-green, .sa-badge-5 .changebox-red { color: white; }

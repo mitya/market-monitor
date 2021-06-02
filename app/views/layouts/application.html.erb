@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Trading</title>
+    <title>
+      <%= params[:tickers] ? params[:tickers] : 'Trading' %>
+    </title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -14,6 +16,7 @@
     <nav class="text-center mb-3">
       <%= link_to 'Instruments', instruments_path %> |
       <%= link_to 'Insider Trades', insider_transactions_path %> |
+      <%= link_to 'Insider Aggregates', insider_aggregates_path %> |
       <%= link_to 'Recommendations', recommendations_path %> |
       <%= link_to 'Signals', signals_path %> |
       <%= link_to 'Public', public_signals_path %>

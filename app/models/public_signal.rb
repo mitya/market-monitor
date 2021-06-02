@@ -1,6 +1,8 @@
 class PublicSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
+  scope :sa, -> { where source: 'SA' }
+
   def load_price_if_missing
     return if price
     Iex.import_day_candles instrument, date: MarketCalendar.closest_weekday(date)
@@ -23,6 +25,7 @@ class PublicSignal < ApplicationRecord
 
       Pathname.glob(Rails.root / "tmp/seekingalpha/*.txt").each do |file|
         ticker = file.basename('.txt')
+        next if file.size < 100
         doc = Nokogiri::HTML(file)
 
         # get_all_by_test_id.(doc, 'post-list-item').each do |item|
@@ -36,7 +39,7 @@ class PublicSignal < ApplicationRecord
 
           score = convert_sa_rating(score)
           date = date.include?('Yesterday') ? Current.us_date.yesterday :
-                 date.include?('Today') ? Current.us_date.today :
+                 date.include?('Today') ? Current.us_date :
                  Date.parse(date)
           next unless score
 
@@ -64,6 +67,14 @@ class PublicSignal < ApplicationRecord
     def load_missing_sa_prices
       where(price: nil).find_each &:load_price_if_missing
     end
+
+    def create_sa_stubs(tickers)
+      tickers.each do |ticker|
+        file = Rails.root / "tmp/seekingalpha/#{ticker}.txt"
+        next if file.exist?
+        file.write('')
+      end
+    end
   end
 end
 
@@ -72,3 +83,4 @@ __END__
 PublicSignal.load
 PublicSignal.parse_seeking_alpha
 PublicSignal.load_missing_sa_prices
+PublicSignal.create_sa_stubs ''.split

@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  m1_buys_total: MyString
+  m1_buys_avg: MyString
+  sa_1_score: MyString
+  sa_2_score: MyString
+
+two:
+  ticker: MyString
+  m1_buys_total: MyString
+  m1_buys_avg: MyString
+  sa_1_score: MyString
+  sa_2_score: MyString

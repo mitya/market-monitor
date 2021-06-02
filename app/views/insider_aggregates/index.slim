@@ -1,0 +1,56 @@
+- period_index = 3
+- price_format = 'absolute'
+- price_format = 'relative'
+
+main.container-fluid
+  form#list-config(action=insider_aggregates_path class='my-2')
+    = render 'instruments/filter_by_tickers'
+    = render 'instruments/pagination_options'
+
+  = page_entries_block @aggregates
+  = paginate @aggregates, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th
+        th Ticker
+        th
+        th
+        th Name
+        th.money-cell Cap
+        th.money-cell Last
+        th.money-cell Buys Total
+        th.money-cell Buys Avg
+        th.money-cell Sales Total
+        th.money-cell Sales Avg
+        th
+        th
+        th.money-cell SA
+        th
+        th
+    tbody
+      - @aggregates.each do |aggr|
+        - inst = aggr.instrument
+        tr
+          td= instrument_logo_button inst
+          td= link_to inst.ticker, insider_transactions_path(tickers: inst.ticker), tabindex: '-1'
+          td= known_icon inst
+          td= type_icon inst
+          td= truncate inst.name
+          td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+          td.money-cell= number_to_currency inst.base_price, unit: currency_span(inst.currency)
+
+          td.money-cell(class=red_green_class(true)) = number_to_currency aggr.send("m#{period_index}_buys_total"), unit: currency_span(inst.currency), precision: 0
+          td.money-cell(class=red_green_class(true)) = relative_price inst.base_price, aggr.send("m#{period_index}_buys_avg"), unit: inst.currency, format: price_format
+          td.money-cell(class=red_green_class(false))= number_to_currency aggr.send("m#{period_index}_sells_total"), unit: currency_span(inst.currency), precision: 0
+          td.money-cell(class=red_green_class(false))= relative_price inst.base_price, aggr.send("m#{period_index}_sells_avg"), unit: inst.currency, format: price_format
+
+          td.money-cell= link_to fa_icon(:font), seeking_alpha_url(inst), target: '_blank'
+          td.money-cell= link_to fa_icon('chart-bar'), trading_view_url(inst), target: '_blank'
+          - [1, 2, 3].each do |index|
+            td.money-cell
+              = seeking_alpha_badge inst, aggr.send("sa_#{index}_score"), aggr.send("sa_#{index}_price"), format: price_format
+
+  = paginate @aggregates, window: 20
+  = tickers_copy_list @aggregates

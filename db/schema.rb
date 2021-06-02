@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_17_204020) do
+ActiveRecord::Schema.define(version: 2021_06_02_162403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,30 @@ ActiveRecord::Schema.define(version: 2021_05_17_204020) do
     t.index ["ticker"], name: "candles_5m_ticker_idx"
   end
 
+  create_table "insider_aggregates", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.bigint "m1_buys_total"
+    t.decimal "m1_buys_avg", precision: 20, scale: 4
+    t.bigint "m1_sells_total"
+    t.decimal "m1_sells_avg", precision: 20, scale: 4
+    t.bigint "m2_buys_total"
+    t.decimal "m2_buys_avg", precision: 20, scale: 4
+    t.bigint "m2_sells_total"
+    t.decimal "m2_sells_avg", precision: 20, scale: 4
+    t.bigint "m3_buys_total"
+    t.decimal "m3_buys_avg", precision: 20, scale: 4
+    t.bigint "m3_sells_total"
+    t.decimal "m3_sells_avg", precision: 20, scale: 4
+    t.string "sa_1_score"
+    t.string "sa_1_price"
+    t.string "sa_2_score"
+    t.string "sa_2_price"
+    t.string "sa_3_score"
+    t.string "sa_3_price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "insider_transactions", force: :cascade do |t|
     t.string "ticker"
     t.string "insider_name"
@@ -203,6 +227,9 @@ ActiveRecord::Schema.define(version: 2021_05_17_204020) do
     t.decimal "price", precision: 20, scale: 4
     t.integer "score"
     t.datetime "created_at"
+    t.text "post_title"
+    t.text "post_author"
+    t.integer "post_comments_count"
   end
 
   create_table "recommendations", force: :cascade do |t|
@@ -248,6 +275,7 @@ ActiveRecord::Schema.define(version: 2021_05_17_204020) do
     t.datetime "advanced_stats_updated_at"
     t.string "peers", array: true
     t.float "last_insider_buy_price"
+    t.jsonb "extra"
   end
 
 end

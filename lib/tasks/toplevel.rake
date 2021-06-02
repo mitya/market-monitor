@@ -38,4 +38,8 @@ end
 task :a => %w[aggregate analyze]
 
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
-envtask(:sa) { PublicSignal.parse_seeking_alpha }
+
+envtask(:sa) do
+  PublicSignal.parse_seeking_alpha
+  InsiderAggregate.aggregate
+end
