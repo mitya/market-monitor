@@ -50,13 +50,13 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='MTX ZIP'
+export tickers='TRMK.US'
 rake tinkoff:premium:import
 rake iex:days:missing since=2021-04-01 special=1 ok=1
-rake iex:days:missing dates=2021-04-21
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1
+export tickers='TRMK.US'
 rake tinkoff:days:missing
 rake tinkoff:days:year
 rake tinkoff:logos:download

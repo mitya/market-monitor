@@ -123,6 +123,10 @@ ActiveRecord::Schema.define(version: 2021_06_02_162403) do
     t.decimal "m3_buys_avg", precision: 20, scale: 4
     t.bigint "m3_sells_total"
     t.decimal "m3_sells_avg", precision: 20, scale: 4
+    t.bigint "m6_buys_total"
+    t.decimal "m6_buys_avg", precision: 20, scale: 4
+    t.bigint "m6_sells_total"
+    t.decimal "m6_sells_avg", precision: 20, scale: 4
     t.string "sa_1_score"
     t.string "sa_1_price"
     t.string "sa_2_score"

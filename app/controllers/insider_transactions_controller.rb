@@ -3,7 +3,7 @@ class InsiderTransactionsController < ApplicationController
     params[:per_page] ||= '200'
     params[:insider] = nil if params[:tickers] && params[:tickers].split.many?
 
-    params[:tickers] ||= Instrument.joins(:info).where('stats.marketcap < ?', 600_000_000).pluck(:ticker).join(' ')
+    # params[:tickers] ||= Instrument.joins(:info).where('stats.marketcap < ?', 600_000_000).pluck(:ticker).join(' ')
 
     @transactions = InsiderTransaction.with_price
     @transactions = @transactions.for_tickers params[:tickers].split if params[:tickers].present?

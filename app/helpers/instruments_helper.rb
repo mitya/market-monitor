@@ -267,10 +267,6 @@ module InstrumentsHelper
     Sec4TransactionCodesNames[sec_code] || sec_code
   end
 
-  def instrument_logo(instrument, **options)
-    image_tag "#{instrument.logo_path.sub('public', '')}", size: '19x19', class: 'rounded', **options if instrument.has_logo?
-  end
-
   def days_old_badge(date)
     return if date.blank?
     days_ago = (Current.date - date).to_i
@@ -320,9 +316,14 @@ module InstrumentsHelper
     return fa_icon 'glasses', xsmall: true if InstrumentSet.known?(instrument.ticker)
   end
 
+  def instrument_logo(instrument, **options)
+    inst = instrument.has_logo? ? instrument : Instrument.get('LX')
+    image_tag "#{inst.logo_path.sub('public', '')}", size: '19x19', class: 'rounded', **options
+  end
+
   def instrument_logo_button(inst)
     # link_to instrument_logo(inst), trading_view_url(inst), target: '_blank', tabindex: '-1', class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
-    instrument_logo inst, class: 'open-chart', 'data-ticker': inst.ticker if inst.has_logo?
+    instrument_logo inst, class: 'open-chart', 'data-ticker': inst.ticker
   end
 
   def tickers_copy_list(records)

@@ -32,9 +32,9 @@ class Iex
     return if period == 'previous' && instrument.candles.day.final.where(date: Current.yesterday).exists?
 
     candles_data =
-      date ? day_on(instrument.ticker, date) :
-      period == 'previous' ? [previous(instrument.ticker)] :
-      days_for(instrument.ticker, period)
+      date ? day_on(instrument.iex_ticker, date) :
+      period == 'previous' ? [previous(instrument.iex_ticker)] :
+      days_for(instrument.iex_ticker, period)
 
     return puts "No IEX data on #{date || period} for #{instrument}".light_yellow if candles_data.none?
 

@@ -4,7 +4,7 @@ class InsiderAggregate < ApplicationRecord
   def refresh
     end_of_month = Date.current.beginning_of_month - 1.day
 
-    [1,2,3].each do |months|
+    [1,2,3,6].each do |months|
       period = (end_of_month - (months - 1).month).beginning_of_month .. Date.current
       %w[buys sells].each do |type|
         transactions = instrument.insider_transactions.where(date: period).send(type)

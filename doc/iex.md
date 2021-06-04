@@ -29,6 +29,9 @@ curl -s "https://cloud.iexapis.com/stable/stock/aapl/price-target?token=$IEX_SEC
 
 curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_TEST_SECRET_KEY" | jq
 
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/options?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/options/20210618?token=$IEX_SECRET_KEY" | jq
+
 # Cost
 
 5.000.000 std credits / mon + 20$ for 20.000.000 premium credits

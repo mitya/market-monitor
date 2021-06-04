@@ -126,9 +126,32 @@
 + aggregate insider buys into a list with (1/2/3/4m buys/sells)
 + mark tickers with insider buys
 + add score & source filter to public signals
++ Coal list
++ Russia-2 list
++ format list as badges
++ list of rockets
++ 6m insider agregation
++ transportation list
++ consolidations list
++ TRMK.US
 
+- tinkoff invest index
+- kogan
 
-- buy something insider
+- parallelize candle loading
+
+- longs terms levels
+- search for long-term level hits
+- rebounds from long term levels
+
+- заказать запчасти для ТО
+
+- search for consolidations
+- determine consolidation boundaries
+
+- add breakout dates to rockets
+
+- buy something insider ACHV LQDA ESPR ET FELE HRZN  BRG AGRX FSP KBAL BH HCHC MO NI GTX UNVR BXC
 - search for retests / levels / breakouts
 
 @@@

@@ -114,6 +114,8 @@ class Instrument < ApplicationRecord
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)
 
+  def iex_ticker = self.class.iex_ticker_for(ticker)
+
   MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA MTLRP OKEY SIBN SMLT].to_set
 
   def to_s = ticker
@@ -138,6 +140,8 @@ class Instrument < ApplicationRecord
 
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
+
+    def iex_ticker_for(ticker) = ticker.delete('.US')
   end
 
   concerning :Filters do

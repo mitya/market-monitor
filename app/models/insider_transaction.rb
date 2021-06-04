@@ -72,7 +72,7 @@ class InsiderTransaction < ApplicationRecord
     def parse_guru_focus
       get_row_field = -> (row, field, extra = nil) { row.css("td[data-column='#{field}']#{extra}").first&.inner_text&.strip }
 
-      Pathname.glob(Rails.root / "tmp/gurufocus/2021-04.html").each do |file|
+      Pathname.glob(Rails.root / "tmp/gurufocus/*.html").each do |file|
         doc = Nokogiri::HTML(file)
         table = doc.css('table').first
         table.css('tr').each do |row|
@@ -105,7 +105,7 @@ class InsiderTransaction < ApplicationRecord
 
             next if record.persisted?
 
-            puts "Import GF insider transaction: #{buy_sell} #{ticker} on #{date} by #{insider_name} #{shares_number} @ #{price}"
+            puts "Import GF insider transaction: #{date} #{buy_sell.ljust 4} #{ticker.ljust 8} by #{insider_name} #{shares_number} @ #{price}"
             record.update!(
               shares_final:  shares_final,
               cost:          cost,

@@ -2,8 +2,10 @@ class InsiderAggregatesController < ApplicationController
   def index
     params[:per_page] ||= '200'
 
+    @period = 6
+
     @aggregates = InsiderAggregate.all
-    @aggregates = @aggregates.order(m3_buys_total: :desc)
+    @aggregates = @aggregates.order("m#{@period}_buys_total" => :desc)
     @aggregates = @aggregates.includes(:instrument => :info)
 
     @aggregates = @aggregates.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?

@@ -34,7 +34,7 @@ class Price < ApplicationRecord
     end
 
     def refresh_premium_from_iex
-      refresh_from_iex Instrument.premium.map(&:ticker)
+      refresh_from_iex Instrument.premium.map(&:iex_ticker)
     end
   end
 end

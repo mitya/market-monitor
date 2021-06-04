@@ -7,7 +7,7 @@ class Stats < ApplicationRecord
     return if stats_updated_at && stats_updated_at > 15.minutes.ago
     puts "Update info for #{ticker}"
 
-    self.stats = Iex.stats(ticker)
+    self.stats = Iex.stats(iex_ticker)
     self.stats_updated_at = Time.current
     self.marketcap = stats['marketcap']
     self.shares = stats['sharesOutstanding']
@@ -20,7 +20,7 @@ class Stats < ApplicationRecord
 
     if include_company
       puts "Update comp for #{ticker}"
-      self.company = Iex.company(ticker)
+      self.company = Iex.company(iex_ticker)
       self.company_updated_at = Time.current
       self.name = company['companyName']
       self.industry = company['industry']&.strip
@@ -40,6 +40,7 @@ class Stats < ApplicationRecord
     destroy
   end
 
+  def iex_ticker = Instrument.iex_ticker_for(ticker)
   def marketcap = super.to_i.nonzero?
   def marketcap_mil = marketcap && marketcap / 1_000_000.0
   def marketcap_bil = marketcap && marketcap / 1_000_000_000.0

@@ -105,7 +105,8 @@ namespace :tinkoff do
       tickers = ENV['tickers'].split # File.read("db/data/tinkoff-premium.txt").split.map &:upcase
       tickers.each do |ticker|
         next if Instrument.exists?(ticker: ticker)
-        iex_item = iex_items.find { |item| item.symbol == ticker }
+        iex_ticker = Instrument.iex_ticker_for(ticker)
+        iex_item = iex_items.find { |item| item.symbol == iex_ticker }
         next puts "Skip #{ticker}" unless iex_item
         puts "Create #{ticker}"
         Instrument.create!(

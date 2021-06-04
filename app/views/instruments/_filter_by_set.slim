@@ -1,6 +1,6 @@
-/ .row.mb-1
-/   legend class="col-form-label col-sm-2 pt-0" Set
-/   .col-sm-10
-/     - InstrumentSet.all_with_null.each do |set|
-/       = bs_toggle_button :set, set.key.to_s, set.name
-= bs_select :set, 'Set:', InstrumentSet.all_with_null.map { |set| [set.name, set.key.to_s] }, select_class: 'w-auto', blank: nil
+.row.mb-1
+  legend class="col-form-label col-sm-1 pt-0" Set
+  .col-sm-10(style="line-height: 2rem")
+    - InstrumentSet.all_with_null.each do |set|
+      = bs_toggle_button :set, set.key.to_s, set.name
+/ = bs_select :set, 'Set:', InstrumentSet.all_with_null.map { |set| [set.name, set.key.to_s] }, select_class: 'w-auto', blank: nil

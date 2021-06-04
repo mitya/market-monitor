@@ -10,15 +10,18 @@ main.container-fluid
 
   form#list-config(action=signals_path class='my-2')
     = render 'instruments/filter_by_set'
-    = render 'instruments/filter_by_currency'
-    = render 'instruments/filter_by_availability'
-    = render 'instruments/filter_by_tickers'
-    = render 'instruments/pagination_options'
-    = render 'filter_by_signal'
-    = render 'filter_by_direction'
-    = render 'filter_by_interval'
-    = render 'filter_by_date'
-    = bs_select :order, 'Sort By:', signal_order_options, style: 'width: auto'
+    .row.mb-3
+      .col
+        = render 'instruments/filter_by_currency'
+        = render 'instruments/filter_by_availability'
+        = render 'instruments/filter_by_tickers'
+        = render 'instruments/pagination_options'
+        = render 'filter_by_signal'
+        = render 'filter_by_direction'
+        = render 'filter_by_interval'
+        = render 'filter_by_date'
+        = bs_select :order, 'Sort By:', signal_order_options, style: 'width: auto'
+      .col
     .row
       .col-sm-2
       .col-sm-9
