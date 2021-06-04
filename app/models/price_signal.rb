@@ -32,11 +32,11 @@ class PriceSignal < ApplicationRecord
 
   class << self
     def analyze_all(date: Current.yesterday, interval: 'day')
+      where(date: date).delete_all
       instruments = Instrument.all.abc
       Current.preload_prices_for instruments
-
-      where(date: date).delete_all
-      instruments.each { |instrument| analyze instrument, date }
+      Current.parallelize_instruments(instruments, 6) { |inst| analyze inst, date }
+      # instruments.each { |instrument| analyze instrument, date }
     end
 
     def analyze(instrument, date, interval: 'day')

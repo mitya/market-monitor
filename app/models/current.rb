@@ -76,6 +76,24 @@ class Current < ActiveSupport::CurrentAttributes
     end
   end
 
+  def parallelize(threads_count, &block)
+    threads_count.times.map { |i| Thread.new(&block) }.each &:join
+  end
+
+  def parallelize_instruments(instruments, threads_count, &block)
+    # queue = Queue.new
+    # instruments.each { |instr| queue << instr }
+    queue = instruments.to_a
+    threads_count.times.map do |index|
+      Thread.new do
+        while instr = queue.shift
+
+          yield instr, index
+        end
+      end
+    end.each &:join
+  end
+
   class PriceCache
     def initialize(instruments)
       @instruments = Instrument.normalize(instruments)

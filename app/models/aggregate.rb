@@ -55,10 +55,10 @@ class Aggregate < ApplicationRecord
     end
 
     def create_for_all(date: Current.date)
-      instruments = Instrument.all.abc
+      instruments = Instrument.all.abc.to_a
       Current.preload_prices_for instruments
-      # Current.preload_day_candles_for instruments
-      instruments.each { |instrument| create_for instrument, date: date }
+      Current.parallelize_instruments(instruments, 6) { |inst| create_for inst, date: date }
+      # instruments.each { |inst| create_for inst, date: date }
     end
   end
 end

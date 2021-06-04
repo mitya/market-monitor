@@ -72,7 +72,7 @@ class InsiderTransaction < ApplicationRecord
     def parse_guru_focus
       get_row_field = -> (row, field, extra = nil) { row.css("td[data-column='#{field}']#{extra}").first&.inner_text&.strip }
 
-      Pathname.glob(Rails.root / "tmp/gurufocus/*.html").each do |file|
+      Pathname.glob(Rails.root / "tmp/gurufocus/2021-06.html").each do |file|
         doc = Nokogiri::HTML(file)
         table = doc.css('table').first
         table.css('tr').each do |row|
@@ -122,7 +122,6 @@ class InsiderTransaction < ApplicationRecord
     def remove_dups
       results = 0
       where(source: 'gf').find_each do |tx|
-        # count = where(source: 'gf', ticker: tx.ticker, date: tx.date, price: tx.price, insider_name: tx.insider_name, shares: tx.shares).count
         count = where(source: 'gf', ticker: tx.ticker, date: tx.date, price: tx.price, insider_name: tx.insider_name, shares: tx.shares).count
         results += 1 if count > 1
       end

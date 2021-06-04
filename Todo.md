@@ -134,16 +134,13 @@
 + transportation list
 + consolidations list
 + TRMK.US
-
-- tinkoff invest index
-- kogan
-
-- parallelize candle loading
++ parallelize candle loading
 
 - longs terms levels
 - search for long-term level hits
 - rebounds from long term levels
 
+- kogan
 - заказать запчасти для ТО
 
 - search for consolidations
