@@ -180,6 +180,7 @@ module InstrumentsHelper
       ['Days Up',  'aggregates.days_up desc'],
       ['Low Date', 'aggregates.lowest_day_date desc'],
       ['Low Gain', 'aggregates.lowest_day_gain desc'],
+      ['Trend', 'aggregates.days_up desc'],
       ['Portfolio Cost',       'portfolio.cost_in_usd'],
       ['Portfolio Cost Ideal', 'portfolio.ideal_cost_in_usd'],
       ['Portfolio Cost Diff',  'portfolio.cost_diff'],

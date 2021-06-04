@@ -145,7 +145,7 @@ main.container-fluid.mb-4
         th
         - if show_last_insider_buys
           th.money-cell Insider
-        th Trn
+        th(data-sort="aggregates.days_up desc") Trn
 
     tbody
       - instruments = @instruments

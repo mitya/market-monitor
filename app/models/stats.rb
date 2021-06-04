@@ -81,10 +81,12 @@ class Stats < ApplicationRecord
     def load_peers
       Instrument.iex.usd.find_each do |inst|
         next if inst.info!.peers
-        peers = Iex.peers(inst.ticker)
+        peers = Iex.peers(inst.iex_ticker)
         puts "Load peers for #{inst.ticker}: #{peers.join(' ')}"
         inst.info.update! peers: peers
         sleep 0.33
+      rescue RestClient::NotFound
+        puts "Miss peers for #{inst.ticker}".red
       end
     end
   end

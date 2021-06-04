@@ -141,7 +141,7 @@ class Instrument < ApplicationRecord
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
 
-    def iex_ticker_for(ticker) = ticker.delete('.US')
+    def iex_ticker_for(ticker) = ticker.sub('.US', '')
   end
 
   concerning :Filters do

@@ -50,7 +50,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='TRMK.US'
+export tickers='SND'
 rake tinkoff:premium:import
 rake iex:days:missing since=2021-04-01 special=1 ok=1
 

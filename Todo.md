@@ -147,8 +147,6 @@
 - determine consolidation boundaries
 
 - add breakout dates to rockets
-
-- buy something insider ACHV LQDA ESPR ET FELE HRZN  BRG AGRX FSP KBAL BH HCHC MO NI GTX UNVR BXC
 - search for retests / levels / breakouts
 
 @@@
