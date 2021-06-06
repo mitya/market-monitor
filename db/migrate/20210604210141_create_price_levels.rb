@@ -7,6 +7,7 @@ class CreatePriceLevels < ActiveRecord::Migration[6.1]
       t.integer :period
       t.string :kind
       t.date :dates, array: true
+      t.integer :total_volume, :average_volume
       t.timestamps
     end
   end

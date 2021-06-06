@@ -191,6 +191,8 @@ ActiveRecord::Schema.define(version: 2021_06_04_210141) do
     t.integer "period"
     t.string "kind"
     t.date "dates", array: true
+    t.integer "total_volume"
+    t.integer "average_volume"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

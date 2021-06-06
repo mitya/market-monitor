@@ -139,8 +139,8 @@
 + show levels on charts
 + update tinkoff candles to iex
 + add high levels
++ add volume to levels
 
-- add volume to levels
 - search for long-term level hits
 - rebounds from long term levels
 
@@ -148,6 +148,9 @@
 - determine consolidation boundaries
 - add breakout dates to rockets
 - search for retests / levels / breakouts
+
+- add a way to set period on chart
+- add a quick way to change ticker on chart
 
 @@@
 

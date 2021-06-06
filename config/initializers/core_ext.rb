@@ -25,3 +25,9 @@ module Math
     (x - y).abs <= x * accuracy
   end
 end
+
+class Array
+  def average
+    sum / count
+  end
+end

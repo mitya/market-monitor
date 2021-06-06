@@ -144,7 +144,7 @@ class Candle < ApplicationRecord
     end
 
     def replace_tinkoff_with_iex
-      Instrument.usd.find_each do |instrument|
+      Current.parallelize_instruments(Instrument.usd.abc, 4) do |instrument|
         instrument.candles.day.tinkoff.where('date > ?', '2021-01-01').find_each do |candle|
           Iex.import_day_candles instrument, date: candle.date
         end

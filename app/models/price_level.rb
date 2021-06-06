@@ -5,6 +5,11 @@ class PriceLevel < ApplicationRecord
   ACCURACY = 0.02
   PERIOD = 10
 
+  def candles = instrument.candles.day.where(date: dates)
+  def calc_total_volume = candles.map(&:volume).sum
+  def calc_average_volume = candles.map(&:volume).average
+  def cache_volume = update!(total_volume: calc_total_volume, average_volume: calc_average_volume)
+
   class Extremum
     attr :candle, :selector
 
@@ -61,6 +66,10 @@ class PriceLevel < ApplicationRecord
 
       nil
     end
+
+    def cache_volume
+      find_each(&:cache_volume)
+    end
   end
 end
 
@@ -68,5 +77,6 @@ __END__
 
 PriceLevel.search instr('DOCU')
 PriceLevel.search_all
+PriceLevel.cache_volume
 
 instr('DOCU').candles.day.where(date: Date.parse('2021-06-05')..Date.current).count
