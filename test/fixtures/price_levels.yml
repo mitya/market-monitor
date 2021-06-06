@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  value: 9.99
+  accuracy: 1.5
+  kind: MyString
+
+two:
+  ticker: MyString
+  value: 9.99
+  accuracy: 1.5
+  kind: MyString

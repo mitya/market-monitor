@@ -75,17 +75,30 @@ function renderChart(ticker) {
 
     if (chart) chart.destroy()
     chart = new ApexCharts(document.querySelector("#the-chart"), {
-      series: [{
-        data: response.candles.map( ({ date, ohlc }) => [ Date.parse(date), ohlc ] )
-      }],
+      series: [
+        {
+          type: 'candlestick',
+          name: 'candles',
+          data: response.candles.map( ({ date, ohlc }) => [ date, ohlc ] )
+        },
+        ...response.levels.map(level => ({
+          type: 'line',
+          name: level.value,
+          data: level.row,
+        })),
+      ],
       chart: {
-        type: 'candlestick',
         height: 400,
         toolbar: { autoSelected: 'pan' },
         animations: { enabled: false },
         id: 'candles',
         group: 'main',
       },
+      stroke: {
+       width: Array(20).fill(1),
+       curve: 'straight'
+      },
+      colors: ['#f00', ...Array(20).fill('#00f')],
       title: {
         text: `${response.ticker} — ${response.formatted_last_price}`,
         align: 'left'
@@ -103,10 +116,12 @@ function renderChart(ticker) {
         //   }
         // }
       },
+
       yaxis: {
         tooltip: { enabled: true },
         labels: { minWidth: Y_LABELS_WIDTH, maxWidth: Y_LABELS_WIDTH }
       },
+
       // annotations: {
       //   xaxis: [
       //     {

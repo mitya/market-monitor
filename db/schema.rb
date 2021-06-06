@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_02_162403) do
+ActiveRecord::Schema.define(version: 2021_06_04_210141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,16 @@ ActiveRecord::Schema.define(version: 2021_06_02_162403) do
     t.integer "tinkoff_iis_lots"
     t.integer "vtb_lots"
     t.integer "ideal_lots"
+  end
+
+  create_table "price_levels", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.decimal "value", precision: 20, scale: 4
+    t.float "accuracy"
+    t.string "kind"
+    t.date "dates", array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "price_signals", force: :cascade do |t|

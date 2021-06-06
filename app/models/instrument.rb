@@ -8,6 +8,7 @@ class Instrument < ApplicationRecord
   has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignal'
   has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument
   has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument
+  has_many :levels,                        foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevel', dependent: :delete_all
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument

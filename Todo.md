@@ -135,24 +135,21 @@
 + consolidations list
 + TRMK.US
 + parallelize candle loading
++ longs terms levels
++ show levels on charts
 
-- longs terms levels
+- add high levels
 - search for long-term level hits
 - rebounds from long term levels
 
-- kogan
-- заказать запчасти для ТО
-
 - search for consolidations
 - determine consolidation boundaries
-
 - add breakout dates to rockets
 - search for retests / levels / breakouts
 
 @@@
 
 - don't check Europe & Moex2 in the evening
-- signal results on close/last prices
 - intraday accelerations
 - intraday search for more than 1% in 10-min movements
 - intraday search for above average volume in 5 min

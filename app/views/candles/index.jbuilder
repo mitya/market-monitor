@@ -6,3 +6,4 @@ json.candles @candles do |candle|
   json.volume candle.volume
 end
 json.formatted_last_price format_price(@instrument.last, unit: @instrument.currency)
+json.levels @levels

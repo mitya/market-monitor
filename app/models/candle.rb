@@ -9,6 +9,8 @@ class Candle < ApplicationRecord
   scope :non_analyzed, -> { where analyzed: nil }
   # scope :non_analyzed, -> { }
 
+  scope :iex, -> { where source: 'iex' }
+
   def self.find_date_before(date) = order(date: :desc).where('date < ?', date.to_date).take
   def self.find_date_or_before(date) = order(date: :desc).where('date <= ?', date.to_date).take
   def self.find_date(date)        = for_date(date).take
@@ -126,6 +128,17 @@ class Candle < ApplicationRecord
         when '5min' then 5.minutes
         when 'hour' then 1.hour
         when 'day'  then 1.day
+      end
+    end
+
+    def remove_dups
+      iex.find_each do |candle|
+        exist = logger.silence do
+          day.where.not(id: candle.id).where(ticker: candle.ticker, date: candle.date).exists?
+        end
+        if exist
+          day.where.not(id: candle.id).where(ticker: candle.ticker, date: candle.date).delete_all
+        end
       end
     end
   end
