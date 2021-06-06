@@ -19,3 +19,9 @@ class Date
     to_time.to_i * 1000
   end
 end
+
+module Math
+  def self.in_delta?(x, y, accuracy)
+    (x - y).abs <= x * accuracy
+  end
+end

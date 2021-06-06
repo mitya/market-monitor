@@ -50,9 +50,9 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='SND'
+export tickers='A AA AAIC'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-04-01 special=1 ok=1
+rake iex:days:missing since=2021-01-01 special=1 ok=1
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1

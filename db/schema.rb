@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 2021_06_04_210141) do
     t.string "ticker", null: false
     t.decimal "value", precision: 20, scale: 4
     t.float "accuracy"
+    t.integer "period"
     t.string "kind"
     t.date "dates", array: true
     t.datetime "created_at", precision: 6, null: false

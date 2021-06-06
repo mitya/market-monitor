@@ -137,8 +137,10 @@
 + parallelize candle loading
 + longs terms levels
 + show levels on charts
++ update tinkoff candles to iex
++ add high levels
 
-- add high levels
+- add volume to levels
 - search for long-term level hits
 - rebounds from long term levels
 

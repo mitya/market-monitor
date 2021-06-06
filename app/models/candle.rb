@@ -10,6 +10,7 @@ class Candle < ApplicationRecord
   # scope :non_analyzed, -> { }
 
   scope :iex, -> { where source: 'iex' }
+  scope :tinkoff, -> { where source: 'tinkoff' }
 
   def self.find_date_before(date) = order(date: :desc).where('date < ?', date.to_date).take
   def self.find_date_or_before(date) = order(date: :desc).where('date <= ?', date.to_date).take
@@ -138,6 +139,14 @@ class Candle < ApplicationRecord
         end
         if exist
           day.where.not(id: candle.id).where(ticker: candle.ticker, date: candle.date).delete_all
+        end
+      end
+    end
+
+    def replace_tinkoff_with_iex
+      Instrument.usd.find_each do |instrument|
+        instrument.candles.day.tinkoff.where('date > ?', '2021-01-01').find_each do |candle|
+          Iex.import_day_candles instrument, date: candle.date
         end
       end
     end
