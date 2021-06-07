@@ -68,6 +68,7 @@ main.container-fluid.mb-4
         th
         th(data-sort="ticker") Ticker
         th
+        th
         th Name
         - if is_portfolio
           th.money-cell Tinkoff
@@ -163,6 +164,7 @@ main.container-fluid.mb-4
           td= country_flag inst
           td= instrument_logo_button inst
           td= inst.ticker
+          td= known_icon inst
           td= type_icon inst
           td.instrument-name= truncate inst.name
 

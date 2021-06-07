@@ -140,19 +140,21 @@
 + update tinkoff candles to iex
 + add high levels
 + add volume to levels
++ search for long-term level hits
++ level hits listing
++ add a quick way to change ticker on chart
 
-- search for long-term level hits
-- level hits listing
-- rebounds from long term levels
+- level hits from below (passes)
+- level hits from avove (passes)
+- level retests
+- level rebounds
+
+- add a way to set period on chart
+- find & import missing candles
 
 - search for consolidations
 - determine consolidation boundaries
 - add breakout dates to rockets
-- search for retests / levels / breakouts
-
-- add a way to set period on chart
-- add a quick way to change ticker on chart
-- find & import missing candles
 
 @@@
 

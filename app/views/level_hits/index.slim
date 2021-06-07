@@ -1,0 +1,52 @@
+- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+
+main.container-fluid
+  h1.display-3 Level Hits
+
+  form#list-config(action=level_hits_path class='my-2')
+    = render 'instruments/filter_by_set'
+    .row.mb-3
+      .col
+        = render 'instruments/filter_by_currency'
+        = render 'instruments/filter_by_availability'
+        = render 'instruments/filter_by_tickers'
+        = render 'instruments/pagination_options'
+      .col
+    .row
+      .col-sm-2
+      .col-sm-9
+        = bs_check_box :price_targets, 'Price targets', inline: true
+        = bs_check_box :relative_price_targets, 'relative', inline: true
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
+    thead.table-dark
+      tr
+        th
+        th
+        th
+        th(data-sort="ticker") Ticker
+        th.money-cell Level
+        th.text-end Type
+        th Name
+        th Sector
+        th.text-end Date
+        th(data-sort="aggregates.days_up desc") Trn
+    tbody
+      - @hits.each do |hit|
+        - inst = instrument = hit.instrument
+        - info = instrument.info
+        tr
+          td= instrument_logo_button inst
+          td= known_icon instrument
+          td= type_icon instrument
+          td= inst.ticker
+          td.money-cell= price_span hit.level_value, unit: instrument.currency
+          td.text-end= hit.kind
+          td.instrument-name= instrument.name
+          td= sector_badge instrument
+          td.text-end= date_as_wday hit.date
+          td= growth_badge instrument.aggregate
+
+  = paginate @hits, window: 20
+  = tickers_copy_list @hits.map(&:instrument).uniq

@@ -329,7 +329,7 @@ module InstrumentsHelper
 
   def tickers_copy_list(records)
     tickers = records.map(&:ticker)
-    tag.p(tickers.join(' '), class: 'text-muted text-center', style: 'font-size: 0.5rem')
+    tag.p(tickers.join(' '), class: 'text-muted text-center x-tickers-list', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json)
   end
 end
 

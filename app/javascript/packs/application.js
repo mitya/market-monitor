@@ -61,6 +61,26 @@ document.addEventListener("turbolinks:load", () => {
   let tickersInput = document.querySelector('#tickers')
   if (tickersInput?.value)
     tickersInput.focus()
+
+  let chartModal = document.querySelector('#chart-modal')
+  if (chartModal) {
+    chartModal.addEventListener("click", e => {
+      if (e.target.matches('.x-change-chart')) {
+        let down = e.target.matches('.x-next-chart')
+        let button = e.target
+        let modal = button.closest('#chart-modal')
+        let ticker = modal.dataset.ticker
+
+        let tickersList = JSON.parse(document.querySelector('.x-tickers-list').dataset.tickers)
+        let currentIndex = tickersList.indexOf(ticker)
+        let nextTicker = tickersList[down ? currentIndex - 1 : currentIndex + 1]
+        if (nextTicker) {
+          renderChart(nextTicker)
+        }
+      }
+    })
+  }
+
 })
 
 let chart = null
@@ -68,6 +88,7 @@ let volumeChart = null
 
 function renderChart(ticker) {
   fetch(`/instruments/${ticker}/candles`, { headers: { 'Content-Type': 'application/json' } }).then(response => response.json()).then(response => {
+    document.querySelector('#chart-modal').dataset.ticker = ticker
     document.querySelector('#chart-modal .tv-link').href = response.trading_view_url
     document.querySelector('#chart-modal .modal-title').innerText = response.name
 
