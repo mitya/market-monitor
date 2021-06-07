@@ -145,8 +145,9 @@
 + add a quick way to change ticker on chart
 + track the first date for tickers (eg ALTO 2021-02-01)
 + find & import missing candles
++ add a way to set period on chart
 
-- add a way to set period on chart
+- запчасти
 
 - level hits from below (passes)
 - level hits from avove (passes)

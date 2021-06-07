@@ -77,6 +77,14 @@ document.addEventListener("turbolinks:load", () => {
         if (nextTicker) {
           renderChart(nextTicker)
         }
+      } else if (e.target.matches('#show-levels')) {
+        renderChart(currentChartTicker)
+      }
+    })
+
+    chartModal.addEventListener("change", e => {
+      if (e.target.matches('#chart-period')) {
+        renderChart(currentChartTicker)
       }
     })
   }
@@ -85,12 +93,18 @@ document.addEventListener("turbolinks:load", () => {
 
 let chart = null
 let volumeChart = null
+let currentChartTicker = null
 
-function renderChart(ticker) {
-  fetch(`/instruments/${ticker}/candles`, { headers: { 'Content-Type': 'application/json' } }).then(response => response.json()).then(response => {
+function renderChart(ticker, date) {
+  date = document.querySelector('#chart-period').value
+  fetch(`/instruments/${ticker}/candles?since=${date}`, { headers: { 'Content-Type': 'application/json' } }).then(response => response.json()).then(response => {
     document.querySelector('#chart-modal').dataset.ticker = ticker
     document.querySelector('#chart-modal .tv-link').href = response.trading_view_url
     document.querySelector('#chart-modal .modal-title').innerText = response.name
+    currentChartTicker = ticker
+
+    let showLevels = document.querySelector('#show-levels').checked
+    console.log(showLevels)
 
     const Y_LABELS_WIDTH = 80
 
@@ -102,13 +116,14 @@ function renderChart(ticker) {
           name: 'candles',
           data: response.candles.map( ({ date, ohlc }) => [ date, ohlc ] )
         },
-        ...response.levels.map(level => ({
-          type: 'line',
-          name: level.value,
-          data: level.row,
-        })),
+        ... (
+          showLevels ?
+            response.levels.map(level => ({  type: 'line', name: level.value, data: level.row })) :
+            []
+        )
       ],
       chart: {
+        type: showLevels ? 'line' : 'candlestick',
         height: 400,
         toolbar: { autoSelected: 'pan' },
         animations: { enabled: false },
@@ -142,6 +157,22 @@ function renderChart(ticker) {
         tooltip: { enabled: true },
         labels: { minWidth: Y_LABELS_WIDTH, maxWidth: Y_LABELS_WIDTH }
       },
+      // tooltip: {
+      //   shared: true,
+      //   custom: [
+      //     ({seriesIndex, dataPointIndex, w}) => {
+      //       // return w.globals.series[seriesIndex][dataPointIndex]
+      //       try {
+      //         let o = w.globals.seriesCandleO[seriesIndex][dataPointIndex]
+      //         let h = w.globals.seriesCandleH[seriesIndex][dataPointIndex]
+      //         let l = w.globals.seriesCandleL[seriesIndex][dataPointIndex]
+      //         let c = w.globals.seriesCandleC[seriesIndex][dataPointIndex]
+      //         return `Open: ${o}\nHigh: ${h}\nLow: ${l}\nClose: ${c}\n`
+      //       } catch {
+      //       }
+      //     }
+      //   ]
+      // },
 
       // annotations: {
       //   xaxis: [

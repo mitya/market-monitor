@@ -6,9 +6,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id="chart-controls">
+        #chart-controls.row.align-items-center
+          .col-auto
+            = select_tag "chart-period", options_for_select(CandlesController::CHART_PERIODS.map(&:to_s), params[:date] || CandlesController::DEFAULT_PERIOD), class: 'form-select mb-2 w-auto'
+          .col-auto
+            .form-check
+              input class="form-check-input" type="checkbox" value="1" checked="checked" id="show-levels"
+              label class="form-check-label" for="show-levels" Levels
 
-        </div>
         <div id="the-chart"></div>
         <div id="volume-chart"></div>
       </div>
