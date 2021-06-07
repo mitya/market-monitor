@@ -9,6 +9,7 @@ class Instrument < ApplicationRecord
   has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument
   has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument
   has_many :levels,                        foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevel', dependent: :delete_all
+  has_many :level_this,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevelHit', dependent: :delete_all
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
@@ -25,6 +26,7 @@ class Instrument < ApplicationRecord
   scope :premium, -> { with_flag 'premium' }
   scope :spb, -> { where "'spb' = any(flags)" }
   scope :iex, -> { where "'iex' = any(flags)" }
+  scope :iex_sourceable, -> { where.not iex_ticker: nil }
   scope :usd, -> { where currency: 'USD' }
   scope :eur, -> { where currency: 'EUR' }
   scope :rub, -> { where currency: 'RUB' }
@@ -37,10 +39,15 @@ class Instrument < ApplicationRecord
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
 
+  scope :mature, -> { where first_date: MatureDate }
+  scope :with_first_date, -> { where.not first_date: nil }
+  scope :without_first_date, -> { where first_date: nil }
+
   scope :vtb_spb_long, -> { where "stats.extra->>'vtb_list_2' = 'true'" }
   scope :vtb_moex_short, -> { where "stats.extra->>'vtb_can_short' = 'true'" }
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
 
+  MatureDate = Date.new(2019,  1,  3)
   DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d6 d7 w1 w2 m1 week month].map { |period| "#{period}_ago" }
 
   DateSelectors.each do |selector|
@@ -118,8 +125,6 @@ class Instrument < ApplicationRecord
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)
 
-  def iex_ticker = self.class.iex_ticker_for(ticker)
-
   MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA MTLRP OKEY SIBN SMLT].to_set
 
   def to_s = ticker
@@ -145,7 +150,7 @@ class Instrument < ApplicationRecord
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
 
-    def iex_ticker_for(ticker) = ticker.sub('.US', '')
+    def iex_ticker_for(ticker) = ticker.sub(/\.US|@US/, '')
   end
 
   concerning :Filters do

@@ -56,7 +56,6 @@ namespace :iex do
 
         with_missing_date.each do |inst|
           Iex.import_day_candles inst, date: date
-          sleep 0.3
         end
       end
     end

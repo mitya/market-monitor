@@ -143,21 +143,23 @@
 + search for long-term level hits
 + level hits listing
 + add a quick way to change ticker on chart
++ track the first date for tickers (eg ALTO 2021-02-01)
++ find & import missing candles
+
+- add a way to set period on chart
 
 - level hits from below (passes)
 - level hits from avove (passes)
 - level retests
 - level rebounds
 
-- add a way to set period on chart
-- find & import missing candles
+@@@
 
+- iex largest trades
+- iex International Symbols
 - search for consolidations
 - determine consolidation boundaries
 - add breakout dates to rockets
-
-@@@
-
 - don't check Europe & Moex2 in the evening
 - intraday accelerations
 - intraday search for more than 1% in 10-min movements
@@ -177,7 +179,6 @@
 - russian ticker company info
 - maintain average volume for last N months
 - ticker selection & commands
-- track the first date for tickers (eg ALTO 2021-02-01)
 
 # Later
 – comparision to a random date

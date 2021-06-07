@@ -9,7 +9,7 @@ class Price < ApplicationRecord
 
   class << self
     def refresh_from_tinkoff(instruments)
-      Current.parallelize_instruments(instruments, 1) { | instr| Tinkoff.update_current_price instr }
+      Current.parallelize_instruments(instruments, 2) { | instr| Tinkoff.update_current_price instr }
     end
 
     def refresh_from_iex(symbols = [])

@@ -67,4 +67,4 @@ rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:pee
 ## Optional
 rake iex:days:period period=ytd
 rake iex:price_targets:missing
-rake instruments:remove ticker=GWPH
+rake instruments:remove ticker=ACIA

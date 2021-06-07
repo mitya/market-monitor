@@ -40,7 +40,7 @@ class Stats < ApplicationRecord
     destroy
   end
 
-  def iex_ticker = Instrument.iex_ticker_for(ticker)
+  # def iex_ticker = Instrument.iex_ticker_for(ticker)
   def marketcap = super.to_i.nonzero?
   def marketcap_mil = marketcap && marketcap / 1_000_000.0
   def marketcap_bil = marketcap && marketcap / 1_000_000_000.0
