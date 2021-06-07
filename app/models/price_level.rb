@@ -1,5 +1,6 @@
 class PriceLevel < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
+  has_many :hits, class_name: 'PriceLevelHit', foreign_key: 'level_id'
 
   HISTORY_START = Date.parse('2020-01-01')
   ACCURACY = 0.02
@@ -23,7 +24,6 @@ class PriceLevel < ApplicationRecord
   class << self
     def search_all
       Instrument.all.abc.each { |inst| search inst }
-      nil
     end
 
     def search(instrument)

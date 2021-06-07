@@ -3,6 +3,8 @@
 
 require_relative "config/application"
 
+$log_tinkoff = ENV['LOG_TINKOFF']
+
 def envtask(task_name, &block)
   deps = :env
   if task_name.is_a?(Hash)

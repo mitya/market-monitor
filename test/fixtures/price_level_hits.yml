@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  level: one
+  level_value: 9.99
+  kind: MyString
+  date: 2021-06-07
+
+two:
+  level: two
+  level_value: 9.99
+  kind: MyString
+  date: 2021-06-07

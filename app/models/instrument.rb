@@ -101,6 +101,9 @@ class Instrument < ApplicationRecord
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
   def info! = info || create_info
 
+  def today_candle = day_candles!.find_date(Current.date)
+  def yesterday_candle = day_candles!.find_date(Current.yesterday)
+
   def tinkoff? = flags.include?('tinkoff')
   def iex? = info.present?
   def premium? = flags.include?('premium')

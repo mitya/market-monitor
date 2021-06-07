@@ -20,6 +20,7 @@ class Candle < ApplicationRecord
   def final? = !ongoing?
 
   def range = low..high
+  def range_with_delta(delta = 0.02) = (low * (1 - delta)) .. (high * (1 + delta))
   def range_high = close > open ? close : open
   def range_low  = close < open ? close : open
   def top_shadow_spread = high - range_high
@@ -139,14 +140,6 @@ class Candle < ApplicationRecord
         end
         if exist
           day.where.not(id: candle.id).where(ticker: candle.ticker, date: candle.date).delete_all
-        end
-      end
-    end
-
-    def replace_tinkoff_with_iex
-      Current.parallelize_instruments(Instrument.usd.abc, 4) do |instrument|
-        instrument.candles.day.tinkoff.where('date > ?', '2021-01-01').find_each do |candle|
-          Iex.import_day_candles instrument, date: candle.date
         end
       end
     end

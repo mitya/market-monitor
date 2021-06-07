@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_04_210141) do
+ActiveRecord::Schema.define(version: 2021_06_06_213909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,6 +184,17 @@ ActiveRecord::Schema.define(version: 2021_06_04_210141) do
     t.integer "ideal_lots"
   end
 
+  create_table "price_level_hits", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.bigint "level_id", null: false
+    t.decimal "level_value", precision: 20, scale: 4
+    t.string "kind"
+    t.date "date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["level_id"], name: "index_price_level_hits_on_level_id"
+  end
+
   create_table "price_levels", force: :cascade do |t|
     t.string "ticker", null: false
     t.decimal "value", precision: 20, scale: 4
@@ -295,4 +306,5 @@ ActiveRecord::Schema.define(version: 2021_06_04_210141) do
     t.jsonb "extra"
   end
 
+  add_foreign_key "price_level_hits", "price_levels", column: "level_id"
 end

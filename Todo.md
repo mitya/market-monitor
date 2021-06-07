@@ -142,6 +142,7 @@
 + add volume to levels
 
 - search for long-term level hits
+- level hits listing
 - rebounds from long term levels
 
 - search for consolidations
@@ -151,6 +152,7 @@
 
 - add a way to set period on chart
 - add a quick way to change ticker on chart
+- find & import missing candles
 
 @@@
 
