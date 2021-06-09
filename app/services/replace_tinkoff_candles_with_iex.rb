@@ -3,7 +3,7 @@ class ReplaceTinkoffCandlesWithIex
 
   def call
     Current.parallelize_instruments(Instrument.usd.abc, 4) do |instrument|
-      instrument.candles.day.tinkoff.where('date > ?', '2020-07-01').find_each do |candle|
+      instrument.candles.day.tinkoff.where('date > ?', '2020-01-01').find_each do |candle|
         next if candle.instrument.iex_ticker == nil
         imported = Iex.import_day_candles(instrument, date: candle.date)
         candle.destroy unless imported

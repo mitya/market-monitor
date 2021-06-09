@@ -1,3 +1,43 @@
+- level hits from below (passes)
+- level hits from avove (passes)
+- level retests
+- level rebounds
+
+# Next
+
+- iex largest trades
+- iex International symbols
+- search for consolidations
+- determine consolidation boundaries
+- add breakout dates to rockets
+- don't check Europe & Moex2 in the evening
+- intraday accelerations
+- intraday search for more than 1% in 10-min movements
+- intraday search for above average volume in 5 min
+- intraday alarms
+- custom categories (coal / gas / ...)
+- search for pull backs
+- convert rub-usd based on date
+– find stocks with significant spikes last days
+– find stocks with strong growth last days
+– find stocks with slow growth last days
+– find stocks with N% volatility on X previous days and high within Y%
+- find stocks with continious flat
+- portfolio: add a new ticker from UI
+- extract special dates
+- disable stocks without any recent data
+- russian ticker company info
+- maintain average volume for last N months
+- ticker selection & commands
+
+
+# Later
+– comparision to a random date
+- column selection
+- terminal-based UI
+
+
+# Done
 + tinkoff-import BBG000B9XRY4 1min 2020-10-21T12:02:00+03:00 2020-10-21T13:16:00+03:00
 + create AR record from non-Rails script
 + ruby script to import TI JSON metadata into Postgres
@@ -146,43 +186,3 @@
 + track the first date for tickers (eg ALTO 2021-02-01)
 + find & import missing candles
 + add a way to set period on chart
-
-- запчасти
-
-- level hits from below (passes)
-- level hits from avove (passes)
-- level retests
-- level rebounds
-
-@@@
-
-- iex largest trades
-- iex International Symbols
-- search for consolidations
-- determine consolidation boundaries
-- add breakout dates to rockets
-- don't check Europe & Moex2 in the evening
-- intraday accelerations
-- intraday search for more than 1% in 10-min movements
-- intraday search for above average volume in 5 min
-- intraday alarms
-- custom categories (coal / gas / ...)
-- search for pull backs
-- convert rub-usd based on date
-– find stocks with significant spikes last days
-– find stocks with strong growth last days
-– find stocks with slow growth last days
-– find stocks with N% volatility on X previous days and high within Y%
-- find stocks with continious flat
-- portfolio: add a new ticker from UI
-- extract special dates
-- disable stocks without any recent data
-- russian ticker company info
-- maintain average volume for last N months
-- ticker selection & commands
-
-# Later
-– comparision to a random date
-- column selection
-- terminal-based UI
-- charts

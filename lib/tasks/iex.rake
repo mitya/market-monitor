@@ -46,8 +46,9 @@ namespace :iex do
       dates = dates - MarketCalendar.nyse_holidays.to_a
       dates.uniq.sort.each do |date|
         date = Date.parse(date) if String === date
-        instruments = R.instruments_from_env || Instrument.premium
-        with_missing_date = instruments.abc.select { |inst| inst.candles.day.final.where(date: date).none? }
+        instruments = (R.instruments_from_env || Instrument.premium).abc
+        instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date }
+        with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
 
         puts if date.monday?
         puts "#{date} #{date.strftime '%a'} #{with_missing_date.count} #{with_missing_date.join(',')}".yellow
@@ -144,7 +145,7 @@ namespace :iex do
 
   envtask :price_targets do
     instruments = R.instruments_from_env || Instrument.main
-    instruments.usd.iex.stocks.abc.each do |inst|
+    instruments.iex_sourceable.stocks.abc.each do |inst|
       PriceTarget.import_iex_data_from_remote inst
     end
   end

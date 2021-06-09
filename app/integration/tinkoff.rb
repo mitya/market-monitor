@@ -4,7 +4,7 @@ class Tinkoff
   OutdatedTickers = %w[
     AGN AIMT AOBC APY AVP AXE BEAT BFYT BMCH CHA CHL CXO CY DLPH DNKN ENPL ETFC FTRE HDS HIIQ IMMU LM LOGM LVGO MINI MYL MYOK
     NBL PRSC PRTK RUSP SERV SINA TECD TIF TRCN TSS UTX VAR VRTU WYND ACIA FLIR EV PLT PS VIE
-    CBPO MTSC PRSP RP
+    CBPO MTSC PRSP RP MQ
   ].uniq
 
   def sync_instruments(preview: true)
@@ -19,15 +19,16 @@ class Tinkoff
     instruments.each do |hash|
       if inst = Instrument.find_by_ticker(hash['ticker'])
         if inst.isin != hash['isin']
-          puts "#{inst.ticker} ISIN mismatch"
+          puts "Diff ISIN - #{inst.ticker} - #{hash['name']} (was #{inst.name})".yellow
           problematic_tickers << inst.ticker
         end
         if inst.figi != hash['figi']
-          puts "#{inst.ticker} FIGI mismatch"
+          puts "Diff FIGI - #{inst.ticker} - #{hash['name']} (was #{inst.name})".yellow
           problematic_tickers << inst.ticker
         end
       else
-        puts "#{hash['ticker']} missing!"
+        next if OutdatedTickers.include?(hash['ticker'])
+        puts "Miss #{hash['ticker']} - #{hash['name']}".green
         new_tickers << hash['ticker']
       end
     end
@@ -35,16 +36,22 @@ class Tinkoff
     current_tickers = instruments.map { |hash| hash['ticker'] }.to_set
     outdated_tickers = Instrument.tinkoff.reject { |inst| inst.ticker.in? current_tickers }
     puts
-    puts "Outdated: #{outdated_tickers.map &:ticker}"
-    puts "Problematic: #{problematic_tickers + new_tickers}"
+    puts "Outdated: #{outdated_tickers.map(&:ticker).join(' ')}"
+    puts "Problematic: #{problematic_tickers.join(' ')}"
+    puts "New: #{new_tickers.join(' ')}"
     puts
+
+    first_dates = YAML.load_file("db/data/first-dates.yaml")
 
     unless preview
       instruments.
         select { |hash| new_tickers.include? hash['ticker'] }.
         each do |hash|
           puts "Create #{hash['ticker']}"
-          Instrument.create! instrument_attrs_from(hash)
+          inst = Instrument.create! instrument_attrs_from(hash)
+          if first_date = first_dates[hash['ticker']]
+            inst.update! first_date: first_date
+          end
         end
 
       instruments.

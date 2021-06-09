@@ -102,9 +102,7 @@ function renderChart(ticker, date) {
     document.querySelector('#chart-modal .tv-link').href = response.trading_view_url
     document.querySelector('#chart-modal .modal-title').innerText = response.name
     currentChartTicker = ticker
-
     let showLevels = document.querySelector('#show-levels').checked
-    console.log(showLevels)
 
     const Y_LABELS_WIDTH = 80
 

@@ -37,9 +37,9 @@ end
 
 task :a => %w[aggregate analyze]
 
+envtask(:levels) { PriceLevelHit.analyze_all }
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
-
-envtask(:sa) do
+envtask(:sa) {
   PublicSignal.parse_seeking_alpha
   InsiderAggregate.aggregate
-end
+}

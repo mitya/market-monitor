@@ -50,6 +50,7 @@ class Stats < ApplicationRecord
   def avg_30d_volume = stats['avg30Volume']
   def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
   def accessible_peers_and_self = accessible_peers + [ticker]
+  def iex_ticker = instrument.iex_ticker
 
   def country_code
     COUNTRY_NAMES_TO_ISO3[country.to_s]

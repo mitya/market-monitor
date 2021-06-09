@@ -47,6 +47,7 @@ class Instrument < ApplicationRecord
   scope :vtb_moex_short, -> { where "stats.extra->>'vtb_can_short' = 'true'" }
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
 
+
   MatureDate = Date.new(2019,  1,  3)
   DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d6 d7 w1 w2 m1 week month].map { |period| "#{period}_ago" }
 
@@ -132,6 +133,11 @@ class Instrument < ApplicationRecord
 
   def lowest_body_in(period) = day_candles!.find_dates_in(period).min_by(&:range_low)
 
+  after_create def fix_iex_ticker
+    return update! iex_ticker: nil if not usd?
+    return update! iex_ticker: self.class.iex_ticker_for(ticker)
+  end
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker
@@ -150,7 +156,7 @@ class Instrument < ApplicationRecord
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
 
-    def iex_ticker_for(ticker) = ticker.sub(/\.US|@US/, '')
+    def iex_ticker_for(ticker) = ticker.include?('@GS') ? nil : ticker.sub(/\.US|@US/, '')
   end
 
   concerning :Filters do
@@ -173,3 +179,5 @@ Instrument.get('BGS').day_candles.where(date: Current.date)
 Instrument.get('CHK').destroy
 Instrument.get('CCL').today_open
 Instrument.join(:info).count
+
+Instrument.get('AAN').update! first_date: '2020-11-25'

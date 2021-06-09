@@ -34,7 +34,7 @@ class PriceTarget < ApplicationRecord
       return if ApiCache.exist? "cache/iex-price-targets/#{instrument.ticker} targets #{Date.current.to_s :number}.json"
       data = ApiCache.get "cache/iex-price-targets/#{instrument.ticker} targets #{Date.current.to_s :number}.json" do
         puts "Load   price target for #{instrument.ticker}"
-        Iex.price_target(instrument.ticker)
+        Iex.price_target(instrument.iex_ticker)
       end
 
       import_iex_data data

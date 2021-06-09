@@ -56,9 +56,7 @@ rake iex:days:missing since=2021-01-01 special=1 ok=1
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1
-export tickers='TRMK.US'
-rake tinkoff:days:missing
-rake tinkoff:days:year
+export tickers='OGN STE RUN CRSP'
 rake tinkoff:logos:download
 
 ## All
@@ -68,3 +66,5 @@ rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:pee
 rake iex:days:period period=ytd
 rake iex:price_targets:missing
 rake instruments:remove ticker=ACIA
+
+rake instruments:ReplaceTinkoffCandlesWithIex
