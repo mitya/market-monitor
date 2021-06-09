@@ -1,10 +1,12 @@
-- level hits from below (passes)
-- level hits from avove (passes)
-- level retests
-- level rebounds
++ level hits from below & avove
++ level retests & rebounds
+
+- colorize level hits
+- show more details in chart header (marketcap, trend, price targets)
 
 # Next
 
+- improve level rebound search logic
 - iex largest trades
 - iex International symbols
 - search for consolidations

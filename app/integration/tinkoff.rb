@@ -7,6 +7,12 @@ class Tinkoff
     CBPO MTSC PRSP RP MQ
   ].uniq
 
+  TickerWithSomeDatesMIssing = %w[
+    AKBTY CCHGY
+  ]
+
+  BadTickers = (OutdatedTickers + TickerWithSomeDatesMIssing).uniq
+
   def sync_instruments(preview: true)
     file = Pathname("db/data/tinkoff-stocks-#{Date.current.to_s :number}.json")
     file.write `coffee bin/tinkoff.coffee stocks` unless file.exist?
@@ -27,7 +33,7 @@ class Tinkoff
           problematic_tickers << inst.ticker
         end
       else
-        next if OutdatedTickers.include?(hash['ticker'])
+        next if BadTickers.include?(hash['ticker'])
         puts "Miss #{hash['ticker']} - #{hash['name']}".green
         new_tickers << hash['ticker']
       end

@@ -73,6 +73,7 @@ class Candle < ApplicationRecord
 
   def siblings = instrument.candles.where(interval: interval)
   def previous = @previous ||= siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
+  def previous_n(n) = siblings.where('date < ?', date).order(:date).last(n)
   def n_previous(n) = each_previous(with_self: false).take(n)
   def each_previous(with_self: true)
     curr = self
@@ -84,6 +85,8 @@ class Candle < ApplicationRecord
 
   def >=(other) = close >= other.close # || high >= other.close
   def <=(other) = close <= other.close # || low <= other.close
+  def > (other) = close >  other.close # || high >= other.close
+  def < (other) = close <  other.close # || low <= other.close
 
   def to_s = "<#{ticker}:#{interval}:#{date}>"
 

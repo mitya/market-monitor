@@ -36,13 +36,13 @@ main.container-fluid
       - @hits.each do |hit|
         - inst = instrument = hit.instrument
         - info = instrument.info
-        tr
+        tr(data-ticker=hit.ticker)
           td= instrument_logo_button inst
           td= known_icon instrument
           td= type_icon instrument
           td= inst.ticker
-          td.money-cell= price_span hit.level_value, unit: instrument.currency
-          td.text-end= hit.kind
+          td.money-cell.open-chart(class=class_names('text-30': hit.loose?))= price_span hit.level_value, unit: instrument.currency
+          td.text-end(class=class_names('text-30': hit.loose?))= hit.kind
           td.instrument-name= instrument.name
           td= sector_badge instrument
           td.text-end= date_as_wday hit.date

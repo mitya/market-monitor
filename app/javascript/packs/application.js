@@ -41,13 +41,14 @@ document.addEventListener("turbolinks:load", () => {
         let sortKey = th.dataset.sort == 'ticker' ? '' : th.dataset.sort
         document.querySelector('#order').value = sortKey
         document.querySelector('#list-config').submit()
-      } else if (e.target.matches('.open-chart')) {
+      } else if (e.target.matches('.open-chart') || e.target.closest('.open-chart')) {
         e.stopPropagation()
         let link = e.target
+        let row = e.target.closest('tr')
 
         let modal = new Modal(document.getElementById('chart-modal'))
         modal.show()
-        renderChart(link.dataset.ticker)
+        renderChart(link.dataset.ticker || row.dataset.ticker)
       } else if (e.target.matches('.instrument-name')) {
         let row = e.target.closest('tr')
         for (let other of row.parentNode.querySelectorAll('tr')) {

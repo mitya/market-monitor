@@ -87,7 +87,7 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .is-green .percentage-bar { background-color: green; }
 .is-red .percentage-bar { background-color: red; }
 
-.open-chart { cursor: pointer; }
+.open-chart, .open-row-chart { cursor: pointer; }
 
 .instrument-name { cursor: pointer; }
 .selected-row .instrument-name { color: blue; font-weight: bold; }
@@ -103,3 +103,6 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .sa-badge-4 { background-color: #32CD32; }
 .sa-badge-5 { background-color: green; }
 .sa-badge-5 .changebox-green, .sa-badge-5 .changebox-red { color: white; }
+
+.text-20 { color: rgba(black, 0.2); }
+.text-30 { color: rgba(black, 0.3); }

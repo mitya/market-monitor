@@ -37,9 +37,15 @@ end
 
 task :a => %w[aggregate analyze]
 
-envtask(:levels) { PriceLevelHit.analyze_all }
+envtask(:levels) { PriceLevel.search_all }
+envtask(:hits) { PriceLevelHit.analyze_all }
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
 envtask(:sa) {
   PublicSignal.parse_seeking_alpha
   InsiderAggregate.aggregate
 }
+
+
+envtask(:clear_list) do
+  puts ENV['tickers'].split(',').map{ |tk| tk.split(':').last }.sort.join("\n")
+end

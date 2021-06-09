@@ -10,6 +10,7 @@ class PriceLevel < ApplicationRecord
   def calc_total_volume = candles.map(&:volume).sum
   def calc_average_volume = candles.map(&:volume).average
   def cache_volume = update!(total_volume: calc_total_volume, average_volume: calc_average_volume)
+  def value_plus(delta) = value + value * delta
 
   class Extremum
     attr :candle, :selector
@@ -53,10 +54,13 @@ class PriceLevel < ApplicationRecord
       groups.each do |extremums|
         average = extremums.map(&:value).sum / extremums.count
         value = average.round(1)
+
         find_or_create_by!(ticker: instrument.ticker, value: value) do |level|
           level.dates = extremums.map(&:date)
           level.accuracy = ACCURACY
           level.period = PERIOD
+          level.total_volume = extremums.map { |e| e.candle.volume }.sum
+          level.average_volume = extremums.map { |e| e.candle.volume }.average
 
           is_low  = extremums.any?(&:low?)
           is_high = extremums.any?(&:high?)

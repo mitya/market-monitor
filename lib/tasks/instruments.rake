@@ -4,7 +4,7 @@ namespace :instruments do
   end
 
   envtask :check_dead do
-    Tinkoff::OutdatedTickers.each do |ticker|
+    Tinkoff::BadTickers.each do |ticker|
       inst = Instrument.get(ticker)
       if inst
         puts "#{inst} #{inst.candles.day.order(:date).last&.date}"
@@ -13,7 +13,7 @@ namespace :instruments do
   end
 
   envtask :remove_all_dead do
-    Tinkoff::OutdatedTickers.each do |ticker|
+    Tinkoff::BadTickers.each do |ticker|
       Instrument.get(ticker)&.destroy
     end
   end

@@ -5,6 +5,7 @@ class CreatePriceLevelHits < ActiveRecord::Migration[6.1]
       t.references :level, null: false, foreign_key: { to_table: 'price_levels' }
       t.decimal :level_value, precision: 20, scale: 4
       t.string :kind
+      t.boolean :exact, :important
       t.date :date
       t.timestamps
     end

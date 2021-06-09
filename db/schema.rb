@@ -170,6 +170,8 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "has_logo"
     t.string "exchange"
+    t.text "iex_ticker"
+    t.date "first_date"
     t.index ["figi"], name: "index_instruments_on_figi", unique: true
     t.index ["isin"], name: "index_instruments_on_isin", unique: true
   end
@@ -189,6 +191,8 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.bigint "level_id", null: false
     t.decimal "level_value", precision: 20, scale: 4
     t.string "kind"
+    t.boolean "exact"
+    t.boolean "important"
     t.date "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -201,6 +205,8 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.float "accuracy"
     t.integer "period"
     t.string "kind"
+    t.boolean "important"
+    t.boolean "manual"
     t.date "dates", array: true
     t.integer "total_volume"
     t.integer "average_volume"
