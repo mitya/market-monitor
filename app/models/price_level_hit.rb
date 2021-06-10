@@ -4,6 +4,8 @@ class PriceLevelHit < ApplicationRecord
 
   DELTA = 0.01
 
+  scope :exact, -> { where exact: true }
+
   def loose? = !exact?
 
   before_validation do
@@ -40,15 +42,15 @@ class PriceLevelHit < ApplicationRecord
         end
       end
 
-      where(date: MarketCalendar.prev(curr.date)).each do |yday|
-        if curr.up? && curr.close > yday.level.value_plus(DELTA)
-          kind = 'rebound-up' # or just pass through
-        elsif curr.down? && curr.close < yday.level.value_plus(-DELTA)
-          kind = 'rebound-down'
-        end
-
-        record! level: yday.level, date: curr.date, kind: kind
-      end
+      # where(date: MarketCalendar.prev(curr.date)).each do |yday|
+      #   if curr.up? && curr.close > yday.level.value_plus(DELTA)
+      #     kind = 'rebound-up' # or just pass through
+      #   elsif curr.down? && curr.close < yday.level.value_plus(-DELTA)
+      #     kind = 'rebound-down'
+      #   end
+      #
+      #   record! level: yday.level, date: curr.date, kind: kind
+      # end
     end
 
     def analyze_all

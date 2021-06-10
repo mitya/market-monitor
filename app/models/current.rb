@@ -7,9 +7,10 @@ class Current < ActiveSupport::CurrentAttributes
   end
   alias today date
 
+  def est =Time.find_zone!('Eastern Time (US & Canada)')
   def msk = Time.find_zone!('Moscow')
   def ru_time = msk.now
-  def us_time = Time.find_zone!('Eastern Time (US & Canada)').now
+  def us_time = est.now
   def us_date = us_time.to_date
   def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '09:30'
   def uk_market_open? = date.on_weekday? && Time.current.to_s(:time) >= '11:00'

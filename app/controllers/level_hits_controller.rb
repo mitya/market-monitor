@@ -14,6 +14,7 @@ class LevelHitsController < ApplicationController
     @hits = @hits.where ["? = any(instruments.flags)", params[:availability]] if params[:availability].present?
     @hits = @hits.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
     @hits = @hits.where ticker: InstrumentSet.get(params[:set]).symbols       if params[:set].present? && params[:tickers].blank?
+    @hits = @hits.exact                                                       if params[:exact] == '1'
 
     @hits = @hits.page(params[:page]).per(params[:per_page])
     @hits = @hits.order('date desc, ticker')

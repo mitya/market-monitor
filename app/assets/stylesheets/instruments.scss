@@ -17,6 +17,12 @@ th[data-sort] { cursor: pointer; }
 .changebox-green, .is-green { color: green; }
 .changebox-red, .is-red { color: red; }
 
+.text-green { color: green; }
+.text-red   { color: red; }
+.opacity-30 { opacity: 0.3; }
+.opacity-50 { opacity: 0.5; }
+
+
 
 .money-cell, .money-amount, .changebox, .badge-fixed {
   font-family: helvetica, var(--bs-font-sans-serif);

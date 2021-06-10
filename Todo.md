@@ -1,8 +1,9 @@
 + level hits from below & avove
 + level retests & rebounds
++ colorize level hits
 
-- colorize level hits
 - show more details in chart header (marketcap, trend, price targets)
+- alerts
 
 # Next
 

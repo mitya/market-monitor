@@ -64,7 +64,7 @@ class Instrument < ApplicationRecord
   def y2019         = @y2019 ||= day_candles!.find_date(Current.y2019)
   def y2020         = @y2020 ||= day_candles!.find_date(Current.y2020)
   def y2021         = @y2021 ||= day_candles!.find_date(Current.y2021)
-  def last          = @last  ||= price!.value
+  def last          = @last  ||= price!.last_at && yesterday_candle&.close_time ? (price!.last_at < yesterday_candle.close_time ? yesterday_candle.close : price!.value) : price!.value
   def last_or_open  = last || today_open
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }

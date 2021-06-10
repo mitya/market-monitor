@@ -12,7 +12,7 @@ class Candle < ApplicationRecord
   scope :iex, -> { where source: 'iex' }
   scope :tinkoff, -> { where source: 'tinkoff' }
 
-  def self.find_date_before(date) = order(date: :desc).where('date < ?', date.to_date).take
+  def self.find_date_before(date)    = order(date: :desc).where('date < ?', date.to_date).take
   def self.find_date_or_before(date) = order(date: :desc).where('date <= ?', date.to_date).take
   def self.find_date(date)        = for_date(date).take
   def self.find_dates_in(period)  = where(date: period)
@@ -32,6 +32,8 @@ class Candle < ApplicationRecord
   def max = up?? high : low
   alias body_low range_low
   alias body_high range_high
+
+  def close_time = date.in_time_zone(Current.est).change(hour: 16)
 
   def ohlc_row = [open, high, low, close]
 

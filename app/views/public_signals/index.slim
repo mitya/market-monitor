@@ -27,6 +27,7 @@ main.container-fluid
         th
         th Ticker
         th Company
+        th Sector
         th Source
         th Score
         th.money-cell Date
@@ -53,6 +54,7 @@ main.container-fluid
           td= type_icon instrument
           td= inst.ticker
           td.instrument-name= instrument.name
+          td= sector_badge instrument
           td= signal_source signal.source
           td= signal_score_badge signal
           td.money-cell= l signal.date, format: :long

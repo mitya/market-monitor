@@ -14,10 +14,11 @@ main.container-fluid
         = render 'instruments/pagination_options'
       .col
     .row
-      .col-sm-2
-      .col-sm-9
+      .col-sm-1
+      .col-sm-10
         = bs_check_box :price_targets, 'Price targets', inline: true
         = bs_check_box :relative_price_targets, 'relative', inline: true
+        = bs_check_box :exact, 'Exact only'
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
     thead.table-dark
@@ -29,6 +30,7 @@ main.container-fluid
         th.money-cell Level
         th.text-end Type
         th Name
+        th.money-cell Cap
         th Sector
         th.text-end Date
         th(data-sort="aggregates.days_up desc") Trn
@@ -41,9 +43,10 @@ main.container-fluid
           td= known_icon instrument
           td= type_icon instrument
           td= inst.ticker
-          td.money-cell.open-chart(class=class_names('text-30': hit.loose?))= price_span hit.level_value, unit: instrument.currency
-          td.text-end(class=class_names('text-30': hit.loose?))= hit.kind
+          td.money-cell.open-chart(class=class_names(level_hit_color(hit)))= price_span hit.level_value, unit: instrument.currency
+          td.text-end(class=class_names(level_hit_color(hit)))= hit.kind
           td.instrument-name= instrument.name
+          td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           td= sector_badge instrument
           td.text-end= date_as_wday hit.date
           td= growth_badge instrument.aggregate
