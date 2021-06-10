@@ -1,0 +1,63 @@
+- inst = instrument
+- info = instrument.info
+- price_target = instrument.price_target
+- aggregate = instrument.aggregate
+- price_target_format = past_price_format = 'relative'
+
+table.table.table-sm.table-hover.table-font-sm.tickers-table
+  thead.table-dark
+    tr
+      th Sector
+      th.money-cell Cap (M)
+      th.money-cell P/E
+      th.money-cell ß
+      th.money-cell Yield
+      th.money-cell Target Low
+      th.money-cell Average
+      th.money-cell High
+      th.money-cell On
+      th.text-center Trn
+  tbody
+    tr
+      td= sector_badge inst
+      td.money-cell(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+      td.money-cell                = number_with_precision info&.pe, precision: 0
+      td.money-cell                = number_with_precision info&.beta, precision: 1
+      td.money-cell= number_to_percentage  info&.dividend_yield_percent, precision: 1
+      td.money-cell= relative_price price_target&.low_in_usd,     inst.base_price, unit: inst.currency, format: price_target_format
+      td.money-cell= relative_price price_target&.average_in_usd, inst.base_price, unit: inst.currency, format: price_target_format
+      td.money-cell= relative_price price_target&.high_in_usd,    inst.base_price, unit: inst.currency, format: price_target_format
+      td.money-cell= days_old_badge price_target&.date
+      td.text-center= growth_badge aggregate
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th.money-cell(title=l(Current.yesterday, format: :week_day)) 1d ﹪
+        th.money-cell(title=l(Current.d2_ago,    format: :week_day)) 2d ﹪
+        th.money-cell(title=l(Current.d3_ago,    format: :week_day)) 3d ﹪
+        th.money-cell(title=l(Current.d4_ago,    format: :week_day)) 4d ﹪
+        th.money-cell(title=l(Current.w1_ago,    format: :week_day)) 1w ﹪
+        th.money-cell(title=l(Current.w2_ago,    format: :week_day)) 2w ﹪
+        th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
+        th.money-cell ytd ﹪
+        th.money-cell Nov6 ﹪
+        th.money-cell Mar23 ﹪
+        th.money-cell Feb19 ﹪
+        th.money-cell 2020 ﹪
+        th.money-cell 2019 ﹪
+    tbody
+      tr
+        td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell.muted-cell       = relative_price inst.d3_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell.muted-cell       = relative_price inst.d4_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell                  = relative_price inst.w1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell                  = relative_price inst.w2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell                  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell                  = relative_price inst.     nov06_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell                  = relative_price inst.     mar23_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell                  = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+        td.money-cell.muted-cell       = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true

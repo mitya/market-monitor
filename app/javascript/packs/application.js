@@ -102,6 +102,8 @@ function renderChart(ticker, date) {
     document.querySelector('#chart-modal').dataset.ticker = ticker
     document.querySelector('#chart-modal .tv-link').href = response.trading_view_url
     document.querySelector('#chart-modal .modal-title').innerText = response.name
+    document.querySelector('#chart-details').innerHTML = response.details_html
+
     currentChartTicker = ticker
     let showLevels = document.querySelector('#show-levels').checked
 
@@ -123,7 +125,7 @@ function renderChart(ticker, date) {
       ],
       chart: {
         type: showLevels ? 'line' : 'candlestick',
-        height: 400,
+        height: 380,
         toolbar: { autoSelected: 'pan' },
         animations: { enabled: false },
         id: 'candles',
@@ -202,7 +204,7 @@ function renderChart(ticker, date) {
         data: response.candles.map( ({ date, volume }) => [ Date.parse(date), volume ] )
       }],
       chart: {
-        height: 160,
+        height: 140,
         type: 'bar',
         toolbar: { autoSelected: 'pan' },
         animations: { enabled: false },

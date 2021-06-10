@@ -7,3 +7,4 @@ json.candles @candles do |candle|
 end
 json.formatted_last_price format_price(@instrument.last, unit: @instrument.currency)
 json.levels @levels
+json.details_html render('details', instrument: @instrument)
