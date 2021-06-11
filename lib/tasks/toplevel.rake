@@ -38,7 +38,9 @@ end
 task :a => %w[aggregate analyze]
 
 envtask(:levels) { PriceLevel.search_all }
-envtask(:hits) { PriceLevelHit.analyze_all }
+envtask('levels:manual') { PriceLevel.load_manual }
+envtask('levels:hits') { PriceLevelHit.analyze_all }
+envtask('levels:alerts') { PriceLevelHit.analyze_manual }
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
 envtask(:sa) {
   PublicSignal.parse_seeking_alpha
@@ -46,6 +48,15 @@ envtask(:sa) {
 }
 
 
-envtask(:clear_list) do
+envtask('list:clear') do
   puts ENV['tickers'].split(',').map{ |tk| tk.split(':').last }.sort.join("\n")
+end
+
+envtask('list:import') do
+  list = ENV['list']
+  file = Pathname("db/instrument-sets/#{list}.txt")
+  text = file.read
+  text = text.gsub(',', "\n")
+  tickers = text.each_line.map { |line| line.to_s.split(':').last.upcase.chomp.presence }.uniq.compact
+  file.write(tickers.join("\n"))
 end

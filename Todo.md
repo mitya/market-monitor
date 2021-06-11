@@ -2,8 +2,9 @@
 + level retests & rebounds
 + colorize level hits
 + show more details in chart header (marketcap, trend, price targets)
-
-- alerts
++ manual levels
++ export list as TV file
++ import TV list
 
 # Next
 

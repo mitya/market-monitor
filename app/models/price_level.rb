@@ -2,6 +2,10 @@ class PriceLevel < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
   has_many :hits, class_name: 'PriceLevelHit', foreign_key: 'level_id'
 
+  scope :manual, -> { where manual: true }
+  scope :auto, -> { where manual: nil }
+  scope :important, -> { where important: true }
+
   HISTORY_START = Date.parse('2020-01-01')
   ACCURACY = 0.02
   PERIOD = 10
@@ -74,6 +78,16 @@ class PriceLevel < ApplicationRecord
     def cache_volume
       find_each(&:cache_volume)
     end
+
+    def load_manual
+      Pathname("db/alerts.txt").readlines(chomp: true).each do |line|
+        next if line.blank?
+        ticker, value = line.split
+        instrument = Instrument.get(ticker)
+        next puts "Missing #{ticker.upcase}".red unless instrument
+        find_or_create_by! instrument: instrument, value: value, manual: true, important: true
+      end
+    end
   end
 end
 
@@ -81,6 +95,7 @@ __END__
 
 PriceLevel.search instr('DOCU')
 PriceLevel.search_all
+PriceLevel.load_manual
 PriceLevel.cache_volume
 
 instr('DOCU').candles.day.where(date: Date.parse('2021-06-05')..Date.current).count

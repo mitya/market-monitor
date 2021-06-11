@@ -15,6 +15,7 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.where(currency: params[:currency])                 if params[:currency].present?
     @instruments = @instruments.where(type: params[:type])                         if params[:type].present?
     @instruments = @instruments.with_flag(params[:availability])                   if params[:availability].present?
+    @instruments = @instruments.with_alarm                                         if params[:alarm].present?
     @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
 
@@ -33,6 +34,12 @@ class InstrumentsController < ApplicationController
 
     Current.preload_day_candles_with @instruments.to_a, params[:chart_volatility] ? Current.last_2_weeks : []
     Current.preload_prices_for @instruments.to_a
+  end
+
+  def export
+    tickers = params[:tickers].to_s.split(' ')
+    set = params[:set] || 'list'
+    send_data tickers.join("\n"), filename: "#{set.humanize} #{Time.current.strftime('%Y-%m-%d %H:%M')}.txt"
   end
 end
 

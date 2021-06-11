@@ -312,9 +312,13 @@ module InstrumentsHelper
   end
 
   def known_icon(instrument)
-    return fa_icon 'briefcase', xsmall: true if InstrumentSet.portfolio.symbols.include?(instrument.ticker)
-    return fa_icon 'user', xsmall: true if InstrumentSet.insiders.symbols.include?(instrument.ticker)
-    return fa_icon 'glasses', xsmall: true if InstrumentSet.known?(instrument.ticker)
+    icons = [
+      (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker)),
+      (:bell      if InstrumentSet.alarms.symbols.include?(instrument.ticker)),
+      (:user      if InstrumentSet.insiders.symbols.include?(instrument.ticker)),
+    ].compact
+    icons = [:glasses] if icons.empty? && InstrumentSet.known?(instrument.ticker)
+    icons.map { |icon| fa_icon(icon, xsmall: true) }.join(' ').html_safe
   end
 
   def instrument_logo(instrument, **options)
@@ -329,7 +333,10 @@ module InstrumentsHelper
 
   def tickers_copy_list(records)
     tickers = records.map(&:ticker)
-    tag.p(tickers.join(' '), class: 'text-muted text-center x-tickers-list', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json)
+    tag.p(tickers.join(' '), class: 'text-muted text-center x-tickers-list mb-1', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json) +
+    tag.p(class: 'text-muted text-center', style: 'font-size: 0.5rem') do
+      link_to "Export", export_instruments_path(tickers: tickers.join(' '), set: params[:set])
+    end
   end
 end
 

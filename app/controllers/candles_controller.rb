@@ -11,7 +11,7 @@ class CandlesController < ApplicationController
     start_date = params[:since] ? Date.parse(params[:since]) : DEFAULT_PERIOD
     @instrument = Instrument.get!(params[:instrument_id])
     @candles = @instrument.day_candles.where('date > ?', start_date).order(:date)
-    @levels = @instrument.levels.select{ |level| @candles.any? { |c| c.range.include?(level.value) }}.sort_by(&:value).map do |level|
+    @levels = @instrument.levels.auto.select{ |level| @candles.any? { |c| c.range.include?(level.value) }}.sort_by(&:value).map do |level|
       {
         value: level.value,
         row: [ [@candles.first&.date, level.value] , [@candles.last&.date, level.value] ]

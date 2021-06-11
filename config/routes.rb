@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :instruments do
     resources :candles, only: :index
+    get :export, on: :collection
   end
   resources :insider_transactions, path: 'insider-transactions'
   resources :insider_aggregates, path: 'insider-aggregates'

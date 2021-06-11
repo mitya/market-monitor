@@ -38,6 +38,7 @@ class Instrument < ApplicationRecord
   scope :main, -> { in_set :main }
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
+  scope :with_alarm, -> { joins(:levels).where(levels: { manual: true }) }
 
   scope :mature, -> { where first_date: MatureDate }
   scope :with_first_date, -> { where.not first_date: nil }

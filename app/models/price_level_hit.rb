@@ -5,6 +5,7 @@ class PriceLevelHit < ApplicationRecord
   DELTA = 0.01
 
   scope :exact, -> { where exact: true }
+  scope :important, -> { where important: true }
 
   def loose? = !exact?
 
@@ -15,7 +16,9 @@ class PriceLevelHit < ApplicationRecord
   end
 
   class << self
-    def analyze(instrument)
+    def analyze(instrument, levels: instrument.levels)
+      return if levels.none?
+
       curr = instrument.yesterday_candle
       return if not curr
 
@@ -23,7 +26,7 @@ class PriceLevelHit < ApplicationRecord
       recent = curr.previous_n(10)
       recent_ref = recent[-4]
 
-      instrument.levels.order(:value).each do |level|
+      levels.order(:value).each do |level|
         if is_nearby = curr.range_with_delta(DELTA).include?(level.value)
           exact = is_nearby && curr.range.include?(level.value)
           delta = exact ? 0 : DELTA
@@ -57,6 +60,10 @@ class PriceLevelHit < ApplicationRecord
       Instrument.all.abc.each { |inst| analyze inst }
     end
 
+    def analyze_manual
+      Instrument.all.abc.each { |inst| analyze inst, levels: inst.levels.manual }
+    end
+
     def record!(level:, date:, kind:, **attrs)
       puts "#{level.ticker.ljust 8} hit level #{level.value} #{kind}"
       find_or_create_by! level: level, date: date, kind: kind, **attrs
@@ -66,6 +73,7 @@ end
 
 __END__
 PriceLevelHit.analyze_all
+PriceLevelHit.analyze_manual
 
 level
 fall
