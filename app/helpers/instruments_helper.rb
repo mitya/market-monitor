@@ -338,6 +338,10 @@ module InstrumentsHelper
       link_to "Export", export_instruments_path(tickers: tickers.join(' '), set: params[:set])
     end
   end
+
+  def min_amount_options
+    %w[100_000 200_000 500_000 1_000_000]
+  end
 end
 
 __END__

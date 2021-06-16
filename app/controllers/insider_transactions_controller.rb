@@ -2,6 +2,7 @@ class InsiderTransactionsController < ApplicationController
   def index
     params[:per_page] ||= '200'
     params[:insider] = nil if params[:tickers] && params[:tickers].split.many?
+    min_amount = params[:min_amount].to_i.nonzero?
 
     # params[:tickers] ||= Instrument.joins(:info).where('stats.marketcap < ?', 600_000_000).pluck(:ticker).join(' ')
 
@@ -10,10 +11,12 @@ class InsiderTransactionsController < ApplicationController
     @transactions = @transactions.for_insider params[:insider]       if params[:insider].present?
     @transactions = @transactions.for_direction params[:direction]   if params[:direction].present?
     @transactions = @transactions.market_only                        if params[:market_only] == '1'
+    @transactions = @transactions.where('cost > ?', min_amount)      if min_amount
     @transactions = @transactions.order(date: :desc, ticker: :asc)
     @transactions = @transactions.includes(:instrument => :info)
     @transactions = @transactions.page(params[:page]).per(params[:per_page])
 
-    Current.preload_prices_for @transactions.map &:instrument
+    Current.preload_prices_for @transactions.map(&:instrument)
+    Current.preload_day_candles_with @transactions.map(&:instrument).uniq, nil
   end
 end

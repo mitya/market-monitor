@@ -38,7 +38,8 @@ class InstrumentSet
     end
 
     def all
-      @all ||= Pathname.glob("db/instrument-sets/*.txt").map { |path| new path.basename('.txt').to_s }
+      @all ||= (Pathname.glob("db/instrument-sets/*.txt").map { |path| new path.basename('.txt').to_s } +
+        %w[alarms recommendations].map { |key| new key }).sort_by(&:key)
     end
 
     def all_with_null

@@ -17,6 +17,7 @@ envtask :main do
   end
   rake 'aggregate'
   rake 'analyze'
+  rake 'levels:alerts'
   rake 'tinkoff:portfolio:sync'
 end
 
@@ -38,7 +39,7 @@ end
 task :a => %w[aggregate analyze]
 
 envtask(:levels) { PriceLevel.search_all }
-envtask('levels:manual') { PriceLevel.load_manual }
+envtask('levels:import') { PriceLevel.load_manual }
 envtask('levels:hits') { PriceLevelHit.analyze_all }
 envtask('levels:alerts') { PriceLevelHit.analyze_manual }
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
@@ -47,6 +48,8 @@ envtask(:sa) {
   InsiderAggregate.aggregate
 }
 
+
+envtask('signals:import') { PublicSignal.load }
 
 envtask('list:clear') do
   puts ENV['tickers'].split(',').map{ |tk| tk.split(':').last }.sort.join("\n")
@@ -59,4 +62,43 @@ envtask('list:import') do
   text = text.gsub(',', "\n")
   tickers = text.each_line.map { |line| line.to_s.split(':').last.upcase.chomp.presence }.uniq.compact
   file.write(tickers.join("\n"))
+end
+
+
+task :import => %w[levels:import signals:import]
+
+envtask :check_dead do
+  Tinkoff::BadTickers.each do |ticker|
+    inst = Instrument.get(ticker)
+    if inst
+      puts "#{inst} #{inst.candles.day.order(:date).last&.date}"
+    end
+  end
+end
+
+envtask :destroy do
+  Instrument[ENV['ticker']].destroy!
+end
+
+envtask :destroy_all_dead do
+  Tinkoff::BadTickers.each do |ticker|
+    Instrument.get(ticker)&.destroy
+  end
+end
+
+envtask(:LoadMissingIexCandles) { LoadMissingIexCandles.call }
+envtask(:ReplaceTinkoffCandlesWithIex) { ReplaceTinkoffCandlesWithIex.call }
+
+envtask :empty do
+  instruments = Instrument.all.select { |inst| inst.candles.none? }
+  puts instruments.join(' ')
+end
+
+envtask :set_first_date do
+  Instrument.get(ENV['ticker']).update! first_date: ENV['date']
+end
+
+envtask :set_first_date_auto do
+  inst = Instrument.get(ENV['ticker'])
+  Instrument.get(ENV['ticker']).update! first_date: inst.candles.day.asc.first&.date
 end

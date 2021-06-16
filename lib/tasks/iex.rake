@@ -45,7 +45,7 @@ namespace :iex do
       dates -= [Current.date]
       dates = Current.last_2_weeks if dates.empty?
       dates = dates - MarketCalendar.nyse_holidays.to_a
-      dates.uniq.sort.each do |date|
+      dates.uniq.sort.reverse.each do |date|
         date = Date.parse(date) if String === date
         instruments = (R.instruments_from_env || Instrument.premium).abc
         instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date }
@@ -56,9 +56,8 @@ namespace :iex do
 
         next unless R.confirmed?
 
-        with_missing_date.each do |inst|
-          Iex.import_day_candles inst, date: date
-        end
+        # with_missing_date.each { |inst| Iex.import_day_candles inst, date: date }
+        Current.parallelize_instruments(with_missing_date, 4) { | inst| Iex.import_day_candles inst, date: date }
       end
     end
 
@@ -113,6 +112,15 @@ namespace :iex do
       end
     end
     envtask(:peers) { Stats.load_peers }
+    envtask :missing do
+      items = Iex.all_symbols_cache
+      index = items.index_by(&:symbol)
+      Instrument.all.each do |inst|
+        if inst.usd? && !index[inst.iex_ticker]
+          puts "Missing #{inst}".red
+        end
+      end
+    end
   end
 
 

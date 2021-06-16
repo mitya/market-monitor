@@ -17,6 +17,8 @@ class MarketCalendar
 
     def nyse_holidays
       @nyse_holidays ||= %w[
+        2020-09-07
+        2020-12-25
         2021-01-01
         2021-01-18
         2021-02-15

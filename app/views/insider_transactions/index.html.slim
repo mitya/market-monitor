@@ -2,6 +2,7 @@ main.container-fluid
   form#list-config(action=insider_transactions_path class='my-2')
     = render 'instruments/filter_by_tickers'
     = render 'instruments/pagination_options'
+    = bs_select :min_amount, 'Min Amount:', min_amount_options, select_class: 'w-auto'
     - if @transactions.map(&:ticker).uniq.one?
       .row.mb-1
         .col-sm-2=  label_tag :insider, 'Insider:', class: 'col-form-label'

@@ -18,7 +18,7 @@ class Price < ApplicationRecord
         Iex.tops(*symbols)
       end
       prices.sort_by { |p| p['symbol'] }.each do |result|
-        if instrument = Instrument[result['symbol']]
+        if instrument = Instrument.get_by_iex_ticker(result['symbol'])
           next unless instrument.usd?
           price = result['lastSalePrice']
           last_at = Time.ms(result['lastUpdated'])

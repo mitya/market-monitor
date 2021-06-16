@@ -15,6 +15,10 @@
 
 # Data Sources
 
+https://financialmodelingprep.com/
+https://gocharting.com/
+https://github.com/rrag/react-stockcharts
+
     coffee bin/tinkoff.coffee stocks > db/data/stocks.json
 
     https://spbexchange.ru/ru/listing/securities/list/
@@ -43,25 +47,27 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='TKA'
+export tickers='CATO'
 rake tinkoff:premium:import
-rake iex:days:missing since=2021-01-01 special=1 ok=1
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1
-export tickers='OGN STE RUN CRSP'
+rake instruments:empty
+export tickers=''
 rake tinkoff:logos:download
 
 ## All
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
+rake iex:days:missing since=2021-01-01 special=1 ok=1
 
 ## Optional
 rake iex:days:period period=ytd
-rake iex:price_targets:missing
-rake instruments:remove ticker=ACIA
-
+rake destroy ticker=ACIA
+rake set_first_date ticker=TTE date=2021-06-16
+rake set_first_date_auto ticker=TTE
+rake iex:symbols:refresh
 
 ## Import List
 
 rake list:clear tickers=''
-rake list:import list=main
+rake list:import list=portfolio

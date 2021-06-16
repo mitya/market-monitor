@@ -4,7 +4,9 @@ class Tinkoff
   OutdatedTickers = %w[
     AGN AIMT AOBC APY AVP AXE BEAT BFYT BMCH CHA CHL CXO CY DLPH DNKN ENPL ETFC FTRE HDS HIIQ IMMU LM LOGM LVGO MINI MYL MYOK
     NBL PRSC PRTK RUSP SERV SINA TECD TIF TRCN TSS UTX VAR VRTU WYND ACIA FLIR EV PLT PS VIE
-    CBPO MTSC PRSP RP MQ
+    CBPO MTSC PRSP RP MQ TE
+    MNK GSH FTR
+    NVTK@GS LKOD@GS OGZD@GS NLMK@GS PHOR@GS SBER@GS SVST@GS SSA@GS MGNT@GS PLZL@GS KAP@GS
   ].uniq
 
   TickerWithSomeDatesMIssing = %w[
@@ -31,6 +33,9 @@ class Tinkoff
         if inst.figi != hash['figi']
           puts "Diff FIGI - #{inst.ticker} - #{hash['name']} (was #{inst.name})".yellow
           problematic_tickers << inst.ticker
+        end
+        if inst.premium?
+          puts "#{inst.ticker} is on SPB now".yellow
         end
       else
         next if BadTickers.include?(hash['ticker'])

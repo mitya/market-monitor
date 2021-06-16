@@ -8,8 +8,9 @@ class Instrument < ApplicationRecord
   has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignal'
   has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument
   has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument
+  has_many :level_hits,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevelHit', dependent: :delete_all
   has_many :levels,                        foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevel', dependent: :delete_all
-  has_many :level_this,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevelHit', dependent: :delete_all
+  has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
@@ -145,6 +146,10 @@ class Instrument < ApplicationRecord
       figi ? find_by_figi(figi) : find_by_ticker(ticker.to_s.upcase)
     end
 
+    def get_by_iex_ticker(iex_ticker)
+      find_by_iex_ticker(iex_ticker.to_s.upcase)
+    end
+
     def get!(ticker = nil, figi: nil)
       get(ticker, figi: figi) || raise(ActiveRecord::RecordNotFound, "Instrument '#{ticker || figi}' does not exist!")
     end
@@ -157,7 +162,8 @@ class Instrument < ApplicationRecord
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
 
-    def iex_ticker_for(ticker) = ticker.include?('@GS') ? nil : ticker.sub(/\.US|@US/, '')
+    IEX_TICKERS = { 'KAP@GS' => 'KAP' }
+    def iex_ticker_for(ticker) = IEX_TICKERS[ticker] || (ticker.include?('@GS') ? nil : ticker.sub(/\.US|@US/, ''))
   end
 
   concerning :Filters do

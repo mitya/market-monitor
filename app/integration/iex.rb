@@ -62,6 +62,9 @@ class Iex
   rescue RestClient::NotFound => e
     puts "Import IEX #{date} candle for #{instrument}: #{e}".red
     nil
+  rescue RestClient::Forbidden => e
+    puts "Import IEX #{date} candle for #{instrument}: #{e}".red
+    nil
   end
 
   def import_today_candle(instrument)

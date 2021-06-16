@@ -1,10 +1,4 @@
-+ level hits from below & avove
-+ level retests & rebounds
-+ colorize level hits
-+ show more details in chart header (marketcap, trend, price targets)
-+ manual levels
-+ export list as TV file
-+ import TV list
+- perf comparision chart in period
 
 # Next
 
@@ -190,3 +184,10 @@
 + track the first date for tickers (eg ALTO 2021-02-01)
 + find & import missing candles
 + add a way to set period on chart
++ level hits from below & avove
++ level retests & rebounds
++ colorize level hits
++ show more details in chart header (marketcap, trend, price targets)
++ manual levels
++ export list as TV file
++ import TV list

@@ -80,7 +80,7 @@ class PriceLevel < ApplicationRecord
     end
 
     def load_manual
-      Pathname("db/alerts.txt").readlines(chomp: true).each do |line|
+      Pathname("db/levels.txt").readlines(chomp: true).each do |line|
         next if line.blank?
         ticker, value = line.split
         instrument = Instrument.get(ticker)

@@ -7,6 +7,7 @@ class Candle < ApplicationRecord
   scope :today, -> { where date: Current.date }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
   scope :non_analyzed, -> { where analyzed: nil }
+  scope :asc, -> { order :date }  
   # scope :non_analyzed, -> { }
 
   scope :iex, -> { where source: 'iex' }

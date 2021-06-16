@@ -72,7 +72,7 @@ class InsiderTransaction < ApplicationRecord
     def parse_guru_focus
       get_row_field = -> (row, field, extra = nil) { row.css("td[data-column='#{field}']#{extra}").first&.inner_text&.strip }
 
-      Pathname.glob(Rails.root / "tmp/gurufocus/2021-06.html").each do |file|
+      Pathname.glob(Rails.root / "tmp/gurufocus/2021-06*.html").each do |file|
         doc = Nokogiri::HTML(file)
         table = doc.css('table').first
         table.css('tr').each do |row|

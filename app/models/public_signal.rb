@@ -9,6 +9,10 @@ class PublicSignal < ApplicationRecord
     update! price: instrument.price_on_or_before(date)&.close
   end
 
+  def effective_price
+    price.presence || instrument.day_candles.find_date_or_before(date)&.close
+  end
+
   class << self
     def load
       Pathname("db/signals.txt").readlines(chomp: true).each do |line|
