@@ -47,6 +47,7 @@ class PriceTarget < ApplicationRecord
 
     def set_current_for(ticker)
       *old, last = where(ticker: ticker).order(:date)
+      return puts "Missing price target record for #{last.ticker}".red
       last.update! current: true
       old.each { |target| target.update! current: nil }
     end

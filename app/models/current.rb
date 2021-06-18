@@ -41,6 +41,8 @@ class Current < ActiveSupport::CurrentAttributes
   def feb19     = Date.new(2020,  2, 19)
   def mar23     = Date.new(2020,  3, 23)
   def nov06     = Date.new(2020, 11,  6)
+  def y2017     = Date.new(2017,  1,  3)
+  def y2018     = Date.new(2018,  1,  3)
   def y2019     = Date.new(2019,  1,  3)
   def y2020     = Date.new(2020,  1,  3)
   def y2021     = Date.new(2021,  1,  4)
@@ -149,6 +151,13 @@ class Current < ActiveSupport::CurrentAttributes
         Current.w1_ago,
         Current.w2_ago,
         Current.m1_ago,
+      ]
+    end
+
+    def dates_plus
+      dates + [
+        Current.y2017,
+        Current.y2018,
       ]
     end
   end

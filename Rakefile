@@ -22,9 +22,12 @@ module R
   module_function
 
   def instruments_from_env
-    ENV['set'] ? Instrument.in_set(ENV['set']) :
-    ENV['tickers'] ? Instrument.for_tickers(ENV['tickers'].split(/\s|,/)) :
-    nil
+    tickers = ENV['ticker'].presence || ENV['t'].presence || ENV['tickers'].presence
+    tickers ?
+      Instrument.for_tickers(tickers.split(/\s|,/)) :
+      ENV['set'] ?
+        Instrument.in_set(ENV['set']) :
+        nil
   end
 
   def confirmed? = true?(:ok)

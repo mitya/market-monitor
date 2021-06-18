@@ -2,7 +2,7 @@ class RecommendationsController < ApplicationController
   def index
     params[:per_page] ||= '200'
 
-    @recommendations = Recommendation.all
+    @recommendations = Recommendation.joins(:instrument)
     @recommendations = @recommendations.where ticker: InstrumentSet.get(params[:set])&.tickers if params[:set].present?
     @recommendations = @recommendations.where instruments: { currency: params[:currency] }     if params[:currency].present?
     @recommendations = @recommendations.for_tickers params[:tickers].split                     if params[:tickers].present?

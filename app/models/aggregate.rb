@@ -6,7 +6,7 @@ class Aggregate < ApplicationRecord
   # store_accessor :data, :change
   # store_accessor :data, :volatility
 
-  Accessors = %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" } + %w[y2021 nov06 mar23 feb19 y2020 y2019]
+  Accessors = %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" } + %w[y2021 nov06 mar23 feb19 y2020 y2019 y2018 y2017]
 
   def days_down = days_up.to_i > 0 ? 0 : -days_up
 

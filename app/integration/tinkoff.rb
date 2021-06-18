@@ -5,7 +5,8 @@ class Tinkoff
     AGN AIMT AOBC APY AVP AXE BEAT BFYT BMCH CHA CHL CXO CY DLPH DNKN ENPL ETFC FTRE HDS HIIQ IMMU LM LOGM LVGO MINI MYL MYOK
     NBL PRSC PRTK RUSP SERV SINA TECD TIF TRCN TSS UTX VAR VRTU WYND ACIA FLIR EV PLT PS VIE
     CBPO MTSC PRSP RP MQ TE
-    MNK GSH FTR
+    MNK GSH FTR CTB
+    TOT
     NVTK@GS LKOD@GS OGZD@GS NLMK@GS PHOR@GS SBER@GS SVST@GS SSA@GS MGNT@GS PLZL@GS KAP@GS
   ].uniq
 
@@ -47,9 +48,9 @@ class Tinkoff
     current_tickers = instruments.map { |hash| hash['ticker'] }.to_set
     outdated_tickers = Instrument.tinkoff.reject { |inst| inst.ticker.in? current_tickers }
     puts
-    puts "Outdated: #{outdated_tickers.map(&:ticker).join(' ')}"
-    puts "Problematic: #{problematic_tickers.join(' ')}"
-    puts "New: #{new_tickers.join(' ')}"
+    puts "Outdated: #{outdated_tickers.map(&:ticker).sort.join(' ')}"
+    puts "Problematic: #{problematic_tickers.sort.join(' ')}"
+    puts "New: #{new_tickers.sort.join(' ')}"
     puts
 
     first_dates = YAML.load_file("db/data/first-dates.yaml")
@@ -148,15 +149,15 @@ class Tinkoff
     candle_class.transaction do
       candles.each do |hash|
         time = Time.parse hash['time']
-        puts "Import Tinkoff #{time} #{interval} candle for #{instrument}"
         candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time
+        puts "Import Tinkoff #{time} #{interval} candle for #{instrument}" if candle.new_record?
         candle.ticker  = instrument.ticker
         candle.source  = 'tinkoff'
         candle.open    = hash['o']
         candle.close   = hash['c']
         candle.high    = hash['h']
         candle.low     = hash['l']
-        candle.volume  = hash['v']
+        candle.volume  = hash['v'] > Integer::Max31 ? Integer::Max31 : hash['v']
         candle.date    = time.to_date
         candle.ongoing = interval == 'day' && time.to_date == Current.date && !Current.weekend?
         candle.save!
@@ -170,6 +171,15 @@ class Tinkoff
       instrument = Instrument.get figi: data['figi']
       import_candles_from_hash instrument, interval, hash
     end
+  end
+
+  def import_day_candle(instrument, date, delay: 0.25)
+    return if instrument.candles.day.final.tinkoff.where(date: date).exists?
+    data = load_day instrument, date - 1, date
+    import_candles_from_hash instrument, data
+    sleep delay
+  rescue
+    puts "Import #{instrument} failed: #{$!}"
   end
 
   def import_day_candles(instrument, since:, till:, delay: 0.25)

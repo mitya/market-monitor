@@ -143,6 +143,9 @@ main.container-fluid.mb-4
             th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
           th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
           th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
+        - if show_historical_prices
+          th.money-cell(data-sort="aggregates.y2018") 2018 ﹪
+          th.money-cell(data-sort="aggregates.y2017") 2017 ﹪
 
         th
         - if show_last_insider_buys
@@ -251,8 +254,12 @@ main.container-fluid.mb-4
               td.money-cell                  = relative_price inst.     nov06_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
               td.money-cell                  = relative_price inst.     mar23_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
               td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.border-end.pe-2  = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.muted-cell       = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.border-end.pe-2    = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.muted-cell         = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            - if show_historical_prices
+              td.money-cell.muted-cell       = relative_price inst.    y2018_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+              td.money-cell.muted-cell       = relative_price inst.    y2017_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+
 
           td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
             = exchange_logo(inst.exchange_name)

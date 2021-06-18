@@ -86,6 +86,7 @@ envtask :destroy_all_dead do
   end
 end
 
+envtask(:SetIexTickers) { SetIexTickers.call }
 envtask(:LoadMissingIexCandles) { LoadMissingIexCandles.call }
 envtask(:ReplaceTinkoffCandlesWithIex) { ReplaceTinkoffCandlesWithIex.call }
 
@@ -99,6 +100,5 @@ envtask :set_first_date do
 end
 
 envtask :set_first_date_auto do
-  inst = Instrument.get(ENV['ticker'])
-  Instrument.get(ENV['ticker']).update! first_date: inst.candles.day.asc.first&.date
+  (R.instruments_from_env || Instrument.all).to_a.each { |inst| inst.set_first_date! }
 end

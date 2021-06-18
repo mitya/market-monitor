@@ -41,13 +41,13 @@ namespace :iex do
       dates += ENV['dates'].to_s.split(',').presence           if ENV['dates']
       dates += Current.last_n_weeks(ENV['weeks'].to_i)         if ENV['weeks']
       dates += Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
-      dates += Current::SpecialDates.dates                     if R.true?('special')
+      dates += Current::SpecialDates.dates_plus                if R.true?('special')
       dates -= [Current.date]
       dates = Current.last_2_weeks if dates.empty?
       dates = dates - MarketCalendar.nyse_holidays.to_a
       dates.uniq.sort.reverse.each do |date|
         date = Date.parse(date) if String === date
-        instruments = (R.instruments_from_env || Instrument.premium).abc
+        instruments = (R.instruments_from_env || Instrument.iex_sourceable).abc
         instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date }
         with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
 
@@ -133,9 +133,14 @@ namespace :iex do
 
   envtask :stats do
     instruments = R.instruments_from_env || Instrument.all
-    instruments.usd.iex.abc.each do |inst|
+    instruments.iex_sourceable.abc.each do |inst|
       inst.info!.refresh include_company: R.true?(:company)
     end
+  end
+
+  envtask 'stats:missing' do
+    instruments = Instrument.iex_sourceable.select { | inst| inst.info == nil }
+    puts "Missing stats: #{instruments.map(&:ticker).sort.join(' ')}"
   end
 
   envtask :insider_transactions do
@@ -160,8 +165,8 @@ namespace :iex do
   end
 
   envtask :'price_targets:missing' do
-    instruments = Instrument.usd.iex.select { | inst| inst.price_targets.none? }
-    puts "Missing price targets: #{instruments.map(&:ticker).join(' ')}"
+    instruments = Instrument.iex_sourceable.select { | inst| inst.price_targets.none? }
+    puts "Missing price targets: #{instruments.map(&:ticker).sort.join(' ')}"
   end
 
   envtask :recommendations do
@@ -188,7 +193,7 @@ rake iex:candles:days:missing dates=2019-01-03,2020-01-03,2020-02-19,2020-03-23,
 rake iex:candles:days:1m
 rake iex:candles:days:on_dates dates=2021-04-01
 
-rake iex:stats
+rake iex:stats tickers='PRAX' company=1
 rake iex:candles:days:previous
 rake iex:candles:days:today
 rake iex:prices:all

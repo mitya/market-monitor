@@ -22,6 +22,14 @@ namespace :tinkoff do
       end
     end
 
+    envtask :special do
+      Instrument.non_usd.in_set(ENV['set']).abc.each do |inst|
+        Current::SpecialDates.dates_plus.each do |date|
+          Tinkoff.import_day_candle(inst, date)
+        end
+      end
+    end
+
     envtask :previous do
       Instrument.non_usd.in_set(ENV['set']).abc.each do |inst|
         Tinkoff.import_latest_day_candles(inst, today: false)

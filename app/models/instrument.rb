@@ -50,7 +50,7 @@ class Instrument < ApplicationRecord
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
 
 
-  MatureDate = Date.new(2019,  1,  3)
+  MatureDate = Current.y2017
   DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d6 d7 w1 w2 m1 week month].map { |period| "#{period}_ago" }
 
   DateSelectors.each do |selector|
@@ -63,6 +63,8 @@ class Instrument < ApplicationRecord
   def feb19         = @feb19 ||= day_candles!.find_date(Current.feb19)
   def mar23         = @mar23 ||= day_candles!.find_date(Current.mar23)
   def nov06         = @nov06 ||= day_candles!.find_date(Current.nov06)
+  def y2017         = @y2017 ||= day_candles!.find_date(Current.y2017)
+  def y2018         = @y2018 ||= day_candles!.find_date(Current.y2018)
   def y2019         = @y2019 ||= day_candles!.find_date(Current.y2019)
   def y2020         = @y2020 ||= day_candles!.find_date(Current.y2020)
   def y2021         = @y2021 ||= day_candles!.find_date(Current.y2021)
@@ -72,7 +74,7 @@ class Instrument < ApplicationRecord
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
   %w[low high open close volume volatility volatility_range direction].each do |selector|
-    (DateSelectors + %w[feb19 mar23 nov06 y2019 y2020 y2021]).each do |date|
+    (DateSelectors + %w[feb19 mar23 nov06 y2017 y2018 y2019 y2020 y2021]).each do |date|
       define_method("#{date}_#{selector}") { send(date).try(selector) }
       if selector.in? %w[low high open close]
         define_method("#{date}_#{selector}_rel")  { |curr_price = 'last'| rel_diff "#{date}_#{selector}", curr_price }
@@ -99,6 +101,7 @@ class Instrument < ApplicationRecord
     new_price_value / old_price_value - 1.0 if old_price_value && new_price_value
   end
 
+  def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
 
@@ -140,6 +143,12 @@ class Instrument < ApplicationRecord
     return update! iex_ticker: self.class.iex_ticker_for(ticker)
   end
 
+  def set_first_date!
+    first_candle_date = candles.day.asc.first&.date
+    first_candle_date = nil if first_candle_date.to_s == MatureDate.to_s
+    update! first_date: first_candle_date
+  end
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker
@@ -155,6 +164,7 @@ class Instrument < ApplicationRecord
     end
 
     alias [] get
+    def to_proc = -> ticker { get ticker }
 
     def reject_missing(tickers) = Instrument.for_tickers(tickers).pluck(:ticker)
     def normalize(records) = self === records.first ? records : records.map { |ticker| self[ticker] }.compact

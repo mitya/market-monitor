@@ -4,7 +4,7 @@ class Stats < ApplicationRecord
   scope :abc, -> { order :ticker }
 
   def refresh(include_company: false)
-    return if stats_updated_at && stats_updated_at > 15.minutes.ago
+    # return if stats_updated_at && stats_updated_at > 15.minutes.ago
     puts "Update info for #{ticker}"
 
     self.stats = Iex.stats(iex_ticker)

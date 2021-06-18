@@ -18,6 +18,10 @@ class Date
   def ms
     to_time.to_i * 1000
   end
+
+  def self.to_date(date)
+    self === date ? date : parse(date)
+  end
 end
 
 module Math
@@ -30,4 +34,8 @@ class Array
   def average
     sum / count
   end
+end
+
+class Integer
+  Max31 = 2**31 - 1
 end
