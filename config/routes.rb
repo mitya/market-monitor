@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   resources :public_signals
   resources :portfolio, as: :portfolio_items
   resources :level_hits
+  resource :comparision
 end

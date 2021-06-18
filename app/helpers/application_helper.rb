@@ -64,6 +64,17 @@ module ApplicationHelper
     end
   end
 
+  def bs_text_field(name, label, mb: 1, classes: nil)
+    tag.div class: "row mb-#{mb}" do
+      tag.div(class: 'col-sm-2') do
+        label_tag name, label, class: 'col-form-label'
+      end +
+      tag.div(class: 'col-sm-10') do
+        text_field_tag name, params[name], class: "form-control #{classes}"
+      end
+    end
+  end
+
   ExcahngesWithLogos = %w[NYSE NASDAQ MOEX]
   def exchange_logo(exchange_name)
     image_tag "exchange-logos/#{exchange_name}.png", size: '15x15', class: 'exchange-logo' if exchange_name.in?(ExcahngesWithLogos)

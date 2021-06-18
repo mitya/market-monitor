@@ -1,0 +1,15 @@
+main.container-fluid
+  h1.display-3 Comparision
+
+  form#list-config(action=comparision_path class='my-2')
+    = render 'instruments/filter_by_tickers'
+    = bs_text_field :start_date, 'Start Date:', classes: 'w-auto'
+    = bs_text_field :base_date, 'Base Date:', classes: 'w-auto'
+
+  #comparision-chart
+
+javascript:
+  var PageData = {
+    comparision: #{raw json_escape @values.to_json},
+    dates: #{raw json_escape @dates.to_json},
+  }

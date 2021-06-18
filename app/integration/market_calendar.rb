@@ -15,6 +15,10 @@ class MarketCalendar
       closest_weekday date.yesterday
     end
 
+    def open_days(since, till = Date.current)
+      (since.to_date .. till.to_date).map { |date| market_open?(date) ? date : nil }.compact
+    end
+
     def nyse_holidays
       @nyse_holidays ||= %w[
         2020-01-01

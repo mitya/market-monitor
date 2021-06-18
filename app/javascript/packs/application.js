@@ -3,16 +3,11 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-import Rails from "@rails/ujs"
-import Turbolinks from "turbolinks"
-import * as ActiveStorage from "@rails/activestorage"
-import "channels"
 import { Modal } from 'bootstrap'
 import ApexCharts from 'apexcharts'
-
-Rails.start()
-Turbolinks.start()
-ActiveStorage.start()
+import 'pages/init'
+import 'pages/charts'
+import "channels"
 
 document.addEventListener("turbolinks:load", () => {
   document.querySelector('#list-config')?.addEventListener("change", e => {

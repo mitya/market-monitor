@@ -137,6 +137,8 @@ class Current < ActiveSupport::CurrentAttributes
 
     def dates
       [
+        Current.y2017,
+        Current.y2018,        
         Current.y2019,
         Current.y2020,
         Current.feb19,
@@ -156,8 +158,6 @@ class Current < ActiveSupport::CurrentAttributes
 
     def dates_plus
       dates + [
-        Current.y2017,
-        Current.y2018,
       ]
     end
   end
