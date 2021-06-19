@@ -342,6 +342,27 @@ module InstrumentsHelper
   def min_amount_options
     %w[100_000 200_000 500_000 1_000_000]
   end
+
+  def set_button_class(set_key)
+    p set_key
+    SET_BUTTON_CLASSES[set_key]
+  end
+
+  SET_BUTTON_CLASSES = {
+    portfolio:       'inner-warning',
+    insiders:        'inner-info',
+    recommendations: 'inner-info',
+    oil:             'inner-dark',
+    coal:            'inner-dark',
+    gas:             'inner-dark',
+    metals:          'inner-dark',
+    transport:       'inner-dark',
+    tech:            'inner-primary',
+    biotech:         'inner-primary',
+    main:            'inner-success',
+    alarms:          'inner-success',
+    current:         'inner-success',
+  }
 end
 
 __END__

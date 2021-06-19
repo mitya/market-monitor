@@ -1,5 +1,7 @@
 + perf comparision chart in period
 + show portfolio without weights
++ colorize sets
+- add sets to insider tx page
 
 - strategy analysis table
 - intraday 1-min prices
