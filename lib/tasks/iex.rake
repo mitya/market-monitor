@@ -57,7 +57,7 @@ namespace :iex do
         next unless R.confirmed?
 
         # with_missing_date.each { |inst| Iex.import_day_candles inst, date: date }
-        Current.parallelize_instruments(with_missing_date, 4) { | inst| Iex.import_day_candles inst, date: date }
+        Current.parallelize_instruments(with_missing_date, IEX_RPS) { | inst| Iex.import_day_candles inst, date: date }
       end
     end
 
@@ -158,10 +158,10 @@ namespace :iex do
   end
 
   envtask :price_targets do
-    instruments = R.instruments_from_env || Instrument.main
-    instruments.iex_sourceable.stocks.abc.each do |inst|
-      PriceTarget.import_iex_data_from_remote inst
-    end
+    instruments = R.instruments_from_env || Instrument.all
+    instruments = instruments.iex_sourceable.abc
+    instruments = instruments.select { |inst| !inst.price_target || inst.price_target.date < Date.new(2021, 6, 1)  }
+    Current.parallelize_instruments(instruments, 1) { |inst| PriceTarget.import_iex_data_from_remote inst }
   end
 
   envtask :'price_targets:missing' do
@@ -170,15 +170,14 @@ namespace :iex do
   end
 
   envtask :recommendations do
-    instruments = R.instruments_from_env || Instrument.main
-    instruments.usd.iex.abc.each do |inst|
-      Recommendation.import_iex_data_from_remote inst
-    end
+    instruments = R.instruments_from_env || Instrument.all
+    instruments = instruments.iex_sourceable.abc.where('ticker > ?', 'CAR')
+    Current.parallelize_instruments(instruments, IEX_RPS) { |inst| Recommendation.import_iex_data_from_remote inst }
     Recommendation.mark_current
   end
 
   envtask :'recommendations:missing' do
-    instruments = Instrument.usd.iex.select { | inst| inst.recommendations.none? }
+    instruments = Instrument.iex_sourceable.select { | inst| inst.recommendations.none? }
     puts "Missing recommendations: #{instruments.map(&:ticker).join(' ')}"
   end
 end

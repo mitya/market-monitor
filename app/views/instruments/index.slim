@@ -5,10 +5,10 @@
 
 - past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
-- show_volume = params['volume'] == '1'
-- chart_volatility = params['volatility'] == '1' && params['chart_volatility'] == '1'
-- show_volatility = params['volatility'] == '1' && !chart_volatility
-- is_portfolio = params[:set] == 'portfolio'
+- show_volume = params[:volume] == '1'
+- chart_volatility = params[:volatility] == '1' && params['chart_volatility'] == '1'
+- show_volatility = params[:volatility] == '1' && !chart_volatility
+- is_portfolio = params[:portfolio] == '1'
 - show_historical_prices = !show_volume && !show_volatility && !chart_volatility && !is_portfolio
 - show_recent_prices = params[:recent_prices] == '1'
 - show_special_dates = params[:special_dates] == '1'
@@ -54,9 +54,12 @@ main.container-fluid.mb-4
                 .input-group.input-group-sm
                   = number_field_tag :low_gain, params[:low_gain], class: "form-control text-center", style: "width: 60px"
                   .input-group-text %
-            = bs_check_box :special_dates, 'Special dates'
-            = bs_check_box :last_insider_buys, 'Last Insider buys'
-            = bs_check_box :alarm, 'With alarms'
+            = bs_check_box :special_dates, 'Special dates', inline: true
+            = bs_check_box :last_insider_buys, 'Last Insider buys', inline: true
+            = bs_check_box :alarm, 'With alarms', inline: true
+            br
+            = bs_check_box :portfolio, 'Portfolio editor', inline: true
+            = bs_check_box :active, 'Active only', inline: true
     = render 'filter_by_set'
 
   = page_entries_block @instruments
@@ -72,6 +75,7 @@ main.container-fluid.mb-4
         th
         th Name
         - if is_portfolio
+          th
           th.money-cell Tinkoff
           th.money-cell IIS
           th.money-cell VTB
@@ -143,9 +147,9 @@ main.container-fluid.mb-4
             th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
           th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
           th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
-        - if show_historical_prices
-          th.money-cell(data-sort="aggregates.y2018") 2018 ﹪
-          th.money-cell(data-sort="aggregates.y2017") 2017 ﹪
+          - if show_special_dates
+            th.money-cell(data-sort="aggregates.y2018") 2018 ﹪
+            th.money-cell(data-sort="aggregates.y2017") 2017 ﹪
 
         th
         - if show_last_insider_buys
@@ -154,25 +158,28 @@ main.container-fluid.mb-4
 
     tbody
       - instruments = @instruments
-      - instruments = @instruments.sort_by { |inst| inst.info&.vtb_long_risk.to_f } if vtb_marginal_info
-      - instruments = @instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_in_usd'
-      - instruments = @instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
-      - instruments = @instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_diff'
+      - instruments = instruments.select { |inst| inst.portfolio_item&.active? } if params[:active] == '1'
+      - instruments = instruments.sort_by { |inst| inst.info&.vtb_long_risk.to_f } if vtb_marginal_info
+      - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_in_usd'
+      - instruments = instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
+      - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_diff'
       - instruments.each do |inst|
         - price_target = inst.price_target
         - portfolio_item = inst.portfolio_item
         - aggregate = inst.aggregate
         - info = inst.info
         - inst.current_price_selector = :last_or_open
-        tr data-ticker=inst.ticker
+        tr data-ticker=inst.ticker class=class_names('portfolio-inactive': is_portfolio && !inst.portfolio_item&.active? )
           td= country_flag inst
           td= instrument_logo_button inst
-          td= inst.ticker
+          td.ticker-name= inst.ticker
           td= known_icon inst
           td= type_icon inst
           td.instrument-name= truncate inst.name
 
           - if is_portfolio
+            td
+              input class="form-check-input portfolio-item-checker" type="checkbox" value="1" checked=portfolio_item&.active
             td.money-cell
               input class="form-control form-control-sm lots-input" type="number" data-account="tinkoff" value=portfolio_item&.tinkoff_lots
             td.money-cell
@@ -256,7 +263,7 @@ main.container-fluid.mb-4
               td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell.border-end.pe-2    = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell.muted-cell         = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            - if show_historical_prices
+            - if show_special_dates
               td.money-cell.muted-cell       = relative_price inst.    y2018_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
               td.money-cell.muted-cell       = relative_price inst.    y2017_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
 

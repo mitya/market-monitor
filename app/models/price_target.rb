@@ -8,9 +8,9 @@ class PriceTarget < ApplicationRecord
   end
 
   class << self
-    def import_iex_data(item)
-      target = find_or_initialize_by ticker: item['symbol'], date: item['updatedDate']
-      puts "Import price target for #{target.ticker} on #{target.date}" if target.new_record?
+    def import_iex_data(ticker, item)
+      target = find_or_initialize_by ticker: ticker, date: item['updatedDate']
+      puts "Import price target for #{ticker} on #{target.date}" if target.new_record?
       target.high           = item['priceTargetHigh']
       target.low            = item['priceTargetLow']
       target.average        = item['priceTargetAverage']
@@ -20,13 +20,13 @@ class PriceTarget < ApplicationRecord
       target.save!
     end
 
-    def import_iex_data_from_dir(dir: Pathname("cache/iex-price-targets"))
-      Pathname(dir).glob('*.json') { |file| import_iex_data_from_file file }
-    end
-
-    def import_iex_data_from_file(file_name)
-      import_iex_data JSON.parse File.read file_name
-    end
+    # def import_iex_data_from_dir(dir: Pathname("cache/iex-price-targets"))
+    #   Pathname(dir).glob('*.json') { |file| import_iex_data_from_file file }
+    # end
+    #
+    # def import_iex_data_from_file(file_name)
+    #   import_iex_data JSON.parse File.read file_name
+    # end
 
     def import_iex_data_from_remote(instrument, delay: 0)
       instrument = Instrument[instrument]
@@ -37,7 +37,7 @@ class PriceTarget < ApplicationRecord
         Iex.price_target(instrument.iex_ticker)
       end
 
-      import_iex_data data
+      import_iex_data instrument.ticker, data
       set_current_for instrument.ticker
       sleep delay
 
@@ -47,8 +47,8 @@ class PriceTarget < ApplicationRecord
 
     def set_current_for(ticker)
       *old, last = where(ticker: ticker).order(:date)
-      return puts "Missing price target record for #{last.ticker}".red
-      last.update! current: true
+      puts "Missing price target record for #{ticker}".red if !last
+      last&.update! current: true
       old.each { |target| target.update! current: nil }
     end
 

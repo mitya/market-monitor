@@ -5,6 +5,10 @@ class ApiCache
     Pathname(pathname).exist?
   end
 
+  def read(pathname)
+    JSON.parse Pathname(pathname).read if exist?(pathname)
+  end
+
   def get(pathname, skip_if: false, ttl: nil)
     return yield if skip_if
 

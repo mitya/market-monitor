@@ -7,6 +7,7 @@ curl -s "https://cloud.iexapis.com/stable/stock/FCX/splits?token=$IEX_SECRET_KEY
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/quote?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/previous?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/ytd?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/date/20210104?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/date/20210317?chartByDay=true&token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/5d?token=$IEX_SECRET_KEY" | jq

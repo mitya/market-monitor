@@ -1,4 +1,10 @@
-- perf comparision chart in period
++ perf comparision chart in period
++ show portfolio without weights
+
+- strategy analysis table
+- intraday 1-min prices
+- institutional ownership
+
 
 # Next
 

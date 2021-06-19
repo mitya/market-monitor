@@ -64,13 +64,13 @@ module ApplicationHelper
     end
   end
 
-  def bs_text_field(name, label, mb: 1, classes: nil)
+  def bs_text_field(name, label, mb: 1, classes: nil, type: 'text')
     tag.div class: "row mb-#{mb}" do
       tag.div(class: 'col-sm-2') do
         label_tag name, label, class: 'col-form-label'
       end +
       tag.div(class: 'col-sm-10') do
-        text_field_tag name, params[name], class: "form-control #{classes}"
+        text_field_tag name, params[name], class: "form-control #{classes}", type: type
       end
     end
   end

@@ -28,6 +28,18 @@ document.addEventListener("turbolinks:load", () => {
           console.log(response)
         })
       }
+      if (e.target.matches('.portfolio-item-checker')) {
+        let checkbox = e.target
+        let row = checkbox.closest('tr')
+        console.log(row.dataset.ticker, checkbox.checked)
+        fetch(`/portfolio/${row.dataset.ticker}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ active: checkbox.checked })
+        }).then(response => {
+          console.log(response)
+        })
+      }
     })
 
     tickersTable.addEventListener("click", e => {

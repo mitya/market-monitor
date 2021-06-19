@@ -3,8 +3,12 @@ class PortfolioController < ApplicationController
 
   def update
     item = PortfolioItem.find_or_create_by(ticker: params[:id])
-    field = "#{params[:account]}_lots"
-    item.update! field => params[:lots]
+    if params[:account]
+      field = "#{params[:account]}_lots"
+      item.update! field => params[:lots]
+    elsif params.include?(:active)
+      item.update! active: params[:active]
+    end
     render json: item
   end
 end
