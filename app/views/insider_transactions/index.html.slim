@@ -1,30 +1,34 @@
 main.container-fluid
   form#list-config(action=insider_transactions_path class='my-2')
-    = render 'instruments/filter_by_tickers'
-    = render 'instruments/pagination_options'
-    = bs_select :min_amount, 'Min Amount:', min_amount_options, select_class: 'w-auto'
-    - if @transactions.map(&:ticker).uniq.one?
-      .row.mb-1
-        .col-sm-2=  label_tag :insider, 'Insider:', class: 'col-form-label'
-        .col-sm-10= select_tag :insider, options_for_select(insider_options_for(@transactions.first.ticker), params[:insider]), class: "form-select", include_blank: 'All'
-    .row.mb-1
-      .col-sm-2
-      .col-sm-10
-        .form-check.form-switch
-          = check_box_tag :market_only, '1', params[:market_only] == '1', class: 'form-check-input'
-          = label_tag :market_only, 'Market Only', class: 'form-check-label'
+    = render 'instruments/filter_by_set'
     .row.mb-3
-      legend class="col-form-label col-sm-2 pt-0"
-      .col-sm-10
-        .form-check.form-check-inline
-          = radio_button_tag :direction, '', params[:direction].blank?, class: 'form-check-input'
-          = label_tag :direction_, 'All', class: 'form-check-label'
-        .form-check.form-check-inline
-          = radio_button_tag :direction, 'buy', params[:direction] == 'buy', class: 'form-check-input'
-          = label_tag :direction_buy, 'Buys', class: 'form-check-label'
-        .form-check.form-check-inline
-          = radio_button_tag :direction, 'sell', params[:direction] == 'sell', class: 'form-check-input'
-          = label_tag :direction_sell, 'Sells', class: 'form-check-label'
+      .col
+        = render 'instruments/filter_by_tickers'
+        = render 'instruments/pagination_options'
+        = bs_select :min_amount, 'Min Amount:', min_amount_options, select_class: 'w-auto'
+        - if @transactions.map(&:ticker).uniq.one?
+          .row.mb-1
+            .col-sm-2=  label_tag :insider, 'Insider:', class: 'col-form-label'
+            .col-sm-10= select_tag :insider, options_for_select(insider_options_for(@transactions.first.ticker), params[:insider]), class: "form-select", include_blank: 'All'
+        .row.mb-1
+          .col-sm-2
+          .col-sm-10
+            .form-check.form-switch
+              = check_box_tag :market_only, '1', params[:market_only] == '1', class: 'form-check-input'
+              = label_tag :market_only, 'Market Only', class: 'form-check-label'
+        .row.mb-3
+          legend class="col-form-label col-sm-2 pt-0"
+          .col-sm-10
+            .form-check.form-check-inline
+              = radio_button_tag :direction, '', params[:direction].blank?, class: 'form-check-input'
+              = label_tag :direction_, 'All', class: 'form-check-label'
+            .form-check.form-check-inline
+              = radio_button_tag :direction, 'buy', params[:direction] == 'buy', class: 'form-check-input'
+              = label_tag :direction_buy, 'Buys', class: 'form-check-label'
+            .form-check.form-check-inline
+              = radio_button_tag :direction, 'sell', params[:direction] == 'sell', class: 'form-check-input'
+              = label_tag :direction_sell, 'Sells', class: 'form-check-label'
+      .col
 
   = page_entries_block @transactions
   = paginate @transactions, window: 10

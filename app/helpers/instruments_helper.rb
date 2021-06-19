@@ -313,6 +313,7 @@ module InstrumentsHelper
 
   def known_icon(instrument)
     icons = [
+      # (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker) && instrument.portfolio_item&.active?),
       (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker)),
       (:bell      if InstrumentSet.alarms.symbols.include?(instrument.ticker)),
       (:user      if InstrumentSet.insiders.symbols.include?(instrument.ticker)),
@@ -344,7 +345,6 @@ module InstrumentsHelper
   end
 
   def set_button_class(set_key)
-    p set_key
     SET_BUTTON_CLASSES[set_key]
   end
 

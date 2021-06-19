@@ -1,10 +1,11 @@
 + perf comparision chart in period
 + show portfolio without weights
 + colorize sets
-- add sets to insider tx page
++ add sets to insider tx page
+
+- intraday 1-min prices
 
 - strategy analysis table
-- intraday 1-min prices
 - institutional ownership
 
 
