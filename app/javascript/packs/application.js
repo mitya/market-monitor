@@ -70,6 +70,10 @@ document.addEventListener("turbolinks:load", () => {
   if (tickersInput?.value)
     tickersInput.focus()
 
+  let tickerInput = document.querySelector('#ticker')
+  if (tickerInput?.value)
+    tickerInput.focus()
+
   let chartModal = document.querySelector('#chart-modal')
   if (chartModal) {
     chartModal.addEventListener("click", e => {

@@ -5,7 +5,7 @@
 + intraday 1-min prices
 
 + iex insider summaries
-- institutional ownership & major insiders
++ institutional ownership & major insiders
 
 - strategy analysis model
 - strategy analysis results UI

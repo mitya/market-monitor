@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_21_173351) do
+ActiveRecord::Schema.define(version: 2021_06_21_190033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,9 +162,9 @@ ActiveRecord::Schema.define(version: 2021_06_21_173351) do
     t.string "ticker", null: false
     t.string "name"
     t.string "title"
-    t.integer "net"
-    t.integer "bought"
-    t.integer "sold"
+    t.bigint "net"
+    t.bigint "bought"
+    t.bigint "sold"
     t.date "date"
     t.string "source"
     t.datetime "created_at", precision: 6, null: false
@@ -189,6 +189,19 @@ ActiveRecord::Schema.define(version: 2021_06_21_173351) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["date"], name: "index_insider_transactions_on_date"
     t.index ["ticker"], name: "index_insider_transactions_on_ticker"
+  end
+
+  create_table "institution_holdings", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.string "holder", null: false
+    t.integer "shares"
+    t.integer "shares_na"
+    t.integer "value"
+    t.date "date"
+    t.date "reported_on"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["holder"], name: "index_institution_holdings_on_holder"
   end
 
   create_table "instruments", primary_key: "ticker", id: :string, force: :cascade do |t|

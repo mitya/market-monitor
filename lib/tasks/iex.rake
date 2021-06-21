@@ -158,8 +158,14 @@ namespace :iex do
 
   envtask :insider_summaries do
     instruments = R.instruments_from_env || Instrument.all
-    # instruments = instruments.iex_sourceable.abc.where('ticker > ?', 'Y')
+    instruments = instruments.iex_sourceable.abc # .where('ticker > ?', 'Y')
     Current.parallelize_instruments(instruments, IEX_RPS) { |inst| InsiderSummary.import inst }
+  end
+
+  envtask :institutions do
+    instruments = R.instruments_from_env || Instrument.all
+    instruments = instruments.iex_sourceable.abc.after('TA')
+    Current.parallelize_instruments(instruments, 1 || IEX_RPS) { |inst| InstitutionHolding.import inst }
   end
 
   envtask :price_targets do

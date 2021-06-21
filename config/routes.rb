@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
   resources :insider_transactions, path: 'insider-transactions'
   resources :insider_aggregates, path: 'insider-aggregates'
+  resources :insider_summaries, path: 'insider-summaries'
   resources :recommendations
   resources :signals
   resources :public_signals

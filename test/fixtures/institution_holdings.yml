@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  holder: MyString
+  shares: MyString
+  shares_na: MyString
+  value: MyString
+  date: MyString
+  reported_on: MyString
+
+two:
+  ticker: MyString
+  holder: MyString
+  shares: MyString
+  shares_na: MyString
+  value: MyString
+  date: MyString
+  reported_on: MyString

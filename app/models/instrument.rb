@@ -12,6 +12,8 @@ class Instrument < ApplicationRecord
   has_many :level_hits,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevelHit', dependent: :delete_all
   has_many :levels,                        foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevel', dependent: :delete_all
   has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :insider_summaries,             foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :institution_holdings,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
@@ -41,6 +43,7 @@ class Instrument < ApplicationRecord
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
   scope :with_alarm, -> { joins(:levels).where(levels: { manual: true }) }
+  scope :after, -> ticker { where 'ticker >= ?', ticker }
 
   scope :mature, -> { where first_date: MatureDate }
   scope :with_first_date, -> { where.not first_date: nil }

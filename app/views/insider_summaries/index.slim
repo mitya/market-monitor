@@ -1,0 +1,45 @@
+- price_format = 'absolute'
+- price_format = 'relative'
+
+main.container-fluid
+  form#list-config(action=insider_summaries_path class='my-2')
+    .row.mb-1
+      .col-sm-2= label_tag :ticker, 'Ticker:', class: 'col-form-label'
+      .col-sm-10= search_field_tag :ticker, params[:ticker].to_s.squish, class: "form-control text-uppercase"
+
+
+  - if @instrument
+    p Capitalization: #{number_to_currency @instrument.info&.marketcap_mil, unit: currency_span(@instrument.currency), precision: 0} mm
+    p Total Shares: #{number_with_delimiter @instrument.info&.shares}
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th
+        th Ticker
+        th
+        th
+        th Name
+        th Insider
+        th Title
+        th.money-cell Net
+        th.money-cell Buy
+        th.money-cell Sell
+        th Date
+    tbody
+      - @summaries.each do |summary|
+        - inst = summary.instrument
+        tr
+          td= instrument_logo_button inst
+          td= link_to inst.ticker, insider_transactions_path(tickers: inst.ticker), tabindex: '-1'
+          td= known_icon inst
+          td= type_icon inst
+          td= truncate inst.name
+          td= summary.name
+          td= summary.title
+          td.money-cell[
+              class=red_green_class(summary.long?) title=number_to_currency(summary.net_value, unit: currency_sign(inst.currency), precision: 0)
+            ]= number_with_delimiter summary.net
+          td.money-cell= number_with_delimiter summary.bought
+          td.money-cell= number_with_delimiter summary.sold
+          td[title=summary.date]= days_old_badge summary.date

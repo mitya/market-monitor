@@ -13,6 +13,7 @@ class Iex
   def options(symbol)                 = stock(symbol, 'options')
   def insider_transactions(symbol)    = stock(symbol, 'insider-transactions')
   def insider_summary(symbol)         = stock(symbol, 'insider-summary')
+  def institutional_ownership(symbol) = stock(symbol, 'institutional-ownership')
   def recommedations(symbol)          = stock(symbol, 'recommendation-trends')
   def price_target(symbol)            = stock(symbol, 'price-target')
   def estimates(symbol)               = stock(symbol, 'estimates', period: 'annual')
