@@ -146,8 +146,7 @@ namespace :iex do
   envtask :insider_transactions do
     instruments = R.instruments_from_env || Instrument.all
     instruments = instruments.iex_sourceable.abc
-    instruments = instruments.select { |inst| inst.ticker > 'AZRE' && inst.ticker < 'C' }
-    Current.parallelize_instruments(instruments, 1) { |inst| InsiderTransaction.import_iex_data_from_remote inst }
+    Current.parallelize_instruments(instruments, IEX_RPS) { |inst| InsiderTransaction.import_iex_data_from_remote inst }
     rake 'iex:insider_transactions:cache'
   end
 
@@ -155,6 +154,12 @@ namespace :iex do
     Instrument.find_each do |inst|
       inst.info&.update! last_insider_buy_price: inst.last_insider_buy&.price
     end
+  end
+
+  envtask :insider_summaries do
+    instruments = R.instruments_from_env || Instrument.all
+    # instruments = instruments.iex_sourceable.abc.where('ticker > ?', 'Y')
+    Current.parallelize_instruments(instruments, IEX_RPS) { |inst| InsiderSummary.import inst }
   end
 
   envtask :price_targets do

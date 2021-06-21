@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_06_213909) do
+ActiveRecord::Schema.define(version: 2021_06_21_173351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.datetime "updated_at", precision: 6, null: false
     t.date "lowest_day_date"
     t.float "lowest_day_gain"
+    t.float "y2018"
+    t.float "y2017"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
   end
@@ -69,7 +71,7 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.index ["ticker"], name: "index_candles_on_ticker"
   end
 
-  create_table "candles_h1", id: :bigint, default: -> { "nextval('candles_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "candles_h1", force: :cascade do |t|
     t.string "ticker"
     t.string "interval", null: false
     t.datetime "time", null: false
@@ -89,7 +91,26 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.index ["ticker"], name: "candles_1h_ticker_idx"
   end
 
-  create_table "candles_m5", id: :bigint, default: -> { "nextval('candles_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "candles_m1", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.string "interval", default: "1min", null: false
+    t.date "date", null: false
+    t.time "time", null: false
+    t.decimal "open", precision: 20, scale: 4, null: false
+    t.decimal "close", precision: 20, scale: 4, null: false
+    t.decimal "high", precision: 20, scale: 4, null: false
+    t.decimal "low", precision: 20, scale: 4, null: false
+    t.integer "volume", null: false
+    t.string "source", default: "iex", null: false
+    t.boolean "ongoing", default: false, null: false
+    t.boolean "analyzed", default: false, null: false
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["ticker", "date"], name: "candles_m1_ticker_interval_date_idx"
+    t.index ["ticker"], name: "candles_m1_ticker_idx"
+  end
+
+  create_table "candles_m5", force: :cascade do |t|
     t.string "ticker"
     t.string "interval", null: false
     t.datetime "time", null: false
@@ -133,6 +154,19 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.string "sa_2_price"
     t.string "sa_3_score"
     t.string "sa_3_price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "insider_summaries", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.string "name"
+    t.string "title"
+    t.integer "net"
+    t.integer "bought"
+    t.integer "sold"
+    t.date "date"
+    t.string "source"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -184,6 +218,7 @@ ActiveRecord::Schema.define(version: 2021_06_06_213909) do
     t.integer "tinkoff_iis_lots"
     t.integer "vtb_lots"
     t.integer "ideal_lots"
+    t.boolean "active", default: true
   end
 
   create_table "price_level_hits", force: :cascade do |t|

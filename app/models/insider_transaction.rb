@@ -66,7 +66,6 @@ class InsiderTransaction < ApplicationRecord
         Iex.insider_transactions(instrument.ticker)
       end
       import_iex_data data
-      sleep delay
     end
 
     def parse_guru_focus
