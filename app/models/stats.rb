@@ -48,9 +48,11 @@ class Stats < ApplicationRecord
   def dividend_yield_percent = dividend_yield && dividend_yield * 100
   def avg_10d_volume = stats['avg10Volume']
   def avg_30d_volume = stats['avg30Volume']
+  def avg_m1_volume = extra['avg_m1_volume']
   def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
   def accessible_peers_and_self = accessible_peers + [ticker]
   def iex_ticker = instrument.iex_ticker
+
 
   def country_code
     COUNTRY_NAMES_TO_ISO3[country.to_s]

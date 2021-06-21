@@ -2,11 +2,11 @@
 + show portfolio without weights
 + colorize sets
 + add sets to insider tx page
++ intraday 1-min prices
 
-- intraday 1-min prices
-
-- strategy analysis table
-- institutional ownership
+- institutional ownership & major insiders
+- strategy analysis model
+- strategy analysis results UI
 
 
 # Next
@@ -36,6 +36,7 @@
 - russian ticker company info
 - maintain average volume for last N months
 - ticker selection & commands
+- change insider transactions to new API with `from` parameter
 
 
 # Later

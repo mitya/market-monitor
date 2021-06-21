@@ -7,7 +7,7 @@ class Candle < ApplicationRecord
   scope :today, -> { where date: Current.date }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
   scope :non_analyzed, -> { where analyzed: nil }
-  scope :asc, -> { order :date }  
+  scope :asc, -> { order :date }
   # scope :non_analyzed, -> { }
 
   scope :iex, -> { where source: 'iex' }
@@ -33,6 +33,9 @@ class Candle < ApplicationRecord
   def max = up?? high : low
   alias body_low range_low
   alias body_high range_high
+
+  def change = close - open
+  def rel_change = (change / open).round(4)
 
   def close_time = date.in_time_zone(Current.est).change(hour: 16)
 
@@ -128,7 +131,7 @@ class Candle < ApplicationRecord
     def last_loaded_date = final.maximum(:date)
 
     def interval_class_for(interval)
-      { 'hour' => H1, '5min' => M5, 'day' => self }[interval]
+      { 'hour' => H1, '5min' => M5, '1min' => M1, 'day' => self }[interval]
     end
 
     def interval_duration(interval)
@@ -162,5 +165,9 @@ class Candle < ApplicationRecord
 
   class M5 < Intraday
     self.table_name = "candles_m5"
+  end
+
+  class M1 < Intraday
+    self.table_name = "candles_m1"
   end
 end

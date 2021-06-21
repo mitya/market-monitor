@@ -20,8 +20,9 @@ class Iex
   def company(symbol)                 = stock(symbol, 'company')
   def stats(symbol)                   = stock(symbol, 'stats')
   def advanced_stats!(symbol)         = stock(symbol, 'advanced-stats')
-  def day_on(symbol, date)            = stock(symbol, "chart/date/#{date.to_s :number}", chartByDay: true)
   def days_for(symbol, period)        = stock(symbol, "chart/#{period}")
+  def day_on(symbol, date)            = stock(symbol, "chart/date/#{date.to_date.to_s :number}", chartByDay: true)
+  def minutes_on(symbol, date)        = stock(symbol, "chart/date/#{date.to_date.to_s :number}")
   def last(symbol)                    = get("/last?symbols=#{symbol}")
   def tops(*symbols)                  = get("/tops", { symbols: symbols.join(',').presence }.compact)
   def symbols                         = get("/ref-data/symbols")
@@ -87,6 +88,37 @@ class Iex
     puts "IEX today candle import error for #{instrument.ticker}: #{e}".red
   end
 
+  def import_intraday_candles(instrument, date)
+    instrument = Instrument[instrument]
+    date = date.to_date
+
+    candles_data = ApiCache.get "cache/iex-candles-m1/#{instrument.ticker} #{date}.json" do
+      minutes_on instrument.iex_ticker, date
+    end
+
+    # candles_data = minutes_on instrument.iex_ticker, date
+    return puts "No IEX data on #{date} for #{instrument}".light_yellow if candles_data.none?
+
+    Candle.transaction do
+      candles_data.each do |hash|
+        date = Date.parse hash['date']
+        time = hash['minute']
+        next puts "Miss   IEX #{date} #{time} candle for #{instrument}".yellow if hash['marketVolume'].to_i == 0
+        puts "Import IEX #{date} #{time} candle for #{instrument}"
+        candle = Candle::M1.find_or_initialize_by ticker: instrument.ticker, interval: '1min', date: date, time: time
+        candle.source  = 'iex'
+        candle.ongoing = false
+        candle.open    = hash['marketOpen']
+        candle.close   = hash['marketClose']
+        candle.high    = hash['marketHigh']
+        candle.low     = hash['marketLow']
+        candle.volume  = hash['marketVolume']
+        candle.save!
+      end
+    end
+
+  end
+
   def symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols *.json').last.read, object_class: OpenStruct)
   def otc_symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols-otc *.json').last.read, object_class: OpenStruct)
   def all_symbols_cache = symbols_cache + otc_symbols_cache
@@ -116,3 +148,4 @@ Iex.day_on 'ALTO', Date.parse('2021-01-04')
 Iex.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
 Iex.import_today_candle Instrument['PVAC']
 Iex.day_on('ARCH', Date.parse('2021-03-01'))
+Iex.import_intraday_candles('aapl', '2021-06-17'); nil

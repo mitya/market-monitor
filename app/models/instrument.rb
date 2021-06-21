@@ -4,6 +4,7 @@ class Instrument < ApplicationRecord
   has_many :candles,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :aggregates,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
+  has_many :m1_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M1', dependent: :delete_all
   has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument
   has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignal'
   has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument

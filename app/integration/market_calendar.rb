@@ -16,6 +16,7 @@ class MarketCalendar
     end
 
     def open_days(since, till = Date.current)
+      since, till = since.begin, since.end if since.is_a?(Range)
       (since.to_date .. till.to_date).map { |date| market_open?(date) ? date : nil }.compact
     end
 

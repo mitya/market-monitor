@@ -144,10 +144,10 @@ namespace :iex do
   end
 
   envtask :insider_transactions do
-    instruments = R.instruments_from_env || Instrument.iex
-    instruments.usd.iex.abc.each do |inst|
-      InsiderTransaction.import_iex_data_from_remote inst
-    end
+    instruments = R.instruments_from_env || Instrument.all
+    instruments = instruments.iex_sourceable.abc
+    instruments = instruments.select { |inst| inst.ticker > 'AZRE' && inst.ticker < 'C' }
+    Current.parallelize_instruments(instruments, 1) { |inst| InsiderTransaction.import_iex_data_from_remote inst }
     rake 'iex:insider_transactions:cache'
   end
 
@@ -161,7 +161,7 @@ namespace :iex do
     instruments = R.instruments_from_env || Instrument.all
     instruments = instruments.iex_sourceable.abc
     instruments = instruments.select { |inst| !inst.price_target || inst.price_target.date < Date.new(2021, 6, 1)  }
-    Current.parallelize_instruments(instruments, 1) { |inst| PriceTarget.import_iex_data_from_remote inst }
+    Current.parallelize_instruments(instruments, IEX_RPS) { |inst| PriceTarget.import_iex_data_from_remote inst }
   end
 
   envtask :'price_targets:missing' do

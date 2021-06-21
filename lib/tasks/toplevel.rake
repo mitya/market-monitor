@@ -102,3 +102,7 @@ end
 envtask :set_first_date_auto do
   (R.instruments_from_env || Instrument.all).to_a.each { |inst| inst.set_first_date! }
 end
+
+envtask :service do
+  Module.const_get(ENV['s']).call
+end

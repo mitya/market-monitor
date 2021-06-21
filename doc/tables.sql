@@ -1,7 +1,3 @@
-select * from candles where interval = 'day' and date = '2021-05-31' and ticker in (select ticker from instruments where currency = 'USD')
-delete from candles where interval = 'day' and date = '2021-05-31' and ticker in (select ticker from instruments where currency = 'USD')
-
-
 CREATE TABLE candles_m1 (
     id bigint PRIMARY KEY,
     ticker character varying NOT NULL,
@@ -19,8 +15,6 @@ CREATE TABLE candles_m1 (
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     updated_at timestamp without time zone NOT NULL DEFAULT now()
 );
-
--- Indices -------------------------------------------------------
 
 CREATE UNIQUE INDEX candles_m1_pkey ON candles_m1(id int8_ops);
 CREATE INDEX candles_m1_ticker_idx ON candles_m1(ticker text_ops);
