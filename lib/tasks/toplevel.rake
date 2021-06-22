@@ -106,3 +106,9 @@ end
 envtask :service do
   Module.const_get(ENV['s']).call
 end
+
+
+envtask :check_signals do
+  # PriceSignal.outside_bars.up.limit(500).each { |signal| PriceSignalResult.create_for signal }
+  PriceSignal.outside_bars.each { |signal| PriceSignalResult.create_for signal }
+end

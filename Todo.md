@@ -1,10 +1,13 @@
 + show current TI prices for outside candles & highligh those which are good to enter (-1.5%)
++ signal results
++ signal results UI
 
-- signal results
+- aggregate & analyze dates YTD
+- burst-after-flat signal
+
 - search for period lows / highs (e.g. 1w)
 - show institutions
 
-- burst-after-flat signal
 - strategy analysis model
 - analyze large moves (from flat and from prior slow move)
 - analyze shelves

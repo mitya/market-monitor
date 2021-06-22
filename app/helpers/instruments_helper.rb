@@ -42,8 +42,12 @@ module InstrumentsHelper
 
   def colorized_percentage(price, base_price, unit: '$', inverse: false)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
-    tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: format_price(price, unit: currency_sign(unit)) do
-      ratio_percentage ratio, precision: percentage_precision
+    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit))
+  end
+
+  def colorized_ratio(ratio, title: nil, precision: percentage_precision)
+    tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
+      ratio_percentage ratio, precision: precision
     end
   end
 

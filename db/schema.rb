@@ -271,9 +271,16 @@ ActiveRecord::Schema.define(version: 2021_06_22_124754) do
     t.float "d1_max"
     t.float "d2_close"
     t.float "d2_max"
+    t.float "d3_close"
+    t.float "d3_max"
     t.float "w1_close"
     t.float "w1_max"
-    t.float "w1_max_close"
+    t.float "w2_close"
+    t.float "w2_max"
+    t.float "m1_close"
+    t.float "m1_max"
+    t.float "m2_close"
+    t.float "m2_max"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["signal_id"], name: "index_price_signal_results_on_signal_id"

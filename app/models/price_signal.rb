@@ -1,6 +1,6 @@
 class PriceSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
-  has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id'
+  has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id' #, inverse_of: :signal
 
   scope :yesterday, -> { where interval: 'day', date: Current.yesterday }
   scope :days, -> { where interval: 'day' }
@@ -21,7 +21,7 @@ class PriceSignal < ApplicationRecord
 
   def profit_ratio(current = instrument.last, use_stop: true)
     return if !current
-    return -stop_size if stopped_out? && use_stop
+    return -stop_size if stopped_out?(current) && use_stop
     ratio = (current - enter) / enter
     in_money? ? ratio.abs : -ratio.abs
   end

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :insider_summaries, path: 'insider-summaries'
   resources :recommendations
   resources :signals
+  resources :signal_results
   resources :public_signals
   resources :portfolio, as: :portfolio_items
   resources :level_hits

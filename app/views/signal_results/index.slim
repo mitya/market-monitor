@@ -1,0 +1,123 @@
+- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- max_selector = 'close'
+
+main.container-fluid
+  h1.display-3 Signal Results
+
+  form#list-config(action=signal_results_path class='my-2')
+    = render 'instruments/filter_by_set'
+    .row.mb-3
+      .col
+        = render 'instruments/filter_by_currency'
+        = render 'instruments/filter_by_availability'
+        = render 'instruments/filter_by_tickers'
+        = render 'instruments/pagination_options'
+        = render 'signals/filter_by_signal'
+        = render 'signals/filter_by_direction'
+      .col
+    .row
+      .col-sm-2
+      .col-sm-9
+        = bs_check_box :price_targets, 'Price targets', inline: true
+        = bs_check_box :relative_price_targets, 'relative', inline: true
+
+  .row
+    .col-md-7.mt-4
+      = page_entries_block @results
+      = paginate @results, window: 10
+    .col-md-5
+      / = render 'signal_stats'
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
+    thead.table-dark
+      tr
+        th
+        th(data-sort="ticker") Ticker
+        th
+        th
+        th Company
+        th Sector
+        th.money-cell.border-end.pe-2(data-sort="capitalization") Cap (M)
+        - if params[:price_targets]
+          th.money-cell Low
+          th.money-cell Average
+          th.money-cell High
+          th.money-cell.border-end.pe-2
+          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
+          th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
+        th Signal
+        th.money-cell Date
+        th.money-cell Enter
+        th.money-cell Current
+        th.money-cell 1d c﹪
+        th.money-cell 1d m﹪
+        th.money-cell 2d ﹪
+        th.money-cell 3d ﹪
+        th.money-cell 1w ﹪
+        th.money-cell 2w ﹪
+        th.money-cell 1m ﹪
+        th.money-cell 2m ﹪
+    tbody
+      tr
+        td
+        td
+        td
+        td
+        td
+        td
+        td
+        - if params[:price_targets]
+          td
+          td
+          td
+          td
+          td
+          td
+        td
+        td
+        td
+        td
+        td.money-cell= colorized_ratio @averages[:d1_close], precision: 1
+        td.money-cell= colorized_ratio @averages[:d1_max],   precision: 1
+        td.money-cell= colorized_ratio @averages[:"d2_#{max_selector}"], precision: 1
+        td.money-cell= colorized_ratio @averages[:"d3_#{max_selector}"], precision: 1
+        td.money-cell= colorized_ratio @averages[:"w1_#{max_selector}"], precision: 1
+        td.money-cell= colorized_ratio @averages[:"w2_#{max_selector}"], precision: 1
+        td.money-cell= colorized_ratio @averages[:"m1_#{max_selector}"], precision: 1
+        td.money-cell= colorized_ratio @averages[:"m2_#{max_selector}"], precision: 1
+
+      - @results.each do |result|
+        - signal = result.signal
+        - inst = instrument = result.instrument
+        - price_target = instrument.price_target
+        - info = instrument.info
+        tr
+          td= instrument_logo_button inst
+          td= instrument.ticker
+          td= known_icon instrument
+          td= type_icon instrument
+          td.instrument-name= instrument.name
+          td= sector_badge instrument
+          td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0
+          - if params[:price_targets]
+            td.money-cell= relative_price price_target&.low_in_usd,     instrument.base_price, unit: instrument.currency, format: price_target_format
+            td.money-cell= relative_price price_target&.average_in_usd, instrument.base_price, unit: instrument.currency, format: price_target_format
+            td.money-cell= relative_price price_target&.high_in_usd,    instrument.base_price, unit: instrument.currency, format: price_target_format
+            td.money-cell.border-end.pe-2= days_old_badge price_target&.date
+            td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+            td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
+          td.signal-name{class=red_green_class(signal.up?)}= signal.kind.underscore.humanize.downcase
+          td.money-cell= signal.date
+          td.money-cell= format_price signal.enter, unit: instrument.currency
+          td.money-cell= relative_price inst.base_price, signal.enter, unit: inst.currency, format: 'percentage'
+          td.money-cell= colorized_ratio result.d1_close, precision: 1
+          td.money-cell= colorized_ratio result.d1_max,   precision: 1
+          td.money-cell= colorized_ratio result.send("d2_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio result.send("d3_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio result.send("w1_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio result.send("w2_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio result.send("m1_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio result.send("m2_#{max_selector}"), precision: 1
+
+  = paginate @results, window: 20
