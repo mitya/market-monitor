@@ -80,6 +80,9 @@ class Candle < ApplicationRecord
   def siblings = instrument.candles.where(interval: interval)
   def previous = @previous ||= siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
   def previous_n(n) = siblings.where('date < ?', date).order(:date).last(n)
+  def next = @next ||= siblings.find_by(date: MarketCalendar.next(date)) || siblings.where('date > ?', date).order(:date).first
+  def after_n_days(n) = siblings.find_by(date: MarketCalendar.next(date + n)) || siblings.where('date > ?', date + n).order(:date).first
+
   def n_previous(n) = each_previous(with_self: false).take(n)
   def each_previous(with_self: true)
     curr = self

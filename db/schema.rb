@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_21_190033) do
+ActiveRecord::Schema.define(version: 2021_06_22_124754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,9 +194,9 @@ ActiveRecord::Schema.define(version: 2021_06_21_190033) do
   create_table "institution_holdings", force: :cascade do |t|
     t.string "ticker", null: false
     t.string "holder", null: false
-    t.integer "shares"
-    t.integer "shares_na"
-    t.integer "value"
+    t.bigint "shares"
+    t.bigint "shares_na"
+    t.bigint "value"
     t.date "date"
     t.date "reported_on"
     t.datetime "created_at", precision: 6, null: false
@@ -262,6 +262,23 @@ ActiveRecord::Schema.define(version: 2021_06_21_190033) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "price_signal_results", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.bigint "signal_id", null: false
+    t.boolean "entered"
+    t.boolean "stopped"
+    t.float "d1_close"
+    t.float "d1_max"
+    t.float "d2_close"
+    t.float "d2_max"
+    t.float "w1_close"
+    t.float "w1_max"
+    t.float "w1_max_close"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["signal_id"], name: "index_price_signal_results_on_signal_id"
+  end
+
   create_table "price_signals", force: :cascade do |t|
     t.string "ticker", null: false
     t.date "date", null: false
@@ -299,6 +316,8 @@ ActiveRecord::Schema.define(version: 2021_06_21_190033) do
     t.datetime "updated_at"
     t.datetime "last_at"
     t.string "source"
+    t.decimal "low", precision: 20, scale: 4
+    t.integer "volume"
     t.index ["ticker"], name: "index_prices_on_ticker", unique: true
   end
 
@@ -361,4 +380,5 @@ ActiveRecord::Schema.define(version: 2021_06_21_190033) do
   end
 
   add_foreign_key "price_level_hits", "price_levels", column: "level_id"
+  add_foreign_key "price_signal_results", "price_signals", column: "signal_id"
 end

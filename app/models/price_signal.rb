@@ -1,5 +1,6 @@
 class PriceSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
+  has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id'
 
   scope :yesterday, -> { where interval: 'day', date: Current.yesterday }
   scope :days, -> { where interval: 'day' }

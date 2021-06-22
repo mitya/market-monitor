@@ -6,14 +6,21 @@ class MarketCalendar
       date.in?(nyse_holidays) ? closest_weekday(date - 1) :
       date
     end
+    alias prev_closest_weekday closest_weekday
+
+    def next_closest_weekday(date)
+      date.wday == 0          ? next_closest_weekday(date + 1) :
+      date.wday == 6          ? next_closest_weekday(date + 2) :
+      date.in?(nyse_holidays) ? next_closest_weekday(date + 1) :
+      date
+    end
 
     def market_open?(date)
       date.on_weekday? && !nyse_holidays.include?(date)
     end
 
-    def prev(date)
-      closest_weekday date.yesterday
-    end
+    def prev(date) = prev_closest_weekday(date.yesterday)
+    def next(date) = next_closest_weekday(date.tomorrow)
 
     def open_days(since, till = Date.current)
       since, till = since.begin, since.end if since.is_a?(Range)

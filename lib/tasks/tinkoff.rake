@@ -59,7 +59,7 @@ namespace :tinkoff do
   namespace :prices do
     envtask(:all)     { Price.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }
     envtask(:uniq)    { Price.refresh_from_tinkoff Instrument.where(currency: %w[RUB EUR]).abc }
-    envtask(:signals) { Price.refresh_from_tinkoff PriceSignal.yesterday.outside_bars.pluck(:ticker) }
+    envtask(:signals) { Price.refresh_from_tinkoff Instrument.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
   end
   task :prices => 'prices:all'
 

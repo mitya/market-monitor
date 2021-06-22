@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  signal: one
+  signal_date: MyString
+  signal_enter: MyString
+  entered: MyString
+  stopped: MyString
+  direction: MyString
+  d1_close: MyString
+  d1_max: MyString
+  d2_close: MyString
+  d2_max: MyString
+  w1_close: MyString
+  w1_max: MyString
+  w1_max_close: MyString
+
+two:
+  ticker: MyString
+  signal: two
+  signal_date: MyString
+  signal_enter: MyString
+  entered: MyString
+  stopped: MyString
+  direction: MyString
+  d1_close: MyString
+  d1_max: MyString
+  d2_close: MyString
+  d2_max: MyString
+  w1_close: MyString
+  w1_max: MyString
+  w1_max_close: MyString

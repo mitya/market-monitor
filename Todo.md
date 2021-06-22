@@ -1,8 +1,10 @@
 + show current TI prices for outside candles & highligh those which are good to enter (-1.5%)
 
-- signal results (signal, entered, stopped_out, d1_close, d1_max, d2_close, d2_max, w1_close, w1_max, w1_max_close)
+- signal results
 - search for period lows / highs (e.g. 1w)
+- show institutions
 
+- burst-after-flat signal
 - strategy analysis model
 - analyze large moves (from flat and from prior slow move)
 - analyze shelves
