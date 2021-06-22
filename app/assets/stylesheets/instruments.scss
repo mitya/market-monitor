@@ -125,3 +125,7 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .inner-primary { label { background-color: $primary; color: white; } }
 .inner-success { label { background-color: $success; color: white; } }
 .inner-warning { label { background-color: $warning; color: black; } }
+
+.yesterday-price { opacity: 0.33; }
+.safe-enter { background-color: yellow !important; }
+.safe-enter-on-low { background-color: rgba(yellow, 0.33) !important;}

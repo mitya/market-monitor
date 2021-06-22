@@ -1,19 +1,17 @@
-+ perf comparision chart in period
-+ show portfolio without weights
-+ colorize sets
-+ add sets to insider tx page
-+ intraday 1-min prices
++ show current TI prices for outside candles & highligh those which are good to enter (-1.5%)
 
-+ iex insider summaries
-+ institutional ownership & major insiders
+- signal results (signal, entered, stopped_out, d1_close, d1_max, d2_close, d2_max, w1_close, w1_max, w1_max_close)
+- search for period lows / highs (e.g. 1w)
 
 - strategy analysis model
+- analyze large moves (from flat and from prior slow move)
+- analyze shelves
 - strategy analysis results UI
-- largest trades
 
 
 # Next
 
+- new chart engine
 - improve level rebound search logic
 - iex largest trades
 - iex International symbols
@@ -204,3 +202,11 @@
 + manual levels
 + export list as TV file
 + import TV list
++ perf comparision chart in period
++ show portfolio without weights
++ colorize sets
++ add sets to insider tx page
++ intraday 1-min prices
++ iex insider summaries
++ institutional ownership & major insiders
+- insitutional ownership UI

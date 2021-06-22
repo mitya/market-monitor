@@ -73,6 +73,7 @@ class Instrument < ApplicationRecord
   def y2020         = @y2020 ||= day_candles!.find_date(Current.y2020)
   def y2021         = @y2021 ||= day_candles!.find_date(Current.y2021)
   def last          = @last  ||= price!.last_at && yesterday_candle&.close_time ? (price!.last_at < yesterday_candle.close_time ? yesterday_candle.close : price!.value) : price!.value
+  def last_low      = @last_low ||= price!.low
   def last_or_open  = last || today_open
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
@@ -157,6 +158,10 @@ class Instrument < ApplicationRecord
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker
       figi ? find_by_figi(figi) : find_by_ticker(ticker.to_s.upcase)
+    end
+
+    def get_all(tickers)
+      tickers.first.is_a?(self) ? tickers : where(ticker: tickers)
     end
 
     def get_by_iex_ticker(iex_ticker)

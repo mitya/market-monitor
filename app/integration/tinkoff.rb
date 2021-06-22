@@ -7,6 +7,7 @@ class Tinkoff
     CBPO MTSC PRSP RP MQ TE
     MNK GSH FTR CTB
     TOT
+    VZRZP ALNU
     NVTK@GS LKOD@GS OGZD@GS NLMK@GS PHOR@GS SBER@GS SVST@GS SSA@GS MGNT@GS PLZL@GS KAP@GS
   ].uniq
 
@@ -103,13 +104,25 @@ class Tinkoff
     call_js_api "candles #{instrument.figi} 1min #{since.xmlschema} #{till.xmlschema}"
   end
 
+  def last_hour_candles(instrument, since = 1.hour.ago, till = 1.minute.from_now)
+    since, till = since.beginning_of_minute, till.beginning_of_minute
+    call_js_api "candles #{instrument.figi} hour #{since.xmlschema} #{till.xmlschema}"
+  end
+
   def update_current_price(instrument, **opts)
-    response_json = last_minute_candles instrument, 10.minutes.ago
-    candle = response_json.dig 'candles', -1
-    price = candle&.dig 'h'
-    return puts "No response for #{instrument}: #{response_json}".red if response_json['candles'] == nil
-    printf "Refresh Tinkoff price for %-7s %3i candles price=#{price}\n", instrument.ticker, response_json['candles'].count
-    instrument.price.update! value: price, last_at: candle['time'], source: 'tinkoff' if price
+    instrument = Instrument[instrument]
+    response_json = last_hour_candles instrument, 2.hours.ago
+
+    return puts "Refresh Tinkoff price for #{instrument} failed: #{stringify_error response_json}".red if response_json['candles'] == nil
+    candles = response_json.dig 'candles'
+    candle = candles[-1]
+
+    last = candle&.dig 'c'
+    low = candles.map { |c| c['l'] }.min
+    volume = candles.map { |c| c['v'] }.sum
+
+    printf "Refresh Tinkoff price for %-7s %3i candles last=#{last}\n", instrument.ticker, candles.count
+    instrument.price.update! value: last, last_at: candle['time'], source: 'tinkoff', low: low, volume: volume if last
   end
 
 
@@ -239,7 +252,7 @@ class Tinkoff
   end
 
   def sync_portfolio(data, account)
-    data['positions'].each do |position|
+    data['positions'].to_a.each do |position|
       ticker = position['ticker']
       next if position['instrumentType'] == 'Currency'
       next puts "Missing #{ticker} (used in portfolio)".red if !Instrument.get(ticker)
@@ -263,6 +276,11 @@ class Tinkoff
     PortfolioItem.find_each.select { |pi| pi.total_lots == 0 }.each &:destroy
   end
 
+  def stringify_error(json)
+    error_text = "#{json&.dig('error', 'name')} #{json&.dig('error', 'type')}".strip.presence
+    error_text || json
+  end
+
   delegate :logger, to: :Rails
 end
 
@@ -275,3 +293,6 @@ Tinkoff.update_current_price Instrument.get('AAPL')
 Tinkoff.import_latest_day_candles Instrument['PRGS']
 Instrument.tinkoff.each { |inst| Tinkoff.import_day_candles inst, since: Date.parse('2019-12-31'), till: Date.parse('2019-12-31').end_of_day }
 Instrument.tinkoff.each { |inst| Tinkoff.import_day_candles inst, since: Date.parse('2020-12-31'), till: Date.parse('2020-12-31').end_of_day }
+
+$log_tinkoff = true
+Tinkoff.update_current_price('ECHO')

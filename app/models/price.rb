@@ -3,13 +3,14 @@ class Price < ApplicationRecord
 
   before_create { self.ticker ||= instrument.ticker }
 
-  def outdated?
-    !last_at || last_at < Current.date
-  end
+  def outdated? = !last_at || last_at < Current.date
+  def today? = last_at && last_at > Current.date.midnight
+  def low_lower?(percentage) = value && low && value - low >= value * percentage
 
   class << self
     def refresh_from_tinkoff(instruments)
-      Current.parallelize_instruments(instruments, 1) { | instr| Tinkoff.update_current_price instr }
+      instruments = Instrument.get_all(instruments).sort_by(&:ticker).reject(&:premium?)
+      Current.parallelize_instruments(instruments, 2) { | instr| Tinkoff.update_current_price instr }
     end
 
     def refresh_from_iex(symbols = [])
@@ -25,7 +26,7 @@ class Price < ApplicationRecord
           next if instrument.price!.last_at && instrument.price!.last_at > last_at
 
           puts "Update price for #{instrument.ticker.ljust 5} [#{last_at}] to #{price.nonzero?}"
-          instrument.price!.update! value: price, last_at: last_at, source: 'iex' if price.to_f != 0
+          instrument.price!.update! value: price, last_at: last_at, source: 'iex', low: nil, volume: nil if price.to_f != 0
         end
       end
     end

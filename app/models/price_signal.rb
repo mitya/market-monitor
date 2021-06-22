@@ -1,16 +1,22 @@
 class PriceSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
+  scope :yesterday, -> { where interval: 'day', date: Current.yesterday }
   scope :days, -> { where interval: 'day' }
   scope :h1, -> { where interval: 'hour' }
   scope :m5, -> { where interval: '5min' }
   scope :intraday, -> { where interval: %w[5min hour] }
   scope :for_interval, -> interval { interval == 'intraday' ? intraday : where(interval: interval) }
+  scope :outside_bars, -> { where kind: 'outside-bar' }
+  scope :up, -> { where direction: 'up' }
+  scope :down, -> { where direction: 'down' }
 
   def up? = direction == 'up'
   def stopped_out?(price = instrument.last) = price && stop && (up?? price <= stop : price >= stop)
   def can_enter?(price = instrument.last) = price && enter && (up?? price >= enter : price <= enter)
   alias in_money? can_enter?
+
+  def safe_enter?(price = instrument.last, margin = 0.01) = price && (up?? enter - price >= enter * margin : price - enter >= enter * margin)
 
   def profit_ratio(current = instrument.last, use_stop: true)
     return if !current
