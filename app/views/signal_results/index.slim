@@ -17,17 +17,28 @@ main.container-fluid
         = render 'signals/filter_by_direction'
       .col
     .row
-      .col-sm-2
+      .col-sm-1
       .col-sm-9
         = bs_check_box :price_targets, 'Price targets', inline: true
         = bs_check_box :relative_price_targets, 'relative', inline: true
+        = bs_check_box :breakout_details, 'Breakout fields', inline: true
+    - if params[:breakout_details]
+      .row.my-2
+        .col-sm-1
+        .col-auto
+          div.mb-1
+            = render 'signals/filter_by_breakout_details', title: 'Change', name: :change
+          div.mb-1
+            = render 'signals/filter_by_breakout_details', title: 'Next 1d', name: :next_day_change
+            = render 'signals/filter_by_breakout_details', title: 'Next Open', name: :next_day_open
+            = render 'signals/filter_by_breakout_details', title: 'Next Close', name: :next_day_close
+          div.mb-1
+            = render 'signals/filter_by_breakout_details', title: 'Prev 5d', name: :change_from_5d_low
+            = render 'signals/filter_by_breakout_details', title: 'Prev 10d', name: :change_from_10d_low
 
   .row
-    .col-md-7.mt-4
-      = page_entries_block @results
-      = paginate @results, window: 10
-    .col-md-5
-      / = render 'signal_stats'
+    = page_entries_block @results
+    = paginate @results, window: 10
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
     thead.table-dark
@@ -47,8 +58,16 @@ main.container-fluid
           th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
           th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
         th Signal
+        - if params[:breakout_details]
+          th.money-cell Size
+          th.money-cell N open
+          th.money-cell N close
+          th.money-cell N change
+          th.money-cell Prev 5d
+          th.money-cell Prev 10d
         th.money-cell Date
         th.money-cell Enter
+        th.money-cell Stop
         th.money-cell Current
         th.money-cell 1d c﹪
         th.money-cell 1d m﹪
@@ -78,6 +97,13 @@ main.container-fluid
         td
         td
         td
+        td
+        td
+        td
+        td
+        td
+        td
+        td
         td.money-cell= colorized_ratio @averages[:d1_close], precision: 1
         td.money-cell= colorized_ratio @averages[:d1_max],   precision: 1
         td.money-cell= colorized_ratio @averages[:"d2_#{max_selector}"], precision: 1
@@ -97,7 +123,7 @@ main.container-fluid
           td= instrument.ticker
           td= known_icon instrument
           td= type_icon instrument
-          td.instrument-name= instrument.name
+          td.instrument-name= truncate instrument.name
           td= sector_badge instrument
           td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0
           - if params[:price_targets]
@@ -108,8 +134,16 @@ main.container-fluid
             td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
             td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.signal-name{class=red_green_class(signal.up?)}= signal.kind.underscore.humanize.downcase
+          - if params[:breakout_details]
+            td.money-cell= colorized_ratio signal.change, precision: 1
+            td.money-cell= colorized_ratio signal.next_day_open, precision: 1
+            td.money-cell= colorized_ratio signal.next_day_close, precision: 1
+            td.money-cell= colorized_ratio signal.next_day_change, precision: 1
+            td.money-cell= colorized_ratio signal.change_from_5d_low, precision: 1
+            td.money-cell= colorized_ratio signal.change_from_10d_low, precision: 1
           td.money-cell= signal.date
           td.money-cell= format_price signal.enter, unit: instrument.currency
+          td.money-cell= ratio_percentage signal.stop_size, precision: 1
           td.money-cell= relative_price inst.base_price, signal.enter, unit: inst.currency, format: 'percentage'
           td.money-cell= colorized_ratio result.d1_close, precision: 1
           td.money-cell= colorized_ratio result.d1_max,   precision: 1

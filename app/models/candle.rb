@@ -38,6 +38,8 @@ class Candle < ApplicationRecord
   def change = close - open
   def rel_change = (change / open).round(4)
 
+  def diff_to(price, base_price = :close) = (send(base_price) - price) / price
+
   def close_time = date.in_time_zone(Current.est).change(hour: 16)
 
   def ohlc_row = [open, high, low, close]

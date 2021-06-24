@@ -3,6 +3,8 @@ class SignalsController < ApplicationController
     params[:dates] ||= [Current.yesterday.to_s]
     params[:per_page] ||= '400'
     params[:interval] ||= 'day'
+    params[:direction] ||= 'up'
+    params[:signal] ||= 'breakout'
 
     @signals = PriceSignal.all
     @signals = @signals.joins(:instrument)

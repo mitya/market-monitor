@@ -19,8 +19,8 @@ class MarketCalendar
       date.on_weekday? && !nyse_holidays.include?(date)
     end
 
-    def prev(date) = prev_closest_weekday(date.yesterday)
-    def next(date) = next_closest_weekday(date.tomorrow)
+    def prev(date) = prev_closest_weekday(date.to_date.yesterday)
+    def next(date) = next_closest_weekday(date.to_date.tomorrow)
 
     def open_days(since, till = Date.current)
       since, till = since.begin, since.end if since.is_a?(Range)

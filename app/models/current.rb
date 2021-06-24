@@ -7,7 +7,8 @@ class Current < ActiveSupport::CurrentAttributes
   end
   alias today date
 
-  def est =Time.find_zone!('Eastern Time (US & Canada)')
+  def ytd = date.beginning_of_year
+  def est = Time.find_zone!('Eastern Time (US & Canada)')
   def msk = Time.find_zone!('Moscow')
   def ru_time = msk.now
   def us_time = est.now

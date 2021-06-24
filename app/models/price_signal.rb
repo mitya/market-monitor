@@ -1,6 +1,6 @@
 class PriceSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
-  has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id' #, inverse_of: :signal
+  has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id', dependent: :delete #, inverse_of: :signal
 
   scope :yesterday, -> { where interval: 'day', date: Current.yesterday }
   scope :days, -> { where interval: 'day' }
@@ -9,13 +9,22 @@ class PriceSignal < ApplicationRecord
   scope :intraday, -> { where interval: %w[5min hour] }
   scope :for_interval, -> interval { interval == 'intraday' ? intraday : where(interval: interval) }
   scope :outside_bars, -> { where kind: 'outside-bar' }
+  scope :breakouts, -> { where kind: 'breakout' }
   scope :up, -> { where direction: 'up' }
   scope :down, -> { where direction: 'down' }
+  scope :changed_more,              -> percent { where "(data->'change')::float > ?",              percent }
+  scope :changed_next_day_more,     -> percent { where "(data->'next_day_change')::float > ?",     percent }
+  scope :changed_from_10d_low_more, -> percent { where "(data->'change_from_10d_low')::float > ?", percent }
+  scope :changed_from_5d_low_more,  -> percent { where "(data->'change_from_5d_low')::float > ?",  percent }
 
   def up? = direction == 'up'
   def stopped_out?(price = instrument.last) = price && stop && (up?? price <= stop : price >= stop)
   def can_enter?(price = instrument.last) = price && enter && (up?? price >= enter : price <= enter)
   alias in_money? can_enter?
+
+  %w[change next_day_change next_day_open next_day_close change_from_5d_low change_from_10d_low].each do |field|
+    define_method(field) { data&.dig(field) }
+  end
 
   def safe_enter?(price = instrument.last, margin = 0.01) = price && (up?? enter - price >= enter * margin : price - enter >= enter * margin)
 
@@ -37,18 +46,22 @@ class PriceSignal < ApplicationRecord
 
   def outside_bar? = kind == 'outside-bar'
 
+  before_save do
+    self.stop_size ||= ((enter - stop) / enter).abs.round(3) if enter && stop
+  end
+
   class << self
-    def analyze_all(date: Current.yesterday, interval: 'day')
-      where(date: date).delete_all
+    def analyze_all(date: Current.yesterday, interval: 'day', force: true)
+      where(date: date).destroy_all if force
       instruments = Instrument.all.abc
       Current.preload_prices_for instruments
-      Current.parallelize_instruments(instruments, 6) { |inst| analyze inst, date }
-      # instruments.each { |instrument| analyze instrument, date }
+      Current.parallelize_instruments(instruments, 6) { |inst| analyze inst, date, force: force }
     end
 
-    def analyze(instrument, date, interval: 'day')
+    def analyze(instrument, date, interval: 'day', force: true)
       instrument = Instrument[instrument]
       date = date.to_date
+      return if !force && exists?(ticker: instrument.ticker, date: date)
 
       curr = today = instrument.candles.day.find_date(date)
       prev = yesterday = today&.previous
@@ -58,7 +71,7 @@ class PriceSignal < ApplicationRecord
       signal_attrs = { instrument: curr.instrument, date: curr.date, base_date: prev.date, interval: curr.interval }
 
       if match = (today.absorb?(yesterday, 0.0) && today.range_spread_percent > 0.01)
-        puts "Detect outside-bar on #{date} for #{instrument}"
+        puts "Detect on #{date} for #{instrument.ticker.ljust 8} outside-bar"
         create! instrument: instrument, date: today.date, base_date: yesterday.date, kind: 'outside-bar',
           accuracy: (today.spread / yesterday.spread).to_f.round(2),
           exact: match == true,
@@ -67,7 +80,7 @@ class PriceSignal < ApplicationRecord
       end
 
       if pin_vector = today.pin_bar?
-        puts "Detect pin-bar on #{date} for #{instrument}"
+        puts "Detect on #{date} for #{instrument.ticker.ljust 8} pin-bar"
         create! instrument: instrument, date: today.date, kind: 'pin-bar',
           direction: pin_vector, enter: pin_vector == 'up' ? today.high : today.low, stop: pin_vector == 'up' ? today.low : today.high,
           stop_size: today.max_min_rel.abs.to_f.round(4)
@@ -75,7 +88,7 @@ class PriceSignal < ApplicationRecord
 
       outside_range = prev.close - curr.low
       if curr.bottom_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
-        puts "Detect spike-down on #{curr.date} for #{curr.instrument}"
+        puts "Detect on #{date} for #{instrument.ticker.ljust 8} spike-down"
         bullish = curr.close > prev.close || curr.up?
         create! signal_attrs.merge kind: 'spike-down',
           direction: bullish ? 'up' : 'down',
@@ -89,7 +102,7 @@ class PriceSignal < ApplicationRecord
 
       outside_range = curr.high - prev.close
       if curr.top_tail_range > 0.02 && outside_range > 4 * pt && curr.overlaps?(prev)
-        puts "Detect spike-up on #{curr.date} for #{curr.instrument}"
+        puts "Detect on #{date} for #{instrument.ticker.ljust 8} spike-up"
         bullish = curr.close > prev.close || curr.up?
         create! signal_attrs.merge kind: 'spike-up',
           direction: bullish ? 'up' : 'down',
@@ -112,7 +125,7 @@ class PriceSignal < ApplicationRecord
       signal_attrs = { instrument: curr.instrument, date: curr.date, base_date: curr.date, time: curr.time, interval: candle.interval }
 
       if match = (curr.absorb?(prev, 0.0) && curr.range_spread_percent > 0.015)
-        puts "Detect at #{curr.time.in_time_zone Current.msk} outside-bar for #{curr.instrument}"
+        puts "Detect for #{instrument.ticker.ljust 8} at #{curr.time.in_time_zone Current.msk} outside-bar"
         create! signal_attrs.merge kind: 'outside-bar',
           accuracy: (curr.spread / prev.spread).to_f.round(2),
           exact: match == true,
@@ -122,7 +135,7 @@ class PriceSignal < ApplicationRecord
 
       pin_vector, ratio = curr.tail_bar?(prev)
       if pin_vector && ratio > 0.015
-        puts "Detect at #{curr.time.in_time_zone Current.msk} tail-bar for #{curr.instrument} #{pin_vector} #{ratio&.round(4)}"
+        puts "Detect for #{instrument.ticker.ljust 8} at #{curr.time.in_time_zone Current.msk} tail-bar #{pin_vector} #{ratio&.round(4)}"
         create! signal_attrs.merge kind: 'tail-bar',
           direction: pin_vector,
           enter: pin_vector == 'up' ? curr.high : curr.low,
@@ -131,6 +144,37 @@ class PriceSignal < ApplicationRecord
           accuracy: ratio.to_f.round(4)
       end
     end
+
+    def find_breakouts(instruments = Instrument.all, dates = Current.ytd..Current.date)
+      Instrument.get_all(instruments).sort_by(&:ticker).each do |inst|
+        dates.each do |date|
+          candle = inst.day_candles.find_date(date)
+          next if candle == nil
+          next if candle.rel_change < 0.06
+
+          recent = candle.previous_n(10)
+          d10_lowest_body = recent.min_by { |candle| candle.range_low }
+          next if d10_lowest_body == nil
+          next if candle.diff_to(d10_lowest_body.range_low, :open) > 0.15
+
+          d5_lowest_body = recent.sort_by(&:date).last(5).min_by { |candle| candle.range_low }
+          next_day = candle.next
+
+          data = { }
+          data[:change] = candle.rel_change.to_f
+          data[:change_from_10d_low] = candle.diff_to(d10_lowest_body.range_low, :open).round(3).to_f if d10_lowest_body
+          data[:change_from_5d_low]  = candle.diff_to(d5_lowest_body.range_low, :open).round(3).to_f  if d5_lowest_body
+          data[:next_day_change]     = next_day.rel_change.round(3).to_f                              if next_day
+          data[:next_day_open]       = next_day.diff_to(candle.close, :open).round(3).to_f            if next_day
+          data[:next_day_close]      = next_day.diff_to(candle.close, :close).round(3).to_f           if next_day
+
+          signal = find_or_initialize_by kind: 'breakout', instrument: inst, date: date, direction: 'up'
+          signal.update! enter: candle.close, stop: candle.open, data: data
+          puts "Found breakout on #{date} for #{inst}"
+        end
+      end
+    end
+
   end
 end
 
@@ -141,3 +185,5 @@ Candle::H1.update_all analyzed: nil
 Candle::M5.update_all analyzed: nil
 rake analyze
 rake analyze date=2021-05-27
+
+PriceSignal.find_breakouts(%w[BBBY FANG DK])

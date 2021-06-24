@@ -1,12 +1,12 @@
-+ show current TI prices for outside candles & highligh those which are good to enter (-1.5%)
-+ signal results
-+ signal results UI
++ breakout signals
+- negative breakouts signals
+- 2% over yesterday high
+- insider buy signal
 
-- aggregate & analyze dates YTD
-- burst-after-flat signal
+- signal permutation analyzer
 
 - search for period lows / highs (e.g. 1w)
-- show institutions
+- insitutional ownership UI
 
 - strategy analysis model
 - analyze large moves (from flat and from prior slow move)
@@ -214,4 +214,7 @@
 + intraday 1-min prices
 + iex insider summaries
 + institutional ownership & major insiders
-- insitutional ownership UI
++ show current TI prices for outside candles & highligh those which are good to enter (-1.5%)
++ signal results
++ signal results UI
++ aggregate & analyze dates YTD

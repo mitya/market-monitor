@@ -3,6 +3,9 @@ class SignalResultsController < ApplicationController
     params[:per_page] ||= '500'
     params[:since] ||= '2021-03-01'
     params[:till]  ||= Date.current.to_s
+    params[:direction]  ||= 'up'
+    params[:signal]  ||= 'breakout'
+    params[:changed_more] = 0.12
 
     dates = params[:since].to_date .. params[:till].to_date if params[:since].present? || params[:till].present?
 
@@ -17,6 +20,15 @@ class SignalResultsController < ApplicationController
     @results = @results.where ["? = any(instruments.flags)", params[:availability]] if params[:availability].present?
     @results = @results.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
     @results = @results.where ticker: InstrumentSet.get(params[:set]).symbols       if params[:set].present? && params[:tickers].blank?
+
+    %w[change next_day_change next_day_open next_day_close change_from_5d_low change_from_10d_low].each do |var|
+      if from = params["#{var}_from"].presence && params["#{var}_from"].to_f
+        @results = @results.where "(price_signals.data->'#{var}')::float >= ?", from / 100.0
+      end
+      if to = params["#{var}_to"].to_f.nonzero?
+        @results = @results.where "(price_signals.data->'#{var}')::float <= ?", to / 100.0
+      end
+    end
 
     @results = @results.page(params[:page]).per(params[:per_page])
     @results = @results.order('price_signals.date', :ticker)

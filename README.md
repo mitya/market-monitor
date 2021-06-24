@@ -49,28 +49,29 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='CATO'
+export tickers='GTE KLIC SITM XPER UMPQ'
 rake tinkoff:premium:import
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty
-export tickers=''
+export tickers='SHLS GRUB ZIP'
 rake tinkoff:logos:download
 
 ## All
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2021-01-01 special=1 ok=1
-rake iex:days:missing special=1 ok=1
+rake iex:days:missing since=2020-01-01 ok=1
 
 ## Optional
 rake iex:days:period period=ytd
 rake destroy ticker=ACIA
-rake set_first_date ticker=TTE date=2021-06-16
-rake set_first_date_auto tickers=''
+rake set_first_date ticker=GRUB date=2021-03-25
+rake set_first_date_auto tickers='SHLS'
 rake iex:symbols:refresh
 rake tinkoff:days:special
+rake tinkoff:days:year tickers=FLOT
 
 ## Import List
 

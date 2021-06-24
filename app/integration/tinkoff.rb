@@ -122,7 +122,7 @@ class Tinkoff
     volume = candles.map { |c| c['v'] }.sum
 
     printf "Refresh Tinkoff price for %-7s %3i candles last=#{last}\n", instrument.ticker, candles.count
-    instrument.price.update! value: last, last_at: candle['time'], source: 'tinkoff', low: low, volume: volume if last
+    instrument.price!.update! value: last, last_at: candle['time'], source: 'tinkoff', low: low, volume: volume if last
   end
 
 

@@ -27,6 +27,12 @@ envtask :aggregate do
   Aggregate.create_for_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.date
 end
 
+envtask :aggregate_old do
+  MarketCalendar.open_days(Date.current.beginning_of_year, '2021-04-16'.to_date).each do |date|
+    Aggregate.create_for_all date: date
+  end
+end
+
 envtask 'aggregate:stats' do
   pp Aggregate.group(:date).where('date > ?', 2.weeks.ago).count.reverse_merge(Current.last_2_weeks.map{ |d| [d, 0] }.to_h).sort
   pp PriceSignal.group(:date).where('date > ?', 2.weeks.ago).count.reverse_merge(Current.last_2_weeks.map{ |d| [d, 0] }.to_h).sort
@@ -34,6 +40,12 @@ end
 
 envtask :analyze do
   PriceSignal.analyze_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.last_closed_day
+end
+
+envtask :analyze_old do
+  MarketCalendar.open_days(Date.current.beginning_of_year, '2021-04-16'.to_date).each do |date|
+    PriceSignal.analyze_all date: date, force: false
+  end
 end
 
 task :a => %w[aggregate analyze]
@@ -110,5 +122,12 @@ end
 
 envtask :check_signals do
   # PriceSignal.outside_bars.up.limit(500).each { |signal| PriceSignalResult.create_for signal }
-  PriceSignal.outside_bars.each { |signal| PriceSignalResult.create_for signal }
+  # PriceSignal.outside_bars.each { |signal| PriceSignalResult.create_for signal }
+  PriceSignal.breakouts.each { |signal| PriceSignalResult.create_for signal }
+end
+
+envtask :breakouts do
+  PriceSignal.find_breakouts InstrumentSet.known_symbols.sort
+  # PriceSignal.find_breakouts(%w[BBBY FANG DK])
+  # PriceSignal.find_breakouts(%w[DK])
 end

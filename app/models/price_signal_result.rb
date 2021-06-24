@@ -8,6 +8,7 @@ class PriceSignalResult < ApplicationRecord
       instrument = signal.instrument
 
       return puts "Missing #{signal.ticker}".red if instrument == nil
+      puts "Check #{signal.ticker.ljust 6} #{signal.kind} on #{signal.date}"
 
       max_selector = signal.up?? :high : :low
       next_day = MarketCalendar.next_closest_weekday(signal.date + 1)
