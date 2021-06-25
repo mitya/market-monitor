@@ -1,5 +1,5 @@
 class PriceSignal < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'ticker'
+  belongs_to :instrument, foreign_key: 'ticker', inverse_of: :signals
   has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id', dependent: :delete #, inverse_of: :signal
 
   scope :yesterday, -> { where interval: 'day', date: Current.yesterday }
@@ -18,11 +18,12 @@ class PriceSignal < ApplicationRecord
   scope :changed_from_5d_low_more,  -> percent { where "(data->'change_from_5d_low')::float > ?",  percent }
 
   def up? = direction == 'up'
-  def stopped_out?(price = instrument.last) = price && stop && (up?? price <= stop : price >= stop)
+  def stopped_out?(price = instrument.last) = price && stop && (up?? price < stop : price > stop)
   def can_enter?(price = instrument.last) = price && enter && (up?? price >= enter : price <= enter)
   alias in_money? can_enter?
 
-  %w[change next_day_change next_day_open next_day_close change_from_5d_low change_from_10d_low].each do |field|
+  BreakoutFields = %w[change next_1d_change next_1d_open next_1d_close prev_2w_high prev_1w_high prev_2w_low prev_1w_low]
+  BreakoutFields.each do |field|
     define_method(field) { data&.dig(field) }
   end
 
@@ -30,9 +31,9 @@ class PriceSignal < ApplicationRecord
 
   def profit_ratio(current = instrument.last, use_stop: true)
     return if !current
-    return -stop_size if stopped_out?(current) && use_stop
+    return -stop_size if use_stop && stopped_out?(current)
     ratio = (current - enter) / enter
-    in_money? ? ratio.abs : -ratio.abs
+    in_money?(current) ? ratio.abs : -ratio.abs
   end
 
   def candle = instrument.day_candles!.find_date(date)
@@ -145,32 +146,45 @@ class PriceSignal < ApplicationRecord
       end
     end
 
-    def find_breakouts(instruments = Instrument.all, dates = Current.ytd..Current.date)
+    def find_breakouts(instruments = Instrument.all, dates: Current.ytd..Current.date, direction: :up)
+      max_move_in_prev_2w = 0.20
+      min_change = 0.05
+
       Instrument.get_all(instruments).sort_by(&:ticker).each do |inst|
         dates.each do |date|
           candle = inst.day_candles.find_date(date)
           next if candle == nil
-          next if candle.rel_change < 0.06
+          next if candle.direction != direction.to_s
+          next if candle.rel_change.abs < min_change
 
-          recent = candle.previous_n(10)
-          d10_lowest_body = recent.min_by { |candle| candle.range_low }
-          next if d10_lowest_body == nil
-          next if candle.diff_to(d10_lowest_body.range_low, :open) > 0.15
+          last_10 = candle.previous_n(10)
+          prev_2w_low  = last_10.min_by &:range_low
+          prev_2w_high = last_10.max_by &:range_high
 
-          d5_lowest_body = recent.sort_by(&:date).last(5).min_by { |candle| candle.range_low }
+          next if already_moved_too_much = direction == :up ?
+            (!prev_2w_low  || candle.diff_to(prev_2w_low.range_low, :open) > max_move_in_prev_2w) :
+            (!prev_2w_high || candle.diff_to(prev_2w_high.range_high, :open) < -max_move_in_prev_2w)
+
+          last_5 = last_10.sort_by(&:date).last(5)
+          prev_1w_low  = last_5.min_by &:range_low
+          prev_1w_high = last_5.max_by &:range_high
           next_day = candle.next
+          spy_day = Instrument['SPY'].day_candles!.find_date(date)
 
           data = { }
-          data[:change] = candle.rel_change.to_f
-          data[:change_from_10d_low] = candle.diff_to(d10_lowest_body.range_low, :open).round(3).to_f if d10_lowest_body
-          data[:change_from_5d_low]  = candle.diff_to(d5_lowest_body.range_low, :open).round(3).to_f  if d5_lowest_body
-          data[:next_day_change]     = next_day.rel_change.round(3).to_f                              if next_day
-          data[:next_day_open]       = next_day.diff_to(candle.close, :open).round(3).to_f            if next_day
-          data[:next_day_close]      = next_day.diff_to(candle.close, :close).round(3).to_f           if next_day
+          data[:change]         = candle.rel_change.to_f.round(3)
+          data[:prev_2w_high]   = candle.diff_to(prev_2w_high.range_high, :open).round(3).to_f if prev_2w_high
+          data[:prev_1w_high]   = candle.diff_to(prev_1w_high.range_high, :open).round(3).to_f if prev_1w_high
+          data[:prev_2w_low]    = candle.diff_to(prev_2w_low.range_low,   :open).round(3).to_f if prev_2w_low
+          data[:prev_1w_low]    = candle.diff_to(prev_1w_low.range_low,   :open).round(3).to_f if prev_1w_low
+          data[:next_1d_change] = next_day.rel_change.round(3).to_f                            if next_day
+          data[:next_1d_open]   = next_day.diff_to(candle.close, :open).round(3).to_f          if next_day
+          data[:next_1d_close]  = next_day.diff_to(candle.close, :close).round(3).to_f         if next_day
+          data[:spy_change]     = spy_day.rel_change.round(3).to_f                             if spy_day
 
-          signal = find_or_initialize_by kind: 'breakout', instrument: inst, date: date, direction: 'up'
+          signal = find_or_initialize_by kind: 'breakout', instrument: inst, date: date, direction: direction
           signal.update! enter: candle.close, stop: candle.open, data: data
-          puts "Found breakout on #{date} for #{inst}"
+          puts "Found breakout #{direction} on #{date} for #{inst}"
         end
       end
     end

@@ -7,7 +7,7 @@ import { Modal } from 'bootstrap'
 import ApexCharts from 'apexcharts'
 import 'pages/init'
 import 'pages/charts'
-import "channels"
+// import "channels"
 
 document.addEventListener("turbolinks:load", () => {
   document.querySelector('#list-config')?.addEventListener("change", e => {

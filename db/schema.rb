@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_22_124754) do
+ActiveRecord::Schema.define(version: 2021_06_25_151154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -273,10 +273,14 @@ ActiveRecord::Schema.define(version: 2021_06_22_124754) do
     t.float "d2_max"
     t.float "d3_close"
     t.float "d3_max"
+    t.float "d4_close"
+    t.float "d4_max"
     t.float "w1_close"
     t.float "w1_max"
     t.float "w2_close"
     t.float "w2_max"
+    t.float "w3_close"
+    t.float "w3_max"
     t.float "m1_close"
     t.float "m1_max"
     t.float "m2_close"
@@ -284,6 +288,44 @@ ActiveRecord::Schema.define(version: 2021_06_22_124754) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["signal_id"], name: "index_price_signal_results_on_signal_id"
+  end
+
+  create_table "price_signal_strategies", force: :cascade do |t|
+    t.string "signal"
+    t.string "direction"
+    t.daterange "period"
+    t.numrange "change"
+    t.numrange "spy_change"
+    t.numrange "prev_1w_low"
+    t.numrange "prev_2w_low"
+    t.numrange "prev_1w_high"
+    t.numrange "prev_2w_high"
+    t.numrange "next_1d_change"
+    t.numrange "next_1d_open"
+    t.numrange "next_1d_close"
+    t.integer "count"
+    t.integer "entered_count"
+    t.integer "stopped_count"
+    t.float "d1_close"
+    t.float "d1_max"
+    t.float "d2_close"
+    t.float "d2_max"
+    t.float "d3_close"
+    t.float "d3_max"
+    t.float "d4_close"
+    t.float "d4_max"
+    t.float "w1_close"
+    t.float "w1_max"
+    t.float "w2_close"
+    t.float "w2_max"
+    t.float "w3_close"
+    t.float "w3_max"
+    t.float "m1_close"
+    t.float "m1_max"
+    t.float "m2_close"
+    t.float "m2_max"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "price_signals", force: :cascade do |t|

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :recommendations
   resources :signals
   resources :signal_results
+  resources :signal_strategies
   resources :public_signals
   resources :portfolio, as: :portfolio_items
   resources :level_hits

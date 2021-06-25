@@ -124,6 +124,10 @@ module ApplicationHelper
     "#{l date, format: :wday_name}, #{date.day.ordinalize}"
   end
 
+  def date_as_mday(date)
+    l date, format: :mday if date
+  end
+
   IntervalTitles = { 'hour' => 'H1', '5min' => 'M5' }
 
   def interval_badge(interval)
@@ -151,5 +155,16 @@ module ApplicationHelper
 
   def count_bar(value)
     percentage_bar value / 100.0
+  end
+
+  def label_width(locals = nil)
+    locals&.dig(:lw) || @label_width || 1
+  end
+
+  def recent_period_options
+    month_starts = (0..(Current.date.month - 1)).map { |n| Current.ytd + n.months }
+    [['All']] + month_starts.map do |day|
+      [day.strftime("%b %Y"), "#{day.beginning_of_month}..#{day.end_of_month}"]
+    end
   end
 end

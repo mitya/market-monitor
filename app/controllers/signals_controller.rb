@@ -4,7 +4,7 @@ class SignalsController < ApplicationController
     params[:per_page] ||= '400'
     params[:interval] ||= 'day'
     params[:direction] ||= 'up'
-    params[:signal] ||= 'breakout'
+    params[:signal] ||= 'outside-bar'
 
     @signals = PriceSignal.all
     @signals = @signals.joins(:instrument)

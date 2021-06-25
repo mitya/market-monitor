@@ -1,0 +1,67 @@
+- @label_width = 2
+- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- max_selector = params[:max_prices] == '1' ? 'max' : 'close'
+- prev_selector = params[:direction] == 'down' ? 'high' : 'low'
+
+main.container-fluid
+  h1.display-3 Signal Results
+
+  form#list-config(action=signal_results_path class='my-2')
+
+    .row
+      .col
+      .col
+        = render 'instruments/pagination_options'
+        = render 'signals/filter_by_signal'
+        = render 'signals/filter_by_direction'
+  .row
+    = page_entries_block @strategies
+    = paginate @strategies, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
+    thead.table-dark
+      tr
+        th Signal
+        th.money-cell Change
+        th.money-cell N open
+        th.money-cell N close
+        th.money-cell N change
+        th.money-cell Prev 1w
+        th.money-cell Prev 2w
+        th.money-cell 1d ﹪
+        th.money-cell 2d ﹪
+        th.money-cell 3d ﹪
+        th.money-cell 4d ﹪
+        th.money-cell 1w ﹪
+        th.money-cell 2w ﹪
+        th.money-cell 3w ﹪
+        th.money-cell 1m ﹪
+        th.money-cell 2m ﹪
+        th.money-cell Total
+        th.money-cell Entered
+        th.money-cell Stopped
+    tbody
+      - @strategies.each do |strategy|
+        tr
+          td.signal-name{class=red_green_class(strategy.up?)}= strategy.signal.underscore.humanize.downcase
+          td.money-cell= colorized_ratio strategy.change&.begin, precision: 1
+          td.money-cell= colorized_ratio strategy.next_1d_open&.begin, precision: 1
+          td.money-cell= colorized_ratio strategy.next_1d_close&.begin, precision: 1
+          td.money-cell= colorized_ratio strategy.next_1d_change&.begin, precision: 1
+          td.money-cell= colorized_ratio strategy.send("prev_1w_#{prev_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("prev_2w_#{prev_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("d1_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("d2_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("d3_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("d4_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("w1_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("w2_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("w3_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("m1_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("m2_#{max_selector}"), precision: 1
+          td.money-cell= number_with_delimiter strategy.count
+          td.money-cell= number_with_delimiter strategy.entered_count
+          td.money-cell= number_with_delimiter strategy.stopped_count
+
+  = paginate @strategies, window: 20

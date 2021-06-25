@@ -14,13 +14,17 @@
 
   <body class="my-2">
     <nav class="text-center mb-3">
-      <%= link_to 'Instruments', instruments_path %> |
-      <%= link_to 'Targets', recommendations_path %> |
+      <%= link_to 'Instruments', instruments_path %>
+      <span class="d-inline-block w-15p"></span>
       <%= link_to 'Signals', signals_path %> |
-      <%= link_to 'Signal Results', signal_results_path %> |
-      <%= link_to 'Level', level_hits_path %> |
+      <%= link_to 'Results', signal_results_path %> |
+      <%= link_to 'Strategies', signal_strategies_path %>
+      <span class="d-inline-block w-15p"></span>
+      <%= link_to 'Targets', recommendations_path %> |
+      <%= link_to 'Levels', level_hits_path %> |
       <%= link_to 'Gurus', public_signals_path %> |
-      <%= link_to 'Compare', comparision_path %> |
+      <%= link_to 'Compare', comparision_path %>
+      <span class="d-inline-block w-15p"></span>
       <%= link_to 'Insider Tx', insider_transactions_path %> |
       <%= link_to 'Aggregates', insider_aggregates_path %> |
       <%= link_to 'Summaries', insider_summaries_path %>

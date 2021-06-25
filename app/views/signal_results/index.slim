@@ -1,27 +1,41 @@
+- @label_width = 2
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
-- max_selector = 'close'
+- max_selector = params[:max_prices] == '1' ? 'max' : 'close'
+- prev_selector = params[:direction] == 'down' ? 'high' : 'low'
 
 main.container-fluid
   h1.display-3 Signal Results
 
   form#list-config(action=signal_results_path class='my-2')
-    = render 'instruments/filter_by_set'
-    .row.mb-3
+
+    .row
       .col
+        = render 'instruments/filter_by_set'
         = render 'instruments/filter_by_currency'
         = render 'instruments/filter_by_availability'
         = render 'instruments/filter_by_tickers'
+      .col
         = render 'instruments/pagination_options'
         = render 'signals/filter_by_signal'
         = render 'signals/filter_by_direction'
-      .col
-    .row
-      .col-sm-1
-      .col-sm-9
-        = bs_check_box :price_targets, 'Price targets', inline: true
-        = bs_check_box :relative_price_targets, 'relative', inline: true
-        = bs_check_box :breakout_details, 'Breakout fields', inline: true
+        .row.my-2
+          .col-sm-2
+          .col-sm-10
+            = bs_check_box :price_targets, 'Price targets', inline: true
+            = bs_check_box :relative_price_targets, 'relative', inline: true
+            = bs_check_box :breakout_details, 'Breakout fields', inline: true
+            = bs_check_box :cap_sector, 'Cap & sector', inline: true
+            = bs_check_box :max_prices, 'Best prices', inline: true
+        .row.my-2
+          .col-sm-2.col-form-label Dates:
+          .col-sm-10.d-flex.flex-row.align-items-center
+            = date_field_tag :since, params[:since], class: "form-control w-auto"
+            span.px-2 —
+            = date_field_tag :till, params[:till], class: "form-control w-auto"
+        = bs_select :period, 'Period:', recent_period_options, select_class: 'w-auto'
+
+
     - if params[:breakout_details]
       .row.my-2
         .col-sm-1
@@ -29,13 +43,15 @@ main.container-fluid
           div.mb-1
             = render 'signals/filter_by_breakout_details', title: 'Change', name: :change
           div.mb-1
-            = render 'signals/filter_by_breakout_details', title: 'Next 1d', name: :next_day_change
-            = render 'signals/filter_by_breakout_details', title: 'Next Open', name: :next_day_open
-            = render 'signals/filter_by_breakout_details', title: 'Next Close', name: :next_day_close
+            = render 'signals/filter_by_breakout_details', title: 'Next Day', name: :next_1d_change
+            = render 'signals/filter_by_breakout_details', title: 'Next Open', name: :next_1d_open
+            = render 'signals/filter_by_breakout_details', title: 'Next Close', name: :next_1d_close
           div.mb-1
-            = render 'signals/filter_by_breakout_details', title: 'Prev 5d', name: :change_from_5d_low
-            = render 'signals/filter_by_breakout_details', title: 'Prev 10d', name: :change_from_10d_low
-
+            = render 'signals/filter_by_breakout_details', title: '1w low', name: :prev_1w_low
+            = render 'signals/filter_by_breakout_details', title: '2w low', name: :prev_2w_low
+          div.mb-1
+            = render 'signals/filter_by_breakout_details', title: '1w high', name: :prev_1w_high
+            = render 'signals/filter_by_breakout_details', title: '2w high', name: :prev_2w_high
   .row
     = page_entries_block @results
     = paginate @results, window: 10
@@ -48,8 +64,9 @@ main.container-fluid
         th
         th
         th Company
-        th Sector
-        th.money-cell.border-end.pe-2(data-sort="capitalization") Cap (M)
+        - if params[:cap_sector]
+          th Sector
+          th.money-cell.border-end.pe-2(data-sort="capitalization") Cap (M)
         - if params[:price_targets]
           th.money-cell Low
           th.money-cell Average
@@ -59,22 +76,23 @@ main.container-fluid
           th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
         th Signal
         - if params[:breakout_details]
-          th.money-cell Size
+          th.money-cell Change
           th.money-cell N open
           th.money-cell N close
           th.money-cell N change
-          th.money-cell Prev 5d
-          th.money-cell Prev 10d
+          th.money-cell Prev 1w
+          th.money-cell Prev 2w
         th.money-cell Date
         th.money-cell Enter
         th.money-cell Stop
-        th.money-cell Current
-        th.money-cell 1d c﹪
-        th.money-cell 1d m﹪
+        th.money-cell.border-end.pe-2 Current
+        th.money-cell 1d ﹪
         th.money-cell 2d ﹪
         th.money-cell 3d ﹪
+        th.money-cell 4d ﹪
         th.money-cell 1w ﹪
         th.money-cell 2w ﹪
+        th.money-cell 3w ﹪
         th.money-cell 1m ﹪
         th.money-cell 2m ﹪
     tbody
@@ -84,8 +102,9 @@ main.container-fluid
         td
         td
         td
-        td
-        td
+        - if params[:cap_sector]
+          td
+          td
         - if params[:price_targets]
           td
           td
@@ -94,22 +113,24 @@ main.container-fluid
           td
           td
         td
+        - if params[:breakout_details]
+          td
+          td
+          td
+          td
+          td
+          td
         td
         td
         td
-        td
-        td
-        td
-        td
-        td
-        td
-        td
-        td.money-cell= colorized_ratio @averages[:d1_close], precision: 1
-        td.money-cell= colorized_ratio @averages[:d1_max],   precision: 1
+        td.border-end.pe-2
+        td.money-cell= colorized_ratio @averages[:"d1_#{max_selector}"], precision: 1
         td.money-cell= colorized_ratio @averages[:"d2_#{max_selector}"], precision: 1
         td.money-cell= colorized_ratio @averages[:"d3_#{max_selector}"], precision: 1
+        td.money-cell= colorized_ratio @averages[:"d4_#{max_selector}"], precision: 1
         td.money-cell= colorized_ratio @averages[:"w1_#{max_selector}"], precision: 1
         td.money-cell= colorized_ratio @averages[:"w2_#{max_selector}"], precision: 1
+        td.money-cell= colorized_ratio @averages[:"w3_#{max_selector}"], precision: 1
         td.money-cell= colorized_ratio @averages[:"m1_#{max_selector}"], precision: 1
         td.money-cell= colorized_ratio @averages[:"m2_#{max_selector}"], precision: 1
 
@@ -124,8 +145,9 @@ main.container-fluid
           td= known_icon instrument
           td= type_icon instrument
           td.instrument-name= truncate instrument.name
-          td= sector_badge instrument
-          td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0
+          - if params[:cap_sector]
+            td= sector_badge instrument
+            td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0
           - if params[:price_targets]
             td.money-cell= relative_price price_target&.low_in_usd,     instrument.base_price, unit: instrument.currency, format: price_target_format
             td.money-cell= relative_price price_target&.average_in_usd, instrument.base_price, unit: instrument.currency, format: price_target_format
@@ -136,21 +158,22 @@ main.container-fluid
           td.signal-name{class=red_green_class(signal.up?)}= signal.kind.underscore.humanize.downcase
           - if params[:breakout_details]
             td.money-cell= colorized_ratio signal.change, precision: 1
-            td.money-cell= colorized_ratio signal.next_day_open, precision: 1
-            td.money-cell= colorized_ratio signal.next_day_close, precision: 1
-            td.money-cell= colorized_ratio signal.next_day_change, precision: 1
-            td.money-cell= colorized_ratio signal.change_from_5d_low, precision: 1
-            td.money-cell= colorized_ratio signal.change_from_10d_low, precision: 1
-          td.money-cell= signal.date
+            td.money-cell= colorized_ratio signal.next_1d_open, precision: 1
+            td.money-cell= colorized_ratio signal.next_1d_close, precision: 1
+            td.money-cell= colorized_ratio signal.next_1d_change, precision: 1
+            td.money-cell= colorized_ratio signal.send("prev_1w_#{prev_selector}"), precision: 1
+            td.money-cell= colorized_ratio signal.send("prev_2w_#{prev_selector}"), precision: 1
+          td.money-cell= date_as_mday signal.date
           td.money-cell= format_price signal.enter, unit: instrument.currency
           td.money-cell= ratio_percentage signal.stop_size, precision: 1
-          td.money-cell= relative_price inst.base_price, signal.enter, unit: inst.currency, format: 'percentage'
-          td.money-cell= colorized_ratio result.d1_close, precision: 1
-          td.money-cell= colorized_ratio result.d1_max,   precision: 1
+          td.money-cell.border-end.pe-2= colorized_ratio signal.profit_ratio(inst.base_price, use_stop: true), precision: 1
+          td.money-cell= colorized_ratio result.send("d1_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio result.send("d2_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio result.send("d3_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio result.send("d4_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio result.send("w1_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio result.send("w2_#{max_selector}"), precision: 1
+          td.money-cell= colorized_ratio result.send("w3_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio result.send("m1_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio result.send("m2_#{max_selector}"), precision: 1
 

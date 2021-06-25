@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  signal: MyString
+  direction: MyString
+  change: 
+  spy: 
+  prev_1w_low: 
+  prev_2w_low: 
+  count: 1
+
+two:
+  signal: MyString
+  direction: MyString
+  change: 
+  spy: 
+  prev_1w_low: 
+  prev_2w_low: 
+  count: 1

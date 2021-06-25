@@ -101,16 +101,16 @@ main.container-fluid
             = signal.kind.underscore.humanize.downcase
             = '?' if signal.outside_bar? && !signal.exact?
           td.money-cell.enter-price-val{
-            class=(class_names red_green_class(signal.up?) => can_enter, 'yesterday-price': !instrument.price.today?)
+            class=(class_names red_green_class(signal.up?) => can_enter, 'yesterday-price': !instrument.price!.today?)
           } = format_price instrument.last, unit: instrument.currency
           td.money-cell{
-            class=(class_names red_green_class(signal.up?) => can_enter, 'safe-enter': instrument.usd? && signal.safe_enter?, 'yesterday-price': !instrument.price.today?)
+            class=(class_names red_green_class(signal.up?) => can_enter, 'safe-enter': instrument.usd? && signal.safe_enter?, 'yesterday-price': !instrument.price!.today?)
           } = ratio_percentage price_ratio(instrument.last, signal.enter), precision: 1
           td[class=(red_green_class(signal.up?) if can_enter)]= percentage_bar price_ratio(instrument.last, signal.enter)
           td.money-cell(
             title=instrument.last_low
             class=(class_names 'safe-enter-on-low': instrument.usd? && signal.safe_enter?(instrument.last_low))
-          )= ratio_percentage price_ratio(instrument.last_low, signal.enter), precision: 1  if instrument.price.low_lower?(0.01) || signal.safe_enter?(instrument.last_low)
+          )= ratio_percentage price_ratio(instrument.last_low, signal.enter), precision: 1  if instrument.price!.low_lower?(0.01) || signal.safe_enter?(instrument.last_low)
           td.money-cell = number_with_delimiter instrument.price!.volume if !instrument.rub?
           td.money-cell.stop-loss-val= format_price signal.stop, unit: instrument.currency
           td.money-cell= ratio_percentage signal.stop_size, precision: 1

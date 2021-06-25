@@ -1,5 +1,5 @@
 .row.mb-1
-  legend class="col-form-label col-sm-2 pt-0" Currency
+  legend class="col-form-label col-sm-#{label_width local_assigns} pt-0" Currency
   .col-sm-10
     - (all_option + currency_options).each do |label, value|
       = bs_toggle_button :currency, value, label

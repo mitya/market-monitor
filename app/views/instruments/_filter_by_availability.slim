@@ -1,5 +1,5 @@
 .row.mb-1
-  legend class="col-form-label col-sm-2 pt-0" Availability
+  legend class="col-form-label col-sm-#{label_width} pt-0" Availability
   .col-sm-10
     - (all_option + availability_options).each do |label, value|
       = bs_toggle_button :availability, value, label

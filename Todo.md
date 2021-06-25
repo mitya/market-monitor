@@ -1,9 +1,14 @@
 + breakout signals
-- negative breakouts signals
++ negative breakouts signals
++ signal permutation analyzer
+
+- signal prev month dynamics
+- volume / avg volume
+- aggregate results with date range
+
 - 2% over yesterday high
 - insider buy signal
 
-- signal permutation analyzer
 
 - search for period lows / highs (e.g. 1w)
 - insitutional ownership UI
