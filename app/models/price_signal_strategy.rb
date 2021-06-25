@@ -3,6 +3,7 @@ class PriceSignalStrategy < ApplicationRecord
 
   def test!
     results = PriceSignalResult.joins(:signal)
+    results = results.where 'price_signals.date': period        if period
     results = results.param_in_range :change, change            if change
     results = results.param_in_range :prev_2w_low, prev_2w_low  if prev_2w_low
 
@@ -19,7 +20,11 @@ class PriceSignalStrategy < ApplicationRecord
 
   class << self
     def create_some
-      (0.06.to_d ... 0.30.to_d).step(0.01.to_d).each { |change|        test_breakout_up change: range_up(change) }
+      periods = [ nil, *MarketCalendar.periods ]
+      changes = (0.06.to_d ... 0.30.to_d).step(0.01.to_d).map { |low| range_up(low) } + [0.30..1.00]
+      periods.each do |period|
+        changes.each { |change| test_breakout_up period: period, change: change }
+      end
       # (-20...20).each { |prev_2w_low| test_breakout_up prev_2w_low: prev_2w_low }
     end
 

@@ -1,13 +1,11 @@
 - @label_width = 2
-- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
-- past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - max_selector = params[:max_prices] == '1' ? 'max' : 'close'
 - prev_selector = params[:direction] == 'down' ? 'high' : 'low'
 
 main.container-fluid
   h1.display-3 Signal Results
 
-  form#list-config(action=signal_results_path class='my-2')
+  form#list-config(action=signal_strategies_path class='my-2')
 
     .row
       .col
@@ -15,6 +13,11 @@ main.container-fluid
         = render 'instruments/pagination_options'
         = render 'signals/filter_by_signal'
         = render 'signals/filter_by_direction'
+        .row.my-2
+          .col-sm-2
+          .col-sm-10
+            = bs_check_box :max_prices, 'Best prices', inline: true
+        = bs_select :period, 'Period:', recent_period_options, select_class: 'w-auto'
   .row
     = page_entries_block @strategies
     = paginate @strategies, window: 10
@@ -22,6 +25,7 @@ main.container-fluid
   table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
     thead.table-dark
       tr
+        th Period
         th Signal
         th.money-cell Change
         th.money-cell N open
@@ -44,6 +48,7 @@ main.container-fluid
     tbody
       - @strategies.each do |strategy|
         tr
+          td= strategy.period.begin.strftime '%B' if strategy.period
           td.signal-name{class=red_green_class(strategy.up?)}= strategy.signal.underscore.humanize.downcase
           td.money-cell= colorized_ratio strategy.change&.begin, precision: 1
           td.money-cell= colorized_ratio strategy.next_1d_open&.begin, precision: 1

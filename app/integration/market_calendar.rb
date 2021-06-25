@@ -49,5 +49,9 @@ class MarketCalendar
         2021-12-24
       ].map { |str| Date.parse str }.to_set
     end
+
+    def periods
+      (0 .. Current.date.month.pred).map { |n| Current.ytd + n.months }.map { |day| day.beginning_of_month .. day.end_of_month }
+    end
   end
 end

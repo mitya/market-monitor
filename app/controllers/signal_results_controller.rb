@@ -40,7 +40,8 @@ class SignalResultsController < ApplicationController
 
     @unpaged_results = @results
     @results = @results.page(params[:page]).per(params[:per_page])
-    @results = @results.order('price_signals.date', :ticker)
+    # @results = @results.order('price_signals.date', :ticker)
+    @results = @results.order(:ticker, 'price_signals.date')
 
     @averages = {}
     %i[d1_close d1_max d2_close d2_max d3_close d3_max d4_close d4_max w1_close w1_max w2_close w2_max w3_close w3_max m1_close m1_max m2_close m2_max].each do |attr|

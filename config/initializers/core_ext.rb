@@ -34,6 +34,10 @@ class Array
   def average
     sum / count
   end
+
+  def to_inclusive_range
+    first .. last
+  end
 end
 
 class Integer

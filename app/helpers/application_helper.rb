@@ -162,9 +162,6 @@ module ApplicationHelper
   end
 
   def recent_period_options
-    month_starts = (0..(Current.date.month - 1)).map { |n| Current.ytd + n.months }
-    [['All']] + month_starts.map do |day|
-      [day.strftime("%b %Y"), "#{day.beginning_of_month}..#{day.end_of_month}"]
-    end
+    [['All']] + MarketCalendar.periods.map { |period| [period.begin.strftime("%b %Y"), period.to_s] }
   end
 end
