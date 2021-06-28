@@ -44,11 +44,14 @@ class PriceSignal < ApplicationRecord
   def tail_range = data&.dig('tail_range')
   def outside_range = data&.dig('outside_range')
   def vector = data&.dig('vector')
-
   def outside_bar? = kind == 'outside-bar'
+  def candle = instrument.day_candles.find_date(date)
+  def volume_change_percent = volume_change && volume_change.to_f * 100
 
   before_save do
     self.stop_size ||= ((enter - stop) / enter).abs.round(3) if enter && stop
+    self.volume_change ||= candle&.volume_change&.round(1)
+    self.on_level ||= instrument.levels.any? { |level| candle.range_with_delta(0.01).include?(level.value) }
   end
 
   class << self
@@ -114,6 +117,9 @@ class PriceSignal < ApplicationRecord
             vector: 'up'
           }
       end
+
+      find_breakouts [instrument], dates: [date], direction: :up
+      find_breakouts [instrument], dates: [date], direction: :down
     end
 
     def analyze_intraday(candle)
@@ -170,6 +176,7 @@ class PriceSignal < ApplicationRecord
           prev_1w_high = last_5.max_by &:range_high
           next_day = candle.next
           spy_day = Instrument['SPY'].day_candles!.find_date(date)
+          gap_change = candle.gap_change if candle.gap?
 
           data = { }
           data[:change]         = candle.rel_change.to_f.round(3)
@@ -181,10 +188,11 @@ class PriceSignal < ApplicationRecord
           data[:next_1d_open]   = next_day.diff_to(candle.close, :open).round(3).to_f          if next_day
           data[:next_1d_close]  = next_day.diff_to(candle.close, :close).round(3).to_f         if next_day
           data[:spy_change]     = spy_day.rel_change.round(3).to_f                             if spy_day
+          data[:gap]            = gap_change                                                   if gap_change
 
           signal = find_or_initialize_by kind: 'breakout', instrument: inst, date: date, direction: direction
           signal.update! enter: candle.close, stop: candle.open, data: data
-          puts "Found breakout #{direction} on #{date} for #{inst}"
+          puts "Detect on #{date} for #{inst.ticker.ljust 8} breakout #{direction}"
         end
       end
     end
@@ -201,3 +209,6 @@ rake analyze
 rake analyze date=2021-05-27
 
 PriceSignal.find_breakouts(%w[BBBY FANG DK])
+
+PriceSignal.find_each &:check_levels
+a = PriceSignal.find_each.select { |p| p.instrument == nil }.map(&:id)

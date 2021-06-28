@@ -12,8 +12,8 @@ main.container-fluid
     = render 'instruments/filter_by_set'
     .row.mb-3
       .col
-        = render 'instruments/filter_by_currency'
-        = render 'instruments/filter_by_availability'
+        = render 'instruments/filter_by_currency', lw: 2
+        = render 'instruments/filter_by_availability', lw: 2
         = render 'instruments/filter_by_tickers'
         = render 'instruments/pagination_options'
         = render 'filter_by_signal'
@@ -21,12 +21,15 @@ main.container-fluid
         = render 'filter_by_interval'
         = render 'filter_by_date'
         = bs_select :order, 'Sort By:', signal_order_options, style: 'width: auto'
+        = form_field 'Volume:', [2, 10] do
+          = range_fields :volume
       .col
     .row
-      .col-sm-2
-      .col-sm-9
+      .col-sm-1
+      .col-sm-10
         = bs_check_box :price_targets, 'Price targets', inline: true
         = bs_check_box :relative_price_targets, 'relative', inline: true
+        = bs_check_box :only_levels, 'Only levels', inline: true
 
   .row
     .col-md-7.mt-4
@@ -68,6 +71,8 @@ main.container-fluid
         / th.money-cell T
         / th.money-cell M
         / th.money-cell V
+        th.text-end Level
+        th.text-end Vol
         th.text-end Date
     tbody
       - signals = @signals
@@ -120,6 +125,8 @@ main.container-fluid
           / td.money-cell= ratio_percentage signal.tail_range
           / td.money-cell= ratio_percentage signal.outside_range
           / td.money-cell= signal.vector
+          td.money-cell= tag.span 'Yes', class: 'badge bg-success' if signal.on_level?
+          td.money-cell= number_to_percentage signal.volume_change_percent, precision: 0
           td.text-end(title="#{signal.date} to #{signal.base_date}")= link_to date_as_wday(signal.date), trading_view_url(instrument), target: '_blank', tabindex: '-1'
 
   = paginate @signals, window: 20

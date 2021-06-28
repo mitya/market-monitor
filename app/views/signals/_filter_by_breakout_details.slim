@@ -1,5 +1,6 @@
 span.me-4
   label.w-100p>= "#{title}:"
-  input type="text" class="form-control form-control-sm" name="#{name}_from" value=params["#{name}_from"] class="d-inline w-auto" size=5
-  = " — "
-  input type="text" class="form-control form-control-sm" name="#{name}_to" value=params["#{name}_to"] class="d-inline w-auto" size=5
+  = range_fields name
+  / input type="text" class="form-control form-control-sm" name="#{name}_from" value=params["#{name}_from"] class="d-inline w-auto" size=5
+  / = " — "
+  / input type="text" class="form-control form-control-sm" name="#{name}_to" value=params["#{name}_to"] class="d-inline w-auto" size=5

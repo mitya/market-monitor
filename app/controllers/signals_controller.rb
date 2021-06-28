@@ -18,6 +18,9 @@ class SignalsController < ApplicationController
     @signals = @signals.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
     @signals = @signals.where ticker: InstrumentSet.get(params[:set]).symbols       if params[:set].present? && params[:tickers].blank?
     @signals = @signals.where direction: params[:direction]                         if params[:direction].present?
+    @signals = @signals.where on_level: true                                        if params[:only_levels].present?
+    @signals = @signals.where 'volume_change >= ?', params[:volume_from]            if params[:volume_from].present?
+    @signals = @signals.where 'volume_change <= ?', params[:volume_to]              if params[:volume_to].present?
 
     @signals = @signals.page(params[:page]).per(params[:per_page])
 

@@ -2,24 +2,30 @@
 + negative breakouts signals
 + signal permutation analyzer
 + aggregate results with date range
++ signal prev month dynamics
++ signal volume / avg volume
++ signal on level
++ show volume / level in UI
++ check volume & level corellation in strategies
 
-- signal prev month dynamics
-- volume / avg volume
+- page with all SPB price anomalities
+- load last 2 5-min candles from IEX & look for increased vol / change & corellation with next day
 
-- 2% over yesterday high
-- insider buy signal
+- load all Tinkoff USD candles & compare highs / lows with IEX
+- 2% over yesterday high signals
+- insider buy signals
 
 - search for period lows / highs (e.g. 1w)
-- insitutional ownership UI
+- calculate average change from low-to-high
+- institutional ownership UI
 
-- strategy analysis model
 - analyze large moves (from flat and from prior slow move)
 - analyze shelves
-- strategy analysis results UI
 
 
 # Next
 
+- constant price update process for TI
 - new chart engine
 - improve level rebound search logic
 - iex largest trades

@@ -27,6 +27,7 @@ main.container-fluid
             = bs_check_box :breakout_details, 'Breakout fields', inline: true
             = bs_check_box :cap_sector, 'Cap & sector', inline: true
             = bs_check_box :max_prices, 'Best prices', inline: true
+            = bs_check_box :only_levels, 'Only levels', inline: true
         .row.my-2
           .col-sm-2.col-form-label Dates:
           .col-sm-10.d-flex.flex-row.align-items-center
@@ -34,6 +35,8 @@ main.container-fluid
             span.px-2 —
             = date_field_tag :till, params[:till], class: "form-control w-auto"
         = bs_select :period, 'Period:', recent_period_options, select_class: 'w-auto'
+        = form_field 'Volume:', [2, 10] do
+          = range_fields :volume        
 
 
     - if params[:breakout_details]
@@ -85,6 +88,8 @@ main.container-fluid
         th.money-cell Date
         th.money-cell Enter
         th.money-cell Stop
+        th.money-cell Level
+        th.money-cell Vol
         th.money-cell.border-end.pe-2 Current
         th.money-cell 1d ﹪
         th.money-cell 2d ﹪
@@ -120,6 +125,8 @@ main.container-fluid
           td
           td
           td
+        td
+        td
         td
         td
         td
@@ -166,6 +173,8 @@ main.container-fluid
           td.money-cell= date_as_mday signal.date
           td.money-cell= format_price signal.enter, unit: instrument.currency
           td.money-cell= ratio_percentage signal.stop_size, precision: 1
+          td.money-cell= tag.span 'Y', class: 'badge bg-success' if signal.on_level?
+          td.money-cell= number_to_percentage signal.volume_change_percent, precision: 0
           td.money-cell.border-end.pe-2= colorized_ratio signal.profit_ratio(inst.base_price, use_stop: true), precision: 1
           td.money-cell= colorized_ratio result.send("d1_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio result.send("d2_#{max_selector}"), precision: 1

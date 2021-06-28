@@ -164,4 +164,21 @@ module ApplicationHelper
   def recent_period_options
     [['All']] + MarketCalendar.periods.map { |period| [period.begin.strftime("%b %Y"), period.to_s] }
   end
+
+  def range_fields(name, type: 'text', classes: 'form-control form-control-sm d-inline w-auto', size: 5, **attrs)
+    tag.input(type: type, class: classes, name: "#{name}_from", value: params["#{name}_from"], size: size, **attrs) +
+    " — " +
+    tag.input(type: type, class: classes, name: "#{name}_to", value: params["#{name}_to"], size: size, **attrs)
+  end
+
+  def form_field(label = nil, sizes = [2, 10])
+    tag.div(class: 'row mb-1') do
+      tag.div(class: "col-sm-#{sizes.first}") do
+        tag.label label, class: 'col-form-label'
+      end +
+      tag.div(class: "col-sm-#{sizes.last}") do
+        yield
+      end
+    end
+  end
 end

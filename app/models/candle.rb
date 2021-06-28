@@ -38,6 +38,9 @@ class Candle < ApplicationRecord
   def change = close - open
   def rel_change = (change / open).round(4)
 
+  def gap_change = ((open - previous.close) / open if previous)
+  def gap? = gap_change > 0.01
+
   def diff_to(price, base_price = :close) = (send(base_price) - price) / price
 
   def close_time = date.in_time_zone(Current.est).change(hour: 16)
@@ -131,6 +134,9 @@ class Candle < ApplicationRecord
 
   def interval_duration = self.class.interval_duration(interval)
   def abs_to_percent(value, base) = close * percent
+
+  def average_prior_volume(days: 10) = siblings.where('date < ?', date).take(days).pluck(:volume).average
+  def volume_change(days: 10) = volume.to_f / average_prior_volume(days: days)
 
 
   class << self

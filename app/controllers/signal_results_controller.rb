@@ -21,9 +21,12 @@ class SignalResultsController < ApplicationController
     @results = @results.joins(:instrument, :signal)
     @results = @results.includes(:signal, :instrument => [:info, :price_target])
 
-    @results = @results.where price_signals: { date: dates }                        if dates
-    @results = @results.where price_signals: { kind: params[:signal] }              if params[:signal].present?
-    @results = @results.where price_signals: { direction: params[:direction] }      if params[:direction].present?
+    @results = @results.where price_signals: { date: dates }                           if dates
+    @results = @results.where price_signals: { kind: params[:signal] }                 if params[:signal].present?
+    @results = @results.where price_signals: { direction: params[:direction] }         if params[:direction].present?
+    @results = @results.where price_signals: { on_level: true }                        if params[:only_levels].present?
+    @results = @results.where 'price_signals.volume_change >= ?', params[:volume_from] if params[:volume_from].present?
+    @results = @results.where 'price_signals.volume_change <= ?', params[:volume_to]   if params[:volume_to].present?
     @results = @results.where instruments: { currency: params[:currency] }          if params[:currency].present?
     @results = @results.where ["? = any(instruments.flags)", params[:availability]] if params[:availability].present?
     @results = @results.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?

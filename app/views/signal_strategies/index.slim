@@ -17,6 +17,8 @@ main.container-fluid
           .col-sm-2
           .col-sm-10
             = bs_check_box :max_prices, 'Best prices', inline: true
+            = bs_check_box :prev_1w_low_set, 'Prev 1w set', inline: true
+            = bs_check_box :prev_2w_low_set, 'Prev 2w set', inline: true
         = bs_select :period, 'Period:', recent_period_options, select_class: 'w-auto'
   .row
     = page_entries_block @strategies
@@ -31,8 +33,8 @@ main.container-fluid
         th.money-cell N open
         th.money-cell N close
         th.money-cell N change
-        th.money-cell Prev 1w
-        th.money-cell Prev 2w
+        th.money-cell Prev 1w low
+        th.money-cell Prev 2w low
         th.money-cell 1d ﹪
         th.money-cell 2d ﹪
         th.money-cell 3d ﹪
@@ -54,8 +56,8 @@ main.container-fluid
           td.money-cell= colorized_ratio strategy.next_1d_open&.begin, precision: 1
           td.money-cell= colorized_ratio strategy.next_1d_close&.begin, precision: 1
           td.money-cell= colorized_ratio strategy.next_1d_change&.begin, precision: 1
-          td.money-cell= colorized_ratio strategy.send("prev_1w_#{prev_selector}"), precision: 1
-          td.money-cell= colorized_ratio strategy.send("prev_2w_#{prev_selector}"), precision: 1
+          td.money-cell= colorized_ratio strategy.send("prev_1w_#{prev_selector}")&.begin, precision: 1
+          td.money-cell= colorized_ratio strategy.send("prev_2w_#{prev_selector}")&.begin, precision: 1
           td.money-cell= colorized_ratio strategy.send("d1_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio strategy.send("d2_#{max_selector}"), precision: 1
           td.money-cell= colorized_ratio strategy.send("d3_#{max_selector}"), precision: 1
