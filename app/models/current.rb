@@ -63,8 +63,8 @@ class Current < ActiveSupport::CurrentAttributes
     self.day_candles_cache = DayCandleCache.new(instruments, nil)
   end
 
-  def preload_day_candles_with(instruments, extra_dates)
-    self.day_candles_cache = DayCandleCache.new(instruments, extra_dates)
+  def preload_day_candles_with(instruments, extra_dates, dates: nil)
+    self.day_candles_cache = DayCandleCache.new(instruments, extra_dates, dates: dates)
   end
 
   def preload_prices_for(instruments)
@@ -111,9 +111,13 @@ class Current < ActiveSupport::CurrentAttributes
   class DayCandleCache
     attr :candles, :candles_by_ticker
 
-    def initialize(instruments, extra_dates)
-      @instruments = Instrument.normalize(instruments).compact
-      @candles = Candle.day.where(ticker: @instruments.map(&:ticker), date: (SpecialDates.dates + extra_dates.to_a).uniq.sort).order(:date).to_a
+    def initialize(instruments, extra_dates, dates: nil)
+      dates ||= (SpecialDates.dates + extra_dates.to_a)
+      dates = dates.compact.uniq.sort
+      @instruments = Instrument.normalize(instruments).compact unless instruments == :all
+      @candles = Candle.day.where(date: dates)
+      @candles = @candles.where(ticker: @instruments.map(&:ticker)) unless instruments == :all
+      @candles = @candles.order(:date).to_a
       @candles_by_ticker = @candles.group_by &:ticker
     end
 

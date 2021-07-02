@@ -1,0 +1,67 @@
+- chart_volatility = params[:volatility] == '1'
+
+main.container-fluid
+  h1.display-3 Spb Prices
+
+  form#list-config(action=spb_instruments_path class='my-2')
+    .row.mb-3
+      .col
+        = render 'instruments/filter_by_currency', lw: 2
+        = render 'instruments/filter_by_availability', lw: 2
+        = render 'instruments/filter_by_tickers'
+        = render 'instruments/pagination_options'
+      .col
+        = render 'instruments/filter_by_set'
+        = bs_check_box :volatility, 'Volatility'
+
+  .row
+    = page_entries_block @instruments
+    = paginate @instruments, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
+    thead.table-dark
+      tr
+        th
+        th(data-sort="ticker") Ticker
+        th
+        th
+        th Name
+        th Sector
+        th.money-cell.border-end.pe-2 Cap
+        th.money-cell Y ﹪
+        th.money-cell Yclose
+        th.money-cell Last
+        th.money-cell Last ﹪
+        th.money-cell 1H Low
+        th.money-cell Low ﹪
+        th.money-cell Vol
+        th T
+        - if chart_volatility
+          th V
+    tbody
+      - instruments = @instruments.sort_by &:gain_since_close
+      - instruments.each do |instrument|
+        - inst = instrument
+        - info = instrument.info
+        tr
+          td= instrument_logo_button inst
+          td= instrument.ticker
+          td= known_icon instrument
+          td= type_icon instrument
+          td.instrument-name= instrument.name
+          td= sector_badge instrument
+          td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0
+          td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'relative', percentage_precision: 1
+          td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'absolute'
+          td.money-cell= relative_price inst.last, inst.d1_ago_close, unit: inst.currency, format: 'absolute'
+          td.money-cell= relative_price inst.last, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1
+          td.money-cell= relative_price inst.price!.low, inst.d1_ago_close, unit: inst.currency, format: 'absolute'
+          td.money-cell= relative_price inst.price!.low, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1
+          td.money-cell= number_with_delimiter instrument.price!.volume if !instrument.rub?
+          td= growth_badge instrument.aggregate
+          - if chart_volatility
+            td.volatility-chart
+              - Current.last_2_weeks.each do |date|
+                = volatility_indicator inst, date, format: :bar
+
+  = paginate @instruments, window: 20

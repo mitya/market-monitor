@@ -32,17 +32,17 @@ module InstrumentsHelper
     number_to_currency price, unit: currency_sign(unit), precision: precision if price
   end
 
-  def colorized_price(price, base_price, unit: nil, inverse: false)
+  def colorized_price(price, base_price, unit: nil, inverse: false, precision: 1)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
-    title = number_to_percentage ratio * 100, precision: 1, format: '%n ﹪' if ratio
+    title = number_to_percentage ratio * 100, precision: precision, format: '%n ﹪' if ratio
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
       format_price price, unit: unit
     end
   end
 
-  def colorized_percentage(price, base_price, unit: '$', inverse: false)
+  def colorized_percentage(price, base_price, unit: '$', inverse: false, precision: percentage_precision)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
-    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit))
+    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit)), precision: precision
   end
 
   def colorized_ratio(ratio, title: nil, precision: percentage_precision)
@@ -60,9 +60,9 @@ module InstrumentsHelper
     number_to_percentage ratio * 100, precision: precision, delimiter: ',', format: '%n ﹪' if ratio
   end
 
-  def relative_price(price, base_price, unit:, format: "absolute", inverse: false)
+  def relative_price(price, base_price, unit:, format: "absolute", inverse: false, precision: 1, percentage_precision: self.percentage_precision)
     method = format == 'absolute' ? :colorized_price : :colorized_percentage
-    send method, price, base_price, unit: unit, inverse: inverse
+    send method, price, base_price, unit: unit, inverse: inverse, precision: method == :colorized_price ? precision : percentage_precision
   end
 
   def with_2_digits(value)

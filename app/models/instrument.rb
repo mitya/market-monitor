@@ -97,15 +97,17 @@ class Instrument < ApplicationRecord
     new_price - old_price if old_price && new_price
   end
 
-  def rel_diff(old_price, new_price = current_price_selector)
+  def rel_diff(old_price, new_price = current_price_selector, default: nil)
     old_price, new_price = send(old_price), send(new_price)
-    new_price / old_price - 1.0 if old_price && new_price
+    old_price && new_price ? new_price / old_price - 1.0 : default
   end
 
   def rel_diff_value(old_price_value, new_price = current_price_selector)
     new_price_value = send(new_price)
     new_price_value / old_price_value - 1.0 if old_price_value && new_price_value
   end
+
+  def gain_since_close = rel_diff(:d1_ago_close, :last, default: 0)
 
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date)

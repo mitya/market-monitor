@@ -11,6 +11,9 @@ curl -s "https://cloud.iexapis.com/stable/stock/clf/institutional-ownership?toke
 curl -s "https://cloud.iexapis.com/stable/stock/clf/fund-ownership?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/clf/largest-trades?token=$IEX_SECRET_KEY" | jq 'sort_by(.time)'
 
+curl -s "https://cloud.iexapis.com/stable//deep/trades?symbols=CLF&token=$IEX_SECRET_KEY" | jq
+
+
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/quote?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/previous?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/ytd?token=$IEX_SECRET_KEY" | jq

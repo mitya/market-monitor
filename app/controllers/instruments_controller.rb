@@ -41,6 +41,25 @@ class InstrumentsController < ApplicationController
     set = params[:set] || 'list'
     send_data tickers.join("\n"), filename: "#{set.humanize} #{Time.current.strftime('%Y-%m-%d %H:%M')}.txt"
   end
+
+  def spb
+    order = params[:order].presence || 'instruments.ticker'
+    params[:currency] ||= 'USD'
+    params[:availability] ||= 'tinkoff'
+    params[:per_page] ||= 5000
+
+    @instruments = Instrument.all
+    @instruments = @instruments.left_joins(:aggregate, :info)
+    @instruments = @instruments.preload(:aggregate, :info)
+    @instruments = @instruments.where(currency: params[:currency])                 if params[:currency].present?
+    @instruments = @instruments.with_flag(params[:availability])                   if params[:availability].present?
+    @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
+    @instruments = @instruments.order("#{order} nulls last")
+    @instruments = @instruments.page(params[:page]).per(params[:per_page])
+
+    Current.preload_day_candles_with :all, [] #, dates: [Current.yesterday]
+    Current.preload_prices_for @instruments.to_a
+  end
 end
 
 
