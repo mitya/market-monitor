@@ -8,19 +8,20 @@
 + show volume / level in UI
 + check volume & level corellation in strategies
 + page with all SPB price anomalities (Y close, Y change, Ti last, Ti 1h min, Ti 1h vol)
++ load last 2 5m candles from IEX &
++ load all Tinkoff USD candles
 
-- highlight tickers with 1h low lower than 1% from last
-- highlight signalled tickers
+- highlight signalled tickers in SPB list
+- compare Tinkoff highs / lows with IEX
+- compare Tinkoff 11:00 prices with day highs on IEX
+- check yesterday close vol/change corellation with the next day
+
 - show volume changes in the main list
-- load last 2 5m candles from IEX & look for increased vol/change & corellation with the next day
-- load all Tinkoff USD candles & compare highs / lows with IEX
 - 2% over yesterday high signals
 - insider buy signals
-
 - search for period lows / highs (e.g. 1w)
 - calculate average change from low-to-high
 - institutional ownership UI
-
 - analyze large moves (from flat and from prior slow move)
 - analyze shelves
 

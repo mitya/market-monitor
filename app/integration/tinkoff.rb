@@ -152,18 +152,20 @@ class Tinkoff
   end
 
 
-  def import_candles_from_hash(instrument, data)
+  def import_candles_from_hash(instrument, data, candle_class: nil)
     interval = data['interval']
     candles = data['candles'].to_a
 
     # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
     # puts "Import #{candles.count} #{interval} candles for #{instrument}"
-    candle_class = Candle.interval_class_for(interval)
+    candle_class ||= Candle.interval_class_for(interval)
     candle_class.transaction do
       candles.each do |hash|
         time = Time.parse hash['time']
-        candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time
-        puts "Import Tinkoff #{time} #{interval} candle for #{instrument}" if candle.new_record?
+        date = time.to_date
+        time = time.to_s(:time) if candle_class == Candle::M5 || candle_class == Candle::M1
+        candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time, date: date
+        puts "Import Tinkoff #{date} #{time} #{interval} candle for #{instrument}" if candle.new_record?
         candle.ticker  = instrument.ticker
         candle.source  = 'tinkoff'
         candle.open    = hash['o']
@@ -171,8 +173,8 @@ class Tinkoff
         candle.high    = hash['h']
         candle.low     = hash['l']
         candle.volume  = hash['v'] > Integer::Max31 ? Integer::Max31 : hash['v']
-        candle.date    = time.to_date
-        candle.ongoing = interval == 'day' && time.to_date == Current.date && !Current.weekend?
+        candle.date    = date
+        candle.ongoing = interval == 'day' && date == Current.date && !Current.weekend?
         candle.save!
       end
     end
@@ -195,9 +197,9 @@ class Tinkoff
     puts "Import #{instrument} failed: #{$!}"
   end
 
-  def import_day_candles(instrument, since:, till:, delay: 0.25)
+  def import_day_candles(instrument, since:, till:, delay: 0.25, candle_class: nil)
     data = load_day instrument, since, till
-    import_candles_from_hash instrument, data
+    import_candles_from_hash instrument, data, candle_class: candle_class
     sleep delay
   rescue
     puts "Import #{instrument} failed: #{$!}"
@@ -212,10 +214,10 @@ class Tinkoff
     import_day_candles instrument, since: since, till: till
   end
 
-  def import_all_day_candles(instrument, years: [2019, 2020, 2021])
-    import_day_candles instrument, since: Date.parse('2019-01-01'), till: Date.parse('2019-12-31').end_of_day if years.include?(2019)
-    import_day_candles instrument, since: Date.parse('2020-01-01'), till: Date.parse('2020-12-31').end_of_day if years.include?(2020)
-    import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day if years.include?(2021)
+  def import_all_day_candles(instrument, years: [2019, 2020, 2021], candle_class: nil)
+    import_day_candles instrument, since: Date.parse('2019-01-01'), till: Date.parse('2019-12-31').end_of_day, candle_class: candle_class if years.include?(2019)
+    import_day_candles instrument, since: Date.parse('2020-01-01'), till: Date.parse('2020-12-31').end_of_day, candle_class: candle_class if years.include?(2020)
+    import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day,             candle_class: candle_class if years.include?(2021)
   end
 
   def import_intraday_candles(instrument, interval)
@@ -280,6 +282,17 @@ class Tinkoff
     error_text = "#{json&.dig('error', 'name')} #{json&.dig('error', 'type')}".strip.presence
     error_text || json
   end
+
+  def load_last_5m_candles(instrument, date)
+    return if !instrument.tinkoff?
+    return if instrument.rub? || instrument.eur?
+    return puts "Last 5m already loaded on #{date} for #{instrument}".yellow if Candle::M5.where(instrument: instrument, date: date, time: '19:55').exists?
+
+    est_midnight = date.in_time_zone Current.est
+    data = load_intervals instrument, '5min', est_midnight.change(hour: 15, min: 50), est_midnight.change(hour: 16, min: 00), delay: 0.25
+    import_candles_from_hash instrument, data
+  end
+
 
   delegate :logger, to: :Rails
 end

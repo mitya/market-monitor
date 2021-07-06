@@ -29,6 +29,7 @@ main.container-fluid
         th Sector
         th.money-cell.border-end.pe-2 Cap
         th.money-cell Y ﹪
+        th.money-cell Y last ﹪
         th.money-cell Yclose
         th.money-cell Last
         th.money-cell Last ﹪
@@ -52,11 +53,12 @@ main.container-fluid
           td= sector_badge instrument
           td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(instrument.currency), precision: 0
           td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'relative', percentage_precision: 1
+          td.money-cell= colorized_ratio inst.aggregate.close_change, precision: 1, blank_threshold: 0.002
           td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'absolute'
           td.money-cell= relative_price inst.last, inst.d1_ago_close, unit: inst.currency, format: 'absolute'
           td.money-cell= relative_price inst.last, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1
           td.money-cell= relative_price inst.price!.low, inst.d1_ago_close, unit: inst.currency, format: 'absolute'
-          td.money-cell= relative_price inst.price!.low, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1
+          td.money-cell= relative_price inst.price!.low, inst.last, unit: inst.currency, format: 'relative', percentage_precision: 1, blank_threshold: 0.002
           td.money-cell= number_with_delimiter instrument.price!.volume if !instrument.rub?
           td= growth_badge instrument.aggregate
           - if chart_volatility

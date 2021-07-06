@@ -10,7 +10,7 @@ class Price < ApplicationRecord
   class << self
     def refresh_from_tinkoff(instruments)
       instruments = Instrument.get_all(instruments).sort_by(&:ticker).reject(&:premium?)
-      Current.parallelize_instruments(instruments, 2) { | instr| Tinkoff.update_current_price instr }
+      Current.parallelize_instruments(instruments, 1) { | instr| Tinkoff.update_current_price instr }
     end
 
     def refresh_from_iex(symbols = [])

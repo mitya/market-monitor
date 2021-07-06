@@ -182,4 +182,8 @@ class Candle < ApplicationRecord
   class M1 < Intraday
     self.table_name = "candles_m1"
   end
+
+  class DayTinkoff < Candle
+    self.table_name = "candles_d1_tinkoff"
+  end
 end

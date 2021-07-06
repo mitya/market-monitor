@@ -50,6 +50,8 @@ class Aggregate < ApplicationRecord
         end
       end
 
+      aggregate.close_change = instrument.on_close_change(date: MarketCalendar.prev(date))
+
       aggregate.save!
       current.where(ticker: instrument.ticker).where('date < ?', date).update_all current: false
     end

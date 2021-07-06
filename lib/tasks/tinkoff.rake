@@ -38,9 +38,13 @@ namespace :tinkoff do
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"
     envtask :year do
-      instruments = R.instruments_from_env || Instrument.tinkoff
-      instruments.tinkoff.abc.each do |inst|
-        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2019, 2020, 2021])
+      # instruments = R.instruments_from_env || Instrument.tinkoff
+      # instruments.tinkoff.usd.abc.each do |inst|
+      #   Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2019, 2020, 2021])
+      # end
+
+      Instrument.tinkoff.usd.abc.each do |inst|
+        Tinkoff.import_all_day_candles(inst, candle_class: Candle::DayTinkoff, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2021])
       end
     end
   end
@@ -53,10 +57,19 @@ namespace :tinkoff do
     envtask 'import:5min' do
       Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, '5min') }
     end
+
+    envtask 'import:5min:last' do
+      dates = [ENV['date'] ? ENV['date'].to_date : Current.yesterday]
+      dates = Current.last_n_weeks(4) #  - ['2021-07-02'.to_date]
+      dates.each do |date|
+        Instrument.tinkoff.usd.abc.each { |inst| Tinkoff.load_last_5m_candles(inst, date) }
+      end
+    end
   end
 
 
   namespace :prices do
+    envtask(:pre)     { Price.refresh_from_tinkoff Instrument.tinkoff.usd.abc }
     envtask(:all)     { Price.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }
     envtask(:uniq)    { Price.refresh_from_tinkoff Instrument.where(currency: %w[RUB EUR]).abc }
     envtask(:signals) { Price.refresh_from_tinkoff Instrument.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
@@ -149,3 +162,5 @@ rake tinkoff:instruments:sync # ok=1
 rake tinkoff:candles:day
 rake tinkoff:prices # set=main
 rake tinkoff:update
+rake tinkoff:days:year
+rake tinkoff:candles:import:5min:last

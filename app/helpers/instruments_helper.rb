@@ -40,12 +40,13 @@ module InstrumentsHelper
     end
   end
 
-  def colorized_percentage(price, base_price, unit: '$', inverse: false, precision: percentage_precision)
+  def colorized_percentage(price, base_price, unit: '$', inverse: false, precision: percentage_precision, blank_threshold: nil)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
-    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit)), precision: precision
+    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit)), precision: precision, blank_threshold: blank_threshold
   end
 
-  def colorized_ratio(ratio, title: nil, precision: percentage_precision)
+  def colorized_ratio(ratio, title: nil, precision: percentage_precision, blank_threshold: nil)
+    return if blank_threshold && ratio.to_f.abs < blank_threshold
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
       ratio_percentage ratio, precision: precision
     end
@@ -60,9 +61,14 @@ module InstrumentsHelper
     number_to_percentage ratio * 100, precision: precision, delimiter: ',', format: '%n ﹪' if ratio
   end
 
-  def relative_price(price, base_price, unit:, format: "absolute", inverse: false, precision: 1, percentage_precision: self.percentage_precision)
-    method = format == 'absolute' ? :colorized_price : :colorized_percentage
-    send method, price, base_price, unit: unit, inverse: inverse, precision: method == :colorized_price ? precision : percentage_precision
+  def relative_price(price, base_price, unit:, format: "absolute", inverse: false, precision: 1, percentage_precision: self.percentage_precision, blank_threshold: nil)
+    # method = format == 'absolute' ? :colorized_price : :colorized_percentage
+    # send method, price, base_price, unit: unit, inverse: inverse, precision: method == :colorized_price ? precision : percentage_precision, hide_zero: hide_zero
+    if format == 'absolute'
+      colorized_price price, base_price, unit: unit, inverse: inverse, precision: precision
+    else
+      colorized_percentage price, base_price, unit: unit, inverse: inverse, precision: percentage_precision, blank_threshold: blank_threshold
+    end
   end
 
   def with_2_digits(value)

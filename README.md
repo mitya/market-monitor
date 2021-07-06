@@ -38,6 +38,7 @@ rake iex:days:missing
 
 rake main
 rake prices
+rake tinkoff:prices:pre
 
 // rake iex:candles:days:previous iex:prices:all iex:candles:days:today
 // rake tinkoff:candles:day:latest tinkoff:prices:uniq

@@ -195,6 +195,14 @@ class Instrument < ApplicationRecord
   def last_insider_buy
     insider_transactions.buys.market_only.order(:date).last
   end
+
+  def on_close_change(date: Current.yesterday)
+    # candle50 = Candle::M5.find_by(ticker: ticker, date: date, time: '19:50')
+    # candle55 = Candle::M5.find_by(ticker: ticker, date: date, time: '19:55')
+    # (candle55.close - candle50.open) / candle50.open if candle50 && candle55
+
+    Candle::M5.find_by(ticker: ticker, date: date, time: '19:55')&.rel_change
+  end
 end
 
 __END__
