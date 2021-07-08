@@ -48,6 +48,13 @@ curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chart
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/options?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/options/20210618?token=$IEX_SECRET_KEY" | jq
 
+curl -s "https://cloud.iexapis.com/stable/options/AAL20210716P00011000/chart?range=1m&token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols/spy?token=$IEX_SECRET_KEY" > tmp/option-dates.json
+curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols/fcx?token=$IEX_SECRET_KEY" > tmp/option-dates-dk.json
+
+
+
 # Cost
 
 5.000.000 std credits / mon + 20$ for 20.000.000 premium credits

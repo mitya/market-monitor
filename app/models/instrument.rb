@@ -157,6 +157,9 @@ class Instrument < ApplicationRecord
     update! first_date: first_candle_date
   end
 
+  def recent_low(days: 5)  = candles.day.order(:date).last(days).map(&:low).min
+  def recent_high(days: 5) = candles.day.order(:date).last(days).map(&:high).max
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker

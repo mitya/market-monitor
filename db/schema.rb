@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_25_151154) do
+ActiveRecord::Schema.define(version: 2021_07_08_165229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_151154) do
     t.float "lowest_day_gain"
     t.float "y2018"
     t.float "y2017"
+    t.float "close_change"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
   end
@@ -69,6 +70,25 @@ ActiveRecord::Schema.define(version: 2021_06_25_151154) do
     t.index ["ticker", "interval", "date"], name: "index_candles_on_ticker_interval_date"
     t.index ["ticker", "interval", "date"], name: "uniq_ticker_date_for_days", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "index_candles_on_ticker"
+  end
+
+  create_table "candles_d1_tinkoff", id: :bigint, default: -> { "nextval('candles_d1_tinkoff_seq'::regclass)" }, force: :cascade do |t|
+    t.string "ticker", null: false
+    t.string "interval", default: "day", null: false
+    t.date "date", null: false
+    t.datetime "time", null: false
+    t.decimal "open", precision: 20, scale: 4, null: false
+    t.decimal "close", precision: 20, scale: 4, null: false
+    t.decimal "high", precision: 20, scale: 4, null: false
+    t.decimal "low", precision: 20, scale: 4, null: false
+    t.integer "volume", null: false
+    t.string "source", default: "tinkoff", null: false
+    t.boolean "ongoing", default: false, null: false
+    t.boolean "analyzed", default: false, null: false
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["ticker", "date"], name: "candles_d1_tinkoff_ticker_interval_date_idx"
+    t.index ["ticker"], name: "candles_d1_tinkoff_ticker_idx"
   end
 
   create_table "candles_h1", force: :cascade do |t|
@@ -113,7 +133,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_151154) do
   create_table "candles_m5", force: :cascade do |t|
     t.string "ticker"
     t.string "interval", null: false
-    t.datetime "time", null: false
+    t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
     t.decimal "high", precision: 20, scale: 4, null: false
@@ -223,6 +243,31 @@ ActiveRecord::Schema.define(version: 2021_06_25_151154) do
     t.index ["isin"], name: "index_instruments_on_isin", unique: true
   end
 
+  create_table "option_item_specs", force: :cascade do |t|
+    t.string "code"
+    t.string "side"
+    t.string "ticker"
+    t.date "date"
+    t.decimal "strike", precision: 20, scale: 4
+    t.string "desc"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "option_items", force: :cascade do |t|
+    t.string "code"
+    t.string "ticker"
+    t.string "side"
+    t.date "date"
+    t.decimal "strike", precision: 20, scale: 4
+    t.integer "open_interest"
+    t.integer "volume"
+    t.decimal "open", precision: 20, scale: 4
+    t.decimal "close", precision: 20, scale: 4
+    t.datetime "created_at"
+    t.date "updated_on"
+  end
+
   create_table "portfolio_items", primary_key: "ticker", id: :string, force: :cascade do |t|
     t.decimal "price", precision: 20, scale: 4
     t.datetime "created_at", precision: 6, null: false
@@ -326,6 +371,8 @@ ActiveRecord::Schema.define(version: 2021_06_25_151154) do
     t.float "m2_max"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.numrange "volume_change"
+    t.boolean "on_level"
   end
 
   create_table "price_signals", force: :cascade do |t|
@@ -343,6 +390,8 @@ ActiveRecord::Schema.define(version: 2021_06_25_151154) do
     t.float "stop_size"
     t.text "interval", default: "day"
     t.time "time"
+    t.boolean "on_level"
+    t.float "volume_change"
   end
 
   create_table "price_targets", force: :cascade do |t|

@@ -29,6 +29,10 @@ class Iex
   def tops(*symbols)                  = get("/tops", { symbols: symbols.join(',').presence }.compact)
   def symbols                         = get("/ref-data/symbols")
   def otc_symbols                     = get("/ref-data/otc/symbols")
+  def options_chart(code, range: '1d')= get("/options/#{code}/chart", range: range)
+  def options_dates                   = get("/ref-data/options/symbols")
+  def options_specs(ticker)           = get("/ref-data/options/symbols/#{ticker}")
+
 
   def import_day_candles(instrument, date: nil, period: nil)
     return if date && instrument.candles.day.final.where(date: date, source: 'iex').exists?
