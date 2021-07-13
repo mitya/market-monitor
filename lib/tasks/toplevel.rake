@@ -140,3 +140,14 @@ namespace :signal do
     PriceSignalStrategy.create_some
   end
 end
+
+
+OPTION_TICKERS = %w[DK CLF FCX GTHX MAC M AYX RIG SWN COTY ET FTCH FSLY ICPT MFGP OSUR KGC X ZIM].sort
+
+envtask 'options:strikes' do
+  OptionItemSpec.create_all OPTION_TICKERS
+end
+
+envtask :options do
+  OptionItem.load_all OPTION_TICKERS
+end

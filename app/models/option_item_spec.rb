@@ -27,12 +27,15 @@ class OptionItemSpec < ApplicationRecord
       tickers.each do |ticker|
         data = load(ticker)
         data.each do |spec|
-          create! ticker: ticker,
-            date:   spec['expirationDate'],
-            code:   spec['symbol'],
-            side:   spec['side'],
-            strike: spec['strike'],
-            desc:   spec['description']
+          find_or_create_by! ticker: ticker, code: spec['symbol'] do |record|
+            puts "Create option spec for #{ticker} #{spec['expirationDate']}: #{record.code}"
+            record.assign_attributes(
+              date:   spec['expirationDate'],
+              side:   spec['side'],
+              strike: spec['strike'],
+              desc:   spec['description']
+            )
+          end
         end
       end
     end

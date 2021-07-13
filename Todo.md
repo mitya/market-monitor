@@ -12,8 +12,8 @@
 + load all Tinkoff USD candles
 + load options data
 + load IEX transactions via date ranged feed
++ rake task for options
 
-- rake task for options
 - options UI table
 - options chart
 - buy CVM
