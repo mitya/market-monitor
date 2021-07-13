@@ -16,6 +16,7 @@
 - rake task for options
 - options UI table
 - options chart
+- buy CVM
 
 - highlight signalled tickers in SPB list
 - compare Tinkoff highs / lows with IEX
