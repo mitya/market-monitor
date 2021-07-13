@@ -92,11 +92,15 @@ module ApplicationHelper
     string.length > 10 && string.upcase == string ? string.titleize : string
   end
 
-  def days_ago(date)
+  def days_ago(date, suffix = ' days ago')
     if date
       days = (Current.date - date).to_i
-      "#{days} days ago"
+      "#{days}#{suffix}"
     end
+  end
+
+  def days_ago_number(date)
+    (Current.date - date).to_i if date
   end
 
   def sessions_ago(date)

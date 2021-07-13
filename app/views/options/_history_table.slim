@@ -1,0 +1,35 @@
+- last_date = @update_dates.last
+
+h2= side.humanize
+table.table.table-sm.table-hover.table-font-sm.tickers-table.w-auto
+  thead.table-dark
+    tr
+      th.money-cell Strike
+      - @update_dates.each do |date|
+        th.money-cell= l date, format: :mmdd
+      th.money-cell
+  tbody
+    tr
+      td.table-dark Open
+      - @update_dates.each do |date|
+        td.money-cell= format_price @instrument.day_candles!.find_date(date)&.open, unit: @instrument.currency
+    tr
+      td.table-dark Close
+      - @update_dates.each do |date|
+        - candle = @instrument.day_candles!.find_date(date)
+        td.money-cell(class=red_green_class(candle&.up?))= format_price candle&.close, unit: @instrument.currency
+    - @strikes.each do |strike|
+      tr
+        td.money-cell.table-dark= format_price strike, unit: '', precision: 2
+        - last_option = @options.detect { |o| o.side == side && o.strike == strike && o.updated_on == last_date  }
+        - prev = nil
+        - option = nil
+        - @update_dates.each do |date|
+          - prev = option
+          - option = @options.detect { |o| o.side == side && o.strike == strike && o.updated_on == date  }
+          - delta = option&.open_interest.to_i - prev.open_interest.to_i if prev
+          - if prev
+            td.money-cell(class=red_green_class(delta > 0))= number_with_delimiter delta
+          - else
+            td.money-cell= number_with_delimiter option&.open_interest
+        td.money-cell= number_with_delimiter last_option&.open_interest

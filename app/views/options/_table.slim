@@ -1,0 +1,46 @@
+table.table.table-sm.table-hover.table-font-sm.tickers-table.w-auto
+  thead.table-dark
+    tr
+      th.money-cell
+      th.money-cell Calls
+      th.money-cell
+      th.money-cell.nowrap= link_to expiration_date, history_instrument_option_path(@instrument, expiration_date), class: 'text-light text-decoration-none'
+      th.money-cell
+      th.money-cell Puts
+      th.money-cell
+      th.money-cell ∆
+  tbody
+    - strikes.each do |strike|
+      - call = options.find { |o| o.strike == strike && o.call? }
+      - put  = options.find { |o| o.strike == strike && o.put? }
+      - call_in_money = call&.in_the_money?
+      - put_in_money = put&.in_the_money?
+      - delta = call&.open_interest.to_i - put&.open_interest.to_i
+      tr
+        td.money-cell(class=class_names('table-secondary': call_in_money))= days_ago call&.updated_on, 'd'
+        td.money-cell(class=class_names('table-secondary': call_in_money))= format_price call&.close, unit: @instrument.currency, precision: 2
+        td.money-cell(class=class_names('table-secondary': call_in_money))= number_with_delimiter call&.open_interest
+        td.money-cell.table-dark= format_price strike, unit: '', precision: 2
+        td.money-cell(class=class_names('table-secondary': put_in_money))= number_with_delimiter put&.open_interest
+        td.money-cell(class=class_names('table-secondary': put_in_money))= format_price put&.close, unit: @instrument.currency, precision: 2
+        td.money-cell(class=class_names('table-secondary': put_in_money))= days_ago put&.updated_on, 'd'
+        td.money-cell(class=red_green_class(delta > 0))= number_with_delimiter delta
+  tfoot
+    tr
+      td.money-cell
+      td.money-cell
+      td.money-cell.table-secondary= number_with_delimiter options.select(&:call?).select(&:in_the_money?).sum(&:open_interest)
+      td.money-cell
+      td.money-cell.table-secondary= number_with_delimiter options.select(&:put?).select(&:in_the_money?).sum(&:open_interest)
+      td.money-cell
+      td.money-cell
+      td.money-cell
+    tr
+      td.money-cell
+      td.money-cell
+      td.money-cell= number_with_delimiter options.select(&:call?).sum(&:open_interest)
+      td.money-cell
+      td.money-cell= number_with_delimiter options.select(&:put?).sum(&:open_interest)
+      td.money-cell
+      td.money-cell
+      td.money-cell

@@ -1,0 +1,13 @@
+main.container-fluid
+  h1.display-3= "#{@instrument.ticker} Options"
+
+  p
+    => "Current = #{format_price @instrument.last, unit: @instrument.currency}"
+    ==> "marketcap = #{number_to_currency @instrument.info&.marketcap, unit: currency_span(@instrument.currency), precision: 0}"
+    = "shares = #{number_with_delimiter @instrument.info&.shares}"
+
+  .container
+    .row
+      - @options_per_date.each do |date, options|
+        .col
+          = render 'table', options: options, strikes: @strikes, expiration_date: date

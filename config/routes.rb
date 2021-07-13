@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   resources :instruments do
     resources :candles, only: :index
+    resources :options, only: [:index, :show] do
+      get :history, on: :member
+    end
     get :export, :spb, on: :collection
   end
   resources :insider_transactions, path: 'insider-transactions'

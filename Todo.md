@@ -13,9 +13,9 @@
 + load options data
 + load IEX transactions via date ranged feed
 + rake task for options
++ options straddle table
++ options history table
 
-- options UI table
-- options chart
 - buy CVM
 
 - highlight signalled tickers in SPB list

@@ -1,6 +1,15 @@
 class OptionItem < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
+  def call? = side == 'call'
+  def put?  = side == 'put'
+
+  def in_the_money?
+    if last = instrument.last
+      call? ? last > strike : last < strike
+    end
+  end
+
   class << self
     def load_all(tickers)
       tickers.each { |ticker| load_soonest ticker }
@@ -34,8 +43,17 @@ class OptionItem < ApplicationRecord
             close:         strike['close'],
             open:          strike['open']
         end
-
       end
+    end
+
+    def latest_for_date(ticker, date)
+      options = where(ticker: ticker.upcase).where(date: date)
+      options.map(&:strike).uniq.sort.flat_map do |strike|
+        [
+          options.select { |o| o.strike == strike && o.call? }.max_by(&:updated_on),
+          options.select { |o| o.strike == strike && o.put? }.max_by(&:updated_on)
+        ]
+      end.compact
     end
 
   end

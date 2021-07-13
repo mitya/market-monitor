@@ -15,6 +15,8 @@ class Instrument < ApplicationRecord
   has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :insider_summaries,             foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :institution_holdings,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :option_items,                  foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :option_item_specs,             foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
