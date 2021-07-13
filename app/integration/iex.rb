@@ -32,7 +32,7 @@ class Iex
   def options_chart(code, range: '1d')= get("/options/#{code}/chart", range: range)
   def options_dates                   = get("/ref-data/options/symbols")
   def options_specs(ticker)           = get("/ref-data/options/symbols/#{ticker}")
-
+  def insider_transactions_series(symbol, since: 1.month.ago.to_date) = get("/time-series/INSIDER_TRANSACTIONS/#{symbol}", from: since.to_date)
 
   def import_day_candles(instrument, date: nil, period: nil)
     return if date && instrument.candles.day.final.where(date: date, source: 'iex').exists?
@@ -155,3 +155,5 @@ Iex.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
 Iex.import_today_candle Instrument['PVAC']
 Iex.day_on('ARCH', Date.parse('2021-03-01'))
 Iex.import_intraday_candles('aapl', '2021-06-17'); nil
+
+Iex.insider_transactions_series('AAPL')

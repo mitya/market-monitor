@@ -4,6 +4,7 @@ main.container-fluid
     .row.mb-3
       .col
         = render 'instruments/filter_by_tickers'
+        = render 'instruments/filter_by_availability', lw: 2
         = render 'instruments/pagination_options'
         = bs_select :min_amount, 'Min Amount:', min_amount_options, select_class: 'w-auto'
         - if @transactions.map(&:ticker).uniq.one?

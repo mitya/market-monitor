@@ -351,7 +351,7 @@ module InstrumentsHelper
   end
 
   def min_amount_options
-    %w[100_000 200_000 500_000 1_000_000]
+    %w[40_000 50_000 100_000 200_000 500_000 1_000_000]
   end
 
   def set_button_class(set_key)

@@ -15,7 +15,7 @@ class OptionItem < ApplicationRecord
       soonest_dates = OptionItemSpec.where(ticker: ticker).where('date >= ?', Current.date).order(:date).distinct.pluck(:date).first(3)
       soonest_options = OptionItemSpec.where(ticker: ticker).where(date: soonest_dates, strike: strike_range).order(:ticker, :side, :date, :strike)
       soonest_options.each do |option|
-        strikes = Iex.options_chart(option.code, range: '1d')
+        strikes = Iex.options_chart(option.code, range: '1w')
         strikes.each do |strike|
           update_date = strike['lastUpdated']
           record = find_or_initialize_by ticker: ticker, code: option.code, updated_on: update_date

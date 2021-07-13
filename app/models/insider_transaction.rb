@@ -61,10 +61,17 @@ class InsiderTransaction < ApplicationRecord
 
     def import_iex_data_from_remote(instrument, delay: 0)
       instrument = Instrument[instrument]
-      data = ApiCache.get "cache/iex-insider-transactions/#{instrument.ticker} transactions #{Date.current.to_s :number}.json" do
-        puts "Load insider transactions for #{instrument.ticker}"
-        Iex.insider_transactions(instrument.ticker)
+      # data = ApiCache.get "cache/iex-insider-transactions/#{instrument.ticker} transactions #{Date.current.to_s :number}.json" do
+      #   puts "Load insider transactions for #{instrument.ticker}"
+      #   Iex.insider_transactions(instrument.ticker)
+      # end
+
+      since = Date.parse('2021-06-01')
+      data = ApiCache.get "cache/iex-insider-transactions/#{instrument.ticker} transactions #{Date.current.to_s :number}-#{since.to_s :number}.json" do
+        puts "Load   insider transactions for #{instrument.ticker} since #{since}"
+        Iex.insider_transactions_series(instrument.ticker, since: since)
       end
+
       import_iex_data data
     end
 

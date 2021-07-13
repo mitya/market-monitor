@@ -11,14 +11,16 @@
 + load last 2 5m candles from IEX &
 + load all Tinkoff USD candles
 + load options data
++ load IEX transactions via date ranged feed
+
+- rake task for options
+- options UI table
+- options chart
 
 - highlight signalled tickers in SPB list
 - compare Tinkoff highs / lows with IEX
 - compare Tinkoff 11:00 prices with day highs on IEX
 - check yesterday close vol/change corellation with the next day
-
-- options UI table
-- options chart
 
 - show volume changes in the main list
 - 2% over yesterday high signals

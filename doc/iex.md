@@ -33,6 +33,7 @@ curl -s "https://cloud.iexapis.com/stable/stock/aapl/insider-transactions?token=
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/insider-transactions?token=$IEX_SECRET_KEY" > tmp/insiders-AAON.json
 curl -s "https://cloud.iexapis.com/stable/tops?symbols=aapl,fb,twtr&token=$IEX_SECRET_KEY"
 curl -s "https://cloud.iexapis.com/stable/time-series/INSIDER_TRANSACTIONS/BH?from=2021-04-01&token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/time-series/INSIDER_TRANSACTIONS/AAPL?from=2021-06-13&token=$IEX_SECRET_KEY" | jq
 
 curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY"
 curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY" > cache/iex/tops.json
