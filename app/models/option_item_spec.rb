@@ -9,7 +9,7 @@ class OptionItemSpec < ApplicationRecord
     end
 
     def load(ticker)
-      ApiCache.get "cache/iex-options/spec-#{ticker} #{Date.current.to_s :number}.json" do
+      ApiCache.get "cache/iex-options/#{ticker} #{Date.current.to_s :number}.json" do
         puts "Load options specs for #{ticker}"
         Iex.options_specs(ticker)
       end
@@ -25,7 +25,7 @@ class OptionItemSpec < ApplicationRecord
     def create_all(tickers)
       tickers.each do |ticker|
         instrument = Instrument.get_by_iex_ticker(ticker)
-        next if exists?(ticker: instrument.ticker)
+        # next if exists?(ticker: instrument.ticker)
         data = load(ticker)
         data.each do |spec|
           find_or_create_by! code: spec['symbol'] do |record|

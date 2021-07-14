@@ -275,7 +275,7 @@ main.container-fluid.mb-4
           - if show_last_insider_buys
             td.money-cell= relative_price inst.info&.last_insider_buy_price, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td= growth_badge aggregate
-          td= link_to fa_icon(:adjust), instrument_options_path(inst)
+          td= link_to fa_icon(:adjust), instrument_options_path(inst) if inst.usd?
 
   = paginate @instruments, window: 20
   = tickers_copy_list @instruments

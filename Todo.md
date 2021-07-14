@@ -15,24 +15,17 @@
 + rake task for options
 + options straddle table
 + options history table
++ install Pantini extension & check out the order log
 
-- try daily insiders & options updates
-- install Pantini extension
-- check out the order log
-- move TI margin to VTB
-- sell some crap and free up 20k usd
-- CVM PBF STNG VEON
-
-- find large call options blocks with prices significantly higher than the current
-- find the call / put balance point
-- find significant call / put differences when the option buyer seem to be making money
+- show volume changes in the main list
 
 - highlight signalled tickers in SPB list
 - compare Tinkoff highs / lows with IEX
 - compare Tinkoff 11:00 prices with day highs on IEX
 - check yesterday close vol/change corellation with the next day
-
-- show volume changes in the main list
+- find large call options blocks with prices significantly higher than the current
+- find the call / put balance point
+- find significant call / put differences when the option buyer seem to be making money
 - 2% over yesterday high signals
 - insider buy signals
 - search for period lows / highs (e.g. 1w)
@@ -40,6 +33,7 @@
 - institutional ownership UI
 - analyze large moves (from flat and from prior slow move)
 - analyze shelves
+- indexes state bar & index updates
 
 
 # Next

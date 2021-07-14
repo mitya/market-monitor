@@ -38,7 +38,10 @@ rake iex:days:missing
 
 rake main
 rake prices
+rake tinkoff:candles:import:5min:last
 rake tinkoff:prices:pre
+rake options:day
+rake iex:insider_transactions
 
 // rake iex:candles:days:previous iex:prices:all iex:candles:days:today
 // rake tinkoff:candles:day:latest tinkoff:prices:uniq
@@ -50,7 +53,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='GTE KLIC SITM XPER UMPQ'
+export tickers='IWM'
 rake tinkoff:premium:import
 
 ## Tinkoff

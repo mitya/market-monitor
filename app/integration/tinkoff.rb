@@ -8,6 +8,7 @@ class Tinkoff
     MNK GSH FTR CTB
     TOT
     VZRZP ALNU
+    TCS
     NVTK@GS LKOD@GS OGZD@GS NLMK@GS PHOR@GS SBER@GS SVST@GS SSA@GS MGNT@GS PLZL@GS KAP@GS
   ].uniq
 
@@ -159,6 +160,8 @@ class Tinkoff
     # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
     # puts "Import #{candles.count} #{interval} candles for #{instrument}"
     candle_class ||= Candle.interval_class_for(interval)
+    return "Missing candles for #{instrument}".red if candle_class == nil
+
     candle_class.transaction do
       candles.each do |hash|
         time = Time.parse hash['time']

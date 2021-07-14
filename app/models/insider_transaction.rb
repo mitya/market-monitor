@@ -66,9 +66,9 @@ class InsiderTransaction < ApplicationRecord
       #   Iex.insider_transactions(instrument.ticker)
       # end
 
-      since = Date.parse('2021-06-01')
+      since = 2.weeks.ago.to_date
       data = ApiCache.get "cache/iex-insider-transactions/#{instrument.ticker} transactions #{Date.current.to_s :number}-#{since.to_s :number}.json" do
-        puts "Load   insider transactions for #{instrument.ticker} since #{since}"
+        puts "Load   insider transactions for #{instrument.ticker.ljust 6} since #{since}"
         Iex.insider_transactions_series(instrument.ticker, since: since)
       end
 

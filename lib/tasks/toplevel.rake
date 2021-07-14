@@ -143,20 +143,24 @@ end
 
 
 namespace :options do
-  envtask :strikes do
-    OptionItemSpec.create_all Instrument.iex_sourceable.after('SPB').abc.pluck(:iex_ticker)
+  envtask :specs do
+    OptionItemSpec.create_all Instrument.iex_sourceable.abc.pluck(:iex_ticker)
+    # OptionItemSpec.create_all Instrument.for_tickers(%w[ALTO ZIM]).abc.pluck(:iex_ticker)
   end
 
   envtask :week do
     OptionItem.import_all R.instruments_from_env || Instrument.iex_sourceable, range: '1w'
+    # OptionItem.import_all Instrument.for_tickers(%w[ALTO ZIM]).abc.pluck(:iex_ticker), range: '1w'
   end
 
   envtask :day do
     # OptionItem.load_all Instrument.iex_sourceable.abc.pluck(:ticker), range: '1d'
     # instruments = Instrument.iex_sourceable.abc.where('ticker >= ?', 'C').pluck(:iex_ticker)
-    instruments = InstrumentSet.known_instruments.map(&:iex_ticker).compact.sort
+    instruments = InstrumentSet.known_instruments.map(&:iex_ticker).compact.sort.select { |t| t > 'T' }
     Current.parallelize_instruments(instruments, IEX_RPS) do |inst|
-      OptionItem.import inst, range: '5d'
+      OptionItem.import inst, range: '1d'
     end
   end
 end
+
+task :close => 'tinkoff:candles:import:5min:last'

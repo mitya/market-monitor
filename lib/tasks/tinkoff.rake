@@ -59,10 +59,14 @@ namespace :tinkoff do
     end
 
     envtask 'import:5min:last' do
-      dates = [ENV['date'] ? ENV['date'].to_date : Current.yesterday]
-      dates = Current.last_n_weeks(4) #  - ['2021-07-02'.to_date]
+      dates = [ENV['date'] ? ENV['date'].to_date : Current.today]
+      dates = Current.last_n_weeks(2) #  - ['2021-07-02'.to_date]
+      dates = [Current.today, Current.yesterday]
+      instruments = Instrument.tinkoff.usd.abc
       dates.each do |date|
-        Instrument.tinkoff.usd.abc.each { |inst| Tinkoff.load_last_5m_candles(inst, date) }
+        Current.parallelize_instruments(instruments, 3) do |inst|
+          Tinkoff.load_last_5m_candles(inst, date)
+        end
       end
     end
   end
