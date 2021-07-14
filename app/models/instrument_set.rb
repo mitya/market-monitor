@@ -52,6 +52,7 @@ class InstrumentSet
     def recommendations = new(:recommendations)
     def alarms = @alarms ||= new(:alarms)
     def rejected = @rejected ||= new(:rejected)
+    def known_instruments = @known ||= [main, portfolio, recommendations].flat_map(&:instruments).uniq
     def known_symbols = @known_symbols ||= [main, portfolio, recommendations].flat_map(&:symbols).uniq
     def known?(symbol) = known_symbols.include?(symbol)
   end

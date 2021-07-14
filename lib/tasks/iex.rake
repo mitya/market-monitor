@@ -171,7 +171,7 @@ namespace :iex do
   envtask :price_targets do
     instruments = R.instruments_from_env || Instrument.all
     instruments = instruments.iex_sourceable.abc
-    instruments = instruments.select { |inst| !inst.price_target || inst.price_target.date < Date.new(2021, 6, 1)  }
+    # instruments = instruments.select { |inst| !inst.price_target || inst.price_target.date < Date.new(2021, 6, 1)  }
     Current.parallelize_instruments(instruments, IEX_RPS) { |inst| PriceTarget.import_iex_data_from_remote inst }
   end
 

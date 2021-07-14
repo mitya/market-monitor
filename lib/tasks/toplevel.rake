@@ -142,12 +142,21 @@ namespace :signal do
 end
 
 
-OPTION_TICKERS = %w[DK CLF FCX GTHX MAC M AYX RIG SWN COTY ET FTCH FSLY ICPT MFGP OSUR KGC X ZIM].sort
+namespace :options do
+  envtask :strikes do
+    OptionItemSpec.create_all Instrument.iex_sourceable.after('SPB').abc.pluck(:iex_ticker)
+  end
 
-envtask 'options:strikes' do
-  OptionItemSpec.create_all OPTION_TICKERS
-end
+  envtask :week do
+    OptionItem.import_all R.instruments_from_env || Instrument.iex_sourceable, range: '1w'
+  end
 
-envtask :options do
-  OptionItem.load_all OPTION_TICKERS
+  envtask :day do
+    # OptionItem.load_all Instrument.iex_sourceable.abc.pluck(:ticker), range: '1d'
+    # instruments = Instrument.iex_sourceable.abc.where('ticker >= ?', 'C').pluck(:iex_ticker)
+    instruments = InstrumentSet.known_instruments.map(&:iex_ticker).compact.sort
+    Current.parallelize_instruments(instruments, IEX_RPS) do |inst|
+      OptionItem.import inst, range: '5d'
+    end
+  end
 end

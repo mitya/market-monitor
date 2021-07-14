@@ -91,7 +91,6 @@ class Current < ActiveSupport::CurrentAttributes
     threads_count.times.map do |index|
       Thread.new do
         while instr = queue.shift
-
           yield instr, index
         end
       end

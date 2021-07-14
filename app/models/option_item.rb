@@ -11,13 +11,12 @@ class OptionItem < ApplicationRecord
   end
 
   class << self
-    def load_all(tickers)
-      tickers.each { |ticker| load_soonest ticker }
+    def import_all(tickers, range: '1w')
+      tickers.each { |ticker| import ticker, range: range }
     end
 
-    def load_soonest(ticker)
-      return if ticker < 'COTY'
-      instrument = Instrument.get(ticker)
+    def import(ticker, range: '1w')
+      instrument = Instrument.get_by_iex_ticker(ticker)
       max_strike = instrument.recent_high * 1.5
       min_strike = instrument.recent_low * 0.65
       strike_range = min_strike .. max_strike
@@ -26,15 +25,15 @@ class OptionItem < ApplicationRecord
       soonest_options = OptionItemSpec.where(ticker: ticker).where(date: soonest_dates, strike: strike_range).order(:ticker, :side, :date, :strike)
       soonest_options.each do |option|
         puts "Load IEX option data for #{option.code}..."
-        strikes = Iex.options_chart(option.code, range: '1w')
+        strikes = Iex.options_chart(option.code, range: range)
         strikes.each do |strike|
           update_date = strike['lastUpdated']
           volume = strike['volume']
           open_interest = strike['openInterest']
 
-          record = find_or_initialize_by ticker: ticker, code: option.code, updated_on: update_date
+          record = find_or_initialize_by ticker: instrument.ticker, code: option.code, updated_on: update_date
           next if record.persisted?
-          puts "Set option data for #{ticker.ljust(5)} #{option.code} on #{update_date} #{volume.to_s.rjust 6} #{open_interest.to_s.rjust 6}".send(record.new_record?? :green : :yellow)
+          puts "Set option data for #{ticker.ljust(5)} #{update_date} #{option.side.ljust(4)} #{option.strike} #{volume.to_s.rjust 6} #{open_interest.to_s.rjust 6}".send(record.new_record?? :green : :yellow)
 
           record.update! side: option.side, strike: option.strike,
             volume:        volume,

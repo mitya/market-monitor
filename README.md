@@ -57,7 +57,7 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty
-export tickers='SHLS GRUB ZIP'
+export tickers='KNBE DOCS S PAY PCOR IAC'
 rake tinkoff:logos:download
 
 ## All
@@ -69,7 +69,7 @@ rake iex:days:missing since=2020-01-01 ok=1
 rake iex:days:period period=ytd
 rake destroy ticker=ACIA
 rake set_first_date ticker=GRUB date=2021-03-25
-rake set_first_date_auto tickers='SHLS'
+rake set_first_date_auto tickers='DOCS S PAY'
 rake iex:symbols:refresh
 rake tinkoff:days:special
 rake tinkoff:days:year tickers=FLOT
@@ -78,3 +78,7 @@ rake tinkoff:days:year tickers=FLOT
 
 rake list:clear tickers=''
 rake list:import list=portfolio
+
+
+rake options:day
+rake options:week

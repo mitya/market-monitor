@@ -16,7 +16,16 @@
 + options straddle table
 + options history table
 
-- buy CVM
+- try daily insiders & options updates
+- install Pantini extension
+- check out the order log
+- move TI margin to VTB
+- sell some crap and free up 20k usd
+- CVM PBF STNG VEON
+
+- find large call options blocks with prices significantly higher than the current
+- find the call / put balance point
+- find significant call / put differences when the option buyer seem to be making money
 
 - highlight signalled tickers in SPB list
 - compare Tinkoff highs / lows with IEX
