@@ -49,6 +49,7 @@ namespace :iex do
         date = Date.parse(date) if String === date
         instruments = (R.instruments_from_env || Instrument.iex_sourceable).abc
         instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date }
+        instruments = instruments.select(&:iex_ticker)
         with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
 
         puts if date.monday?

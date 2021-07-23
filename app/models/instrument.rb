@@ -162,6 +162,10 @@ class Instrument < ApplicationRecord
   def recent_low(days: 5)  = candles.day.order(:date).last(days).map(&:low).min
   def recent_high(days: 5) = candles.day.order(:date).last(days).map(&:high).max
 
+  def set_average_volume
+    info!.update avg_volume: day_candles.where('date > ?', 6.months.ago).average(:volume).to_i    
+  end
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker

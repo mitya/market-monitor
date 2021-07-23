@@ -164,3 +164,9 @@ namespace :options do
 end
 
 task :close => 'tinkoff:candles:import:5min:last'
+task :pre => 'tinkoff:prices:pre'
+
+
+envtask :set_average_volume do
+  Instrument.find_each &:set_average_volume
+end

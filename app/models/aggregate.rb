@@ -39,6 +39,12 @@ class Aggregate < ApplicationRecord
         end
       end
 
+      %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" }.each do |accessor|
+        if candle = instrument.send(accessor)
+          aggregate.send "#{accessor.remove '_ago'}_volume=", candle.volume_to_average.to_f.round(3)
+        end
+      end
+
       if analyze
         analyzer = CandleAnalyzer.new(instrument, date)
         # aggregate.days_up = analyzer.green_days_count&.nonzero? || -analyzer.red_days_count.to_i

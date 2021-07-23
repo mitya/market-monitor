@@ -182,6 +182,7 @@ module InstrumentsHelper
   def instrument_order_options
     Aggregate::Accessors.map { |p| "aggregates.#{p.remove('_ago')}" } +
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" } +
+    Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_volume desc" } +
     [
       ['P/E',      'stats.pe desc'],
       ['ß',        'stats.beta desc'],

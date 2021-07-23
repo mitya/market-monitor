@@ -60,7 +60,7 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty
-export tickers='KNBE DOCS S PAY PCOR IAC'
+export tickers='AZN GRPH ICLR NABL PLUG RBLX SHOP PRAH RXRX ZY DV GEMC CRSR MDMG GOLD'
 rake tinkoff:logos:download
 
 ## All
@@ -72,7 +72,7 @@ rake iex:days:missing since=2020-01-01 ok=1
 rake iex:days:period period=ytd
 rake destroy ticker=ACIA
 rake set_first_date ticker=GRUB date=2021-03-25
-rake set_first_date_auto tickers='DOCS S PAY'
+rake set_first_date_auto tickers='NABL'
 rake iex:symbols:refresh
 rake tinkoff:days:special
 rake tinkoff:days:year tickers=FLOT
