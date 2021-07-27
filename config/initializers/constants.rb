@@ -1,1 +1,1 @@
-IEX_RPS = 6
+IEX_RPS = 8

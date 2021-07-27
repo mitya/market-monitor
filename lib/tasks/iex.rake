@@ -134,9 +134,7 @@ namespace :iex do
 
   envtask :stats do
     instruments = R.instruments_from_env || Instrument.all
-    instruments.iex_sourceable.abc.each do |inst|
-      inst.info!.refresh include_company: R.true?(:company)
-    end
+    Current.parallelize_instruments(instruments.iex_sourceable.abc, IEX_RPS) { |inst| inst.info!.refresh include_company: R.true?(:company) }
   end
 
   envtask 'stats:missing' do

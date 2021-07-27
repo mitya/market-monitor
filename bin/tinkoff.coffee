@@ -36,6 +36,7 @@ do ->
       when 'search'        then print await api.search(ticker: 'MSFT')
       when 'candles'       then print await api.candlesGet({ figi, interval, from: since, to: till })
       when 'portfolio'     then print await api.portfolio()
+      when 'orderbook'     then print await api.orderbookGet(depth: 4, figi: figi)
       when 'portfolio-iis'
         api.setCurrentAccountId(2019143573)
         print await api.portfolio()

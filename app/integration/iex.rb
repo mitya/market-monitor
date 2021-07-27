@@ -33,6 +33,7 @@ class Iex
   def options_dates                   = get("/ref-data/options/symbols")
   def options_specs(ticker)           = get("/ref-data/options/symbols/#{ticker}")
   def insider_transactions_series(symbol, since: 1.month.ago.to_date) = get("/time-series/INSIDER_TRANSACTIONS/#{symbol}", from: since.to_date)
+  def book(ticker)                    = get("/deep/book", symbols: ticker)
 
   def import_day_candles(instrument, date: nil, period: nil)
     return if date && instrument.candles.day.final.where(date: date, source: 'iex').exists?

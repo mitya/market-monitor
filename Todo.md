@@ -16,8 +16,9 @@
 + options straddle table
 + options history table
 + install Pantini extension & check out the order log
++ show volume changes in the main list
 
-- show volume changes in the main list
+- show correction since 6-m high and gains since after-high low
 
 - highlight signalled tickers in SPB list
 - compare Tinkoff highs / lows with IEX

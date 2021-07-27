@@ -296,6 +296,11 @@ class Tinkoff
     import_candles_from_hash instrument, data
   end
 
+  def book(instrument)
+    instrument = Instrument[instrument]
+    call_js_api "orderbook #{instrument.figi}"
+  end
+
 
   delegate :logger, to: :Rails
 end
