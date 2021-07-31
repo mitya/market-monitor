@@ -34,8 +34,7 @@ class OptionItemSpec < ApplicationRecord
               ticker: instrument.ticker,
               date:   spec['expirationDate'],
               side:   spec['side'],
-              strike: spec['strike'],
-              desc:   spec['description']
+              strike: spec['strike']
             )
           end
         end

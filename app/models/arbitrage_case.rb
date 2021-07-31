@@ -1,0 +1,2 @@
+class ArbitrageCase < ApplicationRecord
+end

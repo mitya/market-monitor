@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_165229) do
+ActiveRecord::Schema.define(version: 2021_07_31_134814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,8 +48,37 @@ ActiveRecord::Schema.define(version: 2021_07_08_165229) do
     t.float "y2018"
     t.float "y2017"
     t.float "close_change"
+    t.float "d1_volume"
+    t.float "d2_volume"
+    t.float "d3_volume"
+    t.float "d4_volume"
+    t.float "w1_volume"
+    t.float "w2_volume"
+    t.float "m1_volume"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
+  end
+
+  create_table "arbitrage_cases", force: :cascade do |t|
+    t.string "ticker"
+    t.decimal "percent", precision: 8, scale: 2
+    t.boolean "long"
+    t.boolean "delisted"
+    t.string "exchange_code"
+    t.decimal "spb_bid", precision: 20, scale: 4
+    t.integer "spb_bid_size"
+    t.decimal "spb_ask", precision: 20, scale: 4
+    t.integer "spb_ask_size"
+    t.decimal "foreign_bid", precision: 20, scale: 4
+    t.integer "foreign_bid_size"
+    t.decimal "foreign_ask", precision: 20, scale: 4
+    t.integer "foreign_ask_size"
+    t.date "date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["date"], name: "index_arbitrage_cases_on_date"
+    t.index ["ticker", "date"], name: "index_arbitrage_cases_on_ticker_and_date"
+    t.index ["ticker"], name: "index_arbitrage_cases_on_ticker"
   end
 
   create_table "candles", force: :cascade do |t|
@@ -198,8 +227,8 @@ ActiveRecord::Schema.define(version: 2021_07_08_165229) do
     t.date "date"
     t.date "filling_date"
     t.string "kind"
-    t.integer "shares"
-    t.integer "shares_final"
+    t.bigint "shares"
+    t.bigint "shares_final"
     t.decimal "price", precision: 20, scale: 4
     t.decimal "cost", precision: 20, scale: 4
     t.string "sec_code"
@@ -249,9 +278,8 @@ ActiveRecord::Schema.define(version: 2021_07_08_165229) do
     t.string "ticker"
     t.date "date"
     t.decimal "strike", precision: 20, scale: 4
-    t.string "desc"
     t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.index ["code"], name: "option_item_specs_on_code", unique: true
   end
 
   create_table "option_items", force: :cascade do |t|
@@ -266,6 +294,8 @@ ActiveRecord::Schema.define(version: 2021_07_08_165229) do
     t.decimal "close", precision: 20, scale: 4
     t.datetime "created_at"
     t.date "updated_on"
+    t.index ["code", "updated_on"], name: "code_date", unique: true
+    t.index ["code"], name: "option_items_code"
   end
 
   create_table "portfolio_items", primary_key: "ticker", id: :string, force: :cascade do |t|
@@ -475,6 +505,7 @@ ActiveRecord::Schema.define(version: 2021_07_08_165229) do
     t.string "peers", array: true
     t.float "last_insider_buy_price"
     t.jsonb "extra"
+    t.integer "avg_volume"
   end
 
   add_foreign_key "price_level_hits", "price_levels", column: "level_id"
