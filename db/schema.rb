@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_31_134814) do
+ActiveRecord::Schema.define(version: 2021_08_02_173239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,15 @@ ActiveRecord::Schema.define(version: 2021_07_31_134814) do
     t.index ["code"], name: "option_items_code"
   end
 
+  create_table "orderbooks", force: :cascade do |t|
+    t.string "ticker"
+    t.jsonb "bids"
+    t.jsonb "asks"
+    t.decimal "last", precision: 20, scale: 4
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "portfolio_items", primary_key: "ticker", id: :string, force: :cascade do |t|
     t.decimal "price", precision: 20, scale: 4
     t.datetime "created_at", precision: 6, null: false
@@ -479,6 +488,12 @@ ActiveRecord::Schema.define(version: 2021_07_31_134814) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["current"], name: "index_recommendations_on_current"
     t.index ["ticker"], name: "index_recommendations_on_ticker"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "key"
+    t.jsonb "value"
+    t.datetime "updated_at"
   end
 
   create_table "stats", primary_key: "ticker", id: :string, force: :cascade do |t|

@@ -84,6 +84,10 @@ module ApplicationHelper
     country_code, country_name = instrument.info&.country_code, instrument.info&.country
     country_code, country_name = 'rus', 'Russia' if instrument.exchange_name == 'MOEX'
     country_code, country_name = 'deu', 'Germanu' if instrument.ticker.include? '@DE'
+    country_flag_icon country_code, country_name
+  end
+
+  def country_flag_icon(country_code, country_name = nil)
     image_tag "/country-flags/#{country_code}.png", class: 'country-flag', title: country_name if country_code
   end
 
@@ -101,6 +105,10 @@ module ApplicationHelper
 
   def days_ago_number(date)
     (Current.date - date).to_i if date
+  end
+
+  def seconds_ago(time)
+    (Time.current - time).round if time
   end
 
   def sessions_ago(date)

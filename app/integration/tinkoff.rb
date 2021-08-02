@@ -301,7 +301,6 @@ class Tinkoff
     call_js_api "orderbook #{instrument.figi}"
   end
 
-
   delegate :logger, to: :Rails
 end
 

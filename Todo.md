@@ -17,9 +17,17 @@
 + options history table
 + install Pantini extension & check out the order log
 + show volume changes in the main list
++ show L2 on arb page
+
+- refresh the arb list every second
+- show price targets on arb page
+- group foreign exchanges by ticker
+- the Buy button
+- show requests
+- show operations
+- show assets
 
 - show correction since 6-m high and gains since after-high low
-
 - highlight signalled tickers in SPB list
 - compare Tinkoff highs / lows with IEX
 - compare Tinkoff 11:00 prices with day highs on IEX

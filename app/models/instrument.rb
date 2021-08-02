@@ -17,6 +17,7 @@ class Instrument < ApplicationRecord
   has_many :institution_holdings,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :option_items,                  foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :option_item_specs,             foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :arbitrage_cases,               foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
@@ -25,6 +26,7 @@ class Instrument < ApplicationRecord
   has_one :info, class_name: 'Stats',      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :portfolio_item,                 foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :insider_aggregate,              foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :orderbook,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
   validates_presence_of :ticker, :name
 
@@ -163,7 +165,7 @@ class Instrument < ApplicationRecord
   def recent_high(days: 5) = candles.day.order(:date).last(days).map(&:high).max
 
   def set_average_volume
-    info!.update avg_volume: day_candles.where('date > ?', 6.months.ago).average(:volume).to_i    
+    info!.update avg_volume: day_candles.where('date > ?', 6.months.ago).average(:volume).to_i
   end
 
   class << self
