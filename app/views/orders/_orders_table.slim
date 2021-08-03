@@ -1,0 +1,11 @@
+table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable
+  thead.table-dark
+    tr
+      th
+      th= title
+      th
+      th.money-cell Lots
+      th.money-cell Price
+      th.money-cell Total
+  tbody
+    = render partial: 'order', collection: orders, as: :order

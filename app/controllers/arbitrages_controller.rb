@@ -8,10 +8,6 @@ class ArbitragesController < ApplicationController
     @arbitrage_groups = @arbitrages.group_by &:ticker
     Current.preload_day_candles_for @arbitrages.map(&:instrument).to_a
 
-    if request.xhr?
-      render partial: 'arbitrages'
-    else
-      render
-    end
+    on_xhr_render :arbitrages
   end
 end

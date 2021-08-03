@@ -6,6 +6,7 @@ class Synchronizer
       Setting.get('sync_exchanges', []).each { |exchange| PantiniArbitrageParser.connect exchange }
       Setting.save 'sync_books', ArbitrageCase.current_tickers
       Setting.get('sync_books', []).each { |ticker| Orderbook.sync ticker }
+      Order.sync
       puts "..."
       sleep 4
     end

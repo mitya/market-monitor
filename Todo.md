@@ -20,12 +20,13 @@
 + show L2 on arb page
 + group foreign exchanges by ticker
 + refresh the arb list with a button
++ sync orders
++ show orders list
 
-- show price targets on arb page
-- the Buy button
-- show requests
 - show operations
 - show assets
+- the Buy button
+- show price targets on arb page
 
 - show correction since 6-m high and gains since after-high low
 - highlight signalled tickers in SPB list

@@ -35,8 +35,11 @@ do ->
       when 'currencies'    then print await api.currencies()
       when 'search'        then print await api.search(ticker: 'MSFT')
       when 'candles'       then print await api.candlesGet({ figi, interval, from: since, to: till })
-      when 'portfolio'     then print await api.portfolio()
       when 'orderbook'     then print await api.orderbookGet(depth: 8, figi: figi)
+      when 'orders'
+        api.setCurrentAccountId(2019143573)
+        print await api.orders()
+      when 'portfolio'     then print await api.portfolio()
       when 'portfolio-iis'
         api.setCurrentAccountId(2019143573)
         print await api.portfolio()
@@ -62,3 +65,4 @@ do ->
 # coffee bin/tinkoff.coffee candles BBG000B9XRY4 day 2021-02-01 2021-03-10
 # coffee bin/tinkoff.coffee candles BBG000B9XRY4 5min 2021-03-11T20:00:00Z 2021-03-11T20:05:00Z
 # coffee bin/tinkoff.coffee orderbook BBG000B9XRY4
+# coffee bin/tinkoff.coffee orders

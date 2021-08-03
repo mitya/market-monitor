@@ -21,5 +21,6 @@ Rails.application.routes.draw do
   resources :portfolio, as: :portfolio_items
   resources :level_hits
   resources :arbitrages
+  resources :orders
   resource :comparision
 end
