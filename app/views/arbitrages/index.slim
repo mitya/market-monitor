@@ -14,7 +14,7 @@ main.container-fluid
         th.money-cell
         th.money-cell
         th.money-cell Percent
-        th.money-cell Ex
+        th Exchange
         th.money-cell Bid
         th.money-cell
         th.money-cell Ask
@@ -26,7 +26,8 @@ main.container-fluid
         th.money-cell
         th.money-cell
     tbody
-      - @arbitrages.each do |arb|
+      - @arbitrage_groups.each do |ticker, arbs|
+        - arb = arbs.first
         - inst = arb.instrument
         tr
           td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'absolute'
@@ -61,31 +62,32 @@ main.container-fluid
             td.money-cell
             td.money-cell
           td.money-cell= seconds_ago inst.orderbook&.updated_at
-        tr.opacity-30
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-            => arb_exchange_flag arb.exchange_code
-            = arb_exchange_code arb.exchange_code
-          td.money-cell= number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2
-          td.money-cell= arb.foreign_bid_size
-          td.money-cell= number_to_currency arb.foreign_ask, unit: currency_span(inst.currency), precision: 2
-          td.money-cell= arb.foreign_ask_size
-          td.money-cell
-            - if arb.long?
-              .is-red== "SELL #{number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2}"
-            - else
-              .is-green== "BUY #{number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2}"
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell= seconds_ago arb.updated_at
+        - arbs.each do |arb|
+          tr.opacity-30
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td
+              => arb_exchange_flag arb.exchange_code
+              = arb_exchange_code arb.exchange_code
+            td.money-cell= number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2
+            td.money-cell= arb.foreign_bid_size
+            td.money-cell= number_to_currency arb.foreign_ask, unit: currency_span(inst.currency), precision: 2
+            td.money-cell= arb.foreign_ask_size
+            td.money-cell
+              - if arb.long?
+                .is-red== "SELL #{number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2}"
+              - else
+                .is-green== "BUY #{number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2}"
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell
+            td.money-cell= seconds_ago arb.updated_at

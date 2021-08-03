@@ -18,10 +18,10 @@
 + install Pantini extension & check out the order log
 + show volume changes in the main list
 + show L2 on arb page
++ group foreign exchanges by ticker
 
 - refresh the arb list every second
 - show price targets on arb page
-- group foreign exchanges by ticker
 - the Buy button
 - show requests
 - show operations

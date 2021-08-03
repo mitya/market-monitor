@@ -39,3 +39,4 @@ yarn-debug.log*
 /Run.*
 /db/tinkoff-*
 /cache
+bin/config/telegram.json
