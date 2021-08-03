@@ -23,11 +23,11 @@
 + sync orders
 + show orders list
 + show operations
++ 5-min overview page
 
 - show portfolio
 - the arb Buy button
 - show price targets on arb page
-- 5-min overview page
 - orders / operations / portfolio page
 
 - show correction since 6-m high and gains since after-high low

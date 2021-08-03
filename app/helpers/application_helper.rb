@@ -193,4 +193,10 @@ module ApplicationHelper
       end
     end
   end
+
+  def format_as_minutes_since(since, minutes)
+    minutes = since + minutes
+    hour, minute = minutes.divmod(60)
+    "#{hour.to_s.rjust(2, '0')}:#{minute.to_s.rjust(2, '0')}"
+  end
 end

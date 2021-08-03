@@ -24,6 +24,7 @@ class InstrumentSet
   def missing_symbols = symbols.select { |s| !Instrument.exists?(ticker: s) }
   def instruments = Instrument.where(ticker: symbols)
   alias tickers symbols
+  alias scope instruments
 
   class << self
     def get(key)

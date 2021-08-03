@@ -54,6 +54,8 @@ class Current < ActiveSupport::CurrentAttributes
   alias w2_ago d10_ago
   alias m1_ago month_ago
 
+  def us_open_time_in_minutes_utc = 13 * 60 + 30
+
   def last_closed_day = workday? ? yesterday : today
 
   def weekdays_since(date) = date.upto(Current.yesterday).to_a.select { |date| MarketCalendar.market_open?(date) }.reverse

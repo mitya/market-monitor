@@ -299,7 +299,7 @@ class Tinkoff
 
   def load_trading_5m_candles
     date = Current.date
-    instruments = Instrument.get_all %w[CLF DK PBF ET]
+    instruments = InstrumentSet[:trading].instruments
     instruments.each do |inst|
       last_loaded_candle = Candle::M5.where(ticker: inst.ticker, date: date).order(:time).last
       data = load_intervals inst, '5min', last_loaded_candle&.datetime || Current.date.midnight, Time.current + 5, delay: 0.25

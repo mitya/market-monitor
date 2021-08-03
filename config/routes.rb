@@ -23,5 +23,8 @@ Rails.application.routes.draw do
   resources :arbitrages, only: %i[index]
   resources :orders, only: %i[index]
   resources :operations, only: %i[index]
+  resource :trading, only: %i[], controller: :trading do
+    get :dashboard
+  end
   resource :comparision
 end

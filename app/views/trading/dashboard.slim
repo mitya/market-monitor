@@ -1,0 +1,30 @@
+main.container-fluid
+  h1.display-3 Trading
+
+  .table-responsive
+    table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.w-auto.trading-table
+      thead.table-dark
+        tr
+          th(data-sort="ticker") Ticker
+          th.money-cell Close
+          th.money-cell ﹪
+          th.money-cell Open
+          th.money-cell.border-end.pe-2 ﹪
+          - @minutes.each do |minutes|
+            th.money-cell= format_as_minutes_since 9 * 60 + 30, minutes
+      tbody
+        - @instruments.each do |instrument|
+          - inst = instrument
+          - info = instrument.info
+          tr
+            td.ticker-cell
+              => instrument_logo_button inst
+              = instrument.ticker
+            td.money-cell= number_to_currency inst.d1_ago_close, unit: currency_span(inst.currency), precision: 2
+            td.money-cell= relative_price inst.last, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1
+            td.money-cell= relative_price @opens[inst.ticker], inst.d1_ago_close, unit: inst.currency, format: 'absolute', percentage_precision: 1
+            td.money-cell.border-end.pe-2= relative_price inst.last, @opens[inst.ticker], unit: inst.currency, format: 'relative', percentage_precision: 1
+            - candles_by_time = @candles_by_ticker_time[inst.ticker]
+            - @minutes.each do |minute|
+              - change = candles_by_time["#{format_as_minutes_since 13 * 60 + 30, minute}:00"]&.rel_change
+              td.money-cell(class=red_green_class(change && change > 0))= number_with_precision change * 100, precision: 2 if change

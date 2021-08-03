@@ -139,3 +139,10 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .w-100p { width: 100px; }
 
 .nowrap { white-space: nowrap; }
+
+
+.trading-table {
+  td.money-cell { min-width: 50px; }
+  td.ticker-cell { min-width: 70px; }
+  td:first-child { position: sticky; left: 0; background-color: white; opacity: 0.9; }
+}
