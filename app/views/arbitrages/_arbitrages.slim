@@ -1,0 +1,90 @@
+table.table.table-hover.table-font-sm.tickers-table.table-selectable.w-auto
+  thead.table-dark
+    tr
+      th.money-cell Close
+      th.money-cell Close %
+      th
+      th
+      th Ticker
+      th
+      th
+      th.money-cell
+      th.money-cell
+      th.money-cell Percent
+      th Exchange
+      th.money-cell Bid
+      th.money-cell
+      th.money-cell Ask
+      th.money-cell
+      th.money-cell
+      th.money-cell
+      th.money-cell
+      th.money-cell
+      th.money-cell
+      th.money-cell
+  tbody
+    - @arbitrage_groups.each do |ticker, arbs|
+      - arb = arbs.first
+      - inst = arb.instrument
+      tr
+        td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'absolute'
+        td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'relative'
+        td= country_flag inst
+        td= instrument_logo_button inst
+        td= arb.ticker
+        td= known_icon inst
+        td= type_icon inst
+        td= sector_badge inst
+        td.money-cell= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+        td.money-cell= number_to_percentage arb.percent, precision: 1
+        td.money-cell
+        td.money-cell= number_to_currency arb.spb_bid, unit: currency_span(inst.currency), precision: 2
+        td.money-cell= arb.spb_bid_size
+        td.money-cell= number_to_currency arb.spb_ask, unit: currency_span(inst.currency), precision: 2
+        td.money-cell= arb.spb_ask_size
+        td.money-cell
+          - if arb.long?
+            .is-green== "BUY #{number_to_currency arb.spb_ask, unit: currency_span(inst.currency), precision: 2}"
+          - else
+            .is-red== "SELL #{number_to_currency arb.spb_bid, unit: currency_span(inst.currency), precision: 2}"
+        - if inst.orderbook&.available?
+          td.money-cell= "#{number_with_precision inst.orderbook&.ask_price_on(0), precision: 2} @ #{inst.orderbook&.ask_size_on 0}"
+          td.money-cell= "#{number_with_precision inst.orderbook&.ask_price_on(1), precision: 2} @ #{inst.orderbook&.ask_size_on 1}"
+          td.money-cell= "#{number_with_precision inst.orderbook&.ask_price_on(2), precision: 2} @ #{inst.orderbook&.ask_size_on 2}"
+          td.money-cell= "#{number_with_precision inst.orderbook&.ask_price_on(3), precision: 2} @ #{inst.orderbook&.ask_size_on 3}"
+        - else
+          td.money-cell
+            span.badge.bg-secondary= inst.orderbook&.status || 'Offline'
+          td.money-cell
+          td.money-cell
+          td.money-cell
+        td.money-cell= seconds_ago inst.orderbook&.updated_at
+      - arbs.each do |arb|
+        tr.opacity-30
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td
+            => arb_exchange_flag arb.exchange_code
+            = arb_exchange_code arb.exchange_code
+          td.money-cell= number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2
+          td.money-cell= arb.foreign_bid_size
+          td.money-cell= number_to_currency arb.foreign_ask, unit: currency_span(inst.currency), precision: 2
+          td.money-cell= arb.foreign_ask_size
+          td.money-cell
+            - if arb.long?
+              .is-red== "SELL #{number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2}"
+            - else
+              .is-green== "BUY #{number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2}"
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell
+          td.money-cell= seconds_ago arb.updated_at

@@ -16,6 +16,7 @@ class PantiniArbitrageParser
     text.gsub!(/(💰|🥛|‼️).*/, '')
     lines = text.split(/\n+/)
     lines = lines[1..-1]
+    return if lines.blank?
     lines.reject! { |line| line.include?('Курс') }
     lines.reject! { |line| line.include?('Последнее обновление') }
 

@@ -173,11 +173,6 @@ envtask :set_average_volume do
   Instrument.find_each &:set_average_volume
 end
 
-envtask :arb do
-  Tinkoff.book 'CLF'
-  Iex.book 'CLF'
-end
-
 envtask :pantini do
   PantiniArbitrageParser.connect 'XFRA'
   PantiniArbitrageParser.connect 'US'
@@ -188,6 +183,6 @@ envtask :book do
   Orderbook.sync ENV['ticker']
 end
 
-envtask :sync do
+envtask :arb do
   Synchronizer.call
 end

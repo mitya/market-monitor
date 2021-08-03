@@ -19,8 +19,8 @@
 + show volume changes in the main list
 + show L2 on arb page
 + group foreign exchanges by ticker
++ refresh the arb list with a button
 
-- refresh the arb list every second
 - show price targets on arb page
 - the Buy button
 - show requests

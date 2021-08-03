@@ -5,8 +5,13 @@ class ArbitragesController < ApplicationController
 
     @arbitrages = ArbitrageCase.includes(:instrument => [:info, :orderbook]).where(date: Current.date).where('updated_at > ?', 1.minute.ago).order('long desc, percent desc')
     @arbitrages = @arbitrages.reject { |arb| !arb.instrument.orderbook || arb.instrument.orderbook&.not_available? || arb.instrument.orderbook.updated_at < 1.minute.ago }
+    @arbitrage_groups = @arbitrages.group_by &:ticker
     Current.preload_day_candles_for @arbitrages.map(&:instrument).to_a
 
-    @arbitrage_groups = @arbitrages.group_by &:ticker
+    if request.xhr?
+      render partial: 'arbitrages'
+    else
+      render
+    end
   end
 end
