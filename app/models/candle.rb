@@ -170,6 +170,7 @@ class Candle < ApplicationRecord
   class Intraday < Candle
     def siblings = self.class.where(instrument: instrument, interval: interval)
     def previous = siblings.find_by(time: time - interval_duration)
+    def datetime = Time.parse("#{date} #{time} Z")
   end
 
   class H1 < Intraday

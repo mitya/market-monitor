@@ -8,6 +8,7 @@ class Order < ApplicationRecord
 
   class << self
     def sync
+      puts "Load orders"
       data = Tinkoff.orders
 
       where.not(id: data.pluck('orderId')).delete_all
@@ -21,7 +22,7 @@ class Order < ApplicationRecord
         order.kind          = hash['type']
         order.price         = hash['price']
         order.lots          = hash['requestedLots']
-        order.executed_lots = hash['executedLots']
+        order.lots_executed = hash['executedLots']
         order.save!
       end
     end

@@ -43,6 +43,10 @@ en:
       month: "%B"
       text: '%d %B %Y'
 
+  time:
+    formats:
+      hhmm: '%H:%M'
+
   datetime:
     distance_in_words:
       short:

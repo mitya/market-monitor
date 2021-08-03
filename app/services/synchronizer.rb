@@ -7,6 +7,7 @@ class Synchronizer
       Setting.save 'sync_books', ArbitrageCase.current_tickers
       Setting.get('sync_books', []).each { |ticker| Orderbook.sync ticker }
       Order.sync
+      Operation.sync
       puts "..."
       sleep 4
     end

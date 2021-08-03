@@ -2,6 +2,6 @@ tr
   td= instrument_logo_button order.instrument
   td= order.ticker
   td(class=red_green_class(order.buy?))= "#{order.operation} #{order.kind}"
-  td.money-cell= "#{number_with_delimiter order.executed_lots} of #{number_with_delimiter order.lots}"
+  td.money-cell= "#{number_with_delimiter order.lots_executed} of #{number_with_delimiter order.lots}"
   td.money-cell= number_to_currency order.price, unit: currency_span(order.instrument.currency), precision: 2
   td.money-cell= number_to_currency order.total, unit: currency_span(order.instrument.currency), precision: 2

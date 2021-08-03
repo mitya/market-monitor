@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_133818) do
+ActiveRecord::Schema.define(version: 2021_08_03_153919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -272,6 +272,22 @@ ActiveRecord::Schema.define(version: 2021_08_03_133818) do
     t.index ["isin"], name: "index_instruments_on_isin", unique: true
   end
 
+  create_table "operations", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.string "kind"
+    t.string "status"
+    t.datetime "datetime"
+    t.integer "lots"
+    t.integer "lots_executed"
+    t.decimal "price", precision: 20, scale: 2
+    t.decimal "payment", precision: 20, scale: 2
+    t.decimal "commission", precision: 20, scale: 2
+    t.string "currency"
+    t.integer "trades_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "option_item_specs", force: :cascade do |t|
     t.string "code"
     t.string "side"
@@ -315,7 +331,7 @@ ActiveRecord::Schema.define(version: 2021_08_03_133818) do
     t.string "kind"
     t.string "status"
     t.integer "lots"
-    t.integer "executed_lots"
+    t.integer "lots_executed"
     t.decimal "price", precision: 20, scale: 4
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -186,3 +186,7 @@ end
 envtask :arb do
   Synchronizer.call
 end
+
+envtask :m5 do
+  Tinkoff.load_trading_5m_candles
+end

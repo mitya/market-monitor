@@ -1,19 +1,13 @@
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.arbitrages-page')
-    refreshArbs = ->
-      html = await $fetchText "/arbitrages"
-      $q('.arbitrages-table').innerHTML = html
-
-    $bind '.buttons .x-refresh', 'click', ->
-      refreshArbs()
-
+    loadArbs = ->
+      $q('.arbitrages-table').innerHTML = await $fetchText "/arbitrages"
     loadOrders = ->
-      html = await $fetchText "/orders"
-      $q('.orders-table').innerHTML = html
+      $q('.orders-table').innerHTML = await $fetchText "/orders"
+    loadOperations = ->
+      $q('.operations-table').innerHTML = await $fetchText "/operations"
+
+    $bind '.buttons .x-refresh', 'click', -> loadArbs()
 
     loadOrders()
-
-    # setInterval(
-    #   -> refreshArbs()
-    #   5000
-    # )
+    loadOperations()

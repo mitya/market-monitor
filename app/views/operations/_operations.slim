@@ -1,0 +1,22 @@
+table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable
+  thead.table-dark
+    tr
+      th Time
+      th
+      th Ticker
+      th Type
+      th.money-cell Lots
+      th.money-cell Price
+      th.money-cell Total
+      th.money-cell Comm
+  tbody
+    - @operations.each do |operation|
+      tr
+        td= l operation.datetime.localtime, format: :hhmm
+        td= instrument_logo_button operation.instrument
+        td= operation.ticker
+        td(class=red_green_class(operation.buy?))= operation.kind
+        td.money-cell= "#{number_with_delimiter operation.lots_executed} of #{number_with_delimiter operation.lots}"
+        td.money-cell= number_to_currency operation.price, unit: currency_span(operation.currency), precision: 2
+        td.money-cell(class=red_green_class(operation.buy?))= number_to_currency operation.total.abs, unit: currency_span(operation.currency), precision: 2
+        td.money-cell= number_to_currency operation.commission, unit: currency_span(operation.currency), precision: 2

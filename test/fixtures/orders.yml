@@ -6,7 +6,7 @@ one:
   kind: MyString
   status: MyString
   lots: MyString
-  executed_lots: 1
+  lots_executed: 1
 
 two:
   ticker: MyString
@@ -14,4 +14,4 @@ two:
   kind: MyString
   status: MyString
   lots: MyString
-  executed_lots: 1
+  lots_executed: 1

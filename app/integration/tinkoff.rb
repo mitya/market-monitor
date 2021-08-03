@@ -237,8 +237,9 @@ class Tinkoff
   end
 
 
-  def call_js_api(command, parse: true, delay: 0)
+  def call_js_api(command, parse: true, delay: 0, account: nil)
     command = "coffee bin/tinkoff.coffee #{command}"
+    command = "TINKOFF_ACCOUNT=#{account} #{command}" if account
     puts command.purple if $log_tinkoff
     response = `#{command}`
     sleep delay if delay.to_f > 0
@@ -296,13 +297,27 @@ class Tinkoff
     import_candles_from_hash instrument, data
   end
 
+  def load_trading_5m_candles
+    date = Current.date
+    instruments = Instrument.get_all %w[CLF DK PBF ET]
+    instruments.each do |inst|
+      last_loaded_candle = Candle::M5.where(ticker: inst.ticker, date: date).order(:time).last
+      data = load_intervals inst, '5min', last_loaded_candle&.datetime || Current.date.midnight, Time.current + 5, delay: 0.25
+      import_candles_from_hash inst, data
+    end
+  end
+
   def book(instrument)
     instrument = Instrument[instrument]
     call_js_api "orderbook #{instrument.figi}"
   end
 
   def orders
-    call_js_api "orders"
+    call_js_api "orders", account: 'iis'
+  end
+
+  def operations(since: Current.ru_market_open_time, till: Time.current + 5.seconds)
+    call_js_api "operations _ _ #{since.xmlschema} #{till.xmlschema}", account: 'iis'
   end
 
   delegate :logger, to: :Rails

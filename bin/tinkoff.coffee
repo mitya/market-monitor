@@ -22,6 +22,8 @@ do ->
     }
     # await api.sandboxClear()
 
+    api.setCurrentAccountId(2019143573) if process.env.TINKOFF_ACCOUNT == 'iis'
+
     # api = new OpenAPI {
     #   apiURL: 'https://api-invest.tinkoff.ru/openapi/' # 'https://api-invest.tinkoff.ru/openapi'
     #   socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws'
@@ -36,14 +38,13 @@ do ->
       when 'search'        then print await api.search(ticker: 'MSFT')
       when 'candles'       then print await api.candlesGet({ figi, interval, from: since, to: till })
       when 'orderbook'     then print await api.orderbookGet(depth: 8, figi: figi)
-      when 'orders'
-        api.setCurrentAccountId(2019143573)
-        print await api.orders()
+      when 'orders'        then print await api.orders()
       when 'portfolio'     then print await api.portfolio()
       when 'portfolio-iis'
         api.setCurrentAccountId(2019143573)
         print await api.portfolio()
       when 'accounts'      then print await api.accounts()
+      when 'operations'    then print await api.operations({ from: since, to: till })
 
   catch error
     print { error }
