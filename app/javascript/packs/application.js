@@ -7,6 +7,7 @@ import { Modal } from 'bootstrap'
 import ApexCharts from 'apexcharts'
 import 'pages/init'
 import 'pages/charts'
+import 'pages/sync'
 // import "channels"
 
 document.addEventListener("turbolinks:load", () => {
