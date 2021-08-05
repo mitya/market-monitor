@@ -2,6 +2,7 @@
 - format = 'diff'
 - format = 'price'
 - format = 'chart'
+- format = params[:view] || 'chart'
 
 main.container-fluid
   h1.display-3 Trading
@@ -14,9 +15,23 @@ main.container-fluid
           th.money-cell Close
           th.money-cell ﹪
           th.money-cell Open
-          th.money-cell.border-end.pe-2 ﹪
+          th.money-cell
+          th.money-cell ﹪
+          th.money-cell.border-end.pe-2 Last
           - if format == 'chart'
             th
+              .chart-hours
+                .hour.half-hour 9:30
+                .hour 10
+                .hour 11
+                .hour 12
+                .hour 1
+                .hour 2
+                .hour 3
+                .hour.aftermarket 4
+                .hour.aftermarket 5
+                .hour.aftermarket 6
+                .hour.aftermarket 7
           - else
             - @minutes.each do |minutes|
               th.money-cell= format_as_minutes_since 9 * 60 + 30, minutes
@@ -24,14 +39,34 @@ main.container-fluid
         - @instruments.each do |instrument|
           - inst = instrument
           - info = instrument.info
+          - last = @lasts[inst.ticker].close
+          - open = @opens[inst.ticker]&.open
           tr
             td.ticker-cell
               => instrument_logo_button inst
               = instrument.ticker
-            td.money-cell= number_to_currency inst.d1_ago_close, unit: currency_span(inst.currency), precision: 2
-            td.money-cell= relative_price inst.last, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1
-            td.money-cell= relative_price @opens[inst.ticker], inst.d1_ago_close, unit: inst.currency, format: 'absolute', percentage_precision: 1
-            td.money-cell.border-end.pe-2= relative_price inst.last, @opens[inst.ticker], unit: inst.currency, format: 'relative', percentage_precision: 1
+            td.money-cell
+              = format_price inst.d1_ago_close, unit: inst.currency
+            td.money-cell
+              = relative_price open, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1
+            td.money-cell
+              span.opacity-30= format_price @highs[inst.ticker]&.high, unit: inst.currency
+              br
+              = relative_price open, inst.d1_ago_close, unit: inst.currency, format: 'absolute'
+              br
+              span.opacity-30= format_price @lows[inst.ticker]&.low, unit: inst.currency
+            td.money-cell
+              span.opacity-30= relative_price last, @highs[inst.ticker]&.high,  unit: inst.currency, format: 'relative', percentage_precision: 1
+              br
+              = relative_price last, open, unit: inst.currency, format: 'relative', percentage_precision: 1
+              br
+              span.opacity-30= relative_price last, @lows[inst.ticker]&.low,   unit: inst.currency, format: 'relative', percentage_precision: 1
+            td.wide-bars(class=red_green_class(open && last > open))
+              .d-inline-block.ps-1= percentage_bar price_ratio(last, open)
+            td.money-cell.border-end.pe-2
+              = relative_price last, open, unit: inst.currency, format: 'absolute'
+
+
             - candles_by_time = @candles_by_ticker_time[inst.ticker]
             - if format == 'chart'
               td

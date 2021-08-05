@@ -43,6 +43,11 @@ namespace :iex do
       dates += Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
       dates += Current::SpecialDates.dates_plus                if R.true?('special')
       dates -= [Current.date]
+
+      if till = ENV['till'].to_date
+        dates.reject! { |date| date > till }
+      end
+
       dates = Current.last_2_weeks if dates.empty?
       dates = dates - MarketCalendar.nyse_holidays.to_a
       dates.uniq.sort.reverse.each do |date|

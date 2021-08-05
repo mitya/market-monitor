@@ -19,10 +19,13 @@ class PantiniArbitrageParser
     return if lines.blank?
     lines.reject! { |line| line.include?('Курс') }
     lines.reject! { |line| line.include?('Последнее обновление') }
+    lines.reject! { |line| line.include?('Арбитражных ситуаций не обнаружено') }
+    lines.reject! { |line| line.include?('Sync arbitrages from US') }
 
     groups = lines.in_groups_of(3)
     groups.each do |group|
       ticker_line, spb_line, foreign_line = group
+      next if [ticker_line, spb_line, foreign_line].any?(&:blank?)
 
       long = ticker_line.include?('💚')
       delisted = ticker_line.include?('💤')
@@ -64,3 +67,4 @@ class PantiniArbitrageParser
 end
 
 __END__
+PantiniArbitrageParser.connect 'US'

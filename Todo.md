@@ -24,20 +24,16 @@
 + show orders list
 + show operations
 + 5-min overview page
++ orders / operations / portfolio page
++ show portfolio
++ 5 min accumulation bar chart
 
-- 5-min morning data
-- 5-min chart similar to volatility chart
-- 5 min accumulation bar chart
-
-- read some reports
-- arb list non-jerky refresh
-- orders / operations / portfolio page
-
-- show portfolio
 - the arb Buy button
+
+- 5-min morning data & fill gaps in 5m candles
+
 - show price targets on arb page
-
-
+- arb list non-jerky refresh
 - show correction since 6-m high and gains since after-high low
 - highlight signalled tickers in SPB list
 - compare Tinkoff highs / lows with IEX

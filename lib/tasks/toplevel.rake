@@ -89,7 +89,10 @@ envtask :check_dead do
 end
 
 envtask :destroy do
-  Instrument[ENV['ticker']].destroy!
+  ENV['ticker'].to_s.split.each do |ticker|
+    puts "Destroy #{ticker}"
+    Instrument[ticker].destroy! if ENV['ok']
+  end
 end
 
 envtask :destroy_all_dead do
@@ -188,5 +191,13 @@ envtask :arb do
 end
 
 envtask :m5 do
-  Tinkoff.load_trading_5m_candles
+  loop do
+    puts "Syncing M5..."
+    Tinkoff.load_trading_5m_candles
+    loop do
+      sleep 5
+      time = Time.current
+      break if time.min % 5 == 0 && time.sec < 9
+    end
+  end
 end

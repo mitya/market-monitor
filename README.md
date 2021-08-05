@@ -67,6 +67,7 @@ rake tinkoff:logos:download
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1
 rake iex:days:missing since=2020-01-01 ok=1
+rake iex:symbols:load iex:symbols:refresh
 
 ## Optional
 rake iex:days:period period=ytd

@@ -112,29 +112,28 @@ module InstrumentsHelper
     end
   end
 
-  def m5_chart(candles, direction: )
+  def m5_chart(candles, direction:)
+    return unless candles && candles.values
     open = candles.values.first&.open
-    base = open
-    return if not base
+    return if not open
     candles.map do |time, candle|
-      # if candle.direction != direction
-      #   next
-      # end
-
-
-      klass = 'high'
-      title = time
       diff = (candle.close - open) / open
-      diff = diff * -1 if direction == 'down'
-      # diff = diff * -1 if candle.close < open
-      title = "#{time} #{candle.close} #{diff.round(3)}"
-      html = tag.span class: 'candle' do
-        # tag.span(class: "candle-above volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_above * 100 * 5}px", title: title) +
-        tag.span(class: "candle-body  volatility-bar volatility-#{klass} direction-#{candle.direction}", style: "height: #{diff  * 100 * 20}px", title: title)
+      high_diff = (candle.high - open) / open - diff
+      low_diff = (candle.low - open) / open - diff
+      positive = diff > 0
+      diff *= -1 if direction == 'down'
+      title = direction == 'up' ?
+        "#{time[0, 5]} C #{candle.close} #{diff.round(4) * 100}% — H #{candle.high} +#{high_diff.round(4) * 100}%" :
+        "#{time[0, 5]} C #{candle.close} #{diff.round(4) * 100}% — L #{candle.low} -#{low_diff.round(4) * 100}%"
+      scale = 1000
+      tag.span class: 'candle' do
+        (
+          (direction == 'up' && positive ? tag.span(class: "candle-above volatility-bar volatility-high spike direction-up", style: "height: #{(high_diff * scale).round}px") : '') +
+          tag.span(class: "candle-body volatility-bar volatility-high direction-#{direction}", style: "height: #{(diff * scale).round}px", title: title) +
+          (direction == 'down' && !positive ? tag.span(class: "candle-above volatility-bar volatility-high spike direction-down", style: "height: #{(-low_diff * scale).round}px") : '')
+        ).html_safe
         # tag.span(class: "candle-below volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_below * 100 * 5}px", title: title)
       end
-      base = candle.close
-      html
     end.join.html_safe
   end
 

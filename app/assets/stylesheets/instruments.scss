@@ -89,8 +89,9 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 .opacity-05 { opacity: 0.5; }
 
-.percentage-bar { display: inline-block; width: 4px; margin-right: 2px; }
-.percentage-bars { height: 20px; }
+.wide-bars .percentage-bar { width: 8px; margin-right: 1px; }
+.percentage-bar { display: inline-block; width: 4px; margin-right: 2px;  }
+.percentage-bars { height: 20px; white-space: nowrap; }
 .percentage-bar { background-color: gray; }
 .is-green .percentage-bar { background-color: green; }
 .is-red .percentage-bar { background-color: red; }
@@ -143,11 +144,21 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 
 .trading-table {
+  td { vertical-align: middle; }
   td.money-cell { min-width: 50px; }
   td.ticker-cell { min-width: 70px; }
   td:first-child { position: sticky; left: 0; background-color: white; opacity: 0.9; }
 }
 
 .volatility-chart.m5-chart {
-  .candle { margin-right: 3px; }
+  .candle { margin-right: 2px; }
+  .candle-body { width: 8px; }
+  // .candle:nth-child(12n) { border-right: 1px solid #ccc; }
+}
+
+.chart-hours {
+  display: flex;
+  .hour { width: 120px; border-right: 1px solid #ccc; padding-left: 2px; }
+  .hour.half-hour { width: 60px; }
+  .hour.aftermarket { opacity: 0.5; }
 }
