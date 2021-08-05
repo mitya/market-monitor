@@ -8,6 +8,7 @@ class Synchronizer
       Setting.get('sync_books', []).each { |ticker| Orderbook.sync ticker }
       Order.sync
       Operation.sync
+      Tinkoff.sync_iis
       puts "..."
       sleep 4
     end

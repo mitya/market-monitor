@@ -1,0 +1,17 @@
+table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable
+  thead.table-dark
+    tr
+      th
+      th Ticker
+      th.money-cell Lots
+      th.money-cell Price
+      th.money-cell Total
+  tbody
+    - @items.each do |item|
+      - inst = item.instrument
+      tr
+        td= instrument_logo_button inst
+        td= inst.ticker
+        td.money-cell= number_with_delimiter item.tinkoff_iis_lots
+        td.money-cell= number_to_currency inst.last, unit: currency_span(inst.currency), precision: 2
+        td.money-cell= number_to_currency item.total_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2

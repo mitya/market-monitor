@@ -5,6 +5,11 @@ class OrdersController < ApplicationController
     @buys   = @orders.select &:buy?
     @sells  = @orders.select &:sell?
 
-    on_xhr_render :orders
+    if request.xhr?
+      render json: {
+        buys: render_to_string(partial: 'orders_table', locals: { title: 'Buys', orders: @buys }),
+        sells: render_to_string(partial: 'orders_table', locals: { title: 'Buys', orders: @sells })
+      }
+    end
   end
 end

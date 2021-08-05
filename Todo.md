@@ -25,10 +25,18 @@
 + show operations
 + 5-min overview page
 
+- 5-min morning data
+- 5-min chart similar to volatility chart
+- 5 min accumulation bar chart
+
+- read some reports
+- arb list non-jerky refresh
+- orders / operations / portfolio page
+
 - show portfolio
 - the arb Buy button
 - show price targets on arb page
-- orders / operations / portfolio page
+
 
 - show correction since 6-m high and gains since after-high low
 - highlight signalled tickers in SPB list

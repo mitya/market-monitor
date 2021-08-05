@@ -13,4 +13,7 @@ class TradingController < ApplicationController
     Current.preload_day_candles_with @instruments.to_a, []
     Current.preload_prices_for @instruments.to_a
   end
+
+  def activities    
+  end
 end

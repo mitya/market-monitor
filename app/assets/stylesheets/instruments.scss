@@ -59,6 +59,7 @@ th[data-sort] { cursor: pointer; }
 
 .candle { display: flex; flex-direction: column; justify-content: flex-end; align-content: center; margin-right: 3px; }
 .volatility-chart { display: flex; flex-direction: row; }
+.volatility-chart.chart-down { align-items: end; }
 
 .volatility-value.volatility-low { color: rgba(black, 0.25); }
 .volatility-value.volatility-mid { color: rgba(black, 0.5); }
@@ -145,4 +146,8 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
   td.money-cell { min-width: 50px; }
   td.ticker-cell { min-width: 70px; }
   td:first-child { position: sticky; left: 0; background-color: white; opacity: 0.9; }
+}
+
+.volatility-chart.m5-chart {
+  .candle { margin-right: 3px; }
 }

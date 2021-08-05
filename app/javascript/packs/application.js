@@ -9,6 +9,7 @@ import 'pages/helpers'
 import 'pages/init'
 import 'pages/charts'
 import 'pages/sync'
+import 'pages/dashboard'
 // import "channels"
 
 document.addEventListener("turbolinks:load", () => {

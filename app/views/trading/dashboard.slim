@@ -1,3 +1,8 @@
+- format = 'volume'
+- format = 'diff'
+- format = 'price'
+- format = 'chart'
+
 main.container-fluid
   h1.display-3 Trading
 
@@ -10,8 +15,11 @@ main.container-fluid
           th.money-cell ﹪
           th.money-cell Open
           th.money-cell.border-end.pe-2 ﹪
-          - @minutes.each do |minutes|
-            th.money-cell= format_as_minutes_since 9 * 60 + 30, minutes
+          - if format == 'chart'
+            th
+          - else
+            - @minutes.each do |minutes|
+              th.money-cell= format_as_minutes_since 9 * 60 + 30, minutes
       tbody
         - @instruments.each do |instrument|
           - inst = instrument
@@ -25,6 +33,19 @@ main.container-fluid
             td.money-cell= relative_price @opens[inst.ticker], inst.d1_ago_close, unit: inst.currency, format: 'absolute', percentage_precision: 1
             td.money-cell.border-end.pe-2= relative_price inst.last, @opens[inst.ticker], unit: inst.currency, format: 'relative', percentage_precision: 1
             - candles_by_time = @candles_by_ticker_time[inst.ticker]
-            - @minutes.each do |minute|
-              - change = candles_by_time["#{format_as_minutes_since 13 * 60 + 30, minute}:00"]&.rel_change
-              td.money-cell(class=red_green_class(change && change > 0))= number_with_precision change * 100, precision: 2 if change
+            - if format == 'chart'
+              td
+                .volatility-chart.m5-chart.chart-up=   m5_chart candles_by_time, direction: 'up'
+                .volatility-chart.m5-chart.chart-down= m5_chart candles_by_time, direction: 'down'
+            - else
+              - @minutes.each do |minute|
+                - candle = candles_by_time["#{format_as_minutes_since 13 * 60 + 30, minute}:00"]
+                - if format == 'price'
+                  - close = candle&.close
+                  td.money-cell(class=red_green_class(candle&.change && candle&.change > 0))= number_with_precision close, precision: 2
+                - elsif format == 'diff'
+                  - change = candle&.rel_change
+                  td.money-cell(class=red_green_class(change && change > 0))= number_with_precision change * 100, precision: 2 if change
+                - elsif format == 'diff'
+                  - change = candle&.volume if candles_by_time
+                  td.money-cell= number_with_delimiter change if change

@@ -3,6 +3,10 @@ class PortfolioItem < ApplicationRecord
 
   scope :empty, -> { where tinkoff_lots: nil, tinkoff_iis_lots: nil, vtb_lots: nil }
 
+  def total_on(account_name)
+    send("#{account_name}_lots").to_i * instrument.last
+  end
+
   def cost
     lots = total_lots
     lots * instrument.last if lots && instrument.last

@@ -112,6 +112,32 @@ module InstrumentsHelper
     end
   end
 
+  def m5_chart(candles, direction: )
+    open = candles.values.first&.open
+    base = open
+    return if not base
+    candles.map do |time, candle|
+      # if candle.direction != direction
+      #   next
+      # end
+
+
+      klass = 'high'
+      title = time
+      diff = (candle.close - open) / open
+      diff = diff * -1 if direction == 'down'
+      # diff = diff * -1 if candle.close < open
+      title = "#{time} #{candle.close} #{diff.round(3)}"
+      html = tag.span class: 'candle' do
+        # tag.span(class: "candle-above volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_above * 100 * 5}px", title: title) +
+        tag.span(class: "candle-body  volatility-bar volatility-#{klass} direction-#{candle.direction}", style: "height: #{diff  * 100 * 20}px", title: title)
+        # tag.span(class: "candle-below volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_below * 100 * 5}px", title: title)
+      end
+      base = candle.close
+      html
+    end.join.html_safe
+  end
+
 
   def currency_sign(currency_code)
     CurrencySigns[currency_code.to_s.to_sym] || currency_code

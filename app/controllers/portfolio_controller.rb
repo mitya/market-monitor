@@ -11,4 +11,9 @@ class PortfolioController < ApplicationController
     end
     render json: item
   end
+
+  def index
+    @items = PortfolioItem.where('tinkoff_iis_lots > 0').order(:ticker)
+    render partial: 'items'
+  end
 end

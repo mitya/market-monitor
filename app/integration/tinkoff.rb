@@ -258,6 +258,7 @@ class Tinkoff
   end
 
   def sync_portfolio(data, account)
+    puts "Sync tinkoff portfolio '#{account}'"
     data['positions'].to_a.each do |position|
       ticker = position['ticker']
       next if position['instrumentType'] == 'Currency'
@@ -276,6 +277,10 @@ class Tinkoff
     sync_portfolio call_js_api("portfolio"), 'tinkoff'
     sync_portfolio call_js_api("portfolio-iis"), 'tinkoff_iis'
     cleanup_portfolio
+  end
+
+  def sync_iis
+    sync_portfolio call_js_api("portfolio-iis"), 'tinkoff_iis'
   end
 
   def cleanup_portfolio
