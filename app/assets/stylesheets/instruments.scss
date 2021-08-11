@@ -58,6 +58,7 @@ th[data-sort] { cursor: pointer; }
 
 
 .candle { display: flex; flex-direction: column; justify-content: flex-end; align-content: center; margin-right: 3px; }
+.candle-placeholder { width: 8px}
 .volatility-chart { display: flex; flex-direction: row; }
 .volatility-chart.chart-down { align-items: end; }
 

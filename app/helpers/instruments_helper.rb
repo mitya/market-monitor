@@ -113,10 +113,12 @@ module InstrumentsHelper
   end
 
   def m5_chart(candles, direction:)
-    return unless candles && candles.values
-    open = candles.values.first&.open
-    return if not open
-    candles.map do |time, candle|
+    open = candles.compact.first&.open if candles
+    return unless open
+
+    candles.map do |candle|
+      next tag.span(class: 'candle candle-placeholder') unless candle
+      time = ''
       diff = (candle.close - open) / open
       high_diff = (candle.high - open) / open - diff
       low_diff = (candle.low - open) / open - diff

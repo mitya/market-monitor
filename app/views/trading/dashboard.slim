@@ -3,6 +3,7 @@
 - format = 'price'
 - format = 'chart'
 - format = params[:view] || 'chart'
+- market_open_time_in_mins = 9 * 60 + 30
 
 main.container-fluid
   h1.display-3 Trading
@@ -21,25 +22,37 @@ main.container-fluid
           - if format == 'chart'
             th
               .chart-hours
-                .hour.half-hour 9:30
-                .hour 10
-                .hour 11
-                .hour 12
-                .hour 1
-                .hour 2
-                .hour 3
-                .hour.aftermarket 4
-                .hour.aftermarket 5
-                .hour.aftermarket 6
-                .hour.aftermarket 7
+                - if @is_morning
+                  .hour.aftermarket 7
+                  .hour.aftermarket 8
+                  .hour.aftermarket 9
+                  .hour 10
+                  .hour 11
+                  .hour 12
+                  .hour 13
+                  .hour 14
+                  .hour 15
+                  .hour 16
+                - else
+                  .hour.half-hour 9:30
+                  .hour 10
+                  .hour 11
+                  .hour 12
+                  .hour 1
+                  .hour 2
+                  .hour 3
+                  .hour.aftermarket 4
+                  .hour.aftermarket 5
+                  .hour.aftermarket 6
+                  .hour.aftermarket 7
           - else
             - @minutes.each do |minutes|
-              th.money-cell= format_as_minutes_since 9 * 60 + 30, minutes
+              th.money-cell= format_as_minutes_since @market_open_time_in_mins, minutes
       tbody
         - @instruments.each do |instrument|
           - inst = instrument
           - info = instrument.info
-          - last = @lasts[inst.ticker].close
+          - last = @lasts[inst.ticker]&.close
           - open = @opens[inst.ticker]&.open
           tr
             td.ticker-cell
@@ -66,15 +79,14 @@ main.container-fluid
             td.money-cell.border-end.pe-2
               = relative_price last, open, unit: inst.currency, format: 'absolute'
 
-
-            - candles_by_time = @candles_by_ticker_time[inst.ticker]
             - if format == 'chart'
               td
-                .volatility-chart.m5-chart.chart-up=   m5_chart candles_by_time, direction: 'up'
-                .volatility-chart.m5-chart.chart-down= m5_chart candles_by_time, direction: 'down'
+                .volatility-chart.m5-chart.chart-up=   m5_chart @candles_by_ticker[inst.ticker], direction: 'up'
+                .volatility-chart.m5-chart.chart-down= m5_chart @candles_by_ticker[inst.ticker], direction: 'down'
             - else
+              - candles_by_time = @candles_by_ticker_time[inst.ticker]
               - @minutes.each do |minute|
-                - candle = candles_by_time["#{format_as_minutes_since 13 * 60 + 30, minute}:00"]
+                - candle = candles_by_time["#{format_as_minutes_since @market_open_time_in_mins_utc, minute}:00"]
                 - if format == 'price'
                   - close = candle&.close
                   td.money-cell(class=red_green_class(candle&.change && candle&.change > 0))= number_with_precision close, precision: 2

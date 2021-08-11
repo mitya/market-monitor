@@ -1,4 +1,4 @@
-window.$fetch = (url, { data, ...options }) ->
+window.$fetch = (url, { data, ...options } = { }) ->
   options ?= {}
   options.headers ?= {}
   options.headers['X-Requested-With'] = 'XMLHttpRequest'
