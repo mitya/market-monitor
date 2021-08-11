@@ -128,11 +128,13 @@ module InstrumentsHelper
         "#{time[0, 5]} C #{candle.close} #{diff.round(4) * 100}% — H #{candle.high} +#{high_diff.round(4) * 100}%" :
         "#{time[0, 5]} C #{candle.close} #{diff.round(4) * 100}% — L #{candle.low} -#{low_diff.round(4) * 100}%"
       scale = 1000
+      candle_color = direction == 'up' ? 'direction-up' : 'direction-down'
+      candle_color = candle.up?? 'direction-up' : 'direction-down'
       tag.span class: 'candle' do
         (
-          (direction == 'up' && positive ? tag.span(class: "candle-above volatility-bar volatility-high spike direction-up", style: "height: #{(high_diff * scale).round}px") : '') +
-          tag.span(class: "candle-body volatility-bar volatility-high direction-#{direction}", style: "height: #{(diff * scale).round}px", title: title) +
-          (direction == 'down' && !positive ? tag.span(class: "candle-above volatility-bar volatility-high spike direction-down", style: "height: #{(-low_diff * scale).round}px") : '')
+          (direction == 'up' && positive ? tag.span(class: "candle-above volatility-bar volatility-high spike #{candle_color}", style: "height: #{(high_diff * scale).round}px") : '') +
+          tag.span(class: "candle-body volatility-bar volatility-high #{candle_color}", style: "height: #{(diff * scale).round}px", title: title) +
+          (direction == 'down' && !positive ? tag.span(class: "candle-above volatility-bar volatility-high spike #{candle_color}", style: "height: #{(-low_diff * scale).round}px") : '')
         ).html_safe
         # tag.span(class: "candle-below volatility-bar volatility-#{klass} direction-#{direction}", style: "height: #{candle.volatility_below * 100 * 5}px", title: title)
       end

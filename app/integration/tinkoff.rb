@@ -265,7 +265,9 @@ class Tinkoff
       next if position['instrumentType'] == 'Currency'
       next puts "Missing #{ticker} (used in portfolio)".red if !Instrument.get(ticker)
       item = PortfolioItem.find_or_create_by(ticker: ticker)
-      item.update! "#{account}_lots" => position['balance']
+      item.update! "#{account}_lots" => position['balance'],
+        "#{account}_average" => position.dig('averagePositionPrice', 'value'),
+        "#{account}_yield" => position.dig('expectedYield', 'value')
     end
     PortfolioItem.where.not(ticker: data['positions'].map { |p| p['ticker'] }).find_each do |item|
       puts "Missing #{item.instrument} (which is in portfolio)".red unless item.instrument

@@ -10,11 +10,13 @@ class ArbitragesController < ApplicationController
     @arbitrage_groups = @arbitrages.group_by &:ticker
     Current.preload_day_candles_for @arbitrages.map(&:instrument).to_a
 
+    @long_arbitrage_groups, @short_arbitrage_groups = @arbitrage_groups.partition { |ticker, group| group.any? &:long? }
+
     on_xhr_render :arbitrages
   end
 
   def limit_order
-    response = Tinkoff.limit_order(params[:ticker], params[:operation], params[:price], params[:lots])
+    response = Tinkoff.limit_order(params[:ticker], params[:operation], params[:lots], params[:price])
     render json: response
   end
 end

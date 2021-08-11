@@ -15,9 +15,9 @@ table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable.v-
       th.money-cell ﹪
       th.money-cell Diff
       th Exchange
-      th.money-cell Bid
+      th.money-cell Local
       th.money-cell
-      th.money-cell Ask
+      th.money-cell Foreign
       th.money-cell
       th.money-cell
       th.money-cell
@@ -26,66 +26,72 @@ table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable.v-
       th.money-cell
       th.money-cell
   tbody
-    - @arbitrage_groups.each do |ticker, arbs|
-      - arb = arbs.first
-      - inst = arb.instrument
-      tr
-        td.money-cell= relative_price inst.d1_ago_close, inst.d3_ago_open, unit: inst.currency, format: 'relative'
-        td.money-cell= relative_price inst.d1_ago_close, inst.d2_ago_open, unit: inst.currency, format: 'relative'
-        td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'relative'
-        td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'absolute'
-        td= country_flag inst
-        td= instrument_logo_button inst
-        td= arb.ticker
-        td= known_icon inst
-        td= type_icon inst
-        td= sector_badge inst
-        td.money-cell= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
-        td.money-cell(class=red_green_class(arb.long?))= number_to_percentage arb.percent, precision: 1
-        td.money-cell(class=red_green_class(arb.long?))= number_to_currency arb.diff, unit: currency_span(inst.currency), precision: 2
-        td.money-cell
-        td.money-cell(class=class_names('is-red': arb.short?))= number_to_currency arb.spb_bid, unit: currency_span(inst.currency), precision: 2
-        td.money-cell= arb.spb_bid_size
-        td.money-cell(class=class_names('is-green': arb.long?))= number_to_currency arb.spb_ask, unit: currency_span(inst.currency), precision: 2
-        td.money-cell= arb.spb_ask_size
-        - if inst.orderbook&.available?
-          td.money-cell= buy_button inst.ticker, inst.orderbook&.ask_price_on(0), inst.orderbook&.ask_size_on(0), muted: arb.buy_price < inst.orderbook&.ask_price_on(0)
-          td.money-cell= buy_button inst.ticker, inst.orderbook&.ask_price_on(1), inst.orderbook&.ask_size_on(1), muted: arb.buy_price < inst.orderbook&.ask_price_on(1)
-          td.money-cell= buy_button inst.ticker, inst.orderbook&.ask_price_on(2), inst.orderbook&.ask_size_on(2), muted: arb.buy_price < inst.orderbook&.ask_price_on(2)
-          td.money-cell= buy_button inst.ticker, inst.orderbook&.ask_price_on(3), inst.orderbook&.ask_size_on(3), muted: arb.buy_price < inst.orderbook&.ask_price_on(3)
-          td.money-cell= buy_button inst.ticker, inst.orderbook&.ask_price_on(4), inst.orderbook&.ask_size_on(4), muted: arb.buy_price < inst.orderbook&.ask_price_on(4)
-        - else
-          td.money-cell
-            span.badge.bg-secondary= inst.orderbook&.status || 'Offline'
-          td.money-cell
-          td.money-cell
-          td.money-cell
-        td.money-cell= seconds_ago inst.orderbook&.updated_at
+    - arbitrage_groups.each do |ticker, arbs|
       - arbs.each do |arb|
-        tr.opacity-30
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
+        - arb = arbs.first
+        - inst = arb.instrument
+        tr
+          td.money-cell= relative_price inst.d1_ago_close, inst.d3_ago_open, unit: inst.currency, format: 'relative'
+          td.money-cell= relative_price inst.d1_ago_close, inst.d2_ago_open, unit: inst.currency, format: 'relative'
+          td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'relative'
+          td.money-cell= relative_price inst.d1_ago_close, inst.d1_ago_open, unit: inst.currency, format: 'absolute'
+          td= country_flag inst
+          td= instrument_logo_button inst
+          td= arb.ticker
+          td= known_icon inst
+          td= type_icon inst
+          td= sector_badge inst
+          td.money-cell= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+          td.money-cell(class=red_green_class(arb.long?))= number_to_percentage arb.percent, precision: 1
+          td.money-cell(class=red_green_class(arb.long?))= number_to_currency arb.diff, unit: currency_span(inst.currency), precision: 2
           td
             => arb_exchange_flag arb.exchange_code
             = arb_exchange_code arb.exchange_code
-          td.money-cell(class=class_names('is-red': arb.long?))= number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2
-          td.money-cell= arb.foreign_bid_size
-          td.money-cell(class=class_names('is-green': arb.short?))= number_to_currency arb.foreign_ask, unit: currency_span(inst.currency), precision: 2
-          td.money-cell= arb.foreign_ask_size
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell
-          td.money-cell= seconds_ago arb.updated_at
+          td.money-cell(class=red_green_class(arb.long?))
+            = number_to_currency arb.send(arb.local_source), unit: currency_span(inst.currency), precision: 2
+          td.money-cell= arb.send("#{arb.local_source}_size")
+          td.money-cell(class=red_green_class(!arb.long?))
+            = number_to_currency arb.send(arb.foreign_source), unit: currency_span(inst.currency), precision: 2
+          td.money-cell= arb.send("#{arb.foreign_source}_size")
+          - if inst.orderbook&.available?
+            - (0..4).each do |depth|
+              td.money-cell
+                - if arb.long?
+                  = buy_button inst.ticker, inst.orderbook&.ask_price_on(depth), inst.orderbook&.ask_size_on(depth), muted: arb.sell_price < inst.orderbook&.ask_price_on(depth)
+                - else
+                  = sell_button inst.ticker, inst.orderbook&.bid_price_on(depth), inst.orderbook&.bid_size_on(depth), muted: arb.buy_price > inst.orderbook&.bid_price_on(depth)
+          - else
+            td.money-cell
+              span.badge.bg-secondary= inst.orderbook&.status || 'Offline'
+            td.money-cell
+            td.money-cell
+            td.money-cell
+          td.money-cell= seconds_ago inst.orderbook&.updated_at
+        / - arbs.each do |arb|
+        /   tr.opacity-30
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td
+        /       => arb_exchange_flag arb.exchange_code
+        /       = arb_exchange_code arb.exchange_code
+        /     td.money-cell(class=class_names('is-red': arb.long?))= number_to_currency arb.foreign_bid, unit: currency_span(inst.currency), precision: 2
+        /     td.money-cell= arb.foreign_bid_size
+        /     td.money-cell(class=class_names('is-green': arb.short?))= number_to_currency arb.foreign_ask, unit: currency_span(inst.currency), precision: 2
+        /     td.money-cell= arb.foreign_ask_size
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell
+        /     td.money-cell= seconds_ago arb.updated_at

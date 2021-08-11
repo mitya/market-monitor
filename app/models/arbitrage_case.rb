@@ -4,6 +4,9 @@ class ArbitrageCase < ApplicationRecord
   def diff = long?? foreign_bid - spb_ask : spb_bid - foreign_ask
   def short? = !long?
   def buy_price = long?? spb_ask : foreign_ask
+  def sell_price = long?? foreign_bid : spb_bid
+  def local_source = long?? :spb_ask : :spb_bid
+  def foreign_source = long?? :foreign_bid : :foreign_ask
 
   class << self
     def current_tickers

@@ -3,6 +3,8 @@ class Orderbook < ApplicationRecord
 
   def ask_price_on(index) = asks&.dig(index, 0)
   def ask_size_on(index)  = asks&.dig(index, 1)
+  def bid_price_on(index) = bids&.dig(index, 0)
+  def bid_size_on(index)  = bids&.dig(index, 1)
 
   def available? = status == 'NormalTrading'
   def not_available? = status == 'NotAvailableForTrading'

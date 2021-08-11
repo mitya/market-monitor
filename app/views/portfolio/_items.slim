@@ -6,6 +6,8 @@ table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable
       th.money-cell Lots
       th.money-cell Price
       th.money-cell Total
+      th.money-cell Cost
+      th.money-cell Yield
   tbody
     - @items.each do |item|
       - inst = item.instrument
@@ -15,3 +17,5 @@ table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable
         td.money-cell= number_with_delimiter item.tinkoff_iis_lots
         td.money-cell= number_to_currency inst.last, unit: currency_span(inst.currency), precision: 2
         td.money-cell= number_to_currency item.total_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2
+        td.money-cell= number_to_currency item.average_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2
+        td.money-cell(class=red_green_class(item.yield_on(:tinkoff_iis) > 0))= number_to_currency item.yield_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2

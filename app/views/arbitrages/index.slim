@@ -4,5 +4,5 @@ main.container-fluid.arbitrages-page
   .buttons.my-3
     button.btn.btn-primary.x-refresh= fa_icon :sync
 
-  .arbitrages-table
-    = render 'arbitrages'
+  .arbitrages-table= render 'arbitrages', arbitrage_groups: @long_arbitrage_groups
+  .arbitrages-table.mt-5= render 'arbitrages', arbitrage_groups: @short_arbitrage_groups

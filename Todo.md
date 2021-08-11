@@ -27,10 +27,14 @@
 + orders / operations / portfolio page
 + show portfolio
 + 5 min accumulation bar chart
++ the ask Buy button
++ move buy/sell indication to best bid/ask
++ format arb table in one line
++ indicate average price in portfolio
 
-- the ask Buy button
-- move buy/sell indication to best bid/ask
-- show bids & sell buttons
+- order cancellation button
+- activity page refresh
+- modal with L2 and buy / sell buttons
 
 - once a day set price to last for tickers without the IEX price data
 - 5-min morning data & fill gaps in 5m candles
