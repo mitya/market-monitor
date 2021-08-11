@@ -162,3 +162,11 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
   .hour.half-hour { width: 60px; }
   .hour.aftermarket { opacity: 0.5; }
 }
+
+.v-center-cells td {
+  vertical-align: middle;
+}
+
+.limit-order-button {
+  min-width: 90px; text-align: right
+}

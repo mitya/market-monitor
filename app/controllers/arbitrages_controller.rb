@@ -1,4 +1,6 @@
 class ArbitragesController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def index
     Setting.save 'sync_exchanges', %w[XFRA TG US]
     Setting.save 'sync_books', %w[CLF DK M MAC]
@@ -9,5 +11,10 @@ class ArbitragesController < ApplicationController
     Current.preload_day_candles_for @arbitrages.map(&:instrument).to_a
 
     on_xhr_render :arbitrages
+  end
+
+  def limit_order
+    response = Tinkoff.limit_order(params[:ticker], params[:operation], params[:price], params[:lots])
+    render json: response
   end
 end

@@ -20,7 +20,9 @@ Rails.application.routes.draw do
   resources :public_signals
   resources :portfolio, as: :portfolio_items
   resources :level_hits
-  resources :arbitrages, only: %i[index]
+  resources :arbitrages, only: %i[index] do
+    post :limit_order, on: :collection
+  end
   resources :orders, only: %i[index]
   resources :operations, only: %i[index]
   resource :trading, only: %i[], controller: :trading do

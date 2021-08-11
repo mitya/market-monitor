@@ -28,10 +28,12 @@
 + show portfolio
 + 5 min accumulation bar chart
 
-- the arb Buy button
+- the ask Buy button
+- move buy/sell indication to best bid/ask
+- show bids & sell buttons
 
+- once a day set price to last for tickers without the IEX price data
 - 5-min morning data & fill gaps in 5m candles
-
 - show price targets on arb page
 - arb list non-jerky refresh
 - show correction since 6-m high and gains since after-high low

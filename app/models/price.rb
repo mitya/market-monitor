@@ -25,7 +25,7 @@ class Price < ApplicationRecord
           last_at = Time.ms(result['lastUpdated'])
           next if instrument.price!.last_at && instrument.price!.last_at > last_at
 
-          puts "Update price for #{instrument.ticker.ljust 5} [#{last_at}] to #{price.nonzero?}"
+          # puts "Update price for #{instrument.ticker.ljust 5} [#{last_at}] to #{price.nonzero?}"
           instrument.price!.update! value: price, last_at: last_at, source: 'iex', low: nil, volume: nil if price.to_f != 0
         end
       end

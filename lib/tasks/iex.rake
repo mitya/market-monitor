@@ -44,7 +44,7 @@ namespace :iex do
       dates += Current::SpecialDates.dates_plus                if R.true?('special')
       dates -= [Current.date]
 
-      if till = ENV['till'].to_date
+      if till = ENV['till'].to_s.to_date
         dates.reject! { |date| date > till }
       end
 

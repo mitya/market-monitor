@@ -38,14 +38,14 @@ namespace :tinkoff do
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"
     envtask :year do
-      # instruments = R.instruments_from_env || Instrument.tinkoff
-      # instruments.tinkoff.usd.abc.each do |inst|
-      #   Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2019, 2020, 2021])
-      # end
-
-      Instrument.tinkoff.usd.abc.each do |inst|
-        Tinkoff.import_all_day_candles(inst, candle_class: Candle::DayTinkoff, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2021])
+      instruments = R.instruments_from_env || Instrument.tinkoff
+      instruments.tinkoff.abc.each do |inst|
+        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2019, 2020, 2021])
       end
+
+      # Instrument.tinkoff.usd.abc.each do |inst|
+      #   Tinkoff.import_all_day_candles(inst, candle_class: Candle::DayTinkoff, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2021])
+      # end
     end
   end
 

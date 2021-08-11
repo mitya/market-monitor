@@ -6,7 +6,17 @@
 OpenAPI = require '@tinkoff/invest-openapi-js-sdk'
 
 commandArguments = process.argv.slice(2)
-[command, figi, interval, since, till] = commandArguments
+[command, ...args] = commandArguments
+
+switch command
+  when 'limit-order', 'market-order'
+    [figi, operation, lots, price] = args
+    lots = Number(lots)
+    price = Number(price)
+  when 'cancel-order'
+    [orderId] = args
+  else
+    [figi, interval, since, till] = args
 
 log = (object) -> console.log object
 print = (object) -> console.log JSON.stringify(object, null, 2)
@@ -24,12 +34,6 @@ do ->
 
     api.setCurrentAccountId(2019143573) if process.env.TINKOFF_ACCOUNT == 'iis'
 
-    # api = new OpenAPI {
-    #   apiURL: 'https://api-invest.tinkoff.ru/openapi/' # 'https://api-invest.tinkoff.ru/openapi'
-    #   socketURL: 'wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws'
-    #   secretToken: process.env.TINKOFF_PROD_TOKEN
-    # }
-
     switch command
       when 'stocks'        then print await api.stocks()
       when 'etfs'          then print await api.etfs()
@@ -40,11 +44,11 @@ do ->
       when 'orderbook'     then print await api.orderbookGet(depth: 8, figi: figi)
       when 'orders'        then print await api.orders()
       when 'portfolio'     then print await api.portfolio()
-      when 'portfolio-iis'
-        api.setCurrentAccountId(2019143573)
-        print await api.portfolio()
       when 'accounts'      then print await api.accounts()
       when 'operations'    then print await api.operations({ from: since, to: till })
+      when 'limit-order'   then print await api.limitOrder({ figi, lots, operation, price })
+      when 'market-order'  then print await api.marketOrder({ figi, lots, operation })
+      when 'cancel-order'  then print await api.cancelOrder({ orderId })
 
   catch error
     print { error }
@@ -67,3 +71,10 @@ do ->
 # coffee bin/tinkoff.coffee candles BBG000B9XRY4 5min 2021-03-11T20:00:00Z 2021-03-11T20:05:00Z
 # coffee bin/tinkoff.coffee orderbook BBG000B9XRY4
 # coffee bin/tinkoff.coffee orders
+# coffee bin/tinkoff.coffee portfolio
+# TINKOFF_ACCOUNT=iis coffee bin/tinkoff.coffee portfolio
+
+# coffee bin/tinkoff.coffee limit-order BBG00FZYFVC5 Buy 1 17.2
+# coffee bin/tinkoff.coffee market-order BBG00FZYFVC5 Buy 1
+# coffee bin/tinkoff.coffee orderbook BBG00FZYFVC5
+# TINKOFF_ACCOUNT=iis coffee bin/tinkoff.coffee cancel-order 283904543420

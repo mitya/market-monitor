@@ -2491,6 +2491,7 @@
       "figi": "BBG00XDH4NZ2",
       "ticker": "GRPH",
       "isin": "US38870X1046",
+      "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
       "name": "Graphite Bio, Inc.",
@@ -2660,6 +2661,7 @@
       "figi": "BBG000CTSZQ6",
       "ticker": "ICLR",
       "isin": "IE0005711209",
+      "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
       "name": "ICON plc",
@@ -8453,6 +8455,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG000DSZTN6",
+      "ticker": "CCJ",
+      "isin": "CA13321L1085",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Cameco Corporation",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000QP35H2",
       "ticker": "FATE",
       "isin": "US31189P1021",
@@ -8580,6 +8592,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Syneos Health Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG01103B471",
+      "ticker": "VSCO",
+      "isin": "US9264001028",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Victorias Secret & Co.",
       "type": "Stock"
     },
     {
@@ -11820,6 +11842,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG00YDGX945",
+      "ticker": "GXO",
+      "isin": "US36262G1013",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "GXO Logistics, Inc.",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000KK3464",
       "ticker": "SBCF",
       "isin": "US8117078019",
@@ -14279,12 +14311,12 @@
     },
     {
       "figi": "BBG000BNGTQ7",
-      "ticker": "LB",
-      "isin": "US5017971046",
+      "ticker": "BBWI",
+      "isin": "US0708301041",
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "L Brands",
+      "name": "Bath & Body Works",
       "type": "Stock"
     },
     {
@@ -17425,5 +17457,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1744
+  "total": 1747
 }

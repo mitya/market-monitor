@@ -8,7 +8,7 @@ class Tinkoff
     MNK GSH FTR CTB
     TOT
     VZRZP ALNU
-    TCS CLGX MSGN WORK PRAH
+    TCS CLGX MSGN WORK PRAH KBTK
     NVTK@GS LKOD@GS OGZD@GS NLMK@GS PHOR@GS SBER@GS SVST@GS SSA@GS MGNT@GS PLZL@GS KAP@GS
     HOME LMNX CCIV ALXN CLNY GTT CNST LB TLND
   ].uniq
@@ -276,12 +276,12 @@ class Tinkoff
 
   def sync_portfolios
     sync_portfolio call_js_api("portfolio"), 'tinkoff'
-    sync_portfolio call_js_api("portfolio-iis"), 'tinkoff_iis'
+    sync_portfolio call_js_api("portfolio", account: 'iis'), 'tinkoff_iis'
     cleanup_portfolio
   end
 
   def sync_iis
-    sync_portfolio call_js_api("portfolio-iis"), 'tinkoff_iis'
+    sync_portfolio call_js_api("portfolio", account: 'iis'), 'tinkoff_iis'
   end
 
   def cleanup_portfolio
@@ -326,6 +326,24 @@ class Tinkoff
     call_js_api "operations _ _ #{since.xmlschema} #{till.xmlschema}", account: 'iis'
   end
 
+  def limit_order(ticker, operation, lots, price, account: 'iis')
+    call_js_api "limit-order #{Instrument[ticker].figi} #{operation} #{lots} #{price}", account: account
+  end
+
+  def market_order(ticker, operation, lots, account: 'iis')
+    call_js_api "market-order #{Instrument[ticker].figi} #{operation} #{lots}", account: account
+  end
+
+  def cancel_order(order_id, account: 'iis')
+    call_js_api "cancel-order #{order_id}", account: account
+  end
+
+  def limit_buy  (ticker, lots, price) = limit_order(ticker, 'Buy',  lots, price, account: 'iis')
+  def limit_sell (ticker, lots, price) = limit_order(ticker, 'Sell', lots, price, account: 'iis')
+  def market_buy (ticker, lots)       = market_order(ticker, 'Buy',  lots, account: 'iis')
+  def market_sell(ticker, lots)       = market_order(ticker, 'Sell', lots, account: 'iis')
+
+
   delegate :logger, to: :Rails
 end
 
@@ -341,3 +359,6 @@ Instrument.tinkoff.each { |inst| Tinkoff.import_day_candles inst, since: Date.pa
 
 $log_tinkoff = true
 Tinkoff.update_current_price('ECHO')
+Tinkoff.limit_buy 'UPWK', 46.66, 1
+Tinkoff.limit_buy 'DK', 1, 17
+Tinkoff.cancel_order 283905820350

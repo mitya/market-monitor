@@ -14,6 +14,11 @@ document.addEventListener "turbolinks:load", ->
   if $qs('.arbitrages-page')
     $bind '.buttons .x-refresh', 'click', -> loadArbs()
 
+    $delegate '.arbitrages-table', '.limit-order-button', 'click', (button, e) ->
+      { ticker, operation, price, lots } = button.dataset
+      result = await $fetchJSON "/arbitrages/limit_order", method: 'POST', data: { ticker, operation, price, lots }
+      console.log result
+
   if $qs('.activities-page')
     loadOrders()
     loadOperations()
