@@ -9,8 +9,10 @@ class ArbitrageCase < ApplicationRecord
   def foreign_source = long?? :foreign_bid : :foreign_ask
 
   class << self
-    def current_tickers
-      ArbitrageCase.where(date: Current.date, delisted: false).where('updated_at > ?', 15.seconds.ago).distinct.pluck(:ticker)
+    def current_tickers(direction: nil)
+      cases = ArbitrageCase.where(date: Current.date, delisted: false).where('percent >= ?', 0.3).where('updated_at > ?', 15.seconds.ago)
+      cases = cases.where(long: direction == 'up') if direction
+      cases.distinct.pluck(:ticker)
     end
   end
 end

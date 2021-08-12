@@ -161,8 +161,8 @@ namespace :options do
   envtask :day do
     # OptionItem.load_all Instrument.iex_sourceable.abc.pluck(:ticker), range: '1d'
     # instruments = Instrument.iex_sourceable.abc.where('ticker >= ?', 'C').pluck(:iex_ticker)
-    instruments = InstrumentSet.known_instruments.map(&:iex_ticker).compact.sort # .select { |t| t > 'T' }
-    Current.parallelize_instruments(instruments, IEX_RPS) do |inst|
+    instruments = R.instruments_from_env || InstrumentSet.known_instruments # .select { |t| t > 'T' }
+    Current.parallelize_instruments(instruments.map(&:iex_ticker).sort, IEX_RPS) do |inst|
       OptionItem.import inst, range: '1d'
     end
   end

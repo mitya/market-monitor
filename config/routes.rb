@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   resources :portfolio, as: :portfolio_items
   resources :level_hits
   resources :arbitrages, only: %i[index] do
-    post :limit_order, on: :collection
+    post :limit_order, :cancel_order, on: :collection
   end
   resources :orders, only: %i[index]
   resources :operations, only: %i[index]

@@ -19,4 +19,9 @@ class ArbitragesController < ApplicationController
     response = Tinkoff.limit_order(params[:ticker], params[:operation], params[:lots], params[:price])
     render json: response
   end
+
+  def cancel_order
+    response = Tinkoff.cancel_order(params[:order_id])
+    render json: response
+  end
 end

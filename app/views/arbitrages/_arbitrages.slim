@@ -57,9 +57,9 @@ table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable.v-
             - (0..4).each do |depth|
               td.money-cell
                 - if arb.long?
-                  = buy_button inst.ticker, inst.orderbook&.ask_price_on(depth), inst.orderbook&.ask_size_on(depth), muted: arb.sell_price < inst.orderbook&.ask_price_on(depth)
+                  = buy_button inst.ticker, inst.orderbook&.ask_price_on(depth), inst.orderbook&.ask_size_on(depth), muted: arb.sell_price.to_d < inst.orderbook&.ask_price_on(depth).to_d
                 - else
-                  = sell_button inst.ticker, inst.orderbook&.bid_price_on(depth), inst.orderbook&.bid_size_on(depth), muted: arb.buy_price > inst.orderbook&.bid_price_on(depth)
+                  = sell_button inst.ticker, inst.orderbook&.bid_price_on(depth), inst.orderbook&.bid_size_on(depth), muted: arb.buy_price.to_d > inst.orderbook&.bid_price_on(depth).to_d
           - else
             td.money-cell
               span.badge.bg-secondary= inst.orderbook&.status || 'Offline'

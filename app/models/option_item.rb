@@ -11,20 +11,20 @@ class OptionItem < ApplicationRecord
   end
 
   class << self
-    def import_all(tickers, range: '1w')
-      tickers.each { |ticker| import ticker, range: range }
+    def import_all(tickers, range: '1w', depth: 1)
+      tickers.each { |ticker| import ticker, range: range, depth: 1 }
     end
 
-    def import(ticker, range: '1w')
+    def import(ticker, range: '1w', depth: 1)
       instrument = Instrument.get_by_iex_ticker(ticker)
       max_strike = instrument.recent_high * 1.5
       min_strike = instrument.recent_low * 0.65
       strike_range = min_strike .. max_strike
 
-      soonest_dates = OptionItemSpec.where(ticker: ticker).where('date >= ?', Current.date).order(:date).distinct.pluck(:date).first(3)
+      soonest_dates = OptionItemSpec.where(ticker: ticker).where('date >= ?', Current.date).order(:date).distinct.pluck(:date).first(depth)
       soonest_options = OptionItemSpec.where(ticker: ticker).where(date: soonest_dates, strike: strike_range).order(:ticker, :side, :date, :strike)
       soonest_options.each do |option|
-        puts "Load IEX option data for #{option.code}..."
+        puts "Load IEX option data for #{option.date} #{option.ticker} #{option.side} #{option.strike} #{option.code}..."
         strikes = Iex.options_chart(option.code, range: range)
         strikes.each do |strike|
           update_date = strike['lastUpdated']

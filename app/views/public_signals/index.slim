@@ -1,3 +1,4 @@
+- page_title! 'Signals'
 - main_set = InstrumentSet.main
 - portfolio = InstrumentSet.portfolio
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
@@ -31,8 +32,8 @@ main.container-fluid
         th Source
         th Score
         th.money-cell Date
-        th.money-cell Last
         th.money-cell Enter
+        th.money-cell Last
         th.money-cell Gain ﹪
         - if show_recent_prices
           th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1") 1d ﹪
@@ -58,8 +59,8 @@ main.container-fluid
           td= signal_source signal.source
           td= signal_score_badge signal
           td.money-cell= l signal.date, format: :long
-          td.money-cell= relative_price inst.base_price, signal.price, unit: inst.currency, format: 'absolute', inverse: false
           td.money-cell= relative_price signal.effective_price, inst.base_price, unit: inst.currency, format: 'absolute', inverse: true
+          td.money-cell= relative_price inst.base_price, signal.price, unit: inst.currency, format: 'absolute', inverse: false
           td.money-cell= relative_price signal.effective_price, inst.base_price, unit: inst.currency, format: 'relative', inverse: true
           - if show_recent_prices
             td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true

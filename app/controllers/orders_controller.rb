@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
 
   def index
-    @orders = Order.includes(:instrument)
+    @orders = Order.includes(:instrument).order(:ticker)
     @buys   = @orders.select &:buy?
     @sells  = @orders.select &:sell?
 

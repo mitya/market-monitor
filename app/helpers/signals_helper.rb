@@ -36,6 +36,6 @@ module SignalsHelper
   end
 
   def signal_source_options
-    PublicSignal.distinct.pluck(:source) + ['Non-SA']
+    PublicSignal.distinct.pluck(:source).sort + ['Non-SA']
   end
 end

@@ -32,6 +32,8 @@
 + format arb table in one line
 + indicate average price in portfolio
 
+- BAND EVER YEXT EQT EOG
+
 - order cancellation button
 - activity page refresh
 - modal with L2 and buy / sell buttons

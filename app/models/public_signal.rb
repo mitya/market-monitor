@@ -3,6 +3,8 @@ class PublicSignal < ApplicationRecord
 
   scope :sa, -> { where source: 'SA' }
 
+  after_save :load_price_if_missing
+
   def load_price_if_missing
     return if price
     Iex.import_day_candles instrument, date: MarketCalendar.closest_weekday(date)
@@ -17,9 +19,11 @@ class PublicSignal < ApplicationRecord
     def load
       Pathname("db/signals.txt").readlines(chomp: true).each do |line|
         next if line.blank?
-        date, source, ticker, price = line.split
+        date, source, ticker, price, score = line.split
+        price = nil if price.to_s.downcase == '-'
         next puts "Missing #{ticker} for #{source}".red unless Instrument.get(ticker)
-        find_or_create_by! ticker: ticker, source: source, date: date, price: price
+        next if exists? ticker: ticker, source: source, date: date
+        create! ticker: ticker, source: source, date: date, price: price, score: score
       end
     end
 

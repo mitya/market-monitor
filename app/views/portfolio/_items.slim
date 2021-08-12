@@ -7,7 +7,9 @@ table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable
       th.money-cell Price
       th.money-cell Total
       th.money-cell Cost
-      th.money-cell Yield
+      th.money-cell.border-end.pe-2 Yield
+      th.money-cell Yesterday
+      th.money-cell ﹪
   tbody
     - @items.each do |item|
       - inst = item.instrument
@@ -18,4 +20,6 @@ table.table.table-hover.table-sm.table-font-sm.tickers-table.table-selectable
         td.money-cell= number_to_currency inst.last, unit: currency_span(inst.currency), precision: 2
         td.money-cell= number_to_currency item.total_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2
         td.money-cell= number_to_currency item.average_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2
-        td.money-cell(class=red_green_class(item.yield_on(:tinkoff_iis) > 0))= number_to_currency item.yield_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2
+        td.money-cell.border-end.pe-2(class=red_green_class(item.yield_on(:tinkoff_iis) > 0))= number_to_currency item.yield_on(:tinkoff_iis), unit: currency_span(inst.currency), precision: 2
+        td.money-cell(class=red_green_class(inst.d1_ago.up?))= number_to_currency inst.d1_ago_close, unit: currency_span(inst.currency), precision: 2
+        td.money-cell= relative_price inst.last, inst.d1_ago_close, unit: inst.currency, format: 'relative', percentage_precision: 1

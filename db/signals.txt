@@ -23,7 +23,6 @@
 2021-06-09 Kogan-O KLIC 55.77
 2021-06-11 Kogan-O GPS 31.93
 2021-06-18 Kogan-O WHR 209.21
-2021-06-21 Kogan-O KE 20.81
 2021-06-23 Kogan-O ECHO 31.40
 2021-06-25 Kogan-O ATVI 93.15
 2021-06-28 Kogan-O WLK 89.30
@@ -32,6 +31,8 @@
 2021-07-13 Kogan-O OLN 43.33
 2021-07-28 Kogan-O LOGI 107.95
 2021-08-05 Kogan-O UPS 192.25
+2021-08-09 Kogan-O CF
+2021-08-11 Kogan-O WLL
 
 2020-09-01 Kogan-A VEON 1.39
 2020-11-09 Kogan-A AYX 108
@@ -44,7 +45,6 @@
 2021-03-01 Kogan-A ATNX 4.87
 2021-03-08 Kogan-A CHKP 114
 2021-03-08 Kogan-A TLRY 21.38
-2021-03-23 Kogan-A TKA 12.44
 2021-03-29 Kogan-A VIAC 45.15
 2021-04-15 Kogan-A X 23.03
 2021-04-28 Kogan-A DISCA 36.31
@@ -76,7 +76,6 @@
 2021-03-15 Kogan-2 AGRO 899
 2021-03-15 Kogan-2 BSPB 57.83
 2021-03-22 Kogan-2 RNFT 180.60
-2021-03-22 Kogan-2 LVHK 13
 2021-03-29 Kogan-2 ISKJ 38
 2021-03-29 Kogan-2 ROLO 10.90
 2021-04-05 Kogan-2 AMEZ 8.97
@@ -95,10 +94,43 @@
 2021-05-01 HiddenRock SND
 2021-05-01 HiddenRock CATO
 2021-05-01 HiddenRock DVN
-2021-05-01 HiddenRock SQBG
 2021-05-01 HiddenRock BABA
 2021-05-01 HiddenRock STNG
-2021-05-01 HiddenRock URNM
 2021-05-01 HiddenRock COTY
 2021-05-01 HiddenRock ZIM
 2021-05-01 HiddenRock BTU
+
+2021-07-07 StoneFoxCapital LUMN - 5
+2021-07-09 StoneFoxCapital PAYO - 5
+2021-07-20 StoneFoxCapital AMD - 5
+2021-07-22 StoneFoxCapital AAL - 5
+2021-07-26 StoneFoxCapital TWTR - 5
+2021-07-28 StoneFoxCapital AMD - 5
+2021-07-30 StoneFoxCapital QCOM - 5
+2021-08-04 StoneFoxCapital UAA - 5
+2021-08-06 StoneFoxCapital PVAC - 5
+2021-08-09 StoneFoxCapital XLNX - 5
+2021-08-12 StoneFoxCapital EBAY - 5
+
+2021-04-30 LongPlayer EOG - 5
+2021-05-20 LongPlayer KMI - 5
+2021-05-20 LongPlayer FANG - 5
+2021-06-04 LongPlayer FANG - 5
+2021-06-06 LongPlayer MUR - 5
+2021-06-11 LongPlayer EQT - 5
+2021-07-02 LongPlayer MGY - 5
+2021-07-02 LongPlayer VNOM - 5
+2021-07-08 LongPlayer AM - 5
+2021-07-19 LongPlayer AR - 5
+2021-08-01 LongPlayer PVAC - 5
+2021-08-02 LongPlayer OXY - 5
+
+2021-07-27 KCI HCC - 5
+2021-07-28 KCI XOM - 5
+2021-07-30 KCI OXY - 5
+2021-08-02 KCI AR - 5
+2021-08-04 EQT AR - 5
+
+2021-08-03 GaryAlexander EVER - 5
+2021-08-10 GaryAlexander BAND - 5
+2021-08-11 GaryAlexander YEXT - 5

@@ -4,7 +4,7 @@ class Synchronizer
   def call
     loop do
       Setting.get('sync_exchanges', []).each { |exchange| PantiniArbitrageParser.connect exchange }
-      Setting.save 'sync_books', ArbitrageCase.current_tickers
+      Setting.save 'sync_books', ArbitrageCase.current_tickers(direction: 'up')
       Setting.get('sync_books', []).each { |ticker| Orderbook.sync ticker }
       Order.sync
       Operation.sync

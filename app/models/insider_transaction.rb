@@ -26,6 +26,7 @@ class InsiderTransaction < ApplicationRecord
   def exercise_price = data&.dig('conversionOrExercisePrice')
 
   def full_cost = cost&.nonzero? || (price.to_d * shares.to_i).abs
+  def cost_final = shares_final.to_i * price.to_d
 
   class << self
     def import_iex_data(data)

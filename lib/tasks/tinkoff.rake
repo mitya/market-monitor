@@ -137,6 +137,7 @@ namespace :tinkoff do
         puts "Create #{ticker}"
         Instrument.create!(
           ticker:   ticker,
+          iex_ticker: ticker,
           name:     iex_item.name,
           currency: iex_item.currency,
           figi:     iex_item.figi,

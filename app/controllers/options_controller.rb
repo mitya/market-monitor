@@ -7,7 +7,6 @@ class OptionsController < ApplicationController
       map[date] = OptionItem.latest_for_date params[:instrument_id], date
     end
     @strikes = @options_per_date.values.flatten.map(&:strike).uniq.sort
-    @page_title = "#{@instrument} Options"
   end
 
   def show
@@ -24,7 +23,6 @@ class OptionsController < ApplicationController
     @update_dates = @options.map(&:updated_on).uniq.sort.last(30)
     @strikes = @options.map(&:strike).uniq.sort
     Current.preload_day_candles_with [@instrument], @update_dates
-    @page_title = "#{@instrument} #{@date} Options "
     render :show
   end
 end
