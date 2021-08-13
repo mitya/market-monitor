@@ -6,25 +6,27 @@
 - params[:low_since] ||= 2.weeks.ago.to_date.to_s
 - params[:low_gain] ||= 10
 
-- past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
-- price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
-- show_volume = params[:volume] == '1'
-- show_volume_diff = params[:volume_diff] == '1'
-- chart_volatility = params[:volatility] == '1' && params['chart_volatility'] == '1'
-- show_volatility = params[:volatility] == '1' && !chart_volatility
-- is_portfolio = params[:portfolio] == '1'
-- show_historical_prices = !show_volume && !show_volatility && !chart_volatility && !is_portfolio
-- show_recent_prices = params[:recent_prices] == '1'
-- show_special_dates = params[:special_dates] == '1'
-- volatility_format = :percentage
-- volatility_cell_class = volatility_format == :bar ?  'indicator-cell' : 'money-cell'
-- show_low = params[:low] == '1'
-- show_last_insider_buys = params[:last_insider_buys] == '1'
-- vtb_marginal_info = false
-- show_sa = params[:sa] == '1'
+- @past_price_format  = params[:relative_past_prices] == '1' ? 'percentage' : 'absolute'
+- @price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- @show_volume = params[:volume] == '1'
+- @show_volume_diff = params[:volume_diff] == '1'
+- @chart_volatility = params[:volatility] == '1' && params['chart_volatility'] == '1'
+- @show_volatility = params[:volatility] == '1' && !@chart_volatility
+- @is_portfolio = params[:portfolio] == '1'
+- @show_historical_prices = !@show_volume && !@show_volatility && !@chart_volatility && !@is_portfolio
+- @show_recent_prices = params[:recent_prices] == '1'
+- @show_special_dates = params[:special_dates] == '1'
+- @volatility_format = :percentage
+- @volatility_cell_class = @volatility_format == :bar ?  'indicator-cell' : 'money-cell'
+- @show_low = params[:low] == '1'
+- @show_last_insider_buys = params[:last_insider_buys] == '1'
+- @vtb_marginal_info = false
+- @show_sa = params[:sa] == '1'
+- @show_sector = !@categories
+- @show_open = false
 
 main.container-fluid.mb-4
-  form#list-config(action=instruments_path class='my-2')
+  form#list-config(action=(@categories ? grouped_instruments_path : instruments_path) class='my-2')
     .row.mb-3
       .col
         = render 'filter_by_currency'
@@ -80,7 +82,7 @@ main.container-fluid.mb-4
         th
         th
         th Name
-        - if is_portfolio
+        - if @is_portfolio
           th
           th.money-cell Tinkoff
           th.money-cell IIS
@@ -90,9 +92,10 @@ main.container-fluid.mb-4
           th.money-cell Ideal
           th.money-cell(data-sort="portfolio.ideal_cost_in_usd") Ideal Cost
           th.money-cell(data-sort="portfolio.cost_diff") Diff
-        th Sector
+        - if @show_sector
+          th Sector
         th.money-cell.border-end.pe-2(data-sort="stats.marketcap desc") Cap (M)
-        - if vtb_marginal_info
+        - if @vtb_marginal_info
           th.money-cell Ln
           th.money-cell Sh
         - if params[:fundamentals]
@@ -105,8 +108,9 @@ main.container-fluid.mb-4
           th.money-cell High
           th.money-cell.border-end.pe-2
         th.money-cell Last
-        th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
-        - if show_recent_prices
+        - if @show_open
+          th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
+        - if @show_recent_prices
           th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1") 1d ﹪
           th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2") 2d ﹪
           th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3") 3d ﹪
@@ -116,17 +120,17 @@ main.container-fluid.mb-4
           th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
           th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
 
-        - if show_sa
+        - if @show_sa
           th.money-cell SA
           th
           th
 
 
-        - if show_low
+        - if @show_low
           th.text-end(data-sort="aggregates.lowest_day_date desc") Low
           th.money-cell.border-end.pe-2(data-sort="aggregates.lowest_day_gain desc") Gain
 
-        - if show_volume_diff
+        - if @show_volume_diff
           th.money-cell(title=l(Current.today,     format: :week_day)) 𝑉
           th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_volume desc") 1d 𝑉
           th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2_volume desc") 2d 𝑉
@@ -136,7 +140,7 @@ main.container-fluid.mb-4
           th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_volume desc") 2w 𝑉
           th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_volume desc") 1m 𝑉
 
-        - if show_volatility
+        - if @show_volatility
           th.money-cell(title=l(Current.today,     format: :week_day)) σ
           th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_vol desc") 1d σ
           th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2_vol desc") 2d σ
@@ -146,161 +150,50 @@ main.container-fluid.mb-4
           th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_vol desc") 2w σ
           th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_vol desc") 1m σ
 
-        - if chart_volatility
+        - if @chart_volatility
           th.text-left Volatility
 
-        - if show_volume
+        - if @show_volume
           th.money-cell Vol 1d
           th.money-cell Vol 2d
           th.money-cell Vol 3d
           th.money-cell Vol 1w
           th.money-cell Vol 1m
 
-        - if show_historical_prices
-          - if show_special_dates
+        - if @show_historical_prices
+          - if @show_special_dates
             th.money-cell(data-sort="aggregates.nov06") Nov6 ﹪
             th.money-cell(data-sort="aggregates.mar23") Mar23 ﹪
             th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
           th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
           th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
-          - if show_special_dates
+          - if @show_special_dates
             th.money-cell(data-sort="aggregates.y2018") 2018 ﹪
             th.money-cell(data-sort="aggregates.y2017") 2017 ﹪
 
         th
-        - if show_last_insider_buys
+        - if @show_last_insider_buys
           th.money-cell Insider
         th(data-sort="aggregates.days_up desc") Trn
         th
 
     tbody
-      - instruments = @instruments
-      - instruments = instruments.select { |inst| inst.portfolio_item&.active? } if params[:active] == '1'
-      - instruments = instruments.sort_by { |inst| inst.info&.vtb_long_risk.to_f } if vtb_marginal_info
-      - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_in_usd'
-      - instruments = instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
-      - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if is_portfolio && params[:order] == 'portfolio.cost_diff'
-      - instruments.each do |inst|
-        - price_target = inst.price_target
-        - portfolio_item = inst.portfolio_item
-        - aggregate = inst.aggregate
-        - info = inst.info
-        - inst.current_price_selector = :last_or_open
-        tr data-ticker=inst.ticker class=class_names('portfolio-inactive': is_portfolio && !inst.portfolio_item&.active? )
-          td= country_flag inst
-          td= instrument_logo_button inst
-          td.ticker-name= inst.ticker
-          td= known_icon inst
-          td= type_icon inst
-          td.instrument-name= truncate inst.name
+      - if @categories
+        - @categories.each do |category, tickers|
+          = render 'category_row', category: category
+          - tickers.sort.each do |ticker|
+            - if inst = @instruments_index[ticker]
+              = render 'instrument_row', inst: inst
+      - else
+        - instruments = @instruments
+        - instruments = instruments.select { |inst| inst.portfolio_item&.active? } if params[:active] == '1'
+        - instruments = instruments.sort_by { |inst| inst.info&.vtb_long_risk.to_f } if @vtb_marginal_info
+        - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.cost_in_usd'
+        - instruments = instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
+        - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.cost_diff'
+        - instruments.each do |inst|
+          = render 'instrument_row', inst: inst
 
-          - if is_portfolio
-            td
-              input class="form-check-input portfolio-item-checker" type="checkbox" value="1" checked=portfolio_item&.active
-            td.money-cell
-              input class="form-control form-control-sm lots-input" type="number" data-account="tinkoff" value=portfolio_item&.tinkoff_lots
-            td.money-cell
-              input class="form-control form-control-sm lots-input" type="number" data-account="tinkoff_iis" value=portfolio_item&.tinkoff_iis_lots
-            td.money-cell
-              input class="form-control form-control-sm lots-input" type="number" data-account="vtb" value=portfolio_item&.vtb_lots
-            td.money-cell= number_with_delimiter portfolio_item&.total_lots
-            td.money-cell= format_price portfolio_item.cost_in_usd, unit: 'USD', precision: 0 if portfolio_item&.cost_in_usd
-            td.money-cell
-              input class="form-control form-control-sm lots-input" type="number" data-account="ideal" value=portfolio_item&.ideal_lots
-            td.money-cell= format_price portfolio_item.ideal_cost_in_usd, unit: 'USD', precision: 0 if portfolio_item&.ideal_cost_in_usd
-            td.money-cell= colorized_diff portfolio_item.cost_in_usd, portfolio_item.ideal_cost_in_usd, unit: inst.currency, precision: 0 if portfolio_item&.ideal_cost_in_usd.to_i > 0
-
-
-          td= sector_badge inst
-
-          td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
-          - if vtb_marginal_info
-            td.money-cell= number_with_precision inst.info&.vtb_long_risk, precision: 2
-            td.money-cell= number_with_precision inst.info&.vtb_short_risk, precision: 2
-          - if params[:fundamentals]
-            td.money-cell                = number_with_precision info&.pe, precision: 0
-            td.money-cell                = number_with_precision info&.beta, precision: 1
-            td.money-cell.border-end.pe-2= number_to_percentage  info&.dividend_yield_percent, precision: 1
-
-          - if params[:price_targets]
-            td.money-cell= relative_price price_target&.low_in_usd,     inst.base_price, unit: inst.currency, format: price_target_format
-            td.money-cell= relative_price price_target&.average_in_usd, inst.base_price, unit: inst.currency, format: price_target_format
-            td.money-cell= relative_price price_target&.high_in_usd,    inst.base_price, unit: inst.currency, format: price_target_format
-            td.money-cell.border-end.pe-2= days_old_badge price_target&.date
-
-          td.money-cell
-            - if inst.price!.outdated? && inst.last
-              span.outdated-price(title="Last at #{inst.price!.last_at&.localtime}")= format_price inst.last, unit: inst.currency
-            - else
-              = colorized_price inst.last, inst.today_open, unit: inst.currency
-          td.money-cell.border-end.pe-2  = relative_price inst.today_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          - if show_recent_prices
-            td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.muted-cell       = relative_price inst.d3_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.muted-cell       = relative_price inst.d4_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell                  = relative_price inst.w1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell                  = relative_price inst.w2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell                  = relative_price inst.m1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-
-          - if show_sa
-            = render "instruments/seeking_alpha_fields", instrument: inst, aggregate: inst.insider_aggregate, format: past_price_format
-
-          - if show_low
-            td.money-cell(title=aggregate.lowest_day_date)= days_ago aggregate.lowest_day_date
-            td.money-cell.border-end.pe-2= relative_price aggregate.lowest_day_low, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-
-          - if show_volume_diff
-            td.money-cell=
-            td.money-cell= ratio_percentage aggregate.d1_volume, precision: 0
-            td.money-cell= ratio_percentage aggregate.d2_volume, precision: 0
-            td.money-cell= ratio_percentage aggregate.d3_volume, precision: 0
-            td.money-cell= ratio_percentage aggregate.d4_volume, precision: 0
-            td.money-cell= ratio_percentage aggregate.w1_volume, precision: 0
-            td.money-cell= ratio_percentage aggregate.w2_volume, precision: 0
-            td.money-cell= ratio_percentage aggregate.m1_volume, precision: 0
-
-          - if show_volatility
-            td[class=volatility_cell_class]= volatility_indicator inst, :today,     format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :d1_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :d2_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :d3_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :d4_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :w1_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :w2_ago,    format: volatility_format
-            td[class=volatility_cell_class]= volatility_indicator inst, :month_ago, format: volatility_format
-
-          - if chart_volatility
-            td.volatility-chart
-              - Current.last_2_weeks.each do |date|
-                = volatility_indicator inst, date, format: :bar
-
-          - if show_volume
-            td.money-cell= format_price_in_millions inst.base_price.to_d * inst.yesterday_volume.to_d, unit: inst.currency
-            td.money-cell= format_price_in_millions inst.base_price.to_d * inst.   d2_ago_volume.to_d, unit: inst.currency
-            td.money-cell= format_price_in_millions inst.base_price.to_d * inst.   d3_ago_volume.to_d, unit: inst.currency
-            td.money-cell= format_price_in_millions inst.base_price.to_d * inst. week_ago_volume.to_d, unit: inst.currency
-            td.money-cell= format_price_in_millions inst.base_price.to_d * inst.month_ago_volume.to_d, unit: inst.currency
-
-          - if show_historical_prices
-            - if show_special_dates
-              td.money-cell                  = relative_price inst.     nov06_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-              td.money-cell                  = relative_price inst.     mar23_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-              td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.border-end.pe-2    = relative_price inst.    y2020_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            td.money-cell.muted-cell         = relative_price inst.    y2019_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-            - if show_special_dates
-              td.money-cell.muted-cell       = relative_price inst.    y2018_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-              td.money-cell.muted-cell       = relative_price inst.    y2017_open,  inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-
-
-          td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
-            = exchange_logo(inst.exchange_name)
-          - if show_last_insider_buys
-            td.money-cell= relative_price inst.info&.last_insider_buy_price, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
-          td= growth_badge aggregate
-          td= link_to fa_icon(:adjust), instrument_options_path(inst) if inst.usd?
 
   = paginate @instruments, window: 20
   = tickers_copy_list @instruments

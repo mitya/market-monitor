@@ -16,7 +16,7 @@ document.addEventListener "turbolinks:load", ->
     $qs('.portfolio-table').innerHTML    = data.portfolio
     $qs('.operations-table').innerHTML   = data.operations
   refreshActivities = ->
-    loadActivities() if $qs('#auto-refresh-toggle').checked
+    loadActivities() if $qs('#auto-refresh-toggle')?.checked
 
   if $qs('.arbitrages-page')
     $bind '.buttons .x-refresh', 'click', -> loadArbs()

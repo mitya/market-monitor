@@ -33,10 +33,8 @@
 + indicate average price in portfolio
 + order cancellation button
 + activity page refresh
++ overview page with known tickers grouped by industry
 
-- BAND EVER YEXT EQT EOG
-
-- overview page with known tickers grouped by industry
 - modal with L2 and buy / sell buttons
 
 - once a day set price to last for tickers without the IEX price data

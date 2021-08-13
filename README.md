@@ -53,7 +53,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='WLL'
+export tickers='SNOW'
 rake tinkoff:premium:import
 
 ## Tinkoff

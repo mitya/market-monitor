@@ -74,3 +74,4 @@ main.container-fluid
 
 
   = paginate @signals, window: 20
+  = tickers_copy_list @signals.map(&:instrument)

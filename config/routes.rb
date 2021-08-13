@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :options, only: [:index, :show] do
       get :history, on: :member
     end
-    get :export, :spb, on: :collection
+    get :export, :spb, :grouped, on: :collection
   end
   resources :insider_transactions, path: 'insider-transactions'
   resources :insider_aggregates, path: 'insider-aggregates'
