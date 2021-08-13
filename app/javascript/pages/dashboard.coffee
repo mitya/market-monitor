@@ -15,6 +15,8 @@ document.addEventListener "turbolinks:load", ->
     $qs('.orders-table.sells').innerHTML = data.sells
     $qs('.portfolio-table').innerHTML    = data.portfolio
     $qs('.operations-table').innerHTML   = data.operations
+  refreshActivities = ->
+    loadActivities() if $qs('#auto-refresh-toggle').checked
 
   if $qs('.arbitrages-page')
     $bind '.buttons .x-refresh', 'click', -> loadArbs()
@@ -25,7 +27,7 @@ document.addEventListener "turbolinks:load", ->
 
   if $qs('.activities-page')
     loadActivities()
-    setInterval loadActivities, 5000
+    setInterval refreshActivities, 5000
 
   if $qs('.orders-container')
     $delegate '.orders-container', '.cancel-order-button', 'click', (button, e) ->
