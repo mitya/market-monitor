@@ -13,7 +13,7 @@ class PortfolioController < ApplicationController
   end
 
   def index
-    @items = PortfolioItem.where('tinkoff_iis_lots > 0').order(:ticker)
+    @portfolio = PortfolioItem.where('tinkoff_iis_lots > 0').order(:ticker)
     render partial: 'items'
   end
 end

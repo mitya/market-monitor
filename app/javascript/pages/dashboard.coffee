@@ -9,7 +9,12 @@ document.addEventListener "turbolinks:load", ->
     $qs('.operations-table').innerHTML = await $fetchText "/operations"
   loadPortfolio = ->
     $qs('.portfolio-table').innerHTML = await $fetchText "/portfolio"
-
+  loadActivities = ->
+    data = await $fetchJSON "/trading/activities"
+    $qs('.orders-table.buys').innerHTML  = data.buys
+    $qs('.orders-table.sells').innerHTML = data.sells
+    $qs('.portfolio-table').innerHTML    = data.portfolio
+    $qs('.operations-table').innerHTML   = data.operations
 
   if $qs('.arbitrages-page')
     $bind '.buttons .x-refresh', 'click', -> loadArbs()
@@ -19,9 +24,8 @@ document.addEventListener "turbolinks:load", ->
       result = await $fetchJSON "/arbitrages/limit_order", method: 'POST', data: { ticker, operation, price, lots }
 
   if $qs('.activities-page')
-    loadOrders()
-    loadOperations()
-    loadPortfolio()
+    loadActivities()
+    setInterval loadActivities, 5000
 
   if $qs('.orders-container')
     $delegate '.orders-container', '.cancel-order-button', 'click', (button, e) ->

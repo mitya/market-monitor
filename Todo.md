@@ -32,10 +32,10 @@
 + format arb table in one line
 + indicate average price in portfolio
 + order cancellation button
++ activity page refresh
 
 - BAND EVER YEXT EQT EOG
 
-- activity page refresh with a switch
 - overview page with known tickers grouped by industry
 - modal with L2 and buy / sell buttons
 
