@@ -19,6 +19,8 @@ window.$fetchJSON = (url, options) ->
 window.$qs = (selector) -> document.querySelector(selector)
 window.$bind = (selector, event, handler) -> document.querySelector(selector).addEventListener event, handler
 window.$delegate = (container, selector, event, handler) ->
-  document.querySelector(container).addEventListener event, (e) ->
-    if e.target.matches(selector)
-      handler.bind(e.target, e.target, e)()
+  selector = "#{container} #{selector}"
+  document.addEventListener event, (e) ->
+    closest = e.target.closest(selector)
+    if e.target.matches(selector) || closest
+      handler.bind(closest || e.target, closest || e.target, e)()

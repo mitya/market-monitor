@@ -17,9 +17,13 @@ document.addEventListener "turbolinks:load", ->
     $delegate '.arbitrages-table', '.limit-order-button', 'click', (button, e) ->
       { ticker, operation, price, lots } = button.dataset
       result = await $fetchJSON "/arbitrages/limit_order", method: 'POST', data: { ticker, operation, price, lots }
-      console.log result
 
   if $qs('.activities-page')
     loadOrders()
     loadOperations()
     loadPortfolio()
+
+  if $qs('.orders-container')
+    $delegate '.orders-container', '.cancel-order-button', 'click', (button, e) ->
+      e.stopPropagation()
+      await $fetchJSON "/arbitrages/cancel_order", method: 'POST', data: { id: button.dataset.orderId }

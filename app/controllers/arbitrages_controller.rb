@@ -21,7 +21,7 @@ class ArbitragesController < ApplicationController
   end
 
   def cancel_order
-    response = Tinkoff.cancel_order(params[:order_id])
+    response = Tinkoff.cancel_order(params[:id])
     render json: response
   end
 end

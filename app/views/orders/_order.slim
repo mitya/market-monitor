@@ -5,3 +5,5 @@ tr
   td.money-cell= "#{number_with_delimiter order.lots_executed} of #{number_with_delimiter order.lots}"
   td.money-cell= number_to_currency order.price, unit: currency_span(order.instrument.currency), precision: 2
   td.money-cell= number_to_currency order.total, unit: currency_span(order.instrument.currency), precision: 2
+  td.money-cell
+    a.cancel-order-button(href="#" data-order-id=order.id)= fa_icon :times

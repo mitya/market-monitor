@@ -61,7 +61,7 @@ envtask(:sa) {
 }
 
 
-envtask('signals:import') { PublicSignal.load }
+envtask('signals') { PublicSignal.load }
 
 envtask('list:clear') do
   puts ENV['tickers'].split(',').map{ |tk| tk.split(':').last }.sort.join("\n")

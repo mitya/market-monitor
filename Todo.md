@@ -31,11 +31,12 @@
 + move buy/sell indication to best bid/ask
 + format arb table in one line
 + indicate average price in portfolio
++ order cancellation button
 
 - BAND EVER YEXT EQT EOG
 
-- order cancellation button
-- activity page refresh
+- activity page refresh with a switch
+- overview page with known tickers grouped by industry
 - modal with L2 and buy / sell buttons
 
 - once a day set price to last for tickers without the IEX price data
