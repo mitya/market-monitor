@@ -3,6 +3,7 @@ class Instrument < ApplicationRecord
 
   has_many :candles,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :aggregates,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :all_indicators,                foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'DateIndicators'
   has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
   has_many :m1_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M1', dependent: :delete_all
   has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument
@@ -24,6 +25,7 @@ class Instrument < ApplicationRecord
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :aggregate,      -> { current }, foreign_key: 'ticker', inverse_of: :instrument
+  has_one :indicators,     -> { current }, foreign_key: 'ticker', inverse_of: :instrument, class_name: 'DateIndicators'
   has_one :price,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :info, class_name: 'Stats',      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :portfolio_item,                 foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
@@ -50,7 +52,8 @@ class Instrument < ApplicationRecord
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
   scope :with_alarm, -> { joins(:levels).where(levels: { manual: true }) }
-  scope :after, -> ticker { where 'ticker >= ?', ticker }
+  scope :before, -> ticker { where 'instruments.ticker < ?', ticker }
+  scope :after, -> ticker { where 'instruments.ticker >= ?', ticker }
 
   scope :mature, -> { where first_date: MatureDate }
   scope :with_first_date, -> { where.not first_date: nil }

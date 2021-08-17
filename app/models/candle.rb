@@ -13,7 +13,7 @@ class Candle < ApplicationRecord
   scope :iex, -> { where source: 'iex' }
   scope :tinkoff, -> { where source: 'tinkoff' }
 
-  def self.find_date_before(date)    = order(date: :desc).where('date < ?', date.to_date).take
+  def self.find_date_before(date)    = order(date: :desc).where('date <  ?', date.to_date).take
   def self.find_date_or_before(date) = order(date: :desc).where('date <= ?', date.to_date).take
   def self.find_date_or_after(date)  = order(date: :asc) .where('date >= ?', date.to_date).take
   def self.find_date(date)        = for_date(date).take

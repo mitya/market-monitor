@@ -37,7 +37,7 @@ class Iex
 
   def import_day_candles(instrument, date: nil, period: nil)
     return if date && instrument.candles.day.final.where(date: date, source: 'iex').exists?
-    return if period == 'previous' && instrument.candles.day.final.where(date: Current.yesterday).exists?
+    return if period == 'previous' && instrument.candles.day.final.where(date: Current.last_closed_day_as_iex).exists?
 
     candles_data =
       date ? day_on(instrument.iex_ticker, date) :

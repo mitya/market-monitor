@@ -35,6 +35,8 @@
 + activity page refresh
 + overview page with known tickers grouped by industry
 
+- compact lists of gainers / losers from Yclose to last
+- calculate MA and watch for MA passing
 - modal with L2 and buy / sell buttons
 
 - once a day set price to last for tickers without the IEX price data

@@ -58,6 +58,7 @@ class Current < ActiveSupport::CurrentAttributes
   def us_open_time_in_minutes_utc = 13 * 60 + 30
 
   def last_closed_day = workday? ? yesterday : today
+  def last_closed_day_as_iex = workday? ? yesterday : yesterday - 1
 
   def weekdays_since(date) = date.upto(Current.yesterday).to_a.select { |date| MarketCalendar.market_open?(date) }.reverse
   def last_n_weeks(n) = weekdays_since(n.weeks.ago.to_date)
@@ -69,6 +70,10 @@ class Current < ActiveSupport::CurrentAttributes
 
   def preload_day_candles_with(instruments, extra_dates, dates: nil)
     self.day_candles_cache = DayCandleCache.new(instruments, extra_dates, dates: dates)
+  end
+
+  def preload_day_candles_for_dates(instruments, dates)
+    self.day_candles_cache = DayCandleCache.new(instruments, [], dates: dates)
   end
 
   def preload_prices_for(instruments)
@@ -114,7 +119,7 @@ class Current < ActiveSupport::CurrentAttributes
   class DayCandleCache
     attr :candles, :candles_by_ticker
 
-    def initialize(instruments, extra_dates, dates: nil)
+    def initialize(instruments, extra_dates = nil, dates: nil)
       dates ||= (SpecialDates.dates + extra_dates.to_a)
       dates = dates.compact.uniq.sort
       @instruments = Instrument.normalize(instruments).compact unless instruments == :all

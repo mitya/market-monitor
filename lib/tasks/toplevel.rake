@@ -16,6 +16,7 @@ envtask :main do
     rake 'tinkoff:prices:uniq'      unless R.false?(:price)
   end
   rake 'aggregate'
+  rake 'indicators'
   rake 'analyze'
   rake 'levels:alerts'
   rake 'tinkoff:portfolio:sync'
@@ -24,12 +25,18 @@ end
 task :prices => %w[iex:prices tinkoff:prices:uniq]
 
 envtask :aggregate do
-  Aggregate.create_for_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.date
+  Aggregate.create_for_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.yesterday
+  Aggregate.set_current
+end
+
+envtask :indicators do
+  DateIndicators.create_for_all
+  DateIndicators.set_current
 end
 
 envtask :aggregate_old do
-  MarketCalendar.open_days(Date.current.beginning_of_year, '2021-04-16'.to_date).each do |date|
-    Aggregate.create_for_all date: date
+  MarketCalendar.open_days(Date.current.beginning_of_year, Current.yesterday).each do |date|
+    Aggregate.create_for_all date: date, force: false
   end
 end
 
@@ -201,3 +208,7 @@ envtask :m5 do
     end
   end
 end
+
+__END__
+
+rake aggregate date=2021-08-09

@@ -24,6 +24,7 @@
 - @show_sa = params[:sa] == '1'
 - @show_sector = !@categories
 - @show_open = false
+- @show_ema_trends = params[:ema_trends] == '1'
 
 main.container-fluid.mb-4
   form#list-config(action=(@categories ? grouped_instruments_path : instruments_path) class='my-2')
@@ -68,6 +69,8 @@ main.container-fluid.mb-4
             br
             = bs_check_box :portfolio, 'Portfolio editor', inline: true
             = bs_check_box :active, 'Active only', inline: true
+            br
+            = bs_check_box :ema_trends, 'EMA Trends'
     = render 'filter_by_set', lw: 1
 
   = page_entries_block @instruments
@@ -174,6 +177,10 @@ main.container-fluid.mb-4
         th
         - if @show_last_insider_buys
           th.money-cell Insider
+        - if @show_ema_trends
+          th.money-cell(data-sort="date_indicators.ema_20_trend") MA20
+          th.money-cell(data-sort="date_indicators.ema_50_trend") MA50
+          th.money-cell(data-sort="date_indicators.ema_200_trend") MA200
         th(data-sort="aggregates.days_up desc") Trn
         th
 

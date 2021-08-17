@@ -125,6 +125,7 @@
 2021-07-19 LongPlayer AR - 5
 2021-08-01 LongPlayer PVAC - 5
 2021-08-02 LongPlayer OXY - 5
+2021-08-16 LongPlayer KMI - 5
 
 2021-07-27 KCI HCC - 5
 2021-07-28 KCI XOM - 5
@@ -138,3 +139,5 @@
 
 2021-07-27 Fluidsdoc PXD - 5
 2021-08-09 Fluidsdoc DVN - 5
+
+2021-08-15 LeoNelissen ADM - 4

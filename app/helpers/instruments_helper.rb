@@ -213,17 +213,20 @@ module InstrumentsHelper
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" } +
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_volume desc" } +
     [
-      ['P/E',      'stats.pe desc'],
-      ['ß',        'stats.beta desc'],
-      ['Yield',    'stats.dividend_yield desc'],
-      ['Capitalization',    'stats.marketcap desc'],
-      ['Days Up',  'aggregates.days_up desc'],
-      ['Low Date', 'aggregates.lowest_day_date desc'],
-      ['Low Gain', 'aggregates.lowest_day_gain desc'],
-      ['Trend', 'aggregates.days_up desc'],
+      ['P/E',                  'stats.pe desc'],
+      ['ß',                    'stats.beta desc'],
+      ['Yield',                'stats.dividend_yield desc'],
+      ['Capitalization',       'stats.marketcap desc'],
+      ['Days Up',              'aggregates.days_up desc'],
+      ['Low Date',             'aggregates.lowest_day_date desc'],
+      ['Low Gain',             'aggregates.lowest_day_gain desc'],
+      ['Trend',                'aggregates.days_up desc'],
       ['Portfolio Cost',       'portfolio.cost_in_usd'],
       ['Portfolio Cost Ideal', 'portfolio.ideal_cost_in_usd'],
       ['Portfolio Cost Diff',  'portfolio.cost_diff'],
+      ['EMA 20',               'date_indicators.ema_20_trend'],
+      ['EMA 50',               'date_indicators.ema_50_trend'],
+      ['EMA 200',              'date_indicators.ema_200_trend'],
     ]
   end
 

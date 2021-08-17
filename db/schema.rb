@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_153919) do
+ActiveRecord::Schema.define(version: 2021_08_17_173802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 2021_08_03_153919) do
     t.string "ticker", null: false
     t.date "date", null: false
     t.boolean "current", default: false, null: false
+    t.decimal "close", precision: 20, scale: 4
+    t.float "close_change"
     t.float "d1"
     t.float "d1_vol"
     t.float "d2"
@@ -39,15 +41,11 @@ ActiveRecord::Schema.define(version: 2021_08_03_153919) do
     t.float "feb19"
     t.float "y2020"
     t.float "y2019"
-    t.integer "days_up"
-    t.jsonb "data", default: {}
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.date "lowest_day_date"
-    t.float "lowest_day_gain"
     t.float "y2018"
     t.float "y2017"
-    t.float "close_change"
+    t.integer "days_up"
+    t.date "lowest_day_date"
+    t.float "lowest_day_gain"
     t.float "d1_volume"
     t.float "d2_volume"
     t.float "d3_volume"
@@ -55,6 +53,10 @@ ActiveRecord::Schema.define(version: 2021_08_03_153919) do
     t.float "w1_volume"
     t.float "w2_volume"
     t.float "m1_volume"
+    t.jsonb "data", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["current"], name: "index_aggregates_on_current"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
   end
@@ -177,6 +179,24 @@ ActiveRecord::Schema.define(version: 2021_08_03_153919) do
     t.index ["ticker", "interval", "date"], name: "candles_5m_ticker_interval_date_idx"
     t.index ["ticker", "interval", "date"], name: "candles_5m_ticker_interval_date_idx1", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "candles_5m_ticker_idx"
+  end
+
+  create_table "date_indicators", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.date "date", null: false
+    t.boolean "current", default: false, null: false
+    t.decimal "ema_20", precision: 20, scale: 2
+    t.decimal "ema_50", precision: 20, scale: 2
+    t.decimal "ema_200", precision: 20, scale: 2
+    t.integer "ema_20_trend"
+    t.integer "ema_50_trend"
+    t.integer "ema_200_trend"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["current"], name: "index_date_indicators_on_current"
+    t.index ["ticker", "current"], name: "index_date_indicators_on_ticker_and_current", where: "(current = true)"
+    t.index ["ticker", "date"], name: "index_date_indicators_on_ticker_and_date", unique: true
+    t.index ["ticker"], name: "index_date_indicators_on_ticker"
   end
 
   create_table "insider_aggregates", force: :cascade do |t|
@@ -346,6 +366,10 @@ ActiveRecord::Schema.define(version: 2021_08_03_153919) do
     t.integer "vtb_lots"
     t.integer "ideal_lots"
     t.boolean "active", default: true
+    t.decimal "tinkoff_iis_average", precision: 20, scale: 4
+    t.decimal "tinkoff_iis_yield", precision: 20, scale: 4
+    t.decimal "tinkoff_average", precision: 20, scale: 4
+    t.decimal "tinkoff_yield", precision: 20, scale: 4
   end
 
   create_table "price_level_hits", force: :cascade do |t|
