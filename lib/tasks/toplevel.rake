@@ -13,7 +13,7 @@ envtask :main do
     # rake 'iex:days:today'          if R.true?(:today)
   else
     rake 'iex:prices:uniq'     unless R.false?(:price)
-    rake 'tinkoff:prices:uniq'      unless R.false?(:price)
+    rake 'tinkoff:prices:uniq' unless R.false?(:price)
   end
   rake 'aggregate'
   rake 'indicators'

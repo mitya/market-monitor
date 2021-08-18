@@ -224,9 +224,10 @@ module InstrumentsHelper
       ['Portfolio Cost',       'portfolio.cost_in_usd'],
       ['Portfolio Cost Ideal', 'portfolio.ideal_cost_in_usd'],
       ['Portfolio Cost Diff',  'portfolio.cost_diff'],
-      ['EMA 20',               'date_indicators.ema_20_trend'],
-      ['EMA 50',               'date_indicators.ema_50_trend'],
-      ['EMA 200',              'date_indicators.ema_200_trend'],
+      ['EMA 20',               'date_indicators.ema_20_trend desc'],
+      ['EMA 50',               'date_indicators.ema_50_trend desc'],
+      ['EMA 200',              'date_indicators.ema_200_trend desc'],
+      ['Change',               'prices.change desc'],
     ]
   end
 
@@ -293,6 +294,8 @@ module InstrumentsHelper
   SectorCodeOptions = SectorCodeTitles.transform_values { |val| val.first }.invert
 
   def sector_badge(instrument, link: true)
+    return country_flag_icon('RUS') if instrument.rub?
+
     info = instrument&.info
     code = info&.sector_code
     text, background = *SectorCodeTitles[code] || code || 'N/A'

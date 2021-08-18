@@ -75,7 +75,7 @@ namespace :iex do
 
     %w[previous 5d 1m].each do |period|
       envtask period do
-        Current.parallelize_instruments(Instrument.iex.abc, IEX_RPS) { |inst| Iex.import_day_candles inst, period: period }
+        Current.parallelize_instruments(Instrument.iex_sourceable.abc, IEX_RPS) { |inst| Iex.import_day_candles inst, period: period }
       end
     end
 

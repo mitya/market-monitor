@@ -34,9 +34,10 @@
 + order cancellation button
 + activity page refresh
 + overview page with known tickers grouped by industry
++ calculate MA and watch for MA passing
+- today gainers / losers
 
-- compact lists of gainers / losers from Yclose to last
-- calculate MA and watch for MA passing
+- list of those which are on the highs
 - modal with L2 and buy / sell buttons
 
 - once a day set price to last for tickers without the IEX price data

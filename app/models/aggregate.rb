@@ -26,7 +26,7 @@ class Aggregate < ApplicationRecord
           suffix = 'open' if accessor =~ /y\d{4}/
           suffix = 'close' if accessor =~ /\w\d_ago/
           price = instrument.send("#{accessor}_#{suffix}")
-          base_price = instrument.base_price
+          base_price = instrument.d1_ago_close
           if price && base_price
             ratio = price / base_price - 1.0
             aggregate.send "#{accessor.remove '_ago'}=", ratio.to_f.round(3)

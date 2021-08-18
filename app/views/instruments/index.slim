@@ -111,16 +111,16 @@ main.container-fluid.mb-4
           th.money-cell High
           th.money-cell.border-end.pe-2
         th.money-cell Last
+        th.money-cell(data-sort="prices.change desc") ﹪
         - if @show_open
           th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
         - if @show_recent_prices
-          th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1") 1d ﹪
-          th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2") 2d ﹪
-          th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3") 3d ﹪
-          th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4") 4d ﹪
-          th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1") 1w ﹪
-          th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2") 2w ﹪
-          th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
+          th.money-cell(title=l(Current.d2_ago, format: :week_day) data-sort="aggregates.d2") 2d ﹪
+          th.money-cell(title=l(Current.d3_ago, format: :week_day) data-sort="aggregates.d3") 3d ﹪
+          th.money-cell(title=l(Current.d4_ago, format: :week_day) data-sort="aggregates.d4") 4d ﹪
+          th.money-cell(title=l(Current.w1_ago, format: :week_day) data-sort="aggregates.w1") 1w ﹪
+          th.money-cell(title=l(Current.w2_ago, format: :week_day) data-sort="aggregates.w2") 2w ﹪
+          th.money-cell(title=l(Current.m1_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
           th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
 
         - if @show_sa
@@ -178,9 +178,9 @@ main.container-fluid.mb-4
         - if @show_last_insider_buys
           th.money-cell Insider
         - if @show_ema_trends
-          th.money-cell(data-sort="date_indicators.ema_20_trend") MA20
-          th.money-cell(data-sort="date_indicators.ema_50_trend") MA50
-          th.money-cell(data-sort="date_indicators.ema_200_trend") MA200
+          th.money-cell(data-sort="date_indicators.ema_20_trend desc") MA20
+          th.money-cell(data-sort="date_indicators.ema_50_trend desc") MA50
+          th.money-cell(data-sort="date_indicators.ema_200_trend desc") MA200
         th(data-sort="aggregates.days_up desc") Trn
         th
 

@@ -1,11 +1,18 @@
 class Price < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
-
   before_create { self.ticker ||= instrument.ticker }
+
+  scope :missing, -> { where "source IS NULL OR source = ?", 'close' }
 
   def outdated? = !last_at || last_at < Current.date
   def today? = last_at && last_at > Current.date.midnight
   def low_lower?(percentage) = value && low && value - low >= value * percentage
+
+  after_update def update_change
+    close = instrument.d1_ago_close
+    return unless value && close
+    update_column :change, (value / close - 1.0).round(2)
+  end
 
   class << self
     def refresh_from_tinkoff(instruments)
@@ -21,18 +28,29 @@ class Price < ApplicationRecord
       prices.sort_by { |p| p['symbol'] }.each do |result|
         if instrument = Instrument.get_by_iex_ticker(result['symbol'])
           next unless instrument.usd?
+
           price = result['lastSalePrice']
           last_at = Time.ms(result['lastUpdated'])
           next if instrument.price!.last_at && instrument.price!.last_at > last_at
+          next if price.to_f == 0
 
-          # puts "Update price for #{instrument.ticker.ljust 5} [#{last_at}] to #{price.nonzero?}"
-          instrument.price!.update! value: price, last_at: last_at, source: 'iex', low: nil, volume: nil if price.to_f != 0
+          instrument.price!.update! value: price, last_at: last_at, source: 'iex', low: nil, volume: nil
         end
       end
+      set_missing_prices_to_close
     end
 
     def refresh_premium_from_iex
       refresh_from_iex Instrument.premium.map(&:iex_ticker)
+      set_missing_prices_to_close
+    end
+
+    def set_missing_prices_to_close
+      Price.missing.each do |price|
+        price.update! source: 'close',
+          value:   price.instrument.d1_ago.close,
+          last_at: price.instrument.d1_ago.date.to_time.change(hour: 23)
+      end
     end
   end
 end
