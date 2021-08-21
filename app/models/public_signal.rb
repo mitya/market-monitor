@@ -6,9 +6,10 @@ class PublicSignal < ApplicationRecord
   after_save :load_price_if_missing
 
   def load_price_if_missing
-    return if price
+    return if price && price != 0
+    puts "get for #{ticker} #{date}"
     Iex.import_day_candles instrument, date: MarketCalendar.closest_weekday(date)
-    update! price: instrument.price_on_or_before(date)&.close
+    update! price: instrument.price_on_or_before(date)&.close || 0
   end
 
   def effective_price
@@ -21,6 +22,7 @@ class PublicSignal < ApplicationRecord
         next if line.blank?
         date, source, ticker, price, score = line.split
         price = nil if price.to_s.downcase == '-'
+        price = nil if price.to_s.downcase == 'Q'
         next puts "Missing #{ticker} for #{source}".red unless Instrument.get(ticker)
         next if exists? ticker: ticker, source: source, date: date
         create! ticker: ticker, source: source, date: date, price: price, score: score
@@ -93,3 +95,4 @@ PublicSignal.load
 PublicSignal.parse_seeking_alpha
 PublicSignal.load_missing_sa_prices
 PublicSignal.create_sa_stubs ''.split
+PublicSignal.where(source: 'Funds').each &:load_price_if_missing

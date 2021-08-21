@@ -47,9 +47,11 @@ class Price < ApplicationRecord
 
     def set_missing_prices_to_close
       Price.missing.each do |price|
-        price.update! source: 'close',
-          value:   price.instrument.d1_ago.close,
-          last_at: price.instrument.d1_ago.date.to_time.change(hour: 23)
+        if yesterday = price.instrument.d1_ago
+          price.update! source: 'close',
+            value:   yesterday.close,
+            last_at: yesterday.date.to_time.change(hour: 23)
+        end
       end
     end
   end

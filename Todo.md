@@ -37,9 +37,15 @@
 + calculate MA and watch for MA passing
 - today gainers / losers
 
-- list of those which are on the highs
-- modal with L2 and buy / sell buttons
+- INMD RBLX
 
+- list all the institutional holders
+- find out last quarter institutional transactions
+- list ticker on the highs
+- find 2w high / lows
+- add major market high lows to the special dates
+
+- modal with L2 and buy / sell buttons
 - once a day set price to last for tickers without the IEX price data
 - 5-min morning data & fill gaps in 5m candles
 - show price targets on arb page

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_17_173802) do
+ActiveRecord::Schema.define(version: 2021_08_21_130810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,6 +197,20 @@ ActiveRecord::Schema.define(version: 2021_08_17_173802) do
     t.index ["ticker", "current"], name: "index_date_indicators_on_ticker_and_current", where: "(current = true)"
     t.index ["ticker", "date"], name: "index_date_indicators_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_date_indicators_on_ticker"
+  end
+
+  create_table "extremums", force: :cascade do |t|
+    t.string "ticker"
+    t.date "date"
+    t.decimal "value", precision: 20, scale: 2
+    t.decimal "close", precision: 20, scale: 2
+    t.string "kind"
+    t.integer "period"
+    t.integer "last_low_in"
+    t.integer "last_high_in"
+    t.datetime "created_at"
+    t.index ["date"], name: "index_extremums_on_date"
+    t.index ["ticker"], name: "index_extremums_on_ticker"
   end
 
   create_table "insider_aggregates", force: :cascade do |t|
@@ -509,6 +523,7 @@ ActiveRecord::Schema.define(version: 2021_08_17_173802) do
     t.string "source"
     t.decimal "low", precision: 20, scale: 4
     t.integer "volume"
+    t.float "change"
     t.index ["ticker"], name: "index_prices_on_ticker", unique: true
   end
 
