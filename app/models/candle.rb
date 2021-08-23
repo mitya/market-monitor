@@ -7,6 +7,7 @@ class Candle < ApplicationRecord
   scope :today, -> { where date: Current.date }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
   scope :non_analyzed, -> { where analyzed: nil }
+  scope :since, -> date { where 'date >= ?', date }
   scope :asc, -> { order :date }
   # scope :non_analyzed, -> { }
 
@@ -56,11 +57,12 @@ class Candle < ApplicationRecord
 
   def volatility_range = high - low
   def volatility = (high - low) / low
-  def volatility_above = (high - range_high) / high
-  def volatility_below = (range_low - low) / range_low
+  def volatility_above = top_shadow_spread / range_high
+  def volatility_below = bottom_shadow_spread / range_low
   def volatility_body  = (range_high - range_low) / range_low
   alias bottom_tail_range volatility_below
   alias top_tail_range volatility_above
+  def larger_tail_range = volatility_above > volatility_below ? volatility_above : -volatility_below
 
 
   def up? = close >= open

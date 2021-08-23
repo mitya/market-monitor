@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  date: 2021-08-23
+  spike: 1.5
+  change: 
+
+two:
+  ticker: MyString
+  date: 2021-08-23
+  spike: 1.5
+  change: 

@@ -22,6 +22,7 @@ class Instrument < ApplicationRecord
   has_many :orders,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :operations,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :extremums,                     foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :spikes,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument

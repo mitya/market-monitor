@@ -7,10 +7,10 @@ main.container-fluid
 
   form#list-config(action=level_hits_path class='my-2')
     = render 'instruments/filter_by_set'
+    = render 'instruments/filter_by_currency'
+    = render 'instruments/filter_by_availability'
     .row.mb-3
       .col
-        = render 'instruments/filter_by_currency'
-        = render 'instruments/filter_by_availability'
         = render 'instruments/filter_by_tickers'
         = render 'instruments/pagination_options'
       .col

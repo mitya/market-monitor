@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :insider_aggregates, path: 'insider-aggregates'
   resources :insider_summaries, path: 'insider-summaries'
   resources :recommendations
+  resources :spikes, only: %i[index]
   resources :signals
   resources :signal_results
   resources :signal_strategies

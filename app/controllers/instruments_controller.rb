@@ -36,7 +36,7 @@ class InstrumentsController < ApplicationController
 
   def grouped
     params[:per_page] = 1000
-    @categories = YAML.load_file("db/categories.yaml").transform_values { |str| str.to_s.split.sort }
+    @categories = YAML.load_file("db/categories.yaml").transform_values { |str| str.to_s.split.uniq.sort }
     load_instruments Instrument.where(ticker: @categories.values.flatten.compact.uniq)
     @instruments_index = @instruments.index_by &:ticker
     render :index

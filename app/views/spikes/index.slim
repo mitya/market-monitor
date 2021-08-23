@@ -1,0 +1,52 @@
+- page_title! 'Spikes'
+
+main.container-fluid
+  h1.display-3 Spikes
+
+  form#list-config(action=spikes_path class='my-2')
+    = render 'instruments/filter_by_set'
+    = render 'instruments/filter_by_currency'
+    = render 'instruments/filter_by_availability'
+    .row.mb-3
+      .col
+        = render 'instruments/filter_by_tickers'
+        = render 'signals/filter_by_direction'
+        = render 'instruments/pagination_options'
+      .col
+
+
+  .row
+    = page_entries_block @spikes
+    = paginate @spikes, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table
+    thead.table-dark
+      tr
+        th
+        th
+        th
+        th
+        th Ticker
+        th Company
+        th Sector
+        th.money-cell Date
+        th.money-cell Spike
+        th.money-cell Change
+    tbody
+      - @spikes.each do |spike|
+        - inst = instrument = spike.instrument
+        - info = instrument.info
+        tr
+          td= country_flag inst
+          td= instrument_logo_button inst
+          td= known_icon instrument
+          td= type_icon instrument
+          td= inst.ticker
+          td.instrument-name= instrument.name
+          td= sector_badge instrument
+          td.money-cell= l spike.date, format: :text
+          td.money-cell= colorized_ratio spike.spike, precision: 1
+          td.money-cell= colorized_ratio spike.change, precision: 1
+
+  = paginate @spikes, window: 20
+  = tickers_copy_list @spikes.map(&:instrument)

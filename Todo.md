@@ -35,16 +35,18 @@
 + activity page refresh
 + overview page with known tickers grouped by industry
 + calculate MA and watch for MA passing
-- today gainers / losers
++ today gainers / losers
++ find extremums
 + add ability to add new special dates
++ search for 4% spikes
 
-- INMD RBLX
+- improve Rus illiquid stocks list
+- TV chart programming - open/close lines
+- SA
+- list tickers on the highs
+- show % corrections from 1y high
 
-- list all the institutional holders
-- find out last quarter institutional transactions
-- list ticker on the highs
-- find 2w high / lows
-
+- list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons
 - once a day set price to last for tickers without the IEX price data
 - 5-min morning data & fill gaps in 5m candles
