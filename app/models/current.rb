@@ -41,14 +41,14 @@ class Current < ActiveSupport::CurrentAttributes
   def d10_ago   = MarketCalendar.closest_weekday(d7_ago.prev_weekday.prev_weekday.prev_weekday)
   def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
   def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
-  def feb19     = Date.new(2020,  2, 19)
-  def mar23     = Date.new(2020,  3, 23)
-  def nov06     = Date.new(2020, 11,  6)
   def y2017     = Date.new(2017,  1,  3)
   def y2018     = Date.new(2018,  1,  3)
   def y2019     = Date.new(2019,  1,  3)
   def y2020     = Date.new(2020,  1,  3)
   def y2021     = Date.new(2021,  1,  4)
+  def feb19     = Date.new(2020,  2, 19)
+  def mar23     = Date.new(2020,  3, 23)
+  def nov06     = Date.new(2020, 11,  6)
   alias d0_ago today
   alias d1_ago yesterday
   alias w1_ago d5_ago
@@ -155,10 +155,10 @@ class Current < ActiveSupport::CurrentAttributes
         Current.y2018,
         Current.y2019,
         Current.y2020,
+        Current.y2021,
         Current.feb19,
         Current.mar23,
         Current.nov06,
-        Current.y2021,
         Current.date,
         Current.d1_ago,
         Current.d2_ago,
@@ -171,8 +171,7 @@ class Current < ActiveSupport::CurrentAttributes
     end
 
     def dates_plus
-      dates + [
-      ]
+      dates + []
     end
   end
 end

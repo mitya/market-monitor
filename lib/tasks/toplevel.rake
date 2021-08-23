@@ -25,8 +25,10 @@ end
 task :prices => %w[iex:prices tinkoff:prices:uniq]
 
 envtask :aggregate do
+  Aggregate.delete_all
   Aggregate.create_for_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.yesterday
   Aggregate.set_current
+  Aggregate.old.delete_all
 end
 
 envtask :indicators do

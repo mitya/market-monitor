@@ -2,8 +2,11 @@ class Aggregate < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
 
   scope :current, -> { where current: true }
+  scope :old, -> { where current: false }
 
-  Accessors = %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" } + %w[y2021 nov06 mar23 feb19 y2020 y2019 y2018 y2017]
+  RecentDayAccessors = %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" }
+  YearBeginningAccessors = %w[y2021 y2020 y2019 y2018 y2017]
+  Accessors = RecentDayAccessors + YearBeginningAccessors
 
   def days_down = days_up.to_i > 0 ? 0 : -days_up
 
@@ -20,30 +23,32 @@ class Aggregate < ApplicationRecord
       aggregate.close = day_candle&.close
       aggregate.close_change = instrument.on_close_change(date: MarketCalendar.prev(date))
 
-      if gains && date == Current.yesterday
-        Accessors.each do |accessor|
-          suffix = 'low'
-          suffix = 'open' if accessor =~ /y\d{4}/
-          suffix = 'close' if accessor =~ /\w\d_ago/
-          price = instrument.send("#{accessor}_#{suffix}")
-          base_price = instrument.d1_ago_close
-          if price && base_price
-            ratio = price / base_price - 1.0
-            aggregate.send "#{accessor.remove '_ago'}=", ratio.to_f.round(3)
+      return puts "Requested date #{date} != #{Current.yesterday}".red if date != Current.yesterday
+
+      if gains
+        if base_price = instrument.d1_ago_close
+          Accessors.each do |accessor|
+            suffix = 'low'
+            suffix = 'open' if accessor =~ /y\d{4}/
+            suffix = 'close' if accessor =~ /\w\d_ago/
+            if price = instrument.send("#{accessor}_#{suffix}")
+              aggregate.send "#{accessor.remove '_ago'}=", (price / base_price - 1.0).to_f.round(3)
+            end
           end
 
-          if accessor.include?('ago')
-            if candle = instrument.send(accessor)
-              aggregate.send "#{accessor.remove '_ago'}_vol=", candle.volatility.to_f.round(3)
+          MarketCalendar.special_dates.each do |date|
+            if price = instrument.candles.day.find_date(date)&.close
+              aggregate.send date.strftime("d%Y_%m%d="), (price / base_price - 1.0).to_f.round(3)
             end
           end
         end
       end
 
-      if volume && date == Current.yesterday
-        %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" }.each do |accessor|
-          if candle = instrument.send(accessor)
-            aggregate.send "#{accessor.remove '_ago'}_volume=", candle.volume_to_average.to_f.round(3)
+      if volume
+        RecentDayAccessors.each do |accessor|
+          if recent = instrument.send(accessor)
+            aggregate.send "#{accessor.remove '_ago'}_vol=",    recent.volatility.to_f.round(3)
+            aggregate.send "#{accessor.remove '_ago'}_volume=", recent.volume_to_average.to_f.round(3)
           end
         end
       end
@@ -95,3 +100,4 @@ MarketCalendar.open_days(1.week.ago, Date.yesterday).each   { |date| Aggregate.c
 
 MarketCalendar.open_days(4.months.ago, Date.yesterday).each { |date| Aggregate.create_for_all date: date, instruments: Instrument.all }
 Aggregate.set_current
+Aggregate.create_for Instrument['MSFT']

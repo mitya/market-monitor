@@ -53,5 +53,32 @@ class MarketCalendar
     def periods
       (0 .. Current.date.month.pred).map { |n| Current.ytd + n.months }.map { |day| day.beginning_of_month .. day.end_of_month }
     end
+
+    def special_dates
+      # 2017-01-03
+      # 2018-01-03
+      # 2019-01-03
+      # 2020-01-03
+      # 2021-01-04
+      @special_dates ||= %w[
+        2020-02-19
+        2020-03-23
+        2020-11-06
+        2021-05-12
+        2021-08-20
+      ].map(&:to_date).sort.reverse
+    end
+
+    def current_special_dates
+      @current_special_dates ||= %w[
+        2020-03-23
+        2020-11-06
+        2021-05-12
+      ].map(&:to_date).sort.reverse
+    end
+
+    def current_recent_years
+      [2020, 2019, 2018, 2017]
+    end
   end
 end

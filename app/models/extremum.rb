@@ -42,3 +42,4 @@ __END__
 Extremum.delete_all
 Extremum.create_for 'DK'
 instrument = instr('DK')
+Extremum.create_all

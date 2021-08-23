@@ -16,6 +16,7 @@
 - @show_historical_prices = !@show_volume && !@show_volatility && !@chart_volatility && !@is_portfolio
 - @show_recent_prices = params[:recent_prices] == '1'
 - @show_special_dates = params[:special_dates] == '1'
+- @show_recent_years = params[:recent_years] == '1'
 - @volatility_format = :percentage
 - @volatility_cell_class = @volatility_format == :bar ?  'indicator-cell' : 'money-cell'
 - @show_low = params[:low] == '1'
@@ -64,6 +65,7 @@ main.container-fluid.mb-4
                   = number_field_tag :low_gain, params[:low_gain], class: "form-control text-center", style: "width: 60px"
                   .input-group-text %
             = bs_check_box :special_dates, 'Special dates', inline: true
+            = bs_check_box :recent_years, 'Recent years', inline: true
             = bs_check_box :last_insider_buys, 'Last Insider buys', inline: true
             = bs_check_box :alarm, 'With alarms', inline: true
             br
@@ -163,16 +165,12 @@ main.container-fluid.mb-4
           th.money-cell Vol 1w
           th.money-cell Vol 1m
 
-        - if @show_historical_prices
-          - if @show_special_dates
-            th.money-cell(data-sort="aggregates.nov06") Nov6 ﹪
-            th.money-cell(data-sort="aggregates.mar23") Mar23 ﹪
-            th.money-cell(data-sort="aggregates.feb19") Feb19 ﹪
-          th.money-cell(data-sort="aggregates.y2020" class="border-end pe-2") 2020 ﹪
-          th.money-cell(data-sort="aggregates.y2019") 2019 ﹪
-          - if @show_special_dates
-            th.money-cell(data-sort="aggregates.y2018") 2018 ﹪
-            th.money-cell(data-sort="aggregates.y2017") 2017 ﹪
+        - if @show_special_dates
+          - MarketCalendar.current_special_dates.each do |date|
+            th.money-cell(data-sort="aggregates.#{date.strftime 'd%Y_%m%d'}")= date.strftime('%b %e ﹪')
+        - if @show_recent_years
+          - MarketCalendar.current_recent_years.each do |year|
+            th.money-cell(data-sort="aggregates.y#{year}")= "#{year} ﹪"
 
         th
         - if @show_last_insider_buys

@@ -29,7 +29,6 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell= format_price portfolio_item.ideal_cost_in_usd, unit: 'USD', precision: 0 if portfolio_item&.ideal_cost_in_usd
     td.money-cell= colorized_diff portfolio_item.cost_in_usd, portfolio_item.ideal_cost_in_usd, unit: inst.currency, precision: 0 if portfolio_item&.ideal_cost_in_usd.to_i > 0
 
-
   - if @show_sector
     td= sector_badge inst
 
@@ -104,16 +103,13 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst. week_ago_volume.to_d, unit: inst.currency
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst.month_ago_volume.to_d, unit: inst.currency
 
-  - if @show_historical_prices
-    - if @show_special_dates
-      td.money-cell                  = relative_price inst.     nov06_low,  inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-      td.money-cell                  = relative_price inst.     mar23_low,  inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-      td.money-cell.muted-cell       = relative_price inst.     feb19_low,  inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-    td.money-cell.border-end.pe-2    = relative_price inst.    y2020_open,  inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-    td.money-cell.muted-cell         = relative_price inst.    y2019_open,  inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-    - if @show_special_dates
-      td.money-cell.muted-cell       = relative_price inst.    y2018_open,  inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-      td.money-cell.muted-cell       = relative_price inst.    y2017_open,  inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
+  - if @show_special_dates
+    - MarketCalendar.current_special_dates.each do |date|
+      td.money-cell(class=class_names('muted-cell': date < Current.y2021))= colorized_ratio aggregate.send(date.strftime "d%Y_%m%d"), inverse: true
+  - if @show_recent_years
+    - MarketCalendar.current_recent_years.each do |year|
+      td.money-cell= colorized_ratio aggregate.send("y#{year}")
+      / td.money-cell.muted-cell= relative_price inst.send("y#{year}_open"), inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
 
 
   td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do

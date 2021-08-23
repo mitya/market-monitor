@@ -45,8 +45,9 @@ module InstrumentsHelper
     colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit)), precision: precision, blank_threshold: blank_threshold
   end
 
-  def colorized_ratio(ratio, title: nil, precision: percentage_precision, blank_threshold: nil)
+  def colorized_ratio(ratio, title: nil, precision: percentage_precision, blank_threshold: nil, inverse: false)
     return if blank_threshold && ratio.to_f.abs < blank_threshold
+    ratio = ratio * -1 if ratio && inverse
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
       ratio_percentage ratio, precision: precision
     end
@@ -212,6 +213,7 @@ module InstrumentsHelper
     Aggregate::Accessors.map { |p| "aggregates.#{p.remove('_ago')}" } +
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" } +
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_volume desc" } +
+    MarketCalendar.current_special_dates.select.map { |d| "aggregates.#{d.strftime("d%Y_%m%d")}" } +
     [
       ['P/E',                  'stats.pe desc'],
       ['ß',                    'stats.beta desc'],

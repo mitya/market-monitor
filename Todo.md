@@ -36,6 +36,7 @@
 + overview page with known tickers grouped by industry
 + calculate MA and watch for MA passing
 - today gainers / losers
++ add ability to add new special dates
 
 - INMD RBLX
 
@@ -43,7 +44,6 @@
 - find out last quarter institutional transactions
 - list ticker on the highs
 - find 2w high / lows
-- add major market high lows to the special dates
 
 - modal with L2 and buy / sell buttons
 - once a day set price to last for tickers without the IEX price data
