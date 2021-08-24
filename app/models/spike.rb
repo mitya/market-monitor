@@ -6,7 +6,7 @@ class Spike < ApplicationRecord
   THRESHOLD = 0.04
 
   class << self
-    def scan_all(since: Current.y2020)
+    def scan_all(since: Current.yesterday)
       Instrument.all.abc.each { |inst| scan_for inst, since: since }
     end
 
@@ -26,6 +26,6 @@ end
 
 __END__
 
-Spike.scan_all
+Spike.scan_all since: 1.week.ago
 Spike.scan_for 'NKNCP'
 instr('NKNCP').price_on!('2021-03-12').larger_tail_range

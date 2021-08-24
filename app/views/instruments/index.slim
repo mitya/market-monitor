@@ -159,11 +159,12 @@ main.container-fluid.mb-4
           th.text-left Volatility
 
         - if @show_volume
-          th.money-cell Vol 1d
+          th.money-cell(data-sort="aggregates.d1_money_volume desc") (m) Vol 1d
           th.money-cell Vol 2d
           th.money-cell Vol 3d
           th.money-cell Vol 1w
           th.money-cell Vol 1m
+          th.money-cell(data-sort="stats.d5_money_volume desc") Vol 5d ∑
 
         - if @show_special_dates
           - MarketCalendar.current_special_dates.each do |date|
@@ -192,6 +193,7 @@ main.container-fluid.mb-4
       - else
         - instruments = @instruments
         - instruments = instruments.select { |inst| inst.portfolio_item&.active? } if params[:active] == '1'
+        / - instruments = instruments.select { |inst| inst.info.d5_money_volume < 500_000_000 }
         - instruments = instruments.sort_by { |inst| inst.info&.vtb_long_risk.to_f } if @vtb_marginal_info
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.cost_in_usd'
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
@@ -201,4 +203,4 @@ main.container-fluid.mb-4
 
 
   = paginate @instruments, window: 20
-  = tickers_copy_list @instruments
+  = tickers_copy_list instruments

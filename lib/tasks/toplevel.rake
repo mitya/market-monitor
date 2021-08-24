@@ -18,6 +18,7 @@ envtask :main do
   rake 'aggregate'
   rake 'indicators'
   rake 'analyze'
+  rake 'spikes'
   rake 'levels:alerts'
   rake 'tinkoff:portfolio:sync'
   rake 'tinkoff:instruments:sync'
@@ -181,10 +182,8 @@ end
 task :close => 'tinkoff:candles:import:5min:last'
 task :pre => 'tinkoff:prices:pre'
 
-
-envtask :set_average_volume do
-  Instrument.find_each &:set_average_volume
-end
+envtask(:set_average_volume)  { Stats.find_each &:set_average_volume }
+envtask(:set_d5_money_volume) { Stats.find_each &:set_d5_money_volume }
 
 envtask :pantini do
   PantiniArbitrageParser.connect 'XFRA'
@@ -192,13 +191,9 @@ envtask :pantini do
   PantiniArbitrageParser.connect 'TG'
 end
 
-envtask :book do
-  Orderbook.sync ENV['ticker']
-end
-
-envtask :arb do
-  Synchronizer.call
-end
+envtask(:book) { Orderbook.sync ENV['ticker'] }
+envtask(:arb) { Synchronizer.call }
+envtask(:spikes) { Spike.scan_all since: 1.week.ago }
 
 envtask :m5 do
   loop do

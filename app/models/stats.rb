@@ -61,6 +61,14 @@ class Stats < ApplicationRecord
   def vtb_long_risk = extra&.dig('vtb_long_risk')
   def vtb_short_risk = extra&.dig('vtb_short_risk')
 
+  def set_average_volume
+    update! avg_volume: instrument.day_candles.where('date > ?', 6.months.ago).average(:volume).to_i
+  end
+
+  def set_d5_money_volume
+    update! d5_money_volume: instrument.day_candles.order(:date).last(5).pluck(:volume).sum * instrument.lot * instrument.last
+  end
+
   class << self
     def refresh
       abc.find_each do |info|

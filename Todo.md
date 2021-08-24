@@ -39,10 +39,12 @@
 + find extremums
 + add ability to add new special dates
 + search for 4% spikes
++ show daily/weekly trading vol in money
++ improve Rus illiquid stocks list
 
-- improve Rus illiquid stocks list
 - TV chart programming - open/close lines
 - SA
+
 - list tickers on the highs
 - show % corrections from 1y high
 

@@ -49,6 +49,7 @@ class Aggregate < ApplicationRecord
           if recent = instrument.send(accessor)
             aggregate.send "#{accessor.remove '_ago'}_vol=",    recent.volatility.to_f.round(3)
             aggregate.send "#{accessor.remove '_ago'}_volume=", recent.volume_to_average.to_f.round(3)
+            aggregate.d1_money_volume = recent.volume * instrument.lot * recent.close if accessor == 'd1_ago'
           end
         end
       end

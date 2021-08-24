@@ -20,10 +20,10 @@ module InstrumentsHelper
     tag.span(value, class: "changebox changebox-#{green ? 'green' : 'red'}", title: title)
   end
 
-  def format_price_in_millions(price, unit: nil)
+  def format_price_in_millions(price, unit: nil, precision: 1)
     return unless price
     price_in_millions = price / 1_000_000.0
-    number_to_currency price_in_millions, unit: currency_sign(unit), precision: 1, format: '%u%nm'
+    number_to_currency price_in_millions, unit: currency_sign(unit), precision: precision, format: '%u%n'
   end
 
   def format_price(price, unit: nil, precision: nil)
@@ -215,21 +215,23 @@ module InstrumentsHelper
     Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_volume desc" } +
     MarketCalendar.current_special_dates.select.map { |d| "aggregates.#{d.strftime("d%Y_%m%d")}" } +
     [
-      ['P/E',                  'stats.pe desc'],
-      ['ß',                    'stats.beta desc'],
-      ['Yield',                'stats.dividend_yield desc'],
-      ['Capitalization',       'stats.marketcap desc'],
-      ['Days Up',              'aggregates.days_up desc'],
-      ['Low Date',             'aggregates.lowest_day_date desc'],
-      ['Low Gain',             'aggregates.lowest_day_gain desc'],
-      ['Trend',                'aggregates.days_up desc'],
-      ['Portfolio Cost',       'portfolio.cost_in_usd'],
-      ['Portfolio Cost Ideal', 'portfolio.ideal_cost_in_usd'],
-      ['Portfolio Cost Diff',  'portfolio.cost_diff'],
-      ['EMA 20',               'date_indicators.ema_20_trend desc'],
-      ['EMA 50',               'date_indicators.ema_50_trend desc'],
-      ['EMA 200',              'date_indicators.ema_200_trend desc'],
-      ['Change',               'prices.change desc'],
+      ['P/E',                    'stats.pe desc'],
+      ['ß',                      'stats.beta desc'],
+      ['Yield',                  'stats.dividend_yield desc'],
+      ['Capitalization',         'stats.marketcap desc'],
+      ['Days Up',                'aggregates.days_up desc'],
+      ['Low Date',               'aggregates.lowest_day_date desc'],
+      ['Low Gain',               'aggregates.lowest_day_gain desc'],
+      ['Trend',                  'aggregates.days_up desc'],
+      ['Portfolio Cost',         'portfolio.cost_in_usd'],
+      ['Portfolio Cost Ideal',   'portfolio.ideal_cost_in_usd'],
+      ['Portfolio Cost Diff',    'portfolio.cost_diff'],
+      ['EMA 20',                 'date_indicators.ema_20_trend desc'],
+      ['EMA 50',                 'date_indicators.ema_50_trend desc'],
+      ['EMA 200',                'date_indicators.ema_200_trend desc'],
+      ['Change',                 'prices.change desc'],
+      ['Yesterday Money Volume', 'aggregates.d1_money_volume desc'],
+      ['5-day Money Volume',     'stats.d5_money_volume desc'],
     ]
   end
 
