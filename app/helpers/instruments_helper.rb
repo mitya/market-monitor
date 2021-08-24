@@ -385,7 +385,7 @@ module InstrumentsHelper
   end
 
   def tickers_copy_list(records)
-    tickers = records.map(&:ticker)
+    tickers = records.to_a.map(&:ticker)
     tag.p(tickers.join(' '), class: 'text-muted text-center x-tickers-list mb-1', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json) +
     tag.p(class: 'text-muted text-center', style: 'font-size: 0.5rem') do
       link_to "Export", export_instruments_path(tickers: tickers.join(' '), set: params[:set])
