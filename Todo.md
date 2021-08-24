@@ -42,9 +42,8 @@
 + show daily/weekly trading vol in money
 + improve Rus illiquid stocks list
 + improve the menu
++ add NASDAQ 100 & S&P 500 companies
 
-- NASDAQ 100 companies
-- SPX
 - TV chart programming - open/close lines
 - SA
 
