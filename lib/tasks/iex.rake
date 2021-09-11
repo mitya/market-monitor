@@ -197,6 +197,7 @@ namespace :iex do
   end
 end
 
+task :insiders => 'iex:insider_transactions'
 
 __END__
 rake iex:logos

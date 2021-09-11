@@ -26,19 +26,19 @@ class Aggregate < ApplicationRecord
       return puts "Requested date #{date} != #{Current.yesterday}".red if date != Current.yesterday
 
       if gains
-        if base_price = instrument.d1_ago_close
+        if current = day_candle&.close
           Accessors.each do |accessor|
             suffix = 'low'
             suffix = 'open' if accessor =~ /y\d{4}/
             suffix = 'close' if accessor =~ /\w\d_ago/
-            if price = instrument.send("#{accessor}_#{suffix}")
-              aggregate.send "#{accessor.remove '_ago'}=", (price / base_price - 1.0).to_f.round(3)
+            if historic = instrument.send("#{accessor}_#{suffix}")
+              aggregate.send "#{accessor.remove '_ago'}=", (current / historic - 1.0).to_f.round(3)
             end
           end
 
           MarketCalendar.special_dates.each do |date|
-            if price = instrument.candles.day.find_date(date)&.close
-              aggregate.send date.strftime("d%Y_%m%d="), (price / base_price - 1.0).to_f.round(3)
+            if historic = instrument.candles.day.find_date(date)&.close
+              aggregate.send date.strftime("d%Y_%m%d="), (current / historic - 1.0).to_f.round(3)
             end
           end
         end

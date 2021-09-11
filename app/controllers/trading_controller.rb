@@ -6,7 +6,7 @@ class TradingController < ApplicationController
     @market_open_time_in_hhmm_utc = helpers.format_as_minutes_since @market_open_time_in_mins_utc, 0
     puts @market_open_time_in_hhmm_utc
 
-    @instruments = InstrumentSet[:trading].scope.includes(:info, :aggregate)
+    @instruments = InstrumentSet[:trading].scope.includes(:info, :aggregate).order(:ticker)
     @candles = Candle::M5.where(ticker: @instruments, date: Current.date).order(:time)
     @candles = @candles.select { |candle| candle.time_before_type_cast >= @market_open_time_in_hhmm_utc }
     @candles_by_ticker = @candles.group_by(&:ticker)

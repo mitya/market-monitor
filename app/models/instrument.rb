@@ -121,7 +121,7 @@ class Instrument < ApplicationRecord
   def gain_since_close = rel_diff(:d1_ago_close, :last, default: 0)
 
   def price_on!(date) = day_candles!.find_date(date)
-  def price_on(date) = day_candles!.find_date_before(date)
+  def price_on(date) = day_candles!.find_date_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
 
   alias gain_since rel_diff_value

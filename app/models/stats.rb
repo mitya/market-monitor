@@ -69,6 +69,10 @@ class Stats < ApplicationRecord
     update! d5_money_volume: instrument.day_candles.order(:date).last(5).pluck(:volume).sum * instrument.lot * instrument.last
   end
 
+  def sync_earning_dates
+    update! earning_dates: (earning_dates.to_a + [next_earnings_date]).uniq.compact.sort
+  end
+
   class << self
     def refresh
       abc.find_each do |info|
@@ -140,3 +144,6 @@ Stats.group(:industry).order(:count).count
 Stats.pluck(:industry)
 Stats.load_sector_codes_from_tops
 Instrument['BABA'].info.refresh
+
+Stats.find_each &:sync_earning_dates
+Stats.find_each {  |s| p (s.earning_dates.to_a + [s.next_earnings_date]).uniq.compact.sort }; nil

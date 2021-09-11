@@ -32,8 +32,19 @@ class PriceSignalStrategy < ApplicationRecord
       changes_from_recent.each { |change| test_breakout_up prev_2w_low: change }
       changes_from_recent.each { |change| test_breakout_up prev_1w_low: change }
       volume_diffs.each { |change| test_breakout_up prev_1w_low: change }
-
     end
+
+    def test_earnings_breakouts
+      # changes = (0.06.to_d ... 0.30.to_d).step(0.01.to_d).map { |low| range_up(low) } + [0.30..1.00]
+      # changes.each { |change| test_breakout_up prev_2w_low: change }
+
+      create_earnings_breakout_test
+    end
+
+    def create_earnings_breakout_test(**params)
+      find_or_initialize_by(signal: 'earnings-breakout', direction: 'up', **params).test!
+    end
+
 
     def test_breakout_up(**params)
       strategy = find_or_initialize_by signal: 'breakout', direction: 'up', **params
@@ -49,3 +60,4 @@ end
 __END__
 
 PriceSignalStrategy.create_some
+PriceSignalStrategy.test_earnings_breakouts

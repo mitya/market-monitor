@@ -10,6 +10,7 @@ class PriceSignal < ApplicationRecord
   scope :for_interval, -> interval { interval == 'intraday' ? intraday : where(interval: interval) }
   scope :outside_bars, -> { where kind: 'outside-bar' }
   scope :breakouts, -> { where kind: 'breakout' }
+  scope :earnings_breakouts, -> { where kind: 'earnings-breakout' }
   scope :up, -> { where direction: 'up' }
   scope :down, -> { where direction: 'down' }
   scope :changed_more,              -> percent { where "(data->'change')::float > ?",              percent }
@@ -176,7 +177,7 @@ class PriceSignal < ApplicationRecord
           prev_1w_high = last_5.max_by &:range_high
           next_day = candle.next
           spy_day = Instrument['SPY'].day_candles!.find_date(date)
-          gap_change = candle.gap_change if candle.gap?
+          gap_change = candle.rel_gap if candle.gap?
 
           data = { }
           data[:change]         = candle.rel_change.to_f.round(3)
@@ -197,6 +198,33 @@ class PriceSignal < ApplicationRecord
       end
     end
 
+    def find_earnings_breakouts(instruments = Instrument.all, dates: Current.ytd..Current.date, direction: :up)
+      min_full_change = 0.06
+
+      Instrument.get_all(instruments).sort_by(&:ticker).each do |inst|
+        inst.info.earning_dates.each do |earning_date|
+          [0, 1, 2].each do |date_shift|
+            date = MarketCalendar.next_closest_weekday(earning_date + date_shift)
+            next if date > Current.yesterday
+
+            candle = inst.day_candles.find_date(date)
+            full_change = candle&.rel_close_change
+
+            if full_change.to_f > min_full_change && candle.up?
+              puts "Detect earnings breakout on #{date} (shift #{date_shift}) #{(full_change * 100).to_i.to_s.rjust 2}% for #{inst.ticker.ljust 8}"
+              data = {
+                change: full_change.round(3),
+                gap: candle.rel_gap.to_f.round(3),
+                date_shift: date_shift
+              }
+              signal = find_or_initialize_by kind: 'earnings-breakout', instrument: inst, date: date, direction: direction
+              signal.update! enter: candle.close, stop: candle.low, data: data
+              break
+            end
+          end
+        end
+      end
+    end
   end
 end
 

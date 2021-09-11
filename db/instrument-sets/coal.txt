@@ -1,6 +1,8 @@
-AMR
-ARCH
-BTU
-HCC
-METC
-RASP
+amr
+arch
+btu
+hcc
+metc
+mtlr
+mtlrp
+rasp

@@ -15,6 +15,13 @@ envtask :main do
     rake 'iex:prices:uniq'     unless R.false?(:price)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
   end
+  rake 'process'
+end
+
+# r iex:days:previous iex:prices
+# r tinkoff:days:previous process
+
+task :process do
   rake 'aggregate'
   rake 'indicators'
   rake 'analyze'
@@ -134,7 +141,7 @@ envtask :service do
 end
 
 
-namespace :signal do
+namespace :signals do
   envtask :breakouts do
     instruments = InstrumentSet.known_symbols.sort
     instruments = Instrument.all
@@ -153,6 +160,10 @@ namespace :signal do
   envtask :aggregate do
     PriceSignalStrategy.create_some
   end
+
+  envtask :earnings_breakouts do
+    PriceSignal.find_earnings_breakouts Instrument.all
+  end
 end
 
 
@@ -164,8 +175,8 @@ namespace :options do
   end
 
   envtask :week do
-    OptionItem.import_all InstrumentSet.known_instruments.map(&:iex_ticker).compact.sort.select { |t| t > 'ATEX' }, range: '1w'
-    # OptionItem.import_all R.instruments_from_env || Instrument.iex_sourceable, range: '1w'
+    OptionItem.import_all R.instruments_from_env, range: '1w', spread: 0.2, depth: 2, date: ENV['date'].presence
+    # OptionItem.import_all InstrumentSet.known_instruments.map(&:iex_ticker).compact.sort.select { |t| t > 'ATEX' }, range: '1w'
     # OptionItem.import_all Instrument.for_tickers(%w[ALTO ZIM]).abc.pluck(:iex_ticker), range: '1w'
   end
 
@@ -210,3 +221,5 @@ end
 __END__
 
 rake aggregate date=2021-08-09
+r options:day tickers='BABA'
+r options:week tickers='BABA CLF'

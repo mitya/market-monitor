@@ -12,3 +12,32 @@ mac < 18
 zim 45
 x 24-25
 rig 4.5
+
+
+# 17/09
+dk -17.5
+pbf < 9
+dvn 28
+rig 3.5 (3-4 max)
+alto 5
+
+eqt 18-20 (17*22 max)
+cog 17
+ar 14
+rrc 17
+
+qdel -135 or -150
+
+fcx 34-37 ~35; battle on 35, lots of puts on 34/33/32, calls on 37/38
+clf 23-24
+kgc 6-6.5
+nugt 50-54
+arch 60-65
+zim 50 | 38
+
+mac 17-18
+m 22
+coty 8
+
+baba 170-175
+ftch 40

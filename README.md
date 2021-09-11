@@ -53,7 +53,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='STLA SNOW CNI'
+export tickers='ASTR PACB PAAS SATS AI KTOS'
 rake tinkoff:premium:import
 
 ## Tinkoff
@@ -62,17 +62,17 @@ rake SetIexTickers
 rake empty
 rake tinkoff:logos:download
 
-rake tinkoff:days:year tickers='STLA SNOW CNI'
+rake tinkoff:days:year tickers='ASTR PACB PAAS SATS AI KTOS'
 
 ## All
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
-rake iex:days:missing since=2020-01-01 special=1 ok=1 tickers='PAYO'
+rake iex:days:missing since=2020-01-01 special=1 ok=1
 rake set_average_volume
-rake iex:symbols:refresh
 
 ## Optional
+rake iex:symbols:refresh
 rake set_first_date ticker=GRUB date=2021-03-25
-rake set_first_date_auto tickers='SNOW'
+rake set_first_date_auto tickers='ASTR'
 rake iex:symbols:load iex:symbols:otc:load
 rake destroy ticker=ACIA
 rake iex:days:period period=ytd
@@ -81,7 +81,6 @@ rake tinkoff:days:special
 rake tinkoff:days:year tickers=FLOT
 
 ## Import List
-
 rake list:clear tickers=''
 rake list:import list=portfolio
 
@@ -89,3 +88,9 @@ rake list:import list=portfolio
 rake options:day
 rake options:week
 rake signals:import
+
+
+## Indexes
+
+https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry
+https://tradingeconomics.com/commodities

@@ -58,7 +58,8 @@ class Current < ActiveSupport::CurrentAttributes
   def us_open_time_in_minutes_utc = 13 * 60 + 30
 
   def last_closed_day = workday? ? yesterday : today
-  def last_closed_day_as_iex = workday? ? yesterday : yesterday - 1
+  # def last_closed_day_as_iex = workday? ? yesterday : yesterday - 1
+  def last_closed_day_as_iex = yesterday
 
   def weekdays_since(date) = date.upto(Current.yesterday).to_a.select { |date| MarketCalendar.market_open?(date) }.reverse
   def last_n_weeks(n) = weekdays_since(n.weeks.ago.to_date)

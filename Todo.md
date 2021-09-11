@@ -43,12 +43,11 @@
 + improve Rus illiquid stocks list
 + improve the menu
 + add NASDAQ 100 & S&P 500 companies
++ TV chart programming - open/close lines
++ fix diff to year begins
 
-- TV chart programming - open/close lines
-- SA
-
-- list tickers on the highs
-- show % corrections from 1y high
+- fix 200 MA
+- show % & days since 52w high
 
 - list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons

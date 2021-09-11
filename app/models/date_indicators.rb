@@ -14,10 +14,10 @@ class DateIndicators < ApplicationRecord
       {20 => 21, 50 => 55, 200 => 200}.each do |length, real_length|
         accessor = "ema_#{length}"
 
-        if close < 0.01
+        if close < 0.02
           record.send "#{accessor}=", close
           record.send "#{accessor}_trend=", 0
-          return
+          next
         end
 
         prev_ema   = prev.try(accessor) || close

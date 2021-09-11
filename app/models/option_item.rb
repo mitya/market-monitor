@@ -11,17 +11,18 @@ class OptionItem < ApplicationRecord
   end
 
   class << self
-    def import_all(tickers, range: '1w', depth: 1)
-      tickers.each { |ticker| import ticker, range: range, depth: 1 }
+    def import_all(tickers, range: '1w', depth: 1, spread: 0.2, date: nil)
+      tickers.each { |ticker| import ticker, range: range, depth: depth, spread: spread, date: date }
     end
 
-    def import(ticker, range: '1w', depth: 1)
+    def import(ticker, range: '1w', depth: 1, spread: 0.2, date: nil)
       instrument = Instrument.get_by_iex_ticker(ticker)
-      max_strike = instrument.recent_high * 1.5
-      min_strike = instrument.recent_low * 0.65
+      max_strike = instrument.last * (1 + spread)
+      min_strike = instrument.last * (1 - spread)
       strike_range = min_strike .. max_strike
 
-      soonest_dates = OptionItemSpec.where(ticker: ticker).where('date >= ?', Current.date).order(:date).distinct.pluck(:date).first(depth)
+      soonest_dates = date ? [date.to_date] :
+        OptionItemSpec.where(ticker: ticker).where('date >= ?', Current.date).order(:date).distinct.pluck(:date).first(depth)
       soonest_options = OptionItemSpec.where(ticker: ticker).where(date: soonest_dates, strike: strike_range).order(:ticker, :side, :date, :strike)
       soonest_options.each do |option|
         puts "Load IEX option data for #{option.date} #{option.ticker} #{option.side} #{option.strike} #{option.code}..."
@@ -33,7 +34,7 @@ class OptionItem < ApplicationRecord
 
           record = find_or_initialize_by ticker: instrument.ticker, code: option.code, updated_on: update_date
           next if record.persisted?
-          puts "Set option data for #{ticker.ljust(5)} #{update_date} #{option.side.ljust(4)} #{option.strike} #{volume.to_s.rjust 6} #{open_interest.to_s.rjust 6}".send(record.new_record?? :green : :yellow)
+          puts "Set option data for #{option.ticker.ljust(5)} #{update_date} #{option.side.ljust(4)} #{option.strike} #{volume.to_s.rjust 6} #{open_interest.to_s.rjust 6}".send(record.new_record?? :green : :yellow)
 
           record.update! side: option.side, strike: option.strike,
             volume:        volume,

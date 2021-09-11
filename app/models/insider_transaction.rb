@@ -32,7 +32,7 @@ class InsiderTransaction < ApplicationRecord
     def import_iex_data(data)
       data.each do |item|
         next if exists? ticker: item['symbol'], insider_name: item['fullName'], date: item['transactionDate']
-        puts "Import insider transaction for #{item['symbol']} on #{item['transactionDate']} by #{item['fullName']}"
+        puts "Import insider transaction  for #{item['symbol']} on #{item['transactionDate']} by #{item['fullName']}"
         create!(
           ticker:        item['symbol'],
           shares:        item['transactionShares'],

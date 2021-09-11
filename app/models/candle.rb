@@ -38,9 +38,12 @@ class Candle < ApplicationRecord
 
   def change = close - open
   def rel_change = (change / open).round(4)
+  def close_change = close - previous&.close.to_d
+  def rel_close_change = (close_change / open).round(4)
 
-  def gap_change = ((open - previous.close) / open if previous)
-  def gap? = gap_change > 0.01
+  def gap = open - previous&.close.to_d
+  def gap? = gap > 0
+  def rel_gap = gap?? gap / previous&.close.to_d : 0
 
   def diff_to(price, base_price = :close) = (send(base_price) - price) / price
 
