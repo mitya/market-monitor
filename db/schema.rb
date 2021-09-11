@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_23_191417) do
+ActiveRecord::Schema.define(version: 2021_09_11_194721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,15 @@ ActiveRecord::Schema.define(version: 2021_08_23_191417) do
     t.jsonb "data", default: {}
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "d1_money_volume"
+    t.float "y1_high_change"
+    t.float "y3_high_change"
+    t.date "y1_high_date"
+    t.date "y3_high_date"
+    t.float "y1_low_change"
+    t.float "y3_low_change"
+    t.date "y1_low_date"
+    t.date "y3_low_date"
     t.index ["current"], name: "index_aggregates_on_current"
     t.index ["d2021_0512"], name: "index_aggregates_on_d2021_0512"
     t.index ["d2021_0820"], name: "index_aggregates_on_d2021_0820"
@@ -186,24 +195,6 @@ ActiveRecord::Schema.define(version: 2021_08_23_191417) do
     t.index ["ticker"], name: "candles_5m_ticker_idx"
   end
 
-  create_table "date_indicators", force: :cascade do |t|
-    t.string "ticker", null: false
-    t.date "date", null: false
-    t.boolean "current", default: false, null: false
-    t.decimal "ema_20", precision: 20, scale: 2
-    t.decimal "ema_50", precision: 20, scale: 2
-    t.decimal "ema_200", precision: 20, scale: 2
-    t.integer "ema_20_trend"
-    t.integer "ema_50_trend"
-    t.integer "ema_200_trend"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["current"], name: "index_date_indicators_on_current"
-    t.index ["ticker", "current"], name: "index_date_indicators_on_ticker_and_current", where: "(current = true)"
-    t.index ["ticker", "date"], name: "index_date_indicators_on_ticker_and_date", unique: true
-    t.index ["ticker"], name: "index_date_indicators_on_ticker"
-  end
-
   create_table "extremums", force: :cascade do |t|
     t.string "ticker"
     t.date "date"
@@ -216,6 +207,22 @@ ActiveRecord::Schema.define(version: 2021_08_23_191417) do
     t.datetime "created_at"
     t.index ["date"], name: "index_extremums_on_date"
     t.index ["ticker"], name: "index_extremums_on_ticker"
+  end
+
+  create_table "indicators", id: :bigint, default: -> { "nextval('date_indicators_id_seq'::regclass)" }, force: :cascade do |t|
+    t.string "ticker", null: false
+    t.date "date", null: false
+    t.boolean "current", default: false, null: false
+    t.decimal "ema_20", precision: 20, scale: 4
+    t.decimal "ema_50", precision: 20, scale: 4
+    t.decimal "ema_200", precision: 20, scale: 4
+    t.integer "ema_20_trend"
+    t.integer "ema_50_trend"
+    t.integer "ema_200_trend"
+    t.index ["current"], name: "index_date_indicators_on_current"
+    t.index ["ticker", "current"], name: "index_date_indicators_on_ticker_and_current", where: "(current = true)"
+    t.index ["ticker", "date"], name: "index_date_indicators_on_ticker_and_date", unique: true
+    t.index ["ticker"], name: "index_date_indicators_on_ticker"
   end
 
   create_table "insider_aggregates", force: :cascade do |t|
@@ -298,7 +305,7 @@ ActiveRecord::Schema.define(version: 2021_08_23_191417) do
     t.string "currency"
     t.string "name", null: false
     t.string "type", default: "Stock", null: false
-    t.integer "lot"
+    t.integer "lot", default: 1
     t.float "price_step"
     t.string "flags", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
@@ -575,9 +582,19 @@ ActiveRecord::Schema.define(version: 2021_08_23_191417) do
     t.date "date"
     t.float "spike"
     t.float "change"
-    t.datetime "created_at"
     t.index ["date"], name: "index_spikes_on_date"
     t.index ["ticker"], name: "index_spikes_on_ticker"
+  end
+
+  create_table "splits", force: :cascade do |t|
+    t.string "ticker"
+    t.date "declared_date"
+    t.date "ex_date"
+    t.string "desc"
+    t.float "ratio"
+    t.integer "from_factor"
+    t.integer "to_factor"
+    t.datetime "created_at"
   end
 
   create_table "stats", primary_key: "ticker", id: :string, force: :cascade do |t|
@@ -605,6 +622,8 @@ ActiveRecord::Schema.define(version: 2021_08_23_191417) do
     t.float "last_insider_buy_price"
     t.jsonb "extra"
     t.integer "avg_volume"
+    t.bigint "d5_money_volume"
+    t.date "earning_dates", array: true
   end
 
   add_foreign_key "price_level_hits", "price_levels", column: "level_id"

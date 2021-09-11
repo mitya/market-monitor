@@ -46,8 +46,8 @@
 + TV chart programming - open/close lines
 + fix diff to year begins
 + fix 200 MA
-
-- show % & days since 52w high
++ show % & days since 52w high
++ load splits
 
 - list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons

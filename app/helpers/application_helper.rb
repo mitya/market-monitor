@@ -101,7 +101,7 @@ module ApplicationHelper
   end
 
   def format_date(date)
-    l date, format: :long
+    l date, format: :long if date
   end
 
   def days_ago(date, suffix = ' days ago')

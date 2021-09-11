@@ -22,6 +22,7 @@ class Iex
   def company(symbol)                 = stock(symbol, 'company')
   def stats(symbol)                   = stock(symbol, 'stats')
   def advanced_stats!(symbol)         = stock(symbol, 'advanced-stats')
+  def splits(symbol)                  = stock(symbol, 'splits/5y')
   def days_for(symbol, period)        = stock(symbol, "chart/#{period}")
   def day_on(symbol, date)            = stock(symbol, "chart/date/#{date.to_date.to_s :number}", chartByDay: true)
   def minutes_on(symbol, date)        = stock(symbol, "chart/date/#{date.to_date.to_s :number}")

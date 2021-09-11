@@ -52,9 +52,8 @@ class DateIndicators < ApplicationRecord
       where('date = ?', date).update_all current: true
     end
 
-    def recreate_for_all
-      instruments = Instrument.all
-      Current.parallelize_instruments(instruments, 6) { |inst| recreate_for inst }
+    def recreate_for_all(instruments = Instrument.all)
+      Current.parallelize_instruments(Instrument.normalize(instruments), 6) { |inst| recreate_for inst }
     end
 
     def recreate_for(instrument, since: 1.year.ago)
@@ -79,3 +78,4 @@ MarketCalendar.open_days(4.month.ago, Date.yesterday).each { |date| DateIndicato
 DateIndicators.set_current
 DateIndicators.recreate_for_all
 DateIndicators.recreate_for 'TOL'
+DateIndicators.recreate_for_all ["ACOR", "BBD", "APH"]

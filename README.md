@@ -53,7 +53,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='ASTR PACB PAAS SATS AI KTOS'
+export tickers='CSGP TTD CSX FIZZ NVDA DASTY BBD NEOG EXPI APH SLG GE ACOR VRNS SWI SHW'
 rake tinkoff:premium:import
 
 ## Tinkoff
@@ -94,3 +94,7 @@ rake signals:import
 
 https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry
 https://tradingeconomics.com/commodities
+
+## Dates
+
+* splits were synced on 2021-09-11
