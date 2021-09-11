@@ -1,6 +1,6 @@
 class CreateDateIndicators < ActiveRecord::Migration[6.1]
   def change
-    create_table :date_indicators do |t|
+    create_table :indicators do |t|
       t.string :ticker, null: false
       t.date :date, null: false
       t.boolean :current, default: false, null: false, index: true
@@ -10,7 +10,7 @@ class CreateDateIndicators < ActiveRecord::Migration[6.1]
 
       t.index :ticker
       t.index [:ticker, :date], unique: true
-      t.index [:ticker, :current], unique: true      
+      t.index [:ticker, :current], unique: true
     end
   end
 end

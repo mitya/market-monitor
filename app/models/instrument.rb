@@ -3,7 +3,7 @@ class Instrument < ApplicationRecord
 
   has_many :candles,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :aggregates,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
-  has_many :all_indicators,                foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'DateIndicators'
+  has_many :indicators_history,            foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'DateIndicators'
   has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
   has_many :m1_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M1', dependent: :delete_all
   has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument

@@ -45,8 +45,8 @@
 + add NASDAQ 100 & S&P 500 companies
 + TV chart programming - open/close lines
 + fix diff to year begins
++ fix 200 MA
 
-- fix 200 MA
 - show % & days since 52w high
 
 - list all the institutional holders & find last quarter institutional transactions

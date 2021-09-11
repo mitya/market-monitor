@@ -1,17 +1,25 @@
 class DateIndicators < ApplicationRecord
+  self.table_name = "indicators"
+
   belongs_to :instrument, foreign_key: 'ticker'
   scope :current, -> { where current: true }
 
   class << self
+    def create_recursive(instrument, date: Current.yesterday)
+      last_indicator = instrument.indicators_history.order(:date).where('date < ?', date).last
+      # MarketCalendar.open_days(last_indicator&.date || 1.year.ago, date).each { |date| create_for instrument, date: date }
+      MarketCalendar.open_days(last_indicator&.date || 1.year.ago, date).each { |date| puts "#{date} #{instrument}" }
+    end
+
     def create_for(instrument, date: Current.yesterday)
       candle = instrument.day_candles!.find_date(date) || return
       close = candle.close
 
-      prev = instrument.all_indicators.where('date < ?', date).order(:date).last
-      record = find_or_initialize_by ticker: instrument.ticker, date: date
+      prev = instrument.indicators_history.where('date < ?', date).order(:date).last
+      record = find_or_initialize_by instrument: instrument, date: date
       return if record.persisted?
 
-      {20 => 21, 50 => 55, 200 => 200}.each do |length, real_length|
+      {20 => 20, 50 => 50, 200 => 200}.each do |length, real_length|
         accessor = "ema_#{length}"
 
         if close < 0.02
@@ -32,16 +40,30 @@ class DateIndicators < ApplicationRecord
     end
 
     def create_for_all(date: Current.yesterday, instruments: Instrument.all)
-      instruments = instruments.sort_by &:ticker
+      instruments.sort_by! &:ticker
       transaction do
         Current.preload_day_candles_for_dates instruments, [date.to_date]
-        Current.parallelize_instruments(instruments, 6) { |inst| create_for inst, date: date }
+        Current.parallelize_instruments(instruments, 6) { |inst| create_recursive inst, date: date }
       end
     end
 
     def set_current(date = Current.yesterday)
       where('date < ?', date).where(current: true).update_all current: false
       where('date = ?', date).update_all current: true
+    end
+
+    def recreate_for_all
+      instruments = Instrument.all
+      Current.parallelize_instruments(instruments, 6) { |inst| recreate_for inst }
+    end
+
+    def recreate_for(instrument, since: 1.year.ago)
+      instrument = Instrument[instrument]
+      transaction do
+        instrument.indicators_history.delete_all
+        MarketCalendar.open_days(since, Date.yesterday).each { |date| DateIndicators.create_for instrument, date: date }
+        instrument.indicators_history.reload.last.update! current: true
+      end
     end
 
     private def calculate_ema(close, prev_ema, length)
@@ -55,3 +77,5 @@ end
 __END__
 MarketCalendar.open_days(4.month.ago, Date.yesterday).each { |date| DateIndicators.create_for_all date: date, instruments: Instrument.all }
 DateIndicators.set_current
+DateIndicators.recreate_for_all
+DateIndicators.recreate_for 'TOL'
