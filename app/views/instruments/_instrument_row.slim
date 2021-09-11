@@ -114,8 +114,10 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
       / td.money-cell.muted-cell= relative_price inst.send("y#{year}_open"), inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
 
 
-  td= link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
-    = exchange_logo(inst.exchange_name)
+  td
+    = link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do
+      = exchange_logo(inst.exchange_name)
+
   - if @show_last_insider_buys
     td.money-cell= relative_price inst.info&.last_insider_buy_price, inst.base_price, unit: inst.currency, format: @past_price_format, inverse: true
 
@@ -123,5 +125,12 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell(class=red_green_class(indicators&.ema_20_trend.to_d  > 0) title=indicators&.ema_20 )= indicators&.ema_20_trend
     td.money-cell(class=red_green_class(indicators&.ema_50_trend.to_d  > 0) title=indicators&.ema_50 )= indicators&.ema_50_trend
     td.money-cell(class=red_green_class(indicators&.ema_200_trend.to_d > 0) title=indicators&.ema_200)= indicators&.ema_200_trend
+
+  - if @show_extremums
+    td.money-cell(title=format_date_as_text_with_days(aggregate.y1_high_date))= colorized_ratio aggregate.y1_high_change
+    td.money-cell(title=format_date_as_text_with_days(aggregate.y3_high_date))= colorized_ratio aggregate.y3_high_change if aggregate.y3_high_change != aggregate.y1_high_change
+    td.money-cell(title=format_date_as_text_with_days(aggregate.y1_low_date)) = colorized_ratio aggregate.y1_low_change
+    td.money-cell(title=format_date_as_text_with_days(aggregate.y3_low_date)) = colorized_ratio aggregate.y3_low_change if aggregate.y3_low_change != aggregate.y1_low_change
+
   td= growth_badge aggregate
   td= link_to fa_icon(:adjust), instrument_options_path(inst) if inst.usd?

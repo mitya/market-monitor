@@ -232,6 +232,10 @@ module InstrumentsHelper
       ['Change',                 'prices.change desc'],
       ['Yesterday Money Volume', 'aggregates.d1_money_volume desc'],
       ['5-day Money Volume',     'stats.d5_money_volume desc'],
+      ['Since 1Y High',          'aggregates.y1_high_change desc'],
+      ['Since 3Y High',          'aggregates.y3_high_change desc'],
+      ['Since 1Y Low',           'aggregates.y1_low_change desc'],
+      ['Since 3Y Low',           'aggregates.y3_low_change desc'],
     ]
   end
 

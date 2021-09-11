@@ -100,6 +100,10 @@ module ApplicationHelper
     string.length > 10 && string.upcase == string ? string.titleize : string
   end
 
+  def format_date(date)
+    l date, format: :long
+  end
+
   def days_ago(date, suffix = ' days ago')
     if date
       days = (Current.date - date).to_i
@@ -202,5 +206,9 @@ module ApplicationHelper
     minutes = since + minutes
     hour, minute = minutes.divmod(60)
     "#{hour.to_s.rjust(2, '0')}:#{minute.to_s.rjust(2, '0')}"
+  end
+
+  def format_date_as_text_with_days(date)
+    "On #{format_date date} | #{days_ago date}"
   end
 end

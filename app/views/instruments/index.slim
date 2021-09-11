@@ -26,6 +26,7 @@
 - @show_sector = !@categories
 - @show_open = false
 - @show_ema_trends = params[:ema_trends] == '1'
+- @show_extremums = params[:extremums] == '1'
 
 main.container-fluid.mb-4
   form#list-config(action=(@categories ? grouped_instruments_path : instruments_path) class='my-2')
@@ -68,6 +69,7 @@ main.container-fluid.mb-4
             = bs_check_box :recent_years, 'Recent years', inline: true
             = bs_check_box :last_insider_buys, 'Last Insider buys', inline: true
             = bs_check_box :alarm, 'With alarms', inline: true
+            = bs_check_box :extremums, 'Extremums', inline: true
             br
             = bs_check_box :portfolio, 'Portfolio editor', inline: true
             = bs_check_box :active, 'Active only', inline: true
@@ -174,12 +176,21 @@ main.container-fluid.mb-4
             th.money-cell(data-sort="aggregates.y#{year}")= "#{year} ﹪"
 
         th
+
         - if @show_last_insider_buys
           th.money-cell Insider
+
         - if @show_ema_trends
           th.money-cell(data-sort="indicators.ema_20_trend desc") MA20
           th.money-cell(data-sort="indicators.ema_50_trend desc") MA50
           th.money-cell(data-sort="indicators.ema_200_trend desc") MA200
+
+        - if @show_extremums
+          th.money-cell(data-sort="aggregates.y1_high_change desc") 1y H
+          th.money-cell(data-sort="aggregates.y3_high_change desc") 3y H
+          th.money-cell(data-sort="aggregates.y1_low_change desc") 1y L
+          th.money-cell(data-sort="aggregates.y3_low_change desc") 3y L
+
         th(data-sort="aggregates.days_up desc") Trn
         th
 
