@@ -58,6 +58,10 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
 
+    # @instruments = @instruments.where('indicators.ema_50_trend': 1)
+    # @instruments = @instruments.where('indicators.ema_200_trend': -1)
+    # @instruments = @instruments.where('aggregates.d1_volume <= ?', 1)
+
     # @instruments = @instruments.vtb_spb_long
 
     if params[:low] == '1'

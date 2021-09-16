@@ -10,12 +10,11 @@ curl -s "https://cloud.iexapis.com/stable/stock/clf/insider-summary?token=$IEX_S
 curl -s "https://cloud.iexapis.com/stable/stock/clf/institutional-ownership?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/clf/fund-ownership?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/clf/largest-trades?token=$IEX_SECRET_KEY" | jq 'sort_by(.time)'
-
 curl -s "https://cloud.iexapis.com/stable/deep/trades?symbols=CLF&token=$IEX_SECRET_KEY" | jq
-
 curl -s "https://cloud.iexapis.com/stable/deep/book?symbols=yelp&token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/yelp/book?token=$IEX_SECRET_KEY" | jq
-
+curl -s "https://cloud.iexapis.com/stable/ref-data/exchange/MIC/symbols?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/ref-data/region/RU/symbols?token=$IEX_SECRET_KEY" | jq
 
 
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/quote?token=$IEX_SECRET_KEY" | jq

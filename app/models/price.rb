@@ -11,7 +11,7 @@ class Price < ApplicationRecord
   after_update def update_change
     close = instrument.d1_ago_close
     return unless value && close
-    update_column :change, (value / close - 1.0).round(2)
+    update_column :change, (value / close - 1.0).round(3)
   end
 
   class << self

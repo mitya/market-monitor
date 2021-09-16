@@ -152,14 +152,14 @@ class Current < ActiveSupport::CurrentAttributes
 
     def dates
       [
-        # Current.y2017,
-        # Current.y2018,
-        # Current.y2019,
-        # Current.y2020,
+        Current.y2017,
+        Current.y2018,
+        Current.y2019,
+        Current.y2020,
         Current.y2021,
-        # Current.feb19,
-        # Current.mar23,
-        # Current.nov06,
+        Current.feb19,
+        Current.mar23,
+        Current.nov06,
         Current.date,
         Current.d1_ago,
         Current.d2_ago,

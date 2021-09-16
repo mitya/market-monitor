@@ -29,16 +29,17 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell= format_price portfolio_item.ideal_cost_in_usd, unit: 'USD', precision: 0 if portfolio_item&.ideal_cost_in_usd
     td.money-cell= colorized_diff portfolio_item.cost_in_usd, portfolio_item.ideal_cost_in_usd, unit: inst.currency, precision: 0 if portfolio_item&.ideal_cost_in_usd.to_i > 0
 
+  td.money-cell(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.last_marketcap_mil, unit: currency_span(inst.currency), precision: 0
+  td.money-cell.border-end.pe-2= number_with_precision info&.beta, precision: 1
+
   - if @show_sector
     td= sector_badge inst
 
-  td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
   - if @vtb_marginal_info
     td.money-cell= number_with_precision inst.info&.vtb_long_risk, precision: 2
     td.money-cell= number_with_precision inst.info&.vtb_short_risk, precision: 2
   - if params[:fundamentals]
     td.money-cell                = number_with_precision info&.pe, precision: 0
-    td.money-cell                = number_with_precision info&.beta, precision: 1
     td.money-cell.border-end.pe-2= number_to_percentage  info&.dividend_yield_percent, precision: 1
 
   - if params[:price_targets]
@@ -107,7 +108,7 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
 
   - if @show_special_dates
     - MarketCalendar.current_special_dates.each do |date|
-      td.money-cell(class=class_names('muted-cell': date < Current.y2021))= colorized_ratio aggregate.send(date.strftime "d%Y_%m%d"), inverse: true
+      td.money-cell(class=class_names('muted-cell': date < Current.y2021))= colorized_ratio aggregate.send(date.strftime "d%Y_%m%d")
   - if @show_recent_years
     - MarketCalendar.current_recent_years.each do |year|
       td.money-cell= colorized_ratio aggregate.send("y#{year}")
@@ -124,7 +125,7 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
   - if @show_ema_trends
     td.money-cell(class=red_green_class(indicators&.ema_20_trend.to_d  > 0) title=indicators&.ema_20 )= indicators&.ema_20_trend
     td.money-cell(class=red_green_class(indicators&.ema_50_trend.to_d  > 0) title=indicators&.ema_50 )= indicators&.ema_50_trend
-    td.money-cell(class=red_green_class(indicators&.ema_200_trend.to_d > 0) title=indicators&.ema_200)= indicators&.ema_200_trend
+    td.money-cell.border-end.pe-2(class=red_green_class(indicators&.ema_200_trend.to_d > 0) title=indicators&.ema_200)= indicators&.ema_200_trend
 
   - if @show_extremums
     td.money-cell(title=format_date_as_text_with_days(aggregate.y1_high_date))= colorized_ratio aggregate.y1_high_change

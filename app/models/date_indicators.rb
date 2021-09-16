@@ -6,9 +6,9 @@ class DateIndicators < ApplicationRecord
 
   class << self
     def create_recursive(instrument, date: Current.yesterday)
+      puts "Update EMAs for #{instrument}"
       last_indicator = instrument.indicators_history.order(:date).where('date < ?', date).last
-      # MarketCalendar.open_days(last_indicator&.date || 1.year.ago, date).each { |date| create_for instrument, date: date }
-      MarketCalendar.open_days(last_indicator&.date || 1.year.ago, date).each { |date| puts "#{date} #{instrument}" }
+      MarketCalendar.open_days(last_indicator&.date || 1.year.ago, date).each { |date| create_for instrument, date: date }
     end
 
     def create_for(instrument, date: Current.yesterday)
@@ -40,7 +40,7 @@ class DateIndicators < ApplicationRecord
     end
 
     def create_for_all(date: Current.yesterday, instruments: Instrument.all)
-      instruments.sort_by! &:ticker
+      instruments = instruments.sort_by &:ticker
       transaction do
         Current.preload_day_candles_for_dates instruments, [date.to_date]
         Current.parallelize_instruments(instruments, 6) { |inst| create_recursive inst, date: date }
@@ -76,6 +76,8 @@ end
 __END__
 MarketCalendar.open_days(4.month.ago, Date.yesterday).each { |date| DateIndicators.create_for_all date: date, instruments: Instrument.all }
 DateIndicators.set_current
+DateIndicators.create_recursive instr('AAPL')
 DateIndicators.recreate_for_all
 DateIndicators.recreate_for 'TOL'
 DateIndicators.recreate_for_all ["ACOR", "BBD", "APH"]
+DateIndicators.recreate_for_all %w[SLG FIZZ TTD GE SWI SHW CSGP VRNS KAP@GS APH NEOG]

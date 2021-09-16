@@ -30,6 +30,9 @@ class Iex
   def tops(*symbols)                  = get("/tops", { symbols: symbols.join(',').presence }.compact)
   def symbols                         = get("/ref-data/symbols")
   def otc_symbols                     = get("/ref-data/otc/symbols")
+  def exchanges                       = get("/ref-data/exchanges")
+  def exchange_symbols(exchange)      = get("/ref-data/exchange/#{exchange}/symbols") # MIC
+  def region_symbols(region)          = get("/ref-data/region/#{region}/symbols") # RU
   def options_chart(code, range: '1d')= get("/options/#{code}/chart", range: range)
   def options_dates                   = get("/ref-data/options/symbols")
   def options_specs(ticker)           = get("/ref-data/options/symbols/#{ticker}")

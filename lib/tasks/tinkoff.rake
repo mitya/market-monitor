@@ -23,7 +23,7 @@ namespace :tinkoff do
     end
 
     envtask :special do
-      Instrument.non_usd.in_set(ENV['set']).abc.each do |inst|
+      R.instruments_from_env.abc.each do |inst|
         Current::SpecialDates.dates_plus.each do |date|
           Tinkoff.import_day_candle(inst, date)
         end
@@ -38,9 +38,9 @@ namespace :tinkoff do
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"
     envtask :year do
-      instruments = R.instruments_from_env || Instrument.tinkoff
+      instruments = R.instruments_from_env
       instruments.tinkoff.abc.each do |inst|
-        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2019, 2020, 2021])
+        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2020, 2021])
       end
 
       # Instrument.tinkoff.usd.abc.each do |inst|
@@ -75,7 +75,7 @@ namespace :tinkoff do
   namespace :prices do
     envtask(:pre)     { Price.refresh_from_tinkoff Instrument.tinkoff.abc }
     envtask(:all)     { Price.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }
-    envtask(:uniq)    { Price.refresh_from_tinkoff Instrument.where(currency: %w[RUB EUR]).abc }
+    envtask(:uniq)    { Price.refresh_from_tinkoff Instrument.non_iex.abc }
     envtask(:signals) { Price.refresh_from_tinkoff Instrument.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
   end
   task :prices => 'prices:all'

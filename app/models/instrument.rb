@@ -43,6 +43,7 @@ class Instrument < ApplicationRecord
   scope :spb, -> { where "'spb' = any(flags)" }
   scope :iex, -> { where "'iex' = any(flags)" }
   scope :iex_sourceable, -> { where.not iex_ticker: nil }
+  scope :non_iex, -> { where iex_ticker: nil }
   scope :usd, -> { where currency: 'USD' }
   scope :eur, -> { where currency: 'EUR' }
   scope :rub, -> { where currency: 'RUB' }
@@ -155,6 +156,7 @@ class Instrument < ApplicationRecord
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase
+  def global_iex_ticker = rub?? "#{ticker}-RX" : iex_ticker
 
   def lowest_body_in(period) = day_candles!.find_dates_in(period).min_by(&:range_low)
 
@@ -171,6 +173,7 @@ class Instrument < ApplicationRecord
 
   def recent_low(days: 5)  = candles.day.order(:date).last(days).map(&:low).min
   def recent_high(days: 5) = candles.day.order(:date).last(days).map(&:high).max
+
 
   class << self
     def get(ticker = nil, figi: nil)
@@ -199,8 +202,8 @@ class Instrument < ApplicationRecord
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
 
-    IEX_TICKERS = { 'KAP@GS' => 'KAP' }
-    def iex_ticker_for(ticker) = IEX_TICKERS[ticker] || (ticker.include?('@GS') ? nil : ticker.sub(/\.US|@US/, ''))
+    IEX_TICKERS = { 'KAP@GS' => nil }
+    def iex_ticker_for(ticker) = IEX_TICKERS.include?(ticker) ? IEX_TICKERS[ticker] : (ticker.include?('@GS') ? nil : ticker.sub(/\.US|@US/, ''))
 
     def moex_liquid_tickers = joins(:info).vtb_moex_short.pluck(:ticker)
     def moex_illiquid_tickers = rub.pluck(:ticker) - moex_liquid_tickers

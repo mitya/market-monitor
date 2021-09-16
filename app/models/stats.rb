@@ -40,10 +40,13 @@ class Stats < ApplicationRecord
     destroy
   end
 
-  # def iex_ticker = Instrument.iex_ticker_for(ticker)
   def marketcap = super.to_i.nonzero?
   def marketcap_mil = marketcap && marketcap / 1_000_000.0
   def marketcap_bil = marketcap && marketcap / 1_000_000_000.0
+  def last_marketcap = shares * instrument.last rescue nil
+  def last_marketcap_mil = shares * instrument.last / 1_000_000.0 rescue nil
+  # def last_marketcap_mil = marketcap_mil
+
   def industry = super&.strip
   def dividend_yield_percent = dividend_yield && dividend_yield * 100
   def avg_10d_volume = stats['avg10Volume']
@@ -51,7 +54,7 @@ class Stats < ApplicationRecord
   def avg_m1_volume = extra['avg_m1_volume']
   def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
   def accessible_peers_and_self = accessible_peers + [ticker]
-  def iex_ticker = instrument.iex_ticker
+  def iex_ticker = instrument.global_iex_ticker
 
 
   def country_code
@@ -104,21 +107,26 @@ class Stats < ApplicationRecord
         puts "Miss peers for #{inst.ticker}".red
       end
     end
+
+    def load_moex_info
+      Instrument.rub.abc.each do |inst|
+        inst.info!.refresh include_company: true
+      end
+    end
   end
 
   COUNTRY_NAMES_TO_ISO3 = {
-    'US'               => 'usa',
     'Argentina'        => 'arg',
     'Australia'        => 'aus',
     'BE'               => 'usa',
     'Belgium'          => 'bel',
     'Bermuda'          => 'bmu',
     'Brazil'           => 'bra',
-    'CN'               => 'cny',
     'Canada'           => 'can',
     'Cayman Islands'   => 'cym',
     'Chile'            => 'chl',
     'China (Mainland)' => 'chn',
+    'CN'               => 'cny',
     'France'           => 'fra',
     'Germany'          => 'deu',
     'Hong Kong'        => 'hkg',
@@ -129,9 +137,11 @@ class Stats < ApplicationRecord
     'Japan'            => 'jpn',
     'Luxembourg'       => 'lux',
     'Netherlands'      => 'nld',
+    'Russia'           => 'rus',
     'South Africa'     => 'zaf',
     'Sweden'           => 'swe',
     'Switzerland'      => 'che',
+    'US'               => 'usa',
   }
 end
 
@@ -147,3 +157,5 @@ Instrument['BABA'].info.refresh
 
 Stats.find_each &:sync_earning_dates
 Stats.find_each {  |s| p (s.earning_dates.to_a + [s.next_earnings_date]).uniq.compact.sort }; nil
+
+Stats.load_moex_info

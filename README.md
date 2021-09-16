@@ -53,7 +53,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='CSGP TTD CSX FIZZ NVDA DASTY BBD NEOG EXPI APH SLG GE ACOR VRNS SWI SHW'
+export tickers='RY SAP@DE TRI GDEV'
 rake tinkoff:premium:import
 
 ## Tinkoff
@@ -62,7 +62,7 @@ rake SetIexTickers
 rake empty
 rake tinkoff:logos:download
 
-rake tinkoff:days:year tickers='ASTR PACB PAAS SATS AI KTOS'
+rake tinkoff:days:year tinkoff:days:special tickers='SAP@DE'
 
 ## All
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
@@ -72,9 +72,9 @@ rake set_average_volume
 ## Optional
 rake iex:symbols:refresh
 rake set_first_date ticker=GRUB date=2021-03-25
-rake set_first_date_auto tickers='ASTR'
+rake set_first_date_auto tickers='GDEV'
 rake iex:symbols:load iex:symbols:otc:load
-rake destroy ticker=ACIA
+rake destroy ticker=CHK ok=1
 rake iex:days:period period=ytd
 rake iex:symbols:refresh
 rake tinkoff:days:special
@@ -89,11 +89,6 @@ rake options:day
 rake options:week
 rake signals:import
 
-
-## Indexes
-
-https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry
-https://tradingeconomics.com/commodities
 
 ## Dates
 

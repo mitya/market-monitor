@@ -69,12 +69,12 @@ main.container-fluid.mb-4
             = bs_check_box :recent_years, 'Recent years', inline: true
             = bs_check_box :last_insider_buys, 'Last Insider buys', inline: true
             = bs_check_box :alarm, 'With alarms', inline: true
-            = bs_check_box :extremums, 'Extremums', inline: true
             br
             = bs_check_box :portfolio, 'Portfolio editor', inline: true
             = bs_check_box :active, 'Active only', inline: true
             br
-            = bs_check_box :ema_trends, 'EMA Trends'
+            = bs_check_box :ema_trends, 'EMA Trends', inline: true
+            = bs_check_box :extremums, 'Extremums', inline: true
     = render 'filter_by_set', lw: 1
 
   = page_entries_block @instruments
@@ -99,15 +99,15 @@ main.container-fluid.mb-4
           th.money-cell Ideal
           th.money-cell(data-sort="portfolio.ideal_cost_in_usd") Ideal Cost
           th.money-cell(data-sort="portfolio.cost_diff") Diff
+        th.money-cell(data-sort="stats.marketcap desc") Cap (M)
+        th.money-cell.border-end.pe-2(data-sort="stats.beta desc") ß
         - if @show_sector
           th Sector
-        th.money-cell.border-end.pe-2(data-sort="stats.marketcap desc") Cap (M)
         - if @vtb_marginal_info
           th.money-cell Ln
           th.money-cell Sh
         - if params[:fundamentals]
           th.money-cell(data-sort="stats.pe desc") P/E
-          th.money-cell(data-sort="stats.beta desc") ß
           th.money-cell.border-end.pe-2(data-sort="stats.dividend_yield desc") Yield
         - if params[:price_targets]
           th.money-cell Low
@@ -183,7 +183,7 @@ main.container-fluid.mb-4
         - if @show_ema_trends
           th.money-cell(data-sort="indicators.ema_20_trend desc") MA20
           th.money-cell(data-sort="indicators.ema_50_trend desc") MA50
-          th.money-cell(data-sort="indicators.ema_200_trend desc") MA200
+          th.money-cell.border-end.pe-2(data-sort="indicators.ema_200_trend desc") MA200
 
         - if @show_extremums
           th.money-cell(data-sort="aggregates.y1_high_change desc") 1y H

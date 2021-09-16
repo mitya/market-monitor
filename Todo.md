@@ -48,6 +48,10 @@
 + fix 200 MA
 + show % & days since 52w high
 + load splits
++ add russian companies info & market cap
+
+- filter field for MA50/200
+- predefined links for MA analysis
 
 - list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons

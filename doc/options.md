@@ -16,12 +16,12 @@ rig 4.5
 
 # 17/09
 dk -17.5
-pbf < 9
-dvn 28
+pbf 10
+dvn 30-32
 rig 3.5 (3-4 max)
 alto 5
 
-eqt 18-20 (17*22 max)
+eqt -22
 cog 17
 ar 14
 rrc 17

@@ -29,6 +29,7 @@ main.container-fluid
         th Ticker
         th Company
         th Sector
+        th.money-cell Cap
         th.money-cell Date
         th.money-cell Spike
         th.money-cell Change
@@ -44,7 +45,8 @@ main.container-fluid
           td= inst.ticker
           td.instrument-name= instrument.name
           td= sector_badge instrument
-          td.money-cell= l spike.date, format: :text
+          td.money-cell.border-end.pe-2(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
+          td.money-cell= l spike.date, format: :week_day_short
           td.money-cell= colorized_ratio spike.spike, precision: 1
           td.money-cell= colorized_ratio spike.change, precision: 1
 

@@ -286,7 +286,7 @@ module InstrumentsHelper
     "energyminerals"        => ["Energy",             'success'],
     "finance"               => ["Finance",            'dark'],
     "healthservices"        => ["Health Services",    'danger'],
-    "healthtechnology"      => ["Health Tech",        'danger'],
+    "healthtechnology"      => ["Biotech",            'danger'],
     "industrialservices"    => ["Industrial",         'success'],
     "miscellaneous"         => ["Misc"],
     "n/a"                   => ["N/A"],
@@ -390,7 +390,7 @@ module InstrumentsHelper
 
   def tickers_copy_list(records)
     tickers = records.to_a.map(&:ticker)
-    tag.p(tickers.join(' '), class: 'text-muted text-center x-tickers-list mb-1', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json) +
+    tag.p(tickers.join(' '), class: 'text-muted text-center x-tickers-list my-1 mx-5', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json) +
     tag.p(class: 'text-muted text-center', style: 'font-size: 0.5rem') do
       link_to "Export", export_instruments_path(tickers: tickers.join(' '), set: params[:set])
     end
@@ -406,18 +406,19 @@ module InstrumentsHelper
 
   SET_BUTTON_CLASSES = {
     portfolio:       'inner-warning',
-    insiders:        'inner-info',
-    recommendations: 'inner-info',
     oil:             'inner-dark',
     coal:            'inner-dark',
     gas:             'inner-dark',
     metals:          'inner-dark',
     transport:       'inner-dark',
-    tech:            'inner-primary',
-    biotech:         'inner-primary',
-    main:            'inner-success',
-    alarms:          'inner-success',
-    current:         'inner-success',
+    main:            'inner-warning',
+    arkf:            'inner-success',
+    arkg:            'inner-success',
+    arkk:            'inner-success',
+    arkw:            'inner-success',
+    russel_2000:     'inner-success',
+    sp_500:          'inner-success',
+    nasdaq_500:      'inner-success',
   }
 end
 

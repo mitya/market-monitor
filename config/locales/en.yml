@@ -38,6 +38,7 @@ en:
       mmdd: '%e/%-m %a'
       mday: '%b %d'
       wday: '%a, %d'
+      week_day_short: '%a, %b %e'
       week_day: '%A, %d %B %Y'
       month_year: "%b %Y"
       month: "%B"

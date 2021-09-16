@@ -53,7 +53,7 @@ namespace :iex do
       dates.uniq.sort.reverse.each do |date|
         date = Date.parse(date) if String === date
         instruments = (R.instruments_from_env || Instrument.iex_sourceable).abc
-        instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date }
+        instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date } unless R.true?('force')
         instruments = instruments.select(&:iex_ticker)
         with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
 

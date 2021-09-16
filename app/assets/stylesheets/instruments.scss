@@ -100,7 +100,8 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .open-chart, .open-row-chart { cursor: pointer; }
 
 .instrument-name { cursor: pointer; }
-.selected-row .instrument-name { color: blue; font-weight: bold; }
+// .selected-row .instrument-name { color: blue; font-weight: bold; }
+.selected-row { background-color: rgba(yellow, 0.2); }
 
 .sa-badge { width: 3rem; display: inline-block; text-align: right; }
 .sa-badge .changebox-red, .sa-badge .changebox-green { color: black; }
