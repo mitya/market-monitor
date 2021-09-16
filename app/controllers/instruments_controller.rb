@@ -57,10 +57,8 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.with_alarm                                         if params[:alarm].present?
     @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
     @instruments = @instruments.for_tickers(params[:tickers].to_s.split)           if params[:tickers].present?
-
-    # @instruments = @instruments.where('indicators.ema_50_trend': 1)
-    # @instruments = @instruments.where('indicators.ema_200_trend': -1)
-    # @instruments = @instruments.where('aggregates.d1_volume <= ?', 1)
+    @instruments = @instruments.where('indicators.ema_50_trend': params[:ma_50])   if params[:ma_50].present?
+    @instruments = @instruments.where('indicators.ema_200_trend': params[:ma_200])   if params[:ma_200].present?
 
     # @instruments = @instruments.vtb_spb_long
 

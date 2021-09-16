@@ -63,7 +63,7 @@ module ApplicationHelper
         label_tag name, label, class: 'col-form-label'
       end +
       tag.div(class: 'col-sm-10') do
-        select_tag name, options_for_select(options, params[name]), class: "form-select #{select_class}", include_blank: blank, style: style
+        select_tag name, options_for_select(options, params[name]), class: "form-select form-select-sm #{select_class}", include_blank: blank, style: style
       end
     end
   end

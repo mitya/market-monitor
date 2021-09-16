@@ -10,7 +10,7 @@ main.container-fluid
         - if @transactions.map(&:ticker).uniq.one?
           .row.mb-1
             .col-sm-2=  label_tag :insider, 'Insider:', class: 'col-form-label'
-            .col-sm-10= select_tag :insider, options_for_select(insider_options_for(@transactions.first.ticker), params[:insider]), class: "form-select", include_blank: 'All'
+            .col-sm-10= select_tag :insider, options_for_select(insider_options_for(@transactions.first.ticker), params[:insider]), class: "form-select form-select-sm", include_blank: 'All'
         .row.mb-1
           .col-sm-2
           .col-sm-10
@@ -61,7 +61,7 @@ main.container-fluid
         th
         th
     tbody
-      - transactions = @transactions.reject { |tx| tx.date > Date.current } 
+      - transactions = @transactions.reject { |tx| tx.date > Date.current }
       - transactions.each do |tx|
         - inst = tx.instrument
         tr
