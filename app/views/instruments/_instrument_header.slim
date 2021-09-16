@@ -1,0 +1,113 @@
+tr
+  th
+  th
+  th(data-sort="ticker") Ticker
+  th
+  th
+  th Name
+  - if @is_portfolio
+    th
+    th.money-cell Tinkoff
+    th.money-cell IIS
+    th.money-cell VTB
+    th.money-cell Total
+    th.money-cell(data-sort="portfolio.cost_in_usd") Cost
+    th.money-cell Ideal
+    th.money-cell(data-sort="portfolio.ideal_cost_in_usd") Ideal Cost
+    th.money-cell(data-sort="portfolio.cost_diff") Diff
+  th.money-cell(data-sort="stats.marketcap desc") Cap (M)
+  th.money-cell.border-end.pe-2(data-sort="stats.beta desc") ß
+  - if @show_sector
+    th Sector
+  - if @vtb_marginal_info
+    th.money-cell Long
+    th.money-cell Short
+  - if @tinkoff_marginal_info
+    th.money-cell Long
+    th.money-cell Short
+  - if params[:fundamentals]
+    th.money-cell(data-sort="stats.pe desc") P/E
+    th.money-cell.border-end.pe-2(data-sort="stats.dividend_yield desc") Yield
+  - if params[:price_targets]
+    th.money-cell Low
+    th.money-cell Average
+    th.money-cell High
+    th.money-cell.border-end.pe-2
+  th.money-cell Last
+  th.money-cell(data-sort="prices.change desc") ﹪
+  - if @show_open
+    th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪
+  - if @show_recent_prices
+    th.money-cell(title=l(Current.d2_ago, format: :week_day) data-sort="aggregates.d2") 2d ﹪
+    th.money-cell(title=l(Current.d3_ago, format: :week_day) data-sort="aggregates.d3") 3d ﹪
+    th.money-cell(title=l(Current.d4_ago, format: :week_day) data-sort="aggregates.d4") 4d ﹪
+    th.money-cell(title=l(Current.w1_ago, format: :week_day) data-sort="aggregates.w1") 1w ﹪
+    th.money-cell(title=l(Current.w2_ago, format: :week_day) data-sort="aggregates.w2") 2w ﹪
+    th.money-cell(title=l(Current.m1_ago, format: :week_day) data-sort="aggregates.m1") 1m ﹪
+    th.money-cell.border-end.pe-2(data-sort="aggregates.y2021") ytd ﹪
+
+  - if @show_sa
+    th.money-cell SA
+    th
+    th
+
+  - if @show_low
+    th.text-end(data-sort="aggregates.lowest_day_date desc") Low
+    th.money-cell.border-end.pe-2(data-sort="aggregates.lowest_day_gain desc") Gain
+
+  - if @show_volume_diff
+    th.money-cell(title=l(Current.today,     format: :week_day)) 𝑉
+    th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_volume desc") 1d 𝑉
+    th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2_volume desc") 2d 𝑉
+    th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3_volume desc") 3d 𝑉
+    th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4_volume desc") 4d 𝑉
+    th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1_volume desc") 1w 𝑉
+    th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_volume desc") 2w 𝑉
+    th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_volume desc") 1m 𝑉
+
+  - if @show_volatility
+    th.money-cell(title=l(Current.today,     format: :week_day)) σ
+    th.money-cell(title=l(Current.yesterday, format: :week_day) data-sort="aggregates.d1_vol desc") 1d σ
+    th.money-cell(title=l(Current.d2_ago,    format: :week_day) data-sort="aggregates.d2_vol desc") 2d σ
+    th.money-cell(title=l(Current.d3_ago,    format: :week_day) data-sort="aggregates.d3_vol desc") 3d σ
+    th.money-cell(title=l(Current.d4_ago,    format: :week_day) data-sort="aggregates.d4_vol desc") 4d σ
+    th.money-cell(title=l(Current.w1_ago,    format: :week_day) data-sort="aggregates.w1_vol desc") 1w σ
+    th.money-cell(title=l(Current.w2_ago,    format: :week_day) data-sort="aggregates.w2_vol desc") 2w σ
+    th.money-cell(title=l(Current.month_ago, format: :week_day) data-sort="aggregates.m1_vol desc") 1m σ
+
+  - if @chart_volatility
+    th.text-left Volatility
+
+  - if @show_volume
+    th.money-cell(data-sort="aggregates.d1_money_volume desc") (m) Vol 1d
+    th.money-cell Vol 2d
+    th.money-cell Vol 3d
+    th.money-cell Vol 1w
+    th.money-cell Vol 1m
+    th.money-cell(data-sort="stats.d5_money_volume desc") ∑ 5d
+
+  - if @show_special_dates
+    - MarketCalendar.current_special_dates.each do |date|
+      th.money-cell(data-sort="aggregates.#{date.strftime 'd%Y_%m%d'}")= date.strftime('%b %e ﹪')
+  - if @show_recent_years
+    - MarketCalendar.current_recent_years.each do |year|
+      th.money-cell(data-sort="aggregates.y#{year}")= "#{year} ﹪"
+
+  th
+
+  - if @show_last_insider_buys
+    th.money-cell Insider
+
+  - if @show_ema_trends
+    th.money-cell(data-sort="indicators.ema_20_trend desc") MA20
+    th.money-cell(data-sort="indicators.ema_50_trend desc") MA50
+    th.money-cell.border-end.pe-2(data-sort="indicators.ema_200_trend desc") MA200
+
+  - if @show_extremums
+    th.money-cell(data-sort="aggregates.y1_high_change desc") 1y H
+    th.money-cell(data-sort="aggregates.y3_high_change desc") 3y H
+    th.money-cell(data-sort="aggregates.y1_low_change desc") 1y L
+    th.money-cell(data-sort="aggregates.y3_low_change desc") 3y L
+
+  th(data-sort="aggregates.days_up desc") Trn
+  th

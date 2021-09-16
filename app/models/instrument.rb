@@ -147,7 +147,8 @@ class Instrument < ApplicationRecord
   def exchange_name = rub? ? 'MOEX' : exchange
   def moex? = rub?
   def moex_2nd? = MoexSecondary.include?(ticker)
-  def marginal? = info&.vtb_long_risk != nil
+  def marginal? = info&.tinkoff_long_risk != nil
+  def shortable? = info&.tinkoff_can_short?
 
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)

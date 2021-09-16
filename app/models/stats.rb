@@ -64,6 +64,11 @@ class Stats < ApplicationRecord
   def vtb_long_risk = extra&.dig('vtb_long_risk')
   def vtb_short_risk = extra&.dig('vtb_short_risk')
 
+  def tinkoff_long_risk = extra&.dig('tinkoff_long_risk')
+  def tinkoff_short_risk = extra&.dig('tinkoff_short_risk')
+  def tinkoff_can_short? = extra&.dig('tinkoff_can_short')
+
+
   def set_average_volume
     update! avg_volume: instrument.day_candles.where('date > ?', 6.months.ago).average(:volume).to_i
   end

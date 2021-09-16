@@ -36,8 +36,13 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td= sector_badge inst
 
   - if @vtb_marginal_info
-    td.money-cell= number_with_precision inst.info&.vtb_long_risk, precision: 2
-    td.money-cell= number_with_precision inst.info&.vtb_short_risk, precision: 2
+    td.money-cell= format_risk_ratio inst.info&.vtb_long_risk
+    td.money-cell= format_risk_ratio inst.info&.vtb_short_risk
+
+  - if @tinkoff_marginal_info
+    td.money-cell= format_risk_ratio inst.info&.tinkoff_long_risk
+    td.money-cell= format_risk_ratio inst.info&.tinkoff_short_risk if inst.info&.tinkoff_can_short?
+
   - if params[:fundamentals]
     td.money-cell                = number_with_precision info&.pe, precision: 0
     td.money-cell.border-end.pe-2= number_to_percentage  info&.dividend_yield_percent, precision: 1

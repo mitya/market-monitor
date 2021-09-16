@@ -21,6 +21,7 @@ gem 'colorize'
 gem 'kaminari'
 gem 'nokogiri'
 gem 'telegram-bot-ruby'
+gem 'nokogiri'
 
 group :development do
   gem 'web-console', '>= 4.1.0'

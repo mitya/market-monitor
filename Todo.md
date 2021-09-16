@@ -51,8 +51,7 @@
 + add russian companies info & market cap
 + filter field for MA50/200
 + predefined links for MA analysis
-
-- tinkoff marginal list
++ tinkoff marginal list
 
 - list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons

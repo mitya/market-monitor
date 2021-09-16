@@ -150,6 +150,8 @@ namespace :tinkoff do
   end
 
   task :update => %i[days prices]
+
+  envtask(:parse_margins) { ParseTinkoffMarginList.call }
 end
 
 
@@ -169,3 +171,4 @@ rake tinkoff:prices # set=main
 rake tinkoff:update
 rake tinkoff:days:year
 rake tinkoff:candles:import:5min:last
+rake tinkoff:parse_margins

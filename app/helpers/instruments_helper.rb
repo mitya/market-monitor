@@ -361,7 +361,8 @@ module InstrumentsHelper
 
   def type_icon(instrument)
     return fa_icon 'layer-group', small: true, title: 'Fund' if instrument.fund?
-    return fa_icon 'coins', small: true, title: 'Tinkoff Premium', style: 'color: #ccc'  if instrument.marginal?
+    return fa_icon 'utensils', xsmall: true, title: 'Shortable', style: 'color: #ccc' if instrument.shortable?
+    return fa_icon 'coins', small: true, title: 'Marginal', style: 'color: #ccc' if instrument.marginal?
     return fa_icon 'crown', xsmall: true, title: 'Tinkoff Premium' if instrument.premium?
   end
 
@@ -420,6 +421,12 @@ module InstrumentsHelper
     sp_500:          'inner-success',
     nasdaq_500:      'inner-success',
   }
+
+  def format_risk_ratio(ratio)
+    return if ratio.blank?
+    reversed = 100 / ratio
+    "#{reversed.to_f.round(1)}x"
+  end
 end
 
 __END__
