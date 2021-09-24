@@ -53,6 +53,8 @@
 + predefined links for MA analysis
 + tinkoff marginal list
 
+add news parser
+
 - list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons
 - once a day set price to last for tickers without the IEX price data

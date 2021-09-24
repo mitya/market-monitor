@@ -16,26 +16,17 @@ channelIds = {
   TG:   { id: 1219736125, access_hash: '8462398626162394157' },
   XFRA: { id: 1483214782, access_hash: '5419462402634631275' },
   NSDQ: { id: 1273412762, access_hash: '6877101497188606477' },
+  NEWS: { id: 1205911857, access_hash: '1091215937709403298' },
 }
 
 do ->
   try
-    # result = await api.call('channels.getChannels', id: ['1001219736125'])
-    # result = await api.call('messages.getDialogs', limit: 50)
-    # result = await api.call('messages.getDialogs', limit: 50)
-    # result = await api.call('contacts.getContacts', hash: 0)
-    # result = await api.call('help.getNearestDc')
-    # result = await api.call('contacts.contacts')
-    # result = await api.call('contacts.resolveUsername', username: '@AK47PFLCHAT')
-
-    # result = await api.call('messages.getAllChats', except_ids: []) # WORKS
+    # result = await api.call('messages.getAllChats', except_ids: []) # WORKS - gets all channel ids / access hashes
     # result = await api.call('messages.getFullChat', chat_id: 377702731) # WORKS
     # result = await api.call('messages.getChats', id: [377702731]) # WORKS
-
-
     # result = await api.call('messages.getHistory', peer: { chat_id: 377702731, _: 'inputPeerChat' }) # WORKS
-
-
+    # result = await api.call('contacts.getContacts', hash: 0)
+    # result = await api.call('help.getNearestDc')
     # result = await api.call 'auth.sendCode', phone_number: '79214261515', settings: { _: 'codeSettings' } # WORKS
     # result = await api.call 'auth.signIn', phone_number: '79214261515', phone_code: '79461', phone_code_hash: 'ecc1c89c571798015d' # WORKS
     # result = await api.call 'users.getFullUser', id: { _: 'inputUserSelf' } # WORKS
@@ -45,6 +36,21 @@ do ->
         result = await api.call('messages.getAllChats', except_ids: [])
         console.log result
       when 'messages'
+        channel_id  = channelIds[channelCode]?.id
+        access_hash = channelIds[channelCode]?.access_hash
+        return console.warn "Bad channel code: #{channelCode}" unless channel_id
+        response = await api.call 'messages.getHistory', peer: { channel_id, access_hash, _: 'inputPeerChannel' }, limit: 100 # WORKS min_id: 144730
+
+        results = for message in response.messages
+          id: message.id
+          text: message.message
+          date: message.date
+          url: message.media?.webpage?.url
+
+        # console.log results
+        console.log JSON.stringify results
+
+      when 'last-message'
         channel_id  = channelIds[channelCode]?.id
         access_hash = channelIds[channelCode]?.access_hash
         return console.warn "Bad channel code: #{channelCode}" unless channel_id
@@ -61,3 +67,5 @@ do ->
 
 # phone_hash ecc1c89c571798015d phone_code 79461
 # access_hash 9463499563469815876
+
+# coffee bin/telegram.coffee messages NEWS

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_11_194721) do
+ActiveRecord::Schema.define(version: 2021_09_24_130752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -316,6 +316,20 @@ ActiveRecord::Schema.define(version: 2021_09_11_194721) do
     t.date "first_date"
     t.index ["figi"], name: "index_instruments_on_figi", unique: true
     t.index ["isin"], name: "index_instruments_on_isin", unique: true
+  end
+
+  create_table "news", force: :cascade do |t|
+    t.string "title"
+    t.string "body"
+    t.string "ticker"
+    t.string "tickers", array: true
+    t.datetime "datetime"
+    t.integer "external_id"
+    t.string "url"
+    t.string "source"
+    t.datetime "created_at"
+    t.index ["datetime"], name: "index_news_on_datetime"
+    t.index ["tickers"], name: "index_news_on_tickers"
   end
 
   create_table "operations", force: :cascade do |t|

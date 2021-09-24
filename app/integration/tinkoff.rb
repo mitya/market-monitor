@@ -21,7 +21,7 @@ class Tinkoff
   BadTickers = (OutdatedTickers + TickerWithSomeDatesMIssing).uniq
 
   def sync_instruments(preview: true)
-    file = Pathname("db/data/tinkoff-stocks-#{Date.current.to_s :number}.json")
+    file = Pathname("db/data/tinkoff-stocks.json")
     file.write `coffee bin/tinkoff.coffee stocks` unless file.exist?
 
     data = JSON.parse file.read

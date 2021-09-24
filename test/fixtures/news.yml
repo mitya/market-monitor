@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  body: MyString
+  ticker: MyString
+  tickers: MyString
+  datetime: 2021-09-24 16:07:52
+  url: MyString
+
+two:
+  title: MyString
+  body: MyString
+  ticker: MyString
+  tickers: MyString
+  datetime: 2021-09-24 16:07:52
+  url: MyString

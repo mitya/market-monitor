@@ -207,7 +207,7 @@ envtask(:arb) { Synchronizer.call }
 envtask(:spikes) { Spike.scan_all since: 1.week.ago }
 
 # envtask(:news) { Synchronizer.sync_news }
-envtask(:news) { PantiniNewsParser.test }
+envtask(:news) { PantiniNewsParser.connect }
 
 envtask :m5 do
   loop do

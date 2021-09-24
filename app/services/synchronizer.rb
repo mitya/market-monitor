@@ -13,6 +13,13 @@ class Synchronizer
       sleep 4
     end
   end
+
+  def sync_news
+    loop do
+      PantiniNewsParser.connect
+      sleep 5
+    end
+  end
 end
 
 __END__

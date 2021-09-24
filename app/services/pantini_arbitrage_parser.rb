@@ -3,7 +3,7 @@ class PantiniArbitrageParser
 
   def connect(exchange)
     puts "Sync arbitrages from #{exchange}"
-    command = "coffee bin/telegram.coffee messages #{exchange}"
+    command = "coffee bin/telegram.coffee last-message #{exchange}"
     response = `#{command}`
     parse_text response
   end
