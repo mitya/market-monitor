@@ -206,6 +206,9 @@ envtask(:book) { Orderbook.sync ENV['ticker'] }
 envtask(:arb) { Synchronizer.call }
 envtask(:spikes) { Spike.scan_all since: 1.week.ago }
 
+# envtask(:news) { Synchronizer.sync_news }
+envtask(:news) { PantiniNewsParser.test }
+
 envtask :m5 do
   loop do
     puts "Syncing M5..."

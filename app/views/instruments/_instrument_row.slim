@@ -30,7 +30,7 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell= colorized_diff portfolio_item.cost_in_usd, portfolio_item.ideal_cost_in_usd, unit: inst.currency, precision: 0 if portfolio_item&.ideal_cost_in_usd.to_i > 0
 
   td.money-cell(title="#{number_with_delimiter info&.shares} shares")= number_to_currency info&.last_marketcap_mil, unit: currency_span(inst.currency), precision: 0
-  td.money-cell.border-end.pe-2= number_with_precision info&.beta, precision: 1
+  td.money-cell.border-end.pe-2= number_with_precision info&.beta, precision: 1 if info&.beta != 0
 
   - if @show_sector
     td= sector_badge inst

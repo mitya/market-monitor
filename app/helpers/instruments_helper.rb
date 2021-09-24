@@ -302,7 +302,8 @@ module InstrumentsHelper
   SectorCodeOptions = SectorCodeTitles.transform_values { |val| val.first }.invert
 
   def sector_badge(instrument, link: true)
-    return country_flag_icon('RUS') if instrument.rub?
+    return nil if instrument.rub?
+    # return country_flag_icon('RUS') if instrument.rub?
 
     info = instrument&.info
     code = info&.sector_code
