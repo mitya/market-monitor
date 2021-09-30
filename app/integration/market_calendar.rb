@@ -21,6 +21,7 @@ class MarketCalendar
 
     def prev(date) = prev_closest_weekday(date.to_date.yesterday)
     def next(date) = next_closest_weekday(date.to_date.tomorrow)
+    def prev2(date) = [prev(date), prev(prev date)]
 
     def open_days(since, till = Date.current)
       since, till = since.begin, since.end if since.is_a?(Range)

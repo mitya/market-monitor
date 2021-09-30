@@ -1,9 +1,10 @@
 + search for MA retests
 + search for custom level retest
 + show all recent dates in the hits list
++ break / test depth
++ hit continuation check
+- show hits for single ticker
 - custom level import
-- break / test depth
-- count the number of hits last week
 - improve TV sectioned lists
 - improve the Main list and categorize it
 - recalculate MA200s (load 2018)

@@ -71,6 +71,7 @@ task :a => %w[aggregate analyze]
 envtask(:levels) { PriceLevel.search_all }
 envtask('levels:import') { PriceLevel.load_manual }
 envtask('levels:hits') { PriceLevelHit.analyze_manual }
+envtask('levels:hits:week') { PriceLevelHit.analyze_dates MarketCalendar.open_days(1.week.ago, Current.yesterday) }
 envtask('levels:hits:all') { PriceLevelHit.analyze_all }
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
 envtask(:sa) {
@@ -226,3 +227,5 @@ __END__
 rake aggregate date=2021-08-09
 r options:day tickers='BABA'
 r options:week tickers='BABA CLF'
+
+r levels:hits:week

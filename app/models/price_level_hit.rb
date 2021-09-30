@@ -22,11 +22,17 @@ class PriceLevelHit < ApplicationRecord
     self.exact = true if exact == nil
   end
 
+  before_save do
+    self.continuation = instrument.level_hits.where(date: MarketCalendar.prev2(date)).any?
+  end
+
   class << self
     def analyze(instrument, date: Current.yesterday, levels: instrument.levels)
       curr = instrument.day_candles!.find_date(date)
       prev = curr&.previous
       return unless curr && prev
+
+      instrument.level_hits.where(date: date).delete_all
 
       # recent = curr.previous_n(10)
       # recent_ref = recent[-4]
@@ -79,7 +85,11 @@ class PriceLevelHit < ApplicationRecord
     end
 
     def analyze_manual(date: Current.yesterday)
-      Instrument.all.abc.each { |inst| analyze inst, levels: inst.levels.manual, date: date }
+      Instrument.all.abc.each { |inst| analyze inst, levels: inst.levels.manual, date: date }; nil
+    end
+
+    def analyze_dates(dates)
+      dates.each { |date| analyze_manual date: date }
     end
 
     def check_level(curr, prev, value, attrs)
@@ -88,19 +98,20 @@ class PriceLevelHit < ApplicationRecord
       high    = curr.high
       low     = curr.low
       y_close = prev.close
+      attrs[:close_distance] = ((close - value).abs / value.to_d).round(3)
 
       case
       when open < value && close >= value
         record! 'up-break', **attrs
       when open > value && close > value && low <= value
-        record! 'down-test', **attrs
+        record! 'down-test', **attrs.merge(max_distance: ((low - value).abs / value.to_d).round(3))
       when open > value && close >= value && y_close < value
         record! 'up-gap', **attrs
 
       when open > value && close <= value
         record! 'down-break', **attrs
       when open < value && close < value && high >= value
-        record! 'up-test', **attrs
+        record! 'up-test', **attrs.merge(max_distance: ((high - value).abs / value.to_d).round(2))
       when open < value && close < value && y_close > value
         record! 'down-gap', **attrs
       end
@@ -108,7 +119,7 @@ class PriceLevelHit < ApplicationRecord
 
     def record!(kind, **attrs)
       hit = find_or_create_by! kind: kind, **attrs
-      puts "#{hit.ticker.ljust 8} #{hit.source_name.ljust(5)} #{hit.kind.ljust(10)} #{hit.level_value}".
+      puts "#{hit.date} hit #{hit.ticker.ljust 8} #{hit.source_name.ljust(5)} #{hit.kind.ljust(10)} #{hit.level_value}".
         colorize(hit.positive?? :green : :red)
     end
   end

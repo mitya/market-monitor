@@ -1,32 +1,33 @@
 - params[:relative_price_targets] ||= '1'
 - price_target_format = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
 - past_price_format  = params[:relative_price_targets] == '1' ? 'percentage' : 'absolute'
+- @label_width = 2
 
 main.container-fluid
   h1.display-3 Level Hits
 
   form#list-config(action=level_hits_path class='my-2')
-    = render 'instruments/filter_by_set'
-    = render 'instruments/filter_by_currency'
-    = render 'instruments/filter_by_availability'
-    = render 'filter_by_source'
-    = render 'filter_by_direction'
-    = render 'filter_by_type'
-    = render 'signals/filter_by_date'
-    .row.mb-3
+    .row
       .col
+        = render 'filter_by_source'
+        = render 'filter_by_direction'
+        = render 'filter_by_type'
+        = render 'signals/filter_by_date'
+        .row
+          .col-sm-2
+          .col-sm-10
+            = bs_check_box :price_targets, 'Price targets', inline: true
+            = bs_check_box :relative_price_targets, 'relative', inline: true, default: '1'
+            br
+            = bs_check_box :exact, 'Exact', inline: true
+            = bs_check_box :important, 'Important', inline: true, default: '1'
+            = bs_check_box :manual, 'Manual', inline: true
+      .col
+        = render 'instruments/filter_by_set'
+        = render 'instruments/filter_by_currency'
+        = render 'instruments/filter_by_availability'
         = render 'instruments/filter_by_tickers'
         = render 'instruments/pagination_options'
-      .col
-    .row
-      .col-sm-1
-      .col-sm-10
-        = bs_check_box :price_targets, 'Price targets', inline: true
-        = bs_check_box :relative_price_targets, 'relative', inline: true, default: '1'
-        br
-        = bs_check_box :exact, 'Exact', inline: true
-        = bs_check_box :important, 'Important', inline: true, default: '1'
-        = bs_check_box :manual, 'Manual', inline: true
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
     thead.table-dark
@@ -35,9 +36,11 @@ main.container-fluid
         th
         th
         th(data-sort="ticker") Ticker
-        th.money-cell Level
         th MA
+        th.money-cell Level
         th Type
+        th Cl
+        th Dp
         th Name
         th.money-cell Cap
         th Sector
@@ -52,14 +55,16 @@ main.container-fluid
       - @hits.each do |hit|
         - inst = instrument = hit.instrument
         - info = instrument.info
-        tr(data-ticker=hit.ticker)
+        tr(data-ticker=hit.ticker class=class_names('opacity-50': hit.continuation?))
           td= instrument_logo_button inst
           td= known_icon instrument
           td= type_icon instrument
           td= inst.ticker
-          td.money-cell.open-chart(class=class_names(level_hit_color(hit), 'opacity-50': hit.ma?))= price_span hit.level_value, unit: instrument.currency
-          td.open-chart(class=class_names(level_hit_color(hit)))= "MA #{hit.ma_length}" if hit.source == 'ma'
+          td.open-chart= hit.source == 'ma' ? "MA #{hit.ma_length}" : 'Level'
+          td.money-cell.open-chart= price_span hit.level_value, unit: instrument.currency
           td(class=class_names(level_hit_color(hit)))= hit.kind
+          td= percentage_bar hit.close_distance, classes: red_green_class(hit.positive?)
+          td= percentage_bar hit.max_distance, classes: red_green_class(!hit.positive?)
           td.instrument-name= instrument.name
           td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           td= sector_badge instrument

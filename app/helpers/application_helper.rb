@@ -154,7 +154,7 @@ module ApplicationHelper
     tag.span IntervalTitles[interval], class: 'badge bg-secondary'
   end
 
-  def percentage_bar(value)
+  def percentage_bar(value, classes: nil)
     value = (value.to_f.abs * 100).round(3)
     full_percents = value.to_i
     last_percent = (value % 1 * 100).to_i
@@ -165,8 +165,9 @@ module ApplicationHelper
       too_much = true
     end
 
+    title = number_to_percentage(value, precision: 1)
     last_bar = last_percent.nonzero?? tag.span(class: "percentage-bar", style: "height: #{last_percent}%") : ''
-    tag.div class: 'percentage-bars' do
+    tag.div class: class_names('percentage-bars', classes), title: title, 'data-value': value do
       (full_percents).times.map do |n|
         tag.span class: "percentage-bar", style: "height: 100%"
       end.join.html_safe + last_bar + (too_much ? '!!!!' : '')
