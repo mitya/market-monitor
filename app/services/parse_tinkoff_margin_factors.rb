@@ -1,8 +1,8 @@
-class ParseTinkoffMarginList
+class ParseTinkoffMarginFactors
   include StaticService
 
-  def call
-    doc = Nokogiri::HTML open("db/data/tinkoff-margin.html"), nil, "UTF-8"
+  def run
+    doc = Nokogiri::HTML open("db/data/tinkoff-margin-factors.html"), nil, "UTF-8"
 
     doc.css('.Table__table_14Vfq tbody tr').each do |node|
       title = node.css('.LiquidPapersPure__subtitle_ggFbH').first.content
@@ -15,16 +15,18 @@ class ParseTinkoffMarginList
 
       instrument = Instrument[ticker]
       next puts "Missing #{ticker}".red if instrument == nil
-      instrument.info!.update! extra: {
+      instrument.info!.update! extra: instrument.info!.extra.to_h.merge({
         tinkoff_long_risk: long_k,
         tinkoff_short_risk: short_k,
         tinkoff_can_short: can_short
-      }.compact
+      }.stringify_keys).compact_blank
     end
+
+    nil
   end
 end
 
 
 __END__
 
-ParseTinkoffMarginList.run
+ParseTinkoffMarginFactors.run

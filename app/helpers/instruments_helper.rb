@@ -425,8 +425,9 @@ module InstrumentsHelper
 
   def format_risk_ratio(ratio)
     return if ratio.blank?
-    reversed = 100 / ratio
-    "#{reversed.to_f.round(1)}x"
+    reversed = 100 / ratio.to_f
+    tag.span "#{reversed.to_f.round(1)}x", title: number_to_percentage(ratio, precision: 0)
+    number_to_percentage(ratio, precision: 0)
   end
 end
 

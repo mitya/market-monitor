@@ -26,8 +26,8 @@
 - @show_open = false
 - @show_ema_trends = params[:ema_trends] == '1'
 - @show_extremums = params[:extremums] == '1'
-- @vtb_marginal_info = false
-- @tinkoff_marginal_info = false
+- @vtb_marginal_info = params[:margin_factors]
+- @tinkoff_marginal_info = params[:margin_factors]
 
 main.container-fluid.mb-4
   form#list-config(action=(@categories ? grouped_instruments_path : instruments_path) class='my-2')
@@ -57,7 +57,8 @@ main.container-fluid.mb-4
             = bs_check_box :relative_price_targets, 'relative', inline: true
             = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
             = bs_check_box :recent_prices, 'Recent prices', default: true
-            = bs_check_box :sa, 'Seeking Alpha', default: false
+            = bs_check_box :sa, 'Seeking Alpha', inline: true
+            = bs_check_box :margin_factors, 'Margin Factors', inline: true
             div
               = bs_check_box :low, 'Recent low', inline: true
               => label_tag :low_since, "since: "
@@ -97,7 +98,6 @@ main.container-fluid.mb-4
         - instruments = @instruments
         - instruments = instruments.select { |inst| inst.portfolio_item&.active? } if params[:active] == '1'
         / - instruments = instruments.select { |inst| inst.info.d5_money_volume < 500_000_000 }
-        - instruments = instruments.sort_by { |inst| inst.info&.vtb_long_risk.to_f } if @vtb_marginal_info
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.cost_in_usd'
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.cost_diff'

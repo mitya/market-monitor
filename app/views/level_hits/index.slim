@@ -60,7 +60,7 @@ main.container-fluid
           td= known_icon instrument
           td= type_icon instrument
           td= inst.ticker
-          td.open-chart= hit.source == 'ma' ? "MA #{hit.ma_length}" : 'Level'
+          td= hit.source == 'ma' ? "MA #{hit.ma_length}" : 'Level'
           td.money-cell.open-chart= price_span hit.level_value, unit: instrument.currency
           td(class=class_names(level_hit_color(hit)))= hit.kind
           td= percentage_bar hit.close_distance, classes: red_green_class(hit.positive?)

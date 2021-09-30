@@ -3,11 +3,15 @@
 + show all recent dates in the hits list
 + break / test depth
 + hit continuation check
++ recalculate MA200s (load 2018)
++ show margin factors
+
 - show hits for single ticker
 - custom level import
+
+- highlight expirations & thursdays on charts
 - improve TV sectioned lists
 - improve the Main list and categorize it
-- recalculate MA200s (load 2018)
 
 
 - search for stable tops / bottoms

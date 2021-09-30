@@ -56,7 +56,7 @@ class DateIndicators < ApplicationRecord
       Current.parallelize_instruments(Instrument.normalize(instruments), 6) { |inst| recreate_for inst }
     end
 
-    def recreate_for(instrument, since: 1.year.ago)
+    def recreate_for(instrument, since: Current.y2019)
       instrument = Instrument[instrument]
       transaction do
         instrument.indicators_history.delete_all
@@ -78,6 +78,6 @@ MarketCalendar.open_days(4.month.ago, Date.yesterday).each { |date| DateIndicato
 DateIndicators.set_current
 DateIndicators.create_recursive instr('AAPL')
 DateIndicators.recreate_for_all
-DateIndicators.recreate_for 'TOL'
+DateIndicators.recreate_for_all %w[AAPL MSFT]
 DateIndicators.recreate_for_all ["ACOR", "BBD", "APH"]
 DateIndicators.recreate_for_all %w[SLG FIZZ TTD GE SWI SHW CSGP VRNS KAP@GS APH NEOG]

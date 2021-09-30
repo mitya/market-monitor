@@ -14,6 +14,10 @@ https://www.slickcharts.com/etf/ark-invest/ARKW
 https://www.marketwatch.com/optionscenter/calendar/2021
 
 
+## Margin Factors
+
+https://www.tinkoff.ru/invest/margin/equities/
+https://broker.vtb.ru/trade/margins/#marginlist
 
 ## Queiries
 
