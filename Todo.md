@@ -1,3 +1,47 @@
++ search for MA retests
++ search for custom level retest
++ show all recent dates in the hits list
+- custom level import
+- break / test depth
+- count the number of hits last week
+- improve TV sectioned lists
+- improve the Main list and categorize it
+- recalculate MA200s (load 2018)
+
+
+- search for stable tops / bottoms
+- news UI
+- news sync process
+- compare gains since random date
+- try to get evening data from NASDAQ
+
+
+- list all the institutional holders & find last quarter institutional transactions
+- modal with L2 and buy / sell buttons
+- once a day set price to last for tickers without the IEX price data
+- 5-min morning data & fill gaps in 5m candles
+- show price targets on arb page
+- arb list non-jerky refresh
+- show correction since 6-m high and gains since after-high low
+- highlight signalled tickers in SPB list
+- compare Tinkoff highs / lows with IEX
+- compare Tinkoff 11:00 prices with day highs on IEX
+- check yesterday close vol/change corellation with the next day
+- find large call options blocks with prices significantly higher than the current
+- find the call / put balance point
+- find significant call / put differences when the option buyer seem to be making money
+- 2% over yesterday high signals
+- insider buy signals
+- search for period lows / highs (e.g. 1w)
+- calculate average change from low-to-high
+- institutional ownership UI
+- analyze large moves (from flat and from prior slow move)
+- analyze shelves
+- indexes state bar & index updates
+
+
+# Done
+
 + breakout signals
 + negative breakouts signals
 + signal permutation analyzer
@@ -52,31 +96,7 @@
 + filter field for MA50/200
 + predefined links for MA analysis
 + tinkoff marginal list
-
-add news parser
-
-- list all the institutional holders & find last quarter institutional transactions
-- modal with L2 and buy / sell buttons
-- once a day set price to last for tickers without the IEX price data
-- 5-min morning data & fill gaps in 5m candles
-- show price targets on arb page
-- arb list non-jerky refresh
-- show correction since 6-m high and gains since after-high low
-- highlight signalled tickers in SPB list
-- compare Tinkoff highs / lows with IEX
-- compare Tinkoff 11:00 prices with day highs on IEX
-- check yesterday close vol/change corellation with the next day
-- find large call options blocks with prices significantly higher than the current
-- find the call / put balance point
-- find significant call / put differences when the option buyer seem to be making money
-- 2% over yesterday high signals
-- insider buy signals
-- search for period lows / highs (e.g. 1w)
-- calculate average change from low-to-high
-- institutional ownership UI
-- analyze large moves (from flat and from prior slow move)
-- analyze shelves
-- indexes state bar & index updates
++ add news parser
 
 
 # Next

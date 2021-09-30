@@ -42,10 +42,10 @@ module ApplicationHelper
     end
   end
 
-  def bs_toggle_button(name, value, label, classes: nil)
+  def bs_toggle_button(name, value, label, classes: nil, btn_class: nil)
     tag.span class: class_names('me-2', classes) do
       radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'btn-check') +
-      label_tag("#{name}_#{value}", label, class: 'btn btn-sm btn-outline-secondary')
+      label_tag("#{name}_#{value}", label, class: class_names('btn btn-sm', btn_class || 'btn-outline-secondary'))
     end
   end
 

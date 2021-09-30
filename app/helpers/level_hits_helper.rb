@@ -1,12 +1,13 @@
 module LevelHitsHelper
   def level_hit_color(hit)
-    class_names HitColors[hit.kind], 'opacity-50': hit.loose?
+    class_names livel_hit_kind_color(hit.kind), 'opacity-50': hit.loose?
   end
 
-  HitColors = {
-    fall:          'text-red',
-    rise:          'text-green',
-    'retest-down': 'text-green',
-    'retest-up':   'text-red',
-  }.stringify_keys
+  def livel_hit_kind_color(kind)
+    PriceLevelHit::PositiveKinds.include?(kind) ? 'text-green' : 'text-red'
+  end
+
+  def livel_hit_kind_button_color(kind)
+    PriceLevelHit::PositiveKinds.include?(kind) ? 'btn-outline-success' : 'btn-outline-danger' if kind.present?
+  end
 end

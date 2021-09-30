@@ -53,7 +53,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='RY SAP@DE TRI GDEV'
+export tickers='ZNGA KSPI@GS MGA TOST UBS'
 rake tinkoff:premium:import
 
 ## Tinkoff
@@ -62,7 +62,7 @@ rake SetIexTickers
 rake empty
 rake tinkoff:logos:download
 
-rake tinkoff:days:year tinkoff:days:special tickers='SAP@DE'
+rake tinkoff:days:year tinkoff:days:special tickers='KSPI@GS'
 
 ## All
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
@@ -72,7 +72,7 @@ rake set_average_volume
 ## Optional
 rake iex:symbols:refresh
 rake set_first_date ticker=GRUB date=2021-03-25
-rake set_first_date_auto tickers='GDEV'
+rake set_first_date_auto tickers='TOST'
 rake iex:symbols:load iex:symbols:otc:load
 rake destroy ticker=CHK ok=1
 rake iex:days:period period=ytd

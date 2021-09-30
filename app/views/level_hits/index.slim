@@ -9,6 +9,10 @@ main.container-fluid
     = render 'instruments/filter_by_set'
     = render 'instruments/filter_by_currency'
     = render 'instruments/filter_by_availability'
+    = render 'filter_by_source'
+    = render 'filter_by_direction'
+    = render 'filter_by_type'
+    = render 'signals/filter_by_date'
     .row.mb-3
       .col
         = render 'instruments/filter_by_tickers'
@@ -32,7 +36,8 @@ main.container-fluid
         th
         th(data-sort="ticker") Ticker
         th.money-cell Level
-        th.text-end Type
+        th MA
+        th Type
         th Name
         th.money-cell Cap
         th Sector
@@ -52,8 +57,9 @@ main.container-fluid
           td= known_icon instrument
           td= type_icon instrument
           td= inst.ticker
-          td.money-cell.open-chart(class=class_names(level_hit_color(hit)))= price_span hit.level_value, unit: instrument.currency
-          td.text-end(class=class_names(level_hit_color(hit)))= hit.kind
+          td.money-cell.open-chart(class=class_names(level_hit_color(hit), 'opacity-50': hit.ma?))= price_span hit.level_value, unit: instrument.currency
+          td.open-chart(class=class_names(level_hit_color(hit)))= "MA #{hit.ma_length}" if hit.source == 'ma'
+          td(class=class_names(level_hit_color(hit)))= hit.kind
           td.instrument-name= instrument.name
           td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
           td= sector_badge instrument

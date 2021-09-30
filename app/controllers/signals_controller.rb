@@ -12,7 +12,7 @@ class SignalsController < ApplicationController
 
     @signals = @signals.for_interval params[:interval]                              if params[:interval].present?
     @signals = @signals.where date: params[:dates]                                  if params[:dates].any?
-    @signals = @signals.where kind: params[:signal]                                 if params[:signal].present?
+    @signals = @signals.where kind: params[:kind]                                 if params[:kind].present?
     @signals = @signals.where instruments: { currency: params[:currency] }          if params[:currency].present?
     @signals = @signals.where ["? = any(instruments.flags)", params[:availability]] if params[:availability].present?
     @signals = @signals.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?

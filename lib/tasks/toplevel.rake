@@ -26,7 +26,7 @@ task :process do
   rake 'indicators'
   rake 'analyze'
   rake 'spikes'
-  rake 'levels:alerts'
+  rake 'levels:hits'
   rake 'tinkoff:portfolio:sync'
   rake 'tinkoff:instruments:sync'
 end
@@ -70,8 +70,8 @@ task :a => %w[aggregate analyze]
 
 envtask(:levels) { PriceLevel.search_all }
 envtask('levels:import') { PriceLevel.load_manual }
-envtask('levels:hits') { PriceLevelHit.analyze_all }
-envtask('levels:alerts') { PriceLevelHit.analyze_manual }
+envtask('levels:hits') { PriceLevelHit.analyze_manual }
+envtask('levels:hits:all') { PriceLevelHit.analyze_all }
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
 envtask(:sa) {
   PublicSignal.parse_seeking_alpha

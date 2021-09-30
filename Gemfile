@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.1'
+ruby '3.0.2'
 
 gem 'rails', '~> 6.1.3'
 gem 'pg', '~> 1.1'
@@ -21,7 +21,6 @@ gem 'colorize'
 gem 'kaminari'
 gem 'nokogiri'
 gem 'telegram-bot-ruby'
-gem 'nokogiri'
 
 group :development do
   gem 'web-console', '>= 4.1.0'

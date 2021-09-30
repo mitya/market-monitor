@@ -1,6 +1,6 @@
 .row.mt-2
-  .col-sm-2 Signal dates:
-  .col-sm-9
+  legend class="col-form-label col-sm-#{label_width local_assigns}" Dates:
+  .col-sm-9.col-form-label
     - %w[0 1 2 3 4 5].each do |n|
       - next if n == '0' && Current.workday? && params[:interval] == 'day'
       - date = Current.send("d#{n}_ago")

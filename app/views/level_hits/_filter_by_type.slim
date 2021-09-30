@@ -1,0 +1,5 @@
+.row.mb-1
+  legend class="col-form-label col-sm-#{label_width local_assigns}" Type:
+  .col-sm-10
+    - (all_option + options_from_keys(%w[up-break up-gap down-test down-break down-gap up-test])).each do |label, value|
+      = bs_toggle_button :kind, value, label, btn_class: livel_hit_kind_button_color(value)
