@@ -52,23 +52,25 @@ main.container-fluid
         th.money-cell(title=l(Current.w1_ago,    format: :week_day)) 1w ﹪
         th.money-cell(title=l(Current.month_ago, format: :week_day)) 1m ﹪
     tbody
-      - @hits.each do |hit|
+      - @hits.each_with_index do |hit, index|
         - inst = instrument = hit.instrument
         - info = instrument.info
+        - prev = @hits[index - 1]
+        - prev_is_same = prev&.ticker == inst.ticker
         tr(data-ticker=hit.ticker class=class_names('opacity-50': hit.continuation?))
-          td= instrument_logo_button inst
-          td= known_icon instrument
-          td= type_icon instrument
-          td= inst.ticker
+          td= instrument_logo_button inst unless prev_is_same
+          td= known_icon instrument unless prev_is_same
+          td= type_icon instrument unless prev_is_same
+          td= inst.ticker unless prev_is_same
           td= hit.source == 'ma' ? "MA #{hit.ma_length}" : 'Level'
           td.money-cell.open-chart= price_span hit.level_value, unit: instrument.currency
           td(class=class_names(level_hit_color(hit)))= hit.kind
           td= percentage_bar hit.close_distance, classes: red_green_class(hit.positive?)
           td= percentage_bar hit.max_distance, classes: red_green_class(!hit.positive?)
-          td.instrument-name= instrument.name
-          td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0
-          td= sector_badge instrument
-          td.text-end= date_as_wday hit.date
+          td.instrument-name= instrument.name unless prev_is_same
+          td.money-cell(title="#{number_with_delimiter inst.info&.shares} shares")= number_to_currency inst.info&.marketcap_mil, unit: currency_span(inst.currency), precision: 0 unless prev_is_same
+          td= sector_badge instrument unless prev_is_same
+          td.text-end= date_as_wday hit.date 
           td= growth_badge instrument.aggregate
           td.money-cell.muted-cell       = relative_price inst.d1_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
           td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.base_price, unit: inst.currency, format: past_price_format, inverse: true
