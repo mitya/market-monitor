@@ -39,21 +39,24 @@ class Current < ActiveSupport::CurrentAttributes
   def d6_ago    = MarketCalendar.closest_weekday(d5_ago.prev_weekday)
   def d7_ago    = MarketCalendar.closest_weekday(d6_ago.prev_weekday)
   def d10_ago   = MarketCalendar.closest_weekday(d7_ago.prev_weekday.prev_weekday.prev_weekday)
-  def week_ago  = MarketCalendar.closest_weekday(1.week.ago.to_date)
-  def month_ago = MarketCalendar.closest_weekday(1.month.ago.to_date)
+  def m1_ago    = MarketCalendar.closest_weekday(1.month.ago.to_date)
+  def m3_ago    = MarketCalendar.closest_weekday(3.month.ago.to_date)
+  def y1_ago  = MarketCalendar.closest_weekday(1.year.ago.to_date)
   def y2017     = Date.new(2017,  1,  3)
   def y2018     = Date.new(2018,  1,  3)
   def y2019     = Date.new(2019,  1,  3)
   def y2020     = Date.new(2020,  1,  3)
   def y2021     = Date.new(2021,  1,  4)
-  def feb19     = Date.new(2020,  2, 19)
-  def mar23     = Date.new(2020,  3, 23)
-  def nov06     = Date.new(2020, 11,  6)
+  # def feb19     = Date.new(2020,  2, 19)
+  # def mar23     = Date.new(2020,  3, 23)
+  # def nov06     = Date.new(2020, 11,  6)
   alias d0_ago today
   alias d1_ago yesterday
   alias w1_ago d5_ago
   alias w2_ago d10_ago
-  alias m1_ago month_ago
+  alias week_ago w1_ago
+  alias year_ago y1_ago
+  alias month_ago m1_ago
 
   def us_open_time_in_minutes_utc = 13 * 60 + 30
 
@@ -157,9 +160,6 @@ class Current < ActiveSupport::CurrentAttributes
         Current.y2019,
         Current.y2020,
         Current.y2021,
-        Current.feb19,
-        Current.mar23,
-        Current.nov06,
         Current.date,
         Current.d1_ago,
         Current.d2_ago,
@@ -168,6 +168,8 @@ class Current < ActiveSupport::CurrentAttributes
         Current.w1_ago,
         Current.w2_ago,
         Current.m1_ago,
+        Current.m3_ago,
+        Current.y1_ago,
       ]
     end
 

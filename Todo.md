@@ -7,12 +7,9 @@
 + show margin factors
 + show hits for single ticker
 + custom level import
-
-- compare gains since random date
-- compile the Known list & categorize everything in it
-- compile the Main list
-- compile N1 & N2 categorized lists on the TV
-- highlight expirations & thursdays on charts
++ compile the Known list & categorize everything in it
++ compare gains since random date
++ 3m & 1y comparisions
 
 
 - news UI
@@ -20,6 +17,7 @@
 - try to get the evening data from NASDAQ
 
 
+- use dropdown for sets
 - search for stable tops / bottoms
 - list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons

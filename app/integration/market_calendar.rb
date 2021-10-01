@@ -67,6 +67,7 @@ class MarketCalendar
         2020-11-06
         2021-05-12
         2021-08-20
+        2021-09-21
       ].map(&:to_date).sort.reverse
     end
 
@@ -76,6 +77,7 @@ class MarketCalendar
         2020-11-06
         2021-05-12
         2021-08-20
+        2021-09-21
       ].map(&:to_date).sort.reverse
     end
 

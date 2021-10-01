@@ -92,7 +92,7 @@ main.container-fluid.mb-4
         - @categories.each do |category, tickers|
           = render 'category_row', category: category
           - tickers.sort.each do |ticker|
-            - if inst = @instruments_index[ticker]
+            - if inst = @instruments_index[ticker.upcase]
               = render 'instrument_row', inst: inst
       - else
         - instruments = @instruments

@@ -209,34 +209,37 @@ module InstrumentsHelper
     InsiderTransaction.for_ticker(ticker).pluck(:insider_name).uniq.compact.sort.map { |name| [name.titleize, name] }
   end
 
+  MainSortFields = {
+    ticker:                "Ticker",
+    pe:                    "P/E",
+    beta:                  "ß",
+    yield:                 "Yield",
+    marketcap:             "Capitalization",
+    d5_money_volume:       "5-day Money Volume",
+    d1_money_volume:       "Yesterday Money Volume",
+    days_up:               "Days Up",
+    lowest_day_date:       "Low Date",
+    lowest_day_gain:       "Low Gain",
+    y1_high_change:        "Since 1Y High",
+    y3_high_change:        "Since 3Y High",
+    y1_low_change:         "Since 1Y Low",
+    y3_low_change:         "Since 3Y Low",
+    ema_20_trend:          "EMA 20",
+    ema_50_trend:          "EMA 50",
+    ema_200_trend:         "EMA 200",
+    portfolio_cost:        "Portfolio Cost",
+    portfolio_ideal_cost:  "Portfolio Cost Ideal",
+    portfolio_cost_diff:   "Portfolio Cost Ideal",
+    change:                "Change",
+  }.stringify_keys.invert.to_a
+
   def instrument_order_options
-    Aggregate::Accessors.map { |p| "aggregates.#{p.remove('_ago')}" } +
-    Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_vol desc" } +
-    Aggregate::Accessors.select { |p| p.include?('_ago') }.map { |p| "aggregates.#{p.remove('_ago')}_volume desc" } +
-    MarketCalendar.current_special_dates.select.map { |d| "aggregates.#{d.strftime("d%Y_%m%d")}" } +
-    [
-      ['P/E',                    'stats.pe desc'],
-      ['ß',                      'stats.beta desc'],
-      ['Yield',                  'stats.dividend_yield desc'],
-      ['Capitalization',         'stats.marketcap desc'],
-      ['Days Up',                'aggregates.days_up desc'],
-      ['Low Date',               'aggregates.lowest_day_date desc'],
-      ['Low Gain',               'aggregates.lowest_day_gain desc'],
-      ['Trend',                  'aggregates.days_up desc'],
-      ['Portfolio Cost',         'portfolio.cost_in_usd'],
-      ['Portfolio Cost Ideal',   'portfolio.ideal_cost_in_usd'],
-      ['Portfolio Cost Diff',    'portfolio.cost_diff'],
-      ['EMA 20',                 'indicators.ema_20_trend desc'],
-      ['EMA 50',                 'indicators.ema_50_trend desc'],
-      ['EMA 200',                'indicators.ema_200_trend desc'],
-      ['Change',                 'prices.change desc'],
-      ['Yesterday Money Volume', 'aggregates.d1_money_volume desc'],
-      ['5-day Money Volume',     'stats.d5_money_volume desc'],
-      ['Since 1Y High',          'aggregates.y1_high_change desc'],
-      ['Since 3Y High',          'aggregates.y3_high_change desc'],
-      ['Since 1Y Low',           'aggregates.y1_low_change desc'],
-      ['Since 3Y Low',           'aggregates.y3_low_change desc'],
-    ]
+    MainSortFields +
+    Aggregate::RecentDaySelectors.map { |p| "gain.recent.#{p}" } +
+    Aggregate::RecentDaySelectors.map { |p| "volume.#{p}" } +
+    Aggregate::RecentDaySelectors.map { |p| "volatility.#{p}" } +
+    MarketCalendar.current_special_dates.select.map { |d| "gain.date.#{d}" } +
+    MarketCalendar.current_recent_years.select.map { |year| "gain.year.#{year}" }
   end
 
   def signal_order_options
@@ -370,10 +373,10 @@ module InstrumentsHelper
   def known_icon(instrument)
     icons = [
       # (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker) && instrument.portfolio_item&.active?),
-      (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker)),
-      (:bell      if InstrumentSet.alarms.symbols.include?(instrument.ticker)),
-      (:user      if InstrumentSet.insiders.symbols.include?(instrument.ticker)),
-      (:times     if InstrumentSet.rejected.symbols.include?(instrument.ticker)),
+      # (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker)),
+      # (:bell      if InstrumentSet.alarms.symbols.include?(instrument.ticker)),
+      # (:user      if InstrumentSet.insiders.symbols.include?(instrument.ticker)),
+      # (:times     if InstrumentSet.rejected.symbols.include?(instrument.ticker)),
     ].compact
     icons = [:glasses] if icons.empty? && InstrumentSet.known?(instrument.ticker)
     icons.map { |icon| fa_icon(icon, xsmall: true) }.join(' ').html_safe
@@ -407,20 +410,21 @@ module InstrumentsHelper
   end
 
   SET_BUTTON_CLASSES = {
-    portfolio:       'inner-warning',
     oil:             'inner-dark',
     coal:            'inner-dark',
     gas:             'inner-dark',
-    metals:          'inner-dark',
-    transport:       'inner-dark',
+    mining:          'inner-dark',
+    shipping:        'inner-dark',
+    portfolio:       'inner-warning',
     main:            'inner-warning',
+    categorized:     'inner-warning',
     arkf:            'inner-success',
     arkg:            'inner-success',
     arkk:            'inner-success',
     arkw:            'inner-success',
     russel_2000:     'inner-success',
     sp_500:          'inner-success',
-    nasdaq_500:      'inner-success',
+    nasdaq_100:      'inner-success',
   }
 
   def format_risk_ratio(ratio)

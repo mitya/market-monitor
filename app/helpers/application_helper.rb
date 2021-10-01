@@ -159,8 +159,8 @@ module ApplicationHelper
     full_percents = value.to_i
     last_percent = (value % 1 * 100).to_i
 
-    if full_percents > 20
-      full_percents = 20
+    if full_percents > 15
+      full_percents = 15
       last_percent = 0
       too_much = true
     end
@@ -170,7 +170,7 @@ module ApplicationHelper
     tag.div class: class_names('percentage-bars', classes), title: title, 'data-value': value do
       (full_percents).times.map do |n|
         tag.span class: "percentage-bar", style: "height: 100%"
-      end.join.html_safe + last_bar + (too_much ? '!!!!' : '')
+      end.join.html_safe + last_bar + (too_much ? '!!!' : '')
     end
   end
 

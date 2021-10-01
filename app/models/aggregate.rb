@@ -4,7 +4,8 @@ class Aggregate < ApplicationRecord
   scope :current, -> { where current: true }
   scope :old, -> { where current: false }
 
-  RecentDayAccessors = %w[d1 d2 d3 d4 w1 w2 m1].map { |p| "#{p}_ago" }
+  RecentDaySelectors = %w[d1 d2 d3 d4 w1 w2 m1 m3 y1]
+  RecentDayAccessors = RecentDaySelectors.map { |p| "#{p}_ago" }
   YearBeginningAccessors = %w[y2021 y2020 y2019 y2018 y2017]
   Accessors = RecentDayAccessors + YearBeginningAccessors
 
@@ -12,6 +13,10 @@ class Aggregate < ApplicationRecord
 
   def lowest_day = lowest_day_date && instrument.day_candles.find_date(lowest_day_date)
   def lowest_day_low = lowest_day&.low
+
+  def gains        = data['gains'] ||= {}
+  def volumes      = data['volumes'] ||= {}
+  def volatilities = data['volatilities'] ||= {}
 
   class << self
     def create_for(instrument, date: Current.yesterday, gains: true, analyze: true, volume: true, force: true, year_highs: true)
@@ -27,19 +32,24 @@ class Aggregate < ApplicationRecord
       return puts "Requested date #{date} != #{Current.yesterday}".red if date != Current.yesterday
 
       if gains && close
-       current = close
-        Accessors.each do |accessor|
-          suffix = 'low'
-          suffix = 'open' if accessor =~ /y\d{4}/
-          suffix = 'close' if accessor =~ /\w\d_ago/
-          if historic = instrument.send("#{accessor}_#{suffix}")
-            aggregate.send "#{accessor.remove '_ago'}=", (current / historic - 1.0).to_f.round(3)
+        current = close
+        compare_to_current = -> (historic) { (current / historic - 1.0).to_f.round(3) }
+
+        RecentDayAccessors.each do |accessor|
+          if historic = instrument.send("#{accessor}_close")
+            aggregate.gains[accessor.remove '_ago'] = compare_to_current.(historic)
+          end
+        end
+
+        MarketCalendar.current_recent_years.each do |year|
+          if historic = instrument.send("y#{year}_open")
+            aggregate.gains[year] = compare_to_current.(historic)
           end
         end
 
         MarketCalendar.special_dates.each do |date|
           if historic = instrument.candles.day.find_date(date)&.close
-            aggregate.send date.strftime("d%Y_%m%d="), (current / historic - 1.0).to_f.round(3)
+            aggregate.gains[date.to_s] = compare_to_current.(historic)
           end
         end
       end
@@ -47,8 +57,8 @@ class Aggregate < ApplicationRecord
       if volume
         RecentDayAccessors.each do |accessor|
           if recent = instrument.send(accessor)
-            aggregate.send "#{accessor.remove '_ago'}_vol=",    recent.volatility.to_f.round(3)
-            aggregate.send "#{accessor.remove '_ago'}_volume=", recent.volume_to_average.to_f.round(3)
+            aggregate.volatilities[accessor.remove '_ago'] = recent.volatility.to_f.round(3)
+            aggregate.volumes[accessor.remove '_ago']      = recent.volume_to_average.to_f.round(3)
             aggregate.d1_money_volume = recent.volume * instrument.lot * recent.close if accessor == 'd1_ago'
           end
         end

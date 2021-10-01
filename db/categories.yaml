@@ -1,40 +1,57 @@
 ---
-Auto: TTM F ARVL GM HOG BMW@DE VOW3@DE VOW PAH3 DAI TSLA
-Biotech: ATRA HRTX GTHX ICPT ACHV OSUR QDEL MRNA PFE GOSS
-Cannabis: TLRY
-Chemicals: NKNCP
-China: TAL GOTU BABA YY VIPS FTCH BIDU
-Coal: HCC ARCH BTU MTLRP MTLR CEIX
-CoalMet: METC AMR
-Developers: ETLN SMLT PIKK LSRG
-Elvis:
-Energy: NRG KLXE SJI
-Faang: AAPL AMZN MSFT FB GOOGL NFLX TSLA
-FinanceBanks: WFC SBER VTBR QIWI TCSG
-FinanceTech: PAYO LC
-Food: AGRO UNFI
-Games: ATVI TTWO
-Gas: GAZP NVTK EQT AR ET AM RRC SWN COG
-Gold: POLY POGR PLZL KGC NUGT
-Hardware: INTC AMD XLNX TSM QRVO
-Indexes: SPY
-Kogan: GTE LPX
-Metals: VALE GMKN RUAL
-Oil: XOM CVX RDS.A CLR COP FANG PXD EOG MRO RIG OXY DVN
-OilOther: DK PBF SND ALTO CHX SLB FTI
-OilRus: RNFT ROSN SIBN SNGSP TATN BANEP LKOH
-RealBoring: XRX LOGI
-RealEstate: M MAC SPG
-Retail: FIVE LNTA OKEY MVID
-SoftwareHot: TWLO DOCS SHOP ETSY PLAN ASAN BABA FSLY ESTC TWTR AYX EBAY NET
-SoftwareRus: YNDX MAIL
-SoftwareSecondary: BAND YEXT EVER MFGP
-SoftwareSecurity: TENB CHKP
-Steel: X CLF MAGN CHMF NLMK AMEZ CHMK
-Stonks: HOOD SPCE BBBY
-Telecom: VEON ATEX
-Things: HOG TUP COTY UAA GTX
-Tiger: FTCH VIAC DISCA
-TransportGoods: FESH NAT ZIM STNG GLTR EURN FRO UWGN
-TransportPeople: AAL DAL AFLT CCL RCL SPR BA
-Zzz: PBI BAND YEXT EVER
+auto: ttm f gm hog bmw@de vow3@de vow pah3 dai tsla
+auto.other: gtx ten prts ride arvl
+biotech: atra hrtx gthx icpt achv osur qdel mrna goss
+biotech.big: pfe mrk
+cannabis: tlry
+china: tal gotu baba yy vips ftch bidu jd cyd
+developers.rus: etln smlt pikk lsrg
+energy: nrg klxe sji
+energy.chemicals: nknc nkncp kzos kzosp lyb
+energy.coal: hcc arch btu ceix mtlrp mtlr rasp
+energy.coal.met: metc amr
+energy.gas: eqt ar et am rrc swn cog
+energy.gas.rus: gazp nvtk
+energy.oil: xom cvx rds.a clr cop fang pxd eog mro oxy dvn tte pump apa hes
+energy.oil.other: gte
+energy.oil.refineries: dk pbf alto chx vlo mpc psx
+energy.oil.rus: rosn lkoh sibn sngsp tatn banep rnft
+energy.oil.services: rig slb fti snd ois oii
+finance.banks: wfc sber vtbr qiwi tcsg
+finance.other: payo lc coin pypl ehth bx ivz gs ms
+food: agro unfi tsn
+hardware.chip: intc amd xlnx tsm qrvo mu qcom nvda
+hardware.office: xrx hell hpq logi
+hardware.other: crus sitm
+holdings: brk.b afks
+indexes: spy
+it.faang: aapl amzn msft fb googl nflx
+it.forgotten: band yext ever mfgp uber lyft roku okta ibm
+it.games: atvi ttwo znga
+it.hot: twlo docu shop etsy plan asan fsly estc twtr ayx ebay net twtr pins snap upwk
+it.rus: yndx mail ozon hhru
+it.security: tenb chkp z
+meme: spce zyne nok gme pltr bbby hood mstr amc rwlk
+mining.gold: poly pogr plzl kgc nugt
+mining.misc: vale gmkn fcx rual aa enpg kap@gs ccj mos uec vsmo
+mining.steel: x clf
+mining.steel.rus: magn chmf nlmk amez chmk
+reits: mac spg
+retail: m gps rl bbby coty uaa levi hog cnk
+retail.other: tup
+retail.rus: five lnta okey mvid
+shipping.bulk: gnk sblk dsx ship
+shipping.conainers: zim
+shipping.lng: glop
+shipping.oil: fro eurn insw nat stng flot
+shipping.ports: fesh nmtp
+sourced.elvis:
+sourced.kogan: gte lpx
+sourced.tiger: ftch viac disca
+telecom: veon atex
+transportation.airlines: aal dal alk luv aflt spr ba save ual
+transportation.industrial: gltr uwgn
+travelling: h mar car ccl rcl nclh hlt trip bkng abnb expe
+zzz: pbi band yext ever
+hot: bynd
+covid: chef dkng play mcri

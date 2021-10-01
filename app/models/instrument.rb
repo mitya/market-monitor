@@ -27,7 +27,7 @@ class Instrument < ApplicationRecord
 
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
-  has_one :aggregate,      -> { current }, foreign_key: 'ticker', inverse_of: :instrument
+  has_one :aggregate,                      foreign_key: 'ticker', inverse_of: :instrument
   has_one :indicators,     -> { current }, foreign_key: 'ticker', inverse_of: :instrument, class_name: 'DateIndicators'
   has_one :price,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :info, class_name: 'Stats',      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
@@ -69,7 +69,7 @@ class Instrument < ApplicationRecord
 
 
   MatureDate = Current.y2017
-  DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d6 d7 w1 w2 m1 week month].map { |period| "#{period}_ago" }
+  DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].map { |period| "#{period}_ago" }
 
   DateSelectors.each do |selector|
     define_method("#{selector}") do
@@ -78,9 +78,9 @@ class Instrument < ApplicationRecord
     end
   end
 
-  def feb19         = @feb19 ||= day_candles!.find_date(Current.feb19)
-  def mar23         = @mar23 ||= day_candles!.find_date(Current.mar23)
-  def nov06         = @nov06 ||= day_candles!.find_date(Current.nov06)
+  # def feb19         = @feb19 ||= day_candles!.find_date(Current.feb19)
+  # def mar23         = @mar23 ||= day_candles!.find_date(Current.mar23)
+  # def nov06         = @nov06 ||= day_candles!.find_date(Current.nov06)
   def y2017         = @y2017 ||= day_candles!.find_date(Current.y2017)
   def y2018         = @y2018 ||= day_candles!.find_date(Current.y2018)
   def y2019         = @y2019 ||= day_candles!.find_date(Current.y2019)
@@ -93,7 +93,7 @@ class Instrument < ApplicationRecord
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
   %w[low high open close volume volatility volatility_range direction].each do |selector|
-    (DateSelectors + %w[feb19 mar23 nov06 y2017 y2018 y2019 y2020 y2021]).each do |date|
+    (DateSelectors + %w[y2017 y2018 y2019 y2020 y2021]).each do |date|
       define_method("#{date}_#{selector}") { send(date).try(selector) }
       if selector.in? %w[low high open close]
         define_method("#{date}_#{selector}_rel")  { |curr_price = 'last'| rel_diff "#{date}_#{selector}", curr_price }

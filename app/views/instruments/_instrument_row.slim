@@ -59,17 +59,21 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
       span.outdated-price(title="Last at #{inst.price!.last_at&.localtime}")= format_price inst.last, unit: inst.currency
     - else
       = colorized_price inst.last, inst.d1_ago_close, unit: inst.currency
+
   td.money-cell= colorized_ratio inst.price!.change, precision: 1
+
   - if @show_open
     td.money-cell.border-end.pe-2  = relative_price inst.today_open,   inst.base_price, unit: inst.currency, format: @past_price_format, inverse: true
+
   - if @show_recent_prices
     td.money-cell.muted-cell       = relative_price inst.d2_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
     td.money-cell.muted-cell       = relative_price inst.d3_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-    td.money-cell.muted-cell       = relative_price inst.d4_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
     td.money-cell                  = relative_price inst.w1_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
     td.money-cell                  = relative_price inst.w2_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
     td.money-cell                  = relative_price inst.m1_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-    td.money-cell.border-end.pe-2  = relative_price inst.y2021_open,   inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
+    td.money-cell                  = relative_price inst.m3_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
+    td.money-cell                  = relative_price inst.y2021_open,   inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
+    td.money-cell.border-end.pe-2  = relative_price inst.y1_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
 
   - if @show_sa
     = render "instruments/seeking_alpha_fields", instrument: inst, aggregate: inst.insider_aggregate, format: @past_price_format
@@ -80,23 +84,27 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
 
   - if @show_volume_diff
     td.money-cell=
-    td.money-cell= ratio_percentage aggregate.d1_volume, precision: 0
-    td.money-cell= ratio_percentage aggregate.d2_volume, precision: 0
-    td.money-cell= ratio_percentage aggregate.d3_volume, precision: 0
-    td.money-cell= ratio_percentage aggregate.d4_volume, precision: 0
-    td.money-cell= ratio_percentage aggregate.w1_volume, precision: 0
-    td.money-cell= ratio_percentage aggregate.w2_volume, precision: 0
-    td.money-cell= ratio_percentage aggregate.m1_volume, precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['d1'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['d2'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['d3'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['d4'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['w1'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['w2'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['m1'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['m3'], precision: 0
+    td.money-cell= ratio_percentage aggregate.volumes['y1'], precision: 0
 
   - if @show_volatility
-    td[class=volatility_cell_class]= volatility_indicator inst, :today,     format: @volatility_format
-    td[class=volatility_cell_class]= volatility_indicator inst, :d1_ago,    format: @volatility_format
-    td[class=volatility_cell_class]= volatility_indicator inst, :d2_ago,    format: @volatility_format
-    td[class=volatility_cell_class]= volatility_indicator inst, :d3_ago,    format: @volatility_format
-    td[class=volatility_cell_class]= volatility_indicator inst, :d4_ago,    format: @volatility_format
-    td[class=volatility_cell_class]= volatility_indicator inst, :w1_ago,    format: @volatility_format
-    td[class=volatility_cell_class]= volatility_indicator inst, :w2_ago,    format: @volatility_format
-    td[class=volatility_cell_class]= volatility_indicator inst, :month_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :today,  format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :d1_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :d2_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :d3_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :d4_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :w1_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :w2_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :m1_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :m3_ago, format: @volatility_format
+    td[class=@volatility_cell_class]= volatility_indicator inst, :y1_ago, format: @volatility_format
 
   - if @chart_volatility
     td.volatility-chart
@@ -110,16 +118,16 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst.lot * inst.   d3_ago_volume.to_d, unit: inst.currency
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst.lot * inst. week_ago_volume.to_d, unit: inst.currency
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst.lot * inst.month_ago_volume.to_d, unit: inst.currency
-    td.money-cell= format_price_in_millions info.d5_money_volume, unit: inst.currency, precision: 0
+    td.money-cell= format_price_in_millions info&.d5_money_volume, unit: inst.currency, precision: 0
 
   - if @show_special_dates
     - MarketCalendar.current_special_dates.each do |date|
-      td.money-cell(class=class_names('muted-cell': date < Current.y2021))= colorized_ratio aggregate.send(date.strftime "d%Y_%m%d")
+      td.money-cell(class=class_names('muted-cell': date < Current.y2021))= colorized_ratio aggregate.gains[date.to_s]
+
   - if @show_recent_years
     - MarketCalendar.current_recent_years.each do |year|
-      td.money-cell= colorized_ratio aggregate.send("y#{year}")
+      td.money-cell= colorized_ratio aggregate.gains[year.to_s]
       / td.money-cell.muted-cell= relative_price inst.send("y#{year}_open"), inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-
 
   td
     = link_to insider_transactions_path(tickers: inst.ticker), target: '_blank', title: 'Insider Transactions', tabindex: '-1' do

@@ -36,8 +36,8 @@ class InstrumentsController < ApplicationController
 
   def grouped
     params[:per_page] = 1000
-    @categories = YAML.load_file("db/categories.yaml").transform_values { |str| str.to_s.split.uniq.sort }
-    load_instruments Instrument.where(ticker: @categories.values.flatten.compact.uniq)
+    @categories = InstrumentSet.categories
+    load_instruments Instrument.where(ticker: @categories.values.flatten.sort)
     @instruments_index = @instruments.index_by &:ticker
     render :index
   end
@@ -60,15 +60,12 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.where('indicators.ema_50_trend': params[:ma_50])   if params[:ma_50].present?
     @instruments = @instruments.where('indicators.ema_200_trend': params[:ma_200])   if params[:ma_200].present?
 
-    # @instruments = @instruments.vtb_spb_long
-
     if params[:low] == '1'
       @instruments = @instruments.where('aggregates.lowest_day_date >= ?', params[:low_since]) if params[:low_since].present?
       @instruments = @instruments.where('aggregates.lowest_day_gain >= ?', params[:low_gain].to_f / 100) if params[:low_gain ].present?
     end
 
-    order = params[:order].blank? || params[:order].include?('portfolio') ? 'instruments.ticker' : params[:order]
-    @instruments = @instruments.order("#{order} nulls last")
+    @instruments = @instruments.order(determine_sort_order)
     @instruments = @instruments.page(params[:page]).per(params[:per_page])
 
     @portfolio = PortfolioItem.all
@@ -76,6 +73,49 @@ class InstrumentsController < ApplicationController
     Current.preload_day_candles_with @instruments.to_a, params[:chart_volatility] ? Current.last_2_weeks : []
     Current.preload_prices_for @instruments.to_a
   end
+
+  def determine_sort_order
+    order_field = params[:order].presence.to_s
+    period_selector = order_field.split('.').last
+    order_expression = OrderMap[ order_field ]
+
+    order_expression ||= case order_field
+      when /gain.recent/, /gain.date/, /gain.year/
+        "data->'gains'->'#{period_selector}'"
+      when /volume/
+        "data->'volumes'->'#{period_selector}' desc"
+      when /volatility/
+        "data->'volatilities'->'#{period_selector}' desc"
+    end
+
+    order_expression ||= "instruments.ticker"
+
+    Arel.sql("#{order_expression} nulls last")
+  end
+
+  OrderMap = {
+    ticker:                "instruments.ticker",
+    pe:                    "stats.pe desc",
+    beta:                  "stats.beta desc",
+    yield:                 "stats.dividend_yield desc",
+    marketcap:             "stats.marketcap desc",
+    d5_money_volume:       "stats.d5_money_volume desc",
+    days_up:               "aggregates.days_up desc",
+    lowest_day_date:       "aggregates.lowest_day_date desc",
+    lowest_day_gain:       "aggregates.lowest_day_gain desc",
+    d1_money_volume:       "aggregates.d1_money_volume desc",
+    y1_high_change:        "aggregates.y1_high_change desc",
+    y3_high_change:        "aggregates.y3_high_change desc",
+    y1_low_change:         "aggregates.y1_low_change desc",
+    y1_low_change:         "aggregates.y1_low_change desc",
+    ema_20_trend:          "indicators.ema_20_trend desc",
+    ema_50_trend:          "indicators.ema_50_trend desc",
+    ema_200_trend:         "indicators.ema_200_trend desc",
+    portfolio_cost:        "portfolio.cost_in_usd",
+    portfolio_ideal_cost:  "portfolio.ideal_cost_in_usd",
+    portfolio_cost_diff:   "portfolio.cost_diff",
+    change:                "prices.change desc",
+  }.stringify_keys
 end
 
 
