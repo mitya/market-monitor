@@ -56,6 +56,9 @@ curl -s "https://cloud.iexapis.com/stable/options/AAL20210716P00011000/chart?ran
 curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols/spy?token=$IEX_SECRET_KEY" > tmp/option-dates.json
 curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols/fcx?token=$IEX_SECRET_KEY" > tmp/option-dates-dk.json
+curl -s "https://cloud.iexapis.com/stable//ref-data/exchanges?token=$IEX_SECRET_KEY" > tmp/exchanges.json
+curl -s "https://cloud.iexapis.com/stable//ref-data/region/DE/symbols?token=$IEX_SECRET_KEY" > tmp/region-DE.json
+curl -s "https://cloud.iexapis.com/stable//ref-data/exchange/FRA/symbols?token=$IEX_SECRET_KEY" > tmp/exchange-FRA.json
 
 
 

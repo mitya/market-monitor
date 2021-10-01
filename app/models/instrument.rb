@@ -157,7 +157,7 @@ class Instrument < ApplicationRecord
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase
-  def global_iex_ticker = rub?? "#{ticker}-RX" : iex_ticker
+  def global_iex_ticker = rub?? "#{ticker}-RX" : eur?? ticker.gsub('@DE', '-GF') : iex_ticker
 
   def lowest_body_in(period) = day_candles!.find_dates_in(period).min_by(&:range_low)
 

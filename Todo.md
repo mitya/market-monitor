@@ -8,12 +8,13 @@
 + show hits for single ticker
 + custom level import
 
+- compare gains since random date
 - compile the Known list & categorize everything in it
 - compile the Main list
 - compile N1 & N2 categorized lists on the TV
 - highlight expirations & thursdays on charts
 
-- compare gains since random date
+
 - news UI
 - news sync process
 - try to get the evening data from NASDAQ

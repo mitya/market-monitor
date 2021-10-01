@@ -36,8 +36,8 @@ class Stats < ApplicationRecord
       save!
     end
 
-  rescue RestClient::NotFound
-    destroy
+  # rescue RestClient::NotFound
+  #   destroy
   end
 
   def marketcap = super.to_i.nonzero?
@@ -113,10 +113,9 @@ class Stats < ApplicationRecord
       end
     end
 
-    def load_moex_info
-      Instrument.rub.abc.each do |inst|
-        inst.info!.refresh include_company: true
-      end
+    def load_non_us_info
+      Instrument.rub.abc.each { |inst| inst.info!.refresh include_company: true }
+      Instrument.eur.abc.each { |inst| inst.info!.refresh include_company: true }
     end
   end
 
@@ -163,4 +162,4 @@ Instrument['BABA'].info.refresh
 Stats.find_each &:sync_earning_dates
 Stats.find_each {  |s| p (s.earning_dates.to_a + [s.next_earnings_date]).uniq.compact.sort }; nil
 
-Stats.load_moex_info
+Stats.load_non_us_info

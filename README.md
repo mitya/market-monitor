@@ -34,6 +34,7 @@ rake iex:price_targets
 rake iex:insider_transactions iex:insider_transactions:cache
 rake iex:days:missing
 rake set_average_volume
+rake levels:hits:week
 
 # Run daily
 
