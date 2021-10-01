@@ -5,22 +5,22 @@
 + hit continuation check
 + recalculate MA200s (load 2018)
 + show margin factors
++ show hits for single ticker
 
-- show hits for single ticker
 - custom level import
 
+- compile the Known list & categorize everything in it
+- compile the Main list
+- compile N1 & N2 categorized lists on the TV
 - highlight expirations & thursdays on charts
-- improve TV sectioned lists
-- improve the Main list and categorize it
+
+- compare gains since random date
+- news UI
+- news sync process
+- try to get the evening data from NASDAQ
 
 
 - search for stable tops / bottoms
-- news UI
-- news sync process
-- compare gains since random date
-- try to get evening data from NASDAQ
-
-
 - list all the institutional holders & find last quarter institutional transactions
 - modal with L2 and buy / sell buttons
 - once a day set price to last for tickers without the IEX price data

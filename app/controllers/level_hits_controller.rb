@@ -4,15 +4,21 @@ class LevelHitsController < ApplicationController
     params[:per_page] ||= '400'
     params[:interval] ||= 'day'
 
+    tickers = params[:tickers].to_s.split.map(&:upcase) if params[:tickers].present?
+    if tickers&.one?
+      params[:dates] = nil
+      params[:per_page] = 100
+    end
+
     @hits = PriceLevelHit.all
     @hits = @hits.left_joins(:instrument, :level)
     @hits = @hits.includes(:instrument => [:info, :price_target, :aggregate])
 
-    @hits = @hits.where date: params[:dates]                                  if params[:dates].any?
+    @hits = @hits.where date: params[:dates]                                  if params[:dates].present?
     @hits = @hits.where kind: params[:kind]                                   if params[:kind].present?
     @hits = @hits.where instruments: { currency: params[:currency] }          if params[:currency].present?
     @hits = @hits.where ["? = any(instruments.flags)", params[:availability]] if params[:availability].present?
-    @hits = @hits.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
+    @hits = @hits.where ticker: tickers                                       if tickers.present?
     @hits = @hits.where ticker: InstrumentSet.get(params[:set]).symbols       if params[:set].present? && params[:tickers].blank?
     @hits = @hits.where level: { manual: true }                               if params[:manual] == '1'
     @hits = @hits.where source: params[:source]                               if params[:source].present?
