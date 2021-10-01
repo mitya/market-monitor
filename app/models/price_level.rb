@@ -1,6 +1,6 @@
 class PriceLevel < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
-  has_many :hits, class_name: 'PriceLevelHit', foreign_key: 'level_id'
+  has_many :hits, class_name: 'PriceLevelHit', foreign_key: 'level_id', dependent: :delete_all
 
   scope :manual, -> { where manual: true }
   scope :auto, -> { where manual: nil }
@@ -80,13 +80,22 @@ class PriceLevel < ApplicationRecord
     end
 
     def load_manual
+      manual_tickers = []
+
       Pathname("db/levels.txt").readlines(chomp: true).each do |line|
         next if line.blank?
-        ticker, value = line.split
+        ticker, *values = line.split
+        manual_tickers << ticker
         instrument = Instrument.get(ticker)
-        next puts "Missing #{ticker.upcase}".red unless instrument
-        find_or_create_by! instrument: instrument, value: value, manual: true, important: true
+        instrument.levels.manual.where.not(value: values).each &:destroy
+        values.each do |value|
+          find_or_create_by! instrument: instrument, value: value, manual: true, important: true
+        end
       end
+
+      manual.where.not(ticker: manual_tickers.map(&:upcase)).destroy_all
+
+      nil
     end
   end
 end

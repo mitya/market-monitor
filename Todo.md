@@ -6,8 +6,7 @@
 + recalculate MA200s (load 2018)
 + show margin factors
 + show hits for single ticker
-
-- custom level import
++ custom level import
 
 - compile the Known list & categorize everything in it
 - compile the Main list
