@@ -371,15 +371,19 @@ module InstrumentsHelper
   end
 
   def known_icon(instrument)
-    icons = [
-      # (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker) && instrument.portfolio_item&.active?),
-      # (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker)),
-      # (:bell      if InstrumentSet.alarms.symbols.include?(instrument.ticker)),
-      # (:user      if InstrumentSet.insiders.symbols.include?(instrument.ticker)),
-      # (:times     if InstrumentSet.rejected.symbols.include?(instrument.ticker)),
-    ].compact
-    icons = [:glasses] if icons.empty? && InstrumentSet.known?(instrument.ticker)
-    icons.map { |icon| fa_icon(icon, xsmall: true) }.join(' ').html_safe
+    # icons = [
+    #   (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker) && instrument.portfolio_item&.active?),
+    #   (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker)),
+    #   (:bell      if InstrumentSet.alarms.symbols.include?(instrument.ticker)),
+    #   (:user      if InstrumentSet.insiders.symbols.include?(instrument.ticker)),
+    #   (:times     if InstrumentSet.rejected.symbols.include?(instrument.ticker)),
+    # ].compact
+    # icons = []
+    # icons = [:glasses] if icons.empty? && InstrumentSet.known?(instrument.ticker)
+    # icons.map { |icon| fa_icon(icon, xsmall: true) }.join(' ').html_safe
+
+    return fa_icon :dice, xsmall: true if InstrumentSet.n1?(instrument.ticker)
+    return fa_icon :glasses, xsmall: true if InstrumentSet.known?(instrument.ticker)
   end
 
   def instrument_logo(instrument, **options)

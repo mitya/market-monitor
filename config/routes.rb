@@ -31,4 +31,5 @@ Rails.application.routes.draw do
     get :activities
   end
   resource :comparision
+  resources :news
 end

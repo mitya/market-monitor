@@ -47,6 +47,7 @@ en:
   time:
     formats:
       hhmm: '%H:%M'
+      ddmmhhmm: '%d.%m %H:%M'
 
   datetime:
     distance_in_words:

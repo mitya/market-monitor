@@ -1,0 +1,51 @@
+- page_title! 'News'
+
+main.container-fluid
+  h1.display-3 News
+
+  form#list-config(action=news_index_path class='my-2')
+    = render 'instruments/filter_by_set'
+    = render 'instruments/filter_by_currency'
+    = render 'instruments/filter_by_availability'
+    .row.mb-3
+      .col
+        = render 'instruments/filter_by_tickers'
+        = render 'instruments/pagination_options'
+      .col
+
+  .row
+    = page_entries_block @news
+    = paginate @news, window: 10
+
+  table.table.table-sm.table-hover.table-font-sm.tickers-table.table-striped
+    thead.table-dark
+      tr
+        th.money-cell Time
+        th
+        th
+        th
+        th Ticker
+        th Company
+        th
+        th Subject
+        th Others
+    tbody
+      - @news.each do |item|
+        - inst = instrument = item.instrument
+        - info = instrument.info
+        tr
+          td.nowrap.money-cell= l item.datetime.localtime, format: :ddmmhhmm
+          td.px-2= known_icon instrument
+          td.px-2= type_icon instrument
+          td= instrument_logo_button inst
+          td.px-2= inst.ticker
+          td.instrument-name= truncate instrument.name, length: 30
+          td= link_to fa_icon(:link), item.url, target: '_blank' if item.url
+          td(style="max-width: 700px")
+            = tag.span(item.title, class: "news-title news-title-#{item.sentiment}")
+            - if item.body.present?
+              br
+              div.my-2= item.cleared_body
+          td= item.other_tickers.join(' ')
+
+  = paginate @news, window: 20

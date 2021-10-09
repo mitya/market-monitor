@@ -1,7 +1,7 @@
 class PantiniNewsParser
   include StaticService
 
-  def connect
+  def retrieve
     puts "Sync news from Pantini"
     command = "coffee bin/telegram.coffee messages NEWS"
     data = `#{command}`

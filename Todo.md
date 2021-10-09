@@ -10,12 +10,13 @@
 + compile the Known list & categorize everything in it
 + compare gains since random date
 + 3m & 1y comparisions
++ news UI
 
-
-- news UI
 - news sync process
 - try to get the evening data from NASDAQ
 
+
+# Next
 
 - use dropdown for sets
 - search for stable tops / bottoms
@@ -41,69 +42,6 @@
 - analyze large moves (from flat and from prior slow move)
 - analyze shelves
 - indexes state bar & index updates
-
-
-# Done
-
-+ breakout signals
-+ negative breakouts signals
-+ signal permutation analyzer
-+ aggregate results with date range
-+ signal prev month dynamics
-+ signal volume / avg volume
-+ signal on level
-+ show volume / level in UI
-+ check volume & level corellation in strategies
-+ page with all SPB price anomalities (Y close, Y change, Ti last, Ti 1h min, Ti 1h vol)
-+ load last 2 5m candles from IEX &
-+ load all Tinkoff USD candles
-+ load options data
-+ load IEX transactions via date ranged feed
-+ rake task for options
-+ options straddle table
-+ options history table
-+ install Pantini extension & check out the order log
-+ show volume changes in the main list
-+ show L2 on arb page
-+ group foreign exchanges by ticker
-+ refresh the arb list with a button
-+ sync orders
-+ show orders list
-+ show operations
-+ 5-min overview page
-+ orders / operations / portfolio page
-+ show portfolio
-+ 5 min accumulation bar chart
-+ the ask Buy button
-+ move buy/sell indication to best bid/ask
-+ format arb table in one line
-+ indicate average price in portfolio
-+ order cancellation button
-+ activity page refresh
-+ overview page with known tickers grouped by industry
-+ calculate MA and watch for MA passing
-+ today gainers / losers
-+ find extremums
-+ add ability to add new special dates
-+ search for 4% spikes
-+ show daily/weekly trading vol in money
-+ improve Rus illiquid stocks list
-+ improve the menu
-+ add NASDAQ 100 & S&P 500 companies
-+ TV chart programming - open/close lines
-+ fix diff to year begins
-+ fix 200 MA
-+ show % & days since 52w high
-+ load splits
-+ add russian companies info & market cap
-+ filter field for MA50/200
-+ predefined links for MA analysis
-+ tinkoff marginal list
-+ add news parser
-
-
-# Next
-
 - constant price update process for TI
 - new chart engine
 - improve level rebound search logic
@@ -134,7 +72,7 @@
 - change insider transactions to new API with `from` parameter
 
 
-# Later
+# Probably Never
 – comparision to a random date
 - column selection
 - terminal-based UI
@@ -307,3 +245,58 @@
 + signal results
 + signal results UI
 + aggregate & analyze dates YTD
++ breakout signals
++ negative breakouts signals
++ signal permutation analyzer
++ aggregate results with date range
++ signal prev month dynamics
++ signal volume / avg volume
++ signal on level
++ show volume / level in UI
++ check volume & level corellation in strategies
++ page with all SPB price anomalities (Y close, Y change, Ti last, Ti 1h min, Ti 1h vol)
++ load last 2 5m candles from IEX &
++ load all Tinkoff USD candles
++ load options data
++ load IEX transactions via date ranged feed
++ rake task for options
++ options straddle table
++ options history table
++ install Pantini extension & check out the order log
++ show volume changes in the main list
++ show L2 on arb page
++ group foreign exchanges by ticker
++ refresh the arb list with a button
++ sync orders
++ show orders list
++ show operations
++ 5-min overview page
++ orders / operations / portfolio page
++ show portfolio
++ 5 min accumulation bar chart
++ the ask Buy button
++ move buy/sell indication to best bid/ask
++ format arb table in one line
++ indicate average price in portfolio
++ order cancellation button
++ activity page refresh
++ overview page with known tickers grouped by industry
++ calculate MA and watch for MA passing
++ today gainers / losers
++ find extremums
++ add ability to add new special dates
++ search for 4% spikes
++ show daily/weekly trading vol in money
++ improve Rus illiquid stocks list
++ improve the menu
++ add NASDAQ 100 & S&P 500 companies
++ TV chart programming - open/close lines
++ fix diff to year begins
++ fix 200 MA
++ show % & days since 52w high
++ load splits
++ add russian companies info & market cap
++ filter field for MA50/200
++ predefined links for MA analysis
++ tinkoff marginal list
++ add news parser

@@ -177,3 +177,11 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
   padding-top: 2rem !important;
   font-weight: bold;
 }
+
+.news-positive { font-weight: bold; color: green; }
+.news-negative { font-weight: bold; color: red; }
+
+.news-title { font-weight: bold; }
+.news-title-positive { color: green; }
+.news-title-negative { color: red; }
+.news-title-mixed { color: orange; }

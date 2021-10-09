@@ -207,8 +207,7 @@ envtask(:book) { Orderbook.sync ENV['ticker'] }
 envtask(:arb) { Synchronizer.call }
 envtask(:spikes) { Spike.scan_all since: 1.week.ago }
 
-# envtask(:news) { Synchronizer.sync_news }
-envtask(:news) { PantiniNewsParser.connect }
+envtask(:news) { Synchronizer.sync_news }
 
 envtask :m5 do
   loop do

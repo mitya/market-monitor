@@ -27,6 +27,8 @@ class InstrumentSet
   alias tickers symbols
   alias scope instruments
 
+  def include?(ticker) = tickers.include?(ticker)
+
   class << self
     def get(key)
       return key if self === key
@@ -62,6 +64,8 @@ class InstrumentSet
     def known_instruments = @known ||= [main, portfolio, recommendations].flat_map(&:instruments).uniq
     def known_symbols = @known_symbols ||= [main, portfolio, recommendations, categorized].flat_map(&:symbols).uniq
     def known?(symbol) = known_symbols.include?(symbol)
+    def n1 = @n1 ||= new(:'1')
+    def n1?(symbol) = n1.include?(symbol)
   end
 end
 

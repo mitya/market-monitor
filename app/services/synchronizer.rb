@@ -16,7 +16,7 @@ class Synchronizer
 
   def sync_news
     loop do
-      PantiniNewsParser.connect
+      PantiniNewsParser.retrieve
       sleep 5
     end
   end
