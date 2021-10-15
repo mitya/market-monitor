@@ -41,7 +41,7 @@ class Current < ActiveSupport::CurrentAttributes
   def d10_ago   = MarketCalendar.closest_weekday(d7_ago.prev_weekday.prev_weekday.prev_weekday)
   def m1_ago    = MarketCalendar.closest_weekday(1.month.ago.to_date)
   def m3_ago    = MarketCalendar.closest_weekday(3.month.ago.to_date)
-  def y1_ago  = MarketCalendar.closest_weekday(1.year.ago.to_date)
+  def y1_ago    = MarketCalendar.closest_weekday(1.year.ago.to_date)
   def y2017     = Date.new(2017,  1,  3)
   def y2018     = Date.new(2018,  1,  3)
   def y2019     = Date.new(2019,  1,  3)

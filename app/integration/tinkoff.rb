@@ -155,7 +155,7 @@ class Tinkoff
   end
 
 
-  def import_candles_from_hash(instrument, data, candle_class: nil)
+  def import_candles_from_hash(instrument, data, candle_class: nil, tz: nil)
     interval = data['interval']
     candles = data['candles'].to_a
 
@@ -167,8 +167,9 @@ class Tinkoff
     candle_class.transaction do
       candles.each do |hash|
         time = Time.parse hash['time']
+        time = time.in_time_zone(tz) if tz
         date = time.to_date
-        time = time.to_s(:time) if candle_class == Candle::M5 || candle_class == Candle::M1
+        time = time.to_s(:time) if candle_class == Candle::M5 || candle_class == Candle::M3 || candle_class == Candle::M1
         candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time, date: date
         puts "Import Tinkoff #{date} #{time} #{interval} candle for #{instrument}" if candle.new_record?
         candle.ticker  = instrument.ticker
@@ -225,17 +226,29 @@ class Tinkoff
     import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day,             candle_class: candle_class if years.include?(2021)
   end
 
-  def import_intraday_candles(instrument, interval)
+  def import_historical_intraday_candles(instrument, interval, dates: [Current.date])
+    dates.each do |date|
+      since = instrument.usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
+      till  = instrument.usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 01) : date.end_of_day
+      import_intraday_candles instrument, interval, since: since, till: till
+    end
+  end
+
+  def import_intraday_candles(instrument, interval, since: nil, till: nil)
     return if !instrument.tinkoff?
+    return if !instrument.market_open? && !since
+
     day_start = instrument.rub? || instrument.eur? ? Current.ru_market_open_time : Current.us_market_open_time
     last_loaded_candle = Candle.interval_class_for(interval).where(instrument: instrument, interval: interval).where('time >= ?', day_start).order(:time).last
-    since = last_loaded_candle&.time || day_start
+
+    since ||= last_loaded_candle&.time || day_start
+    till  ||= since.end_of_day
+
     # return if last_loaded_candle.created_at > interval_duration(interval).ago
     return if since + Candle.interval_duration(interval) > Time.current
-    return if !instrument.market_open?
 
-    data = load_intervals instrument, interval, since, Time.current + 1.minute, delay: 0.25
-    import_candles_from_hash instrument, data
+    data = load_intervals instrument, interval, since, till, delay: 0.1
+    import_candles_from_hash instrument, data, tz: instrument.usd? && interval == '3min' ? Current.est : nil
   end
 
 

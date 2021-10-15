@@ -149,12 +149,13 @@ class Candle < ApplicationRecord
     def last_loaded_date = final.maximum(:date)
 
     def interval_class_for(interval)
-      { 'hour' => H1, '5min' => M5, '1min' => M1, 'day' => self }[interval]
+      { 'hour' => H1, '5min' => M5, '3min' => M3, '1min' => M1, 'day' => self }[interval]
     end
 
     def interval_duration(interval)
       case interval
         when '5min' then 5.minutes
+        when '3min' then 3.minutes
         when 'hour' then 1.hour
         when 'day'  then 1.day
       end
@@ -184,6 +185,10 @@ class Candle < ApplicationRecord
 
   class M5 < Intraday
     self.table_name = "candles_m5"
+  end
+
+  class M3 < Intraday
+    self.table_name = "candles_m3"
   end
 
   class M1 < Intraday

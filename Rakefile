@@ -30,6 +30,10 @@ module R
         nil
   end
 
+  def instruments_from_env!
+    instruments_from_env || raise("Please set the 'tickers=' env variable!")
+  end
+
   def confirmed? = true?(:ok)
   def true?(variable) = ENV[variable.to_s] == '1'
   def true_or_nil?(variable) = true?(variable) || ENV[variable.to_s].blank?

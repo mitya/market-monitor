@@ -23,6 +23,7 @@ ftch 40
 gazp 255
 gltr 455
 hcc  18
+mfgp 5
 rosn 600
 snd  2.2
 tsla 550

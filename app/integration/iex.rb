@@ -144,6 +144,12 @@ class Iex
     # puts "GET #{path} #{params}".yellow
     response = RestClient.get "#{BASE}#{path}", params: { token: ENV['IEX_SECRET_KEY'] }.merge(params || {})
     JSON.parse response.body
+  rescue Net::OpenTimeout
+    puts "IEX request timed out for #{path} #{params}".red
+    exit
+  rescue
+    puts "IEX request failed for #{path} #{params}".red
+    raise
   end
 
   ExchangeMapping = { NYS: 'NYSE', NAS: 'NASDAQ' }.stringify_keys.tap { |hash| hash.default_proc = -> (h, k) { k } }

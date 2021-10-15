@@ -55,7 +55,12 @@ namespace :tinkoff do
     end
 
     envtask 'import:5min' do
-      Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, '5min') }
+      Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, '5min' ) }
+    end
+
+    envtask 'import:3min' do
+      # R.instruments_from_env!.abc.each { |inst| Tinkoff.import_intraday_candles(inst, '3min',  since: 1.week.ago) }
+      R.instruments_from_env!.abc.each { |inst| Tinkoff.import_historical_intraday_candles(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago)) }
     end
 
     envtask 'import:5min:last' do
@@ -165,6 +170,8 @@ rake tinkoff:candles:download:ongoing set=main
 rake tinkoff:candles:import:ongoing
 rake tinkoff:candles:day:all tickers=MTX@DE,FIXP,TGKDP
 rake tinkoff:instruments:sync # ok=1
+
+rake tinkoff:candles:import:3min tickers='EQT CLF'
 
 rake tinkoff:candles:day
 rake tinkoff:prices # set=main

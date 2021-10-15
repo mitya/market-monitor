@@ -91,3 +91,6 @@ https://www.nasdaq.com/market-activity/quotes/nasdaq-ndx-index
 https://datahub.io/core/s-and-p-500-companies#resource-constituents
 
 $$(".nasdaq-ndx-index__row th.nasdaq-ndx-index__cell:first-child").map(e => e.innerText)
+
+
+curl -s "https://cloud.iexapis.com/stable/stock/eqt/insider-roster?token=$IEX_SECRET_KEY" | jq
