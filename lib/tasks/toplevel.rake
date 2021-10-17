@@ -60,6 +60,10 @@ envtask :analyze do
   PriceSignal.analyze_all date: ENV['date'] ? Date.parse(ENV['date']) : Current.last_closed_day
 end
 
+envtask :analyze_intraday do
+  PriceSignal.analyze_intraday_history(%w[EQT], MarketCalendar.open_days(5.days.ago))
+end
+
 envtask :analyze_old do
   MarketCalendar.open_days(Date.current.beginning_of_year, '2021-04-16'.to_date).each do |date|
     PriceSignal.analyze_all date: date, force: false

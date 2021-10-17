@@ -1,0 +1,28 @@
+main.container-fluid
+  h1.display-3 ETFs
+
+  form#list-config(action=set_comparision_path class='my-2')
+    = render 'instruments/filter_by_tickers'
+
+  .container-fluid
+    .row
+      - @sets.each do |set|
+        .col
+          h6= set.name
+          table.table.table-sm.table-hover.table-font-sm.tickers-table.w-auto
+            thead
+              tr
+                / th
+                th Ticker
+                th.money-cell 1d
+            tbody
+              - instruments = set.instruments
+              - instruments = instruments.sort_by(&:d1_change).reverse
+              - instruments.each do |inst|
+                tr
+                  / td= instrument_logo_button inst
+                  td(title=inst.name)= inst.ticker
+                  / td.money-cell= relative_price inst.d1_ago_close, inst.d2_ago_close, unit: inst.currency, format: 'relative', precision: 2
+                  / td.money-cell= colorized_percentage inst.d1_ago_close, inst.d2_ago_close, unit: inst.currency, precision: 1, format: '%n'
+                  td.money-cell= colorized_ratio inst.d1_change, precision: 1, format: '%n'
+                  / td.money-cell= inst.price!.change

@@ -6,6 +6,8 @@ class Instrument < ApplicationRecord
   has_many :indicators_history,            foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'DateIndicators'
   has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
   has_many :m1_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M1', dependent: :delete_all
+  has_many :m3_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M3', dependent: :delete_all
+  has_many :m5_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M5', dependent: :delete_all
   has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument
   has_many :signal_results,                foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignalResult', dependent: :delete_all
   has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignal', dependent: :delete_all
@@ -125,6 +127,8 @@ class Instrument < ApplicationRecord
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
+
+  def d1_change = @d1_change ||= d1_ago_close / d2_ago_close - 1.0
 
   alias gain_since rel_diff_value
 

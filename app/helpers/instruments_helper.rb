@@ -40,16 +40,16 @@ module InstrumentsHelper
     end
   end
 
-  def colorized_percentage(price, base_price, unit: '$', inverse: false, precision: percentage_precision, blank_threshold: nil)
+  def colorized_percentage(price, base_price, unit: '$', inverse: false, precision: percentage_precision, blank_threshold: nil, format: nil)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
-    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit)), precision: precision, blank_threshold: blank_threshold
+    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit)), precision: precision, blank_threshold: blank_threshold, format: format
   end
 
-  def colorized_ratio(ratio, title: nil, precision: percentage_precision, blank_threshold: nil, inverse: false)
+  def colorized_ratio(ratio, title: nil, precision: percentage_precision, blank_threshold: nil, inverse: false, format: nil)
     return if blank_threshold && ratio.to_f.abs < blank_threshold
     ratio = ratio * -1 if ratio && inverse
     tag.span class: "changebox changebox-#{ratio_color(ratio)}", title: title do
-      ratio_percentage ratio, precision: precision
+      ratio_percentage ratio, precision: precision, format: format
     end
   end
 
@@ -58,8 +58,9 @@ module InstrumentsHelper
     colorize_change base - current, green: current <= base, unit: 'USD', precision: precision
   end
 
-  def ratio_percentage(ratio, precision: 0)
-    number_to_percentage ratio * 100, precision: precision, delimiter: ',', format: '%n ﹪' if ratio
+  def ratio_percentage(ratio, precision: 0, format: nil)
+    format ||= '%n ﹪'
+    number_to_percentage ratio * 100, precision: precision, delimiter: ',', format: format if ratio
   end
 
   def relative_price(price, base_price, unit:, format: "absolute", inverse: false, precision: 1, percentage_precision: self.percentage_precision, blank_threshold: nil)

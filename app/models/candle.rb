@@ -89,6 +89,7 @@ class Candle < ApplicationRecord
   def shadow_to_body_ratio = shadows_spread / range_spread
 
   def siblings = instrument.candles.where(interval: interval)
+  def same_day_siblings = siblings.where(date: date)
   def previous = @previous ||= siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
   def previous_n(n) = siblings.where('date < ?', date).order(:date).last(n)
   def next = @next ||= siblings.find_by(date: MarketCalendar.next(date)) || siblings.where('date > ?', date).order(:date).first
