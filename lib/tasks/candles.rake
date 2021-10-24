@@ -9,3 +9,25 @@ namespace :m1 do
     end
   end
 end
+
+namespace :candles do
+  envtask :set_prev_closes do
+      klasses = [Candle]
+      klasses = [Candle::H1, Candle::M1, Candle::M3, Candle::M5, Candle::DayTinkoff]
+      klasses.each do |klass|
+        klass.where(prev_close: nil).includes(:instrument).find_in_batches do |candles|
+          klass.transaction do
+            candles.each { |candle| candle.update! prev_close: candle.previous&.close unless candle.prev_close }
+          end
+        end
+      end
+  end
+
+  envtask(:set_average_volume)  { Stats.find_each &:set_average_volume  }
+  envtask(:set_average_change)  { Stats.find_each &:set_average_change  }
+  envtask(:set_d5_money_volume) { Stats.find_each &:set_d5_money_volume }
+end
+
+
+__END__
+rake candles:set_prev_closes

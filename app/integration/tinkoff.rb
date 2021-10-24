@@ -11,7 +11,7 @@ class Tinkoff
     TCS CLGX MSGN WORK PRAH KBTK
     NVTK@GS LKOD@GS OGZD@GS NLMK@GS PHOR@GS SBER@GS SVST@GS SSA@GS MGNT@GS PLZL@GS
     HOME LMNX CCIV ALXN CLNY GTT CNST LB TLND
-    SYKE PFPT QTS CHK
+    SYKE PFPT QTS CHK CREE
   ].uniq
 
   TickerWithSomeDatesMIssing = %w[
@@ -22,7 +22,7 @@ class Tinkoff
 
   def sync_instruments(preview: true)
     file = Pathname("db/data/tinkoff-stocks.json")
-    file.write `coffee bin/tinkoff.coffee stocks` unless file.exist?
+    file.write `coffee bin/tinkoff.coffee stocks` # unless file.exist?
 
     data = JSON.parse file.read
     problematic_tickers = []
@@ -203,7 +203,7 @@ class Tinkoff
     puts "Import #{instrument} failed: #{$!}"
   end
 
-  def import_day_candles(instrument, since:, till:, delay: 0.25, candle_class: nil)
+  def import_day_candles(instrument, since:, till:, delay: 0.1, candle_class: nil)
     data = load_day instrument, since, till
     import_candles_from_hash instrument, data, candle_class: candle_class
     sleep delay

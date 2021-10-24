@@ -128,7 +128,7 @@ class Instrument < ApplicationRecord
   def price_on(date) = day_candles!.find_date_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
 
-  def d1_change = @d1_change ||= d1_ago_close / d2_ago_close - 1.0
+  def d1_change = @d1_change ||= d1_ago_close / d2_ago_close - 1.0 rescue 0
 
   alias gain_since rel_diff_value
 

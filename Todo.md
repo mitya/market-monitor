@@ -11,8 +11,24 @@
 + compare gains since random date
 + 3m & 1y comparisions
 + news UI
++ news sync process
++ add prev candle close to each daily candle
 
-- news sync process
+- calc ATRs
+- list changes in ATRs
+
+- intraday scanner
+  - 3m candle loader (maybe 1m later)
+  - limited set of tickers
+  - scans omi first 15 & last 15 mins
+  - scans:
+    - 2% change in 5 mins
+    - HOD retest when high > 2% && low since high < -2%
+    - HOD 2%+ open down break
+    - yesterday HOD / LOD retests
+    - 4% fall — first green 3m bar, min 0.4%
+    - predefined level checks with tolerance
+
 - try to get the evening data from NASDAQ
 
 

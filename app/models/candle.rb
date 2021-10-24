@@ -9,10 +9,10 @@ class Candle < ApplicationRecord
   scope :non_analyzed, -> { where analyzed: nil }
   scope :since, -> date { where 'date >= ?', date }
   scope :asc, -> { order :date }
-  # scope :non_analyzed, -> { }
-
   scope :iex, -> { where source: 'iex' }
   scope :tinkoff, -> { where source: 'tinkoff' }
+
+  before_create { self.prev_close ||= previous&.close }
 
   def self.find_date_before(date)    = order(date: :desc).where('date <  ?', date.to_date).take
   def self.find_date_or_before(date) = order(date: :desc).where('date <= ?', date.to_date).take
@@ -21,7 +21,6 @@ class Candle < ApplicationRecord
   def self.find_dates_in(period)  = where(date: period)
 
   def final? = !ongoing?
-
   def range = low..high
   def range_with_delta(delta = 0.02) = (low * (1 - delta)) .. (high * (1 + delta))
   def range_high = close > open ? close : open
@@ -38,12 +37,15 @@ class Candle < ApplicationRecord
 
   def change = close - open
   def rel_change = (change / open).round(4)
-  def close_change = close - previous&.close.to_d
+  def close_change = close - prev_close.to_d
   def rel_close_change = (close_change / open).round(4)
 
-  def gap = open - previous&.close.to_d
+  def true_range = [high - low, high - prev_close.to_d, low - prev_close.to_d].map(&:abs).max
+  def rel_true_range = true_range / close
+
+  def gap = open - prev_close.to_d
   def gap? = gap > 0
-  def rel_gap = gap?? gap / previous&.close.to_d : 0
+  def rel_gap = gap?? gap / prev_close.to_d : 0
 
   def diff_to(price, base_price = :close) = (send(base_price) - price) / price
 
@@ -73,10 +75,10 @@ class Candle < ApplicationRecord
   def direction = up?? 'up' : 'down'
   def direction_rev = up?? 'down' : 'up'
 
-  def trend_up? = previous && close >= previous.close
-  def trend_down? = previous && close <= previous.close
-  def days_up = trend_up? ? 1 + previous.days_up : 0
-  def days_down = trend_down? ? 1 + previous.days_down : 0
+  def trend_up? = prev_close && close >= prev_close
+  def trend_down? = prev_close && close <= prev_close
+  def days_up = previous && trend_up? ? 1 + previous.days_up : 0
+  def days_down = previous && trend_down? ? 1 + previous.days_down : 0
 
 
   # def up_for?(period_count)
@@ -88,7 +90,7 @@ class Candle < ApplicationRecord
   def body_to_shadow_ratio = range_spread / shadows_spread
   def shadow_to_body_ratio = shadows_spread / range_spread
 
-  def siblings = instrument.candles.where(interval: interval)
+  def siblings = self.class.where(ticker: ticker, interval: interval)
   def same_day_siblings = siblings.where(date: date)
   def previous = @previous ||= siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
   def previous_n(n) = siblings.where('date < ?', date).order(:date).last(n)
@@ -157,6 +159,7 @@ class Candle < ApplicationRecord
       case interval
         when '5min' then 5.minutes
         when '3min' then 3.minutes
+        when '1min' then 1.minute
         when 'hour' then 1.hour
         when 'day'  then 1.day
       end
@@ -175,8 +178,7 @@ class Candle < ApplicationRecord
   end
 
   class Intraday < Candle
-    def siblings = self.class.where(instrument: instrument, interval: interval)
-    def previous = siblings.find_by(time: time - interval_duration)
+    def previous = time && siblings.find_by(time: time - interval_duration)
     def datetime = Time.parse("#{date} #{time} Z")
   end
 

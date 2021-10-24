@@ -198,9 +198,6 @@ end
 task :close => 'tinkoff:candles:import:5min:last'
 task :pre => 'tinkoff:prices:pre'
 
-envtask(:set_average_volume)  { Stats.find_each &:set_average_volume }
-envtask(:set_d5_money_volume) { Stats.find_each &:set_d5_money_volume }
-
 envtask :pantini do
   PantiniArbitrageParser.connect 'XFRA'
   PantiniArbitrageParser.connect 'US'
