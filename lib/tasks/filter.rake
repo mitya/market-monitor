@@ -69,6 +69,20 @@ namespace :filter do
     puts "Total: #{results.count}"
     puts "Tickers: #{results.keys.sort.join(' ')}"
   end
+
+  envtask :ipos do
+    excluded = %w[AMR ALTO GOTU GTX INTEQ LQDA LTMAQ MODV PRG TTE VTRS WOLF ZWS CLSK DASB FUBO].to_set
+    Instrument.abc.select do |inst|
+      next if inst.eur?
+      next if excluded.include?(inst.ticker)
+      next if inst.ticker.include?('@')
+      if oldest = inst.candles.asc.first
+        if oldest.date > '2020-07-01'.to_date
+          puts inst.ticker
+        end
+      end
+    end
+  end
 end
 
 
@@ -76,3 +90,4 @@ __END__
 
 rake filter:run
 rake filter:outdated
+rake filter:ipos

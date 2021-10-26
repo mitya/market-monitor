@@ -55,7 +55,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='ZNGA KSPI@GS MGA TOST UBS'
+export tickers=''
 rake tinkoff:premium:import
 
 ## Tinkoff
@@ -69,12 +69,15 @@ rake tinkoff:days:year tinkoff:days:special tickers='KSPI@GS'
 ## All
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1
+rake candles:set_prev_closes
+rake candles:set_average_change
+
 rake set_average_volume
 
 ## Optional
 rake iex:symbols:refresh
 rake set_first_date ticker=GRUB date=2021-03-25
-rake set_first_date_auto tickers='TOST'
+rake set_first_date_auto tickers='LPRO SLQT PFSI MP LSPD CRNC DM'
 rake iex:symbols:load iex:symbols:otc:load
 rake destroy ticker=CHK ok=1
 rake iex:days:period period=ytd

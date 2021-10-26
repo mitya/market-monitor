@@ -31,7 +31,8 @@ task :process do
   rake 'tinkoff:instruments:sync'
 end
 
-task :prices => %w[iex:prices tinkoff:prices:uniq]
+task 'prices' => %w[iex:prices]
+task 'prices:all' => %w[iex:prices tinkoff:prices:uniq]
 
 envtask :aggregate do
   Aggregate.delete_all
@@ -195,8 +196,6 @@ namespace :options do
   end
 end
 
-task :close => 'tinkoff:candles:import:5min:last'
-task :pre => 'tinkoff:prices:pre'
 
 envtask :pantini do
   PantiniArbitrageParser.connect 'XFRA'
@@ -204,28 +203,18 @@ envtask :pantini do
   PantiniArbitrageParser.connect 'TG'
 end
 
+task :close => 'tinkoff:candles:import:5min:last'
+task :pre => 'tinkoff:prices:pre'
+
 envtask(:book) { Orderbook.sync ENV['ticker'] }
 envtask(:arb) { Synchronizer.call }
 envtask(:spikes) { Spike.scan_all since: 1.week.ago }
-
 envtask(:news) { Synchronizer.sync_news }
 
-envtask :m5 do
-  loop do
-    puts "Syncing M5..."
-    Tinkoff.load_trading_5m_candles
-    loop do
-      sleep 5
-      time = Time.current
-      break if time.min % 5 == 0 && time.sec < 9
-    end
-  end
-end
 
 __END__
 
-rake aggregate date=2021-08-09
+r aggregate date=2021-08-09
 r options:day tickers='BABA'
 r options:week tickers='BABA CLF'
-
 r levels:hits:week
