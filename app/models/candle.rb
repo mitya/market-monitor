@@ -38,8 +38,8 @@ class Candle < ApplicationRecord
 
   def change = close - open
   def rel_change = (change / open).round(4)
-  def close_change = close - prev_close.to_d
-  def rel_close_change = (close_change / open).round(4)
+  def close_change = close - (prev_close || open)
+  def rel_close_change = (close_change / (prev_close || open)).round(4)
 
   def true_range = [high - low, high - prev_close.to_d, low - prev_close.to_d].map(&:abs).max
   def rel_true_range = true_range / close
@@ -53,6 +53,7 @@ class Candle < ApplicationRecord
   def close_time = date.in_time_zone(Current.est).change(hour: 16)
 
   def ohlc_row = [open, high, low, close]
+  def ohlc_str = ohlc_row.join(' ')
 
   def range_spread_percent = range_spread.abs / close
 
@@ -70,6 +71,7 @@ class Candle < ApplicationRecord
   alias top_tail_range volatility_above
   def larger_tail_range = volatility_above > volatility_below ? volatility_above : -volatility_below
 
+  def analyzed! = update!(analyzed: true)
 
   def up? = close >= open
   def down? = close < open
@@ -180,7 +182,10 @@ class Candle < ApplicationRecord
 
   class Intraday < Candle
     def previous = time && siblings.find_by(time: time - interval_duration)
-    def datetime = instrument.time_zone.parse("#{date} #{time_before_type_cast}")
+    def datetime = instrument.time_zone.parse("#{date} #{hhmm}")
+    def to_s = "<#{ticker}:#{interval}:#{date}T#{hhmm}>"
+    def to_full_s = "#{to_s} #{ohlc_str} P#{prev_close} #{close_change} #{rel_close_change}"
+    def hhmm = time_before_type_cast.first(5)
   end
 
   class H1 < Intraday

@@ -37,7 +37,7 @@ main.container-fluid
       = page_entries_block @signals
       = paginate @signals, window: 10
     .col-md-5
-      = render 'signal_stats'
+      = render 'signal_stats' unless is_intraday
 
   table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
     thead.table-dark

@@ -21,11 +21,11 @@ namespace :intraday do
   envtask :sync do
     last_synced_interval = nil
     loop do
-      duration = 5
+      duration = 3
       interval = "#{duration}min"
       intervals_since_midnight = (Time.current.hour * 60 + Time.current.min / duration)
 
-      next if last_synced_interval != nil && Time.current.sec < 30 
+      next if last_synced_interval != nil && Time.current.sec < 50
 
       if last_synced_interval != intervals_since_midnight
         puts "Sync M#{duration}..."
@@ -36,7 +36,7 @@ namespace :intraday do
         last_synced_interval = intervals_since_midnight
       end
 
-      sleep 3
+      sleep 10
     end
   end
 end

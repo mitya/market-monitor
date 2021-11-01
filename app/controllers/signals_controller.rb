@@ -12,7 +12,7 @@ class SignalsController < ApplicationController
 
     @signals = @signals.for_interval params[:interval]                              if params[:interval].present?
     @signals = @signals.where date: params[:dates]                                  if params[:dates].any?
-    @signals = @signals.where kind: params[:kind]                                 if params[:kind].present?
+    @signals = @signals.where kind: params[:kind]                                   if params[:kind].present?
     @signals = @signals.where instruments: { currency: params[:currency] }          if params[:currency].present?
     @signals = @signals.where ["? = any(instruments.flags)", params[:availability]] if params[:availability].present?
     @signals = @signals.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
@@ -29,5 +29,15 @@ class SignalsController < ApplicationController
 
     Current.preload_prices_for @signals.map(&:instrument)
     Current.preload_day_candles_for @signals.map(&:instrument)
+  end
+
+  def intraday
+    params[:dates] ||= [Current.date.to_s]
+    params[:per_page] ||= '400'
+    params[:interval] ||= '3min'
+    params[:direction] ||= 'up'
+    params[:signal] ||= ''
+    index
+    render
   end
 end

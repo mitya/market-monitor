@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   resources :insider_summaries, path: 'insider-summaries'
   resources :recommendations
   resources :spikes, only: %i[index]
-  resources :signals
+  resources :signals do
+    get :intraday, on: :collection
+  end
   resources :signal_results
   resources :signal_strategies
   resources :public_signals

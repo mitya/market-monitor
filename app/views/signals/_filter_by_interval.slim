@@ -1,5 +1,5 @@
 .row.mb-1
   legend class="col-form-label col-sm-2 pt-0" Interval:
   .col-sm-10
-    - (options_from_keys(%w[day hour 5min intraday])).each do |label, value|
+    - (options_from_keys(%w[day hour 5min 3min intraday])).each do |label, value|
       = bs_toggle_button :interval, value, label

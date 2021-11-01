@@ -16,8 +16,10 @@
 + calc ATRs
 + intraday candle loader
 + run analyze each time a candle is loaded
++ load 3m candles
++ look for simplest things — .5% moves
 
-- look for simplest things — .5% move in 2 candles
+- look for .5 moves in 2 candles
 - look for predefined levels
 
 - intraday scanner
