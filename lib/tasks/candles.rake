@@ -1,11 +1,42 @@
 namespace :m1 do
   envtask :load do
-    tickers = %w[DK FANG CLF X MAC M HRTX ATRA]
-    tickers = %w[DK FANG CLF]
     period = '2021-06-01'.to_date .. Current.yesterday
-
+    tickers = %w[DK FANG CLF X MAC M HRTX ATRA]
     tickers.each do |ticker|
       MarketCalendar.open_days(period).each { |date| Iex.import_intraday_candles(ticker, date) }
+    end
+  end
+end
+
+
+namespace :m3 do
+  envtask :load do
+    R.instruments_from_env!.abc.each do |inst|
+      Tinkoff.import_intraday_candles_for_dates(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago))
+    end
+  end
+end
+
+namespace :intraday do
+  envtask :sync do
+    last_synced_interval = nil
+    loop do
+      duration = 5
+      interval = "#{duration}min"
+      intervals_since_midnight = (Time.current.hour * 60 + Time.current.min / duration)
+
+      next if last_synced_interval != nil && Time.current.sec < 30 
+
+      if last_synced_interval != intervals_since_midnight
+        puts "Sync M#{duration}..."
+        InstrumentSet[:trading].instruments.each do |inst|
+          Tinkoff.import_intraday_candles inst, interval
+          PriceSignal.analyze_intraday_for inst, interval
+        end
+        last_synced_interval = intervals_since_midnight
+      end
+
+      sleep 3
     end
   end
 end
@@ -17,7 +48,10 @@ namespace :candles do
       klasses.each do |klass|
         klass.where(prev_close: nil).includes(:instrument).find_in_batches do |candles|
           klass.transaction do
-            candles.each { |candle| candle.update! prev_close: candle.previous&.close unless candle.prev_close }
+            candles.each do |candle|
+              puts "#{candle.class} #{candle.ticker}"
+              candle.update! prev_close: candle.previous&.close unless candle.prev_close
+            end
           end
         end
       end
@@ -30,4 +64,6 @@ end
 
 
 __END__
-rake candles:set_prev_closes
+r candles:set_prev_closes
+r candles:set_average_change
+r m3:load tickers='CLF DK'

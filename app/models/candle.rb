@@ -9,6 +9,7 @@ class Candle < ApplicationRecord
   scope :non_analyzed, -> { where analyzed: nil }
   scope :since, -> date { where 'date >= ?', date }
   scope :asc, -> { order :date }
+  scope :by_time, -> { order :date, :time }
   scope :iex, -> { where source: 'iex' }
   scope :tinkoff, -> { where source: 'tinkoff' }
 
@@ -179,7 +180,7 @@ class Candle < ApplicationRecord
 
   class Intraday < Candle
     def previous = time && siblings.find_by(time: time - interval_duration)
-    def datetime = Time.parse("#{date} #{time} Z")
+    def datetime = instrument.time_zone.parse("#{date} #{time_before_type_cast}")
   end
 
   class H1 < Intraday
@@ -202,3 +203,8 @@ class Candle < ApplicationRecord
     self.table_name = "candles_d1_tinkoff"
   end
 end
+
+__END__
+
+select distinct c.ticker from candles_m5 c left join instruments i on c.ticker = i.ticker where i.ticker is null
+delete from candles_m5 where ticker in (select distinct c.ticker from candles_m5 c left join instruments i on c.ticker = i.ticker where i.ticker is null)

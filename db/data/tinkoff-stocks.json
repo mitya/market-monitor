@@ -3095,7 +3095,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Facebook",
+      "name": "Meta Platforms",
       "type": "Stock"
     },
     {
@@ -8070,7 +8070,7 @@
       "figi": "BBG011MCM288",
       "ticker": "GEMC",
       "isin": "US91085A2033",
-      "minPriceIncrement": 0.01,
+      "minPriceIncrement": 0.05,
       "lot": 1,
       "currency": "RUB",
       "name": "United medical group",
@@ -11146,6 +11146,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG0136BTL03",
+      "ticker": "SFTL",
+      "isin": "US83407L2079",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "RUB",
+      "name": "ГДР Softline",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BN5LG7",
       "ticker": "VALE",
       "isin": "US91912E1055",
@@ -12322,7 +12332,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Natura &Co Holding S.A.",
+      "name": "Natura & Co Holding S.A.",
       "type": "Stock"
     },
     {
@@ -15367,7 +15377,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "VMware Inc",
+      "name": "VMware",
       "type": "Stock"
     },
     {
@@ -16797,16 +16807,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Perficient Inc",
-      "type": "Stock"
-    },
-    {
-      "figi": "BBG000BSHJ96",
-      "ticker": "SAFM",
-      "isin": "US8000131040",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Sanderson Farms Inc",
       "type": "Stock"
     },
     {

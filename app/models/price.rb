@@ -10,15 +10,34 @@ class Price < ApplicationRecord
 
   after_update def update_change
     close = instrument.d1_ago_close
+    atr = instrument.info&.avg_change
     return unless value && close
-    update_column :change, (value / close - 1.0).round(3)
+    change = value / close - 1.0
+    update_columns change: change.round(3), change_atr: atr && (change / atr).round(3)
   end
 
   class << self
     def refresh_from_tinkoff(instruments)
       instruments = Instrument.get_all(instruments).sort_by(&:ticker).reject(&:premium?)
-      Current.parallelize_instruments(instruments, 1) { | instr| Tinkoff.update_current_price instr; sleep rand(0.1..0.2) }
+      Current.parallelize_instruments(instruments, 1) { | inst| update_tinkoff_price inst; sleep 0.1 }
     end
+
+    def update_tinkoff_price(instrument, **opts)
+      instrument = Instrument[instrument]
+      response_json = Tinkoff.last_hour_candles instrument, 2.hours.ago
+
+      return puts "Refresh Tinkoff price for #{instrument} failed: #{response_json}".red if response_json['candles'] == nil
+      candles = response_json.dig 'candles'
+      candle = candles[-1]
+
+      last = candle&.dig 'c'
+      low = candles.map { |c| c['l'] }.min
+      volume = candles.map { |c| c['v'] }.sum
+
+      printf "Refresh Tinkoff price for %-7s %3i candles last=#{last}\n", instrument.ticker, candles.count
+      instrument.price!.update! value: last, last_at: candle['time'], source: 'tinkoff', low: low, volume: volume if last
+    end
+
 
     def refresh_from_iex(symbols = [])
       prices = ApiCache.get "cache/iex/tops.json", skip_if: symbols.any?, ttl: 15.minutes do
@@ -44,6 +63,7 @@ class Price < ApplicationRecord
       refresh_from_iex Instrument.premium.map(&:iex_ticker)
       set_missing_prices_to_close
     end
+
 
     def set_missing_prices_to_close
       Price.missing.each do |price|

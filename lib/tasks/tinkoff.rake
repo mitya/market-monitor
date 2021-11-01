@@ -59,18 +59,17 @@ namespace :tinkoff do
     end
 
     envtask 'import:3min' do
-      # R.instruments_from_env!.abc.each { |inst| Tinkoff.import_intraday_candles(inst, '3min',  since: 1.week.ago) }
-      R.instruments_from_env!.abc.each { |inst| Tinkoff.import_historical_intraday_candles(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago)) }
+      R.instruments_from_env!.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago)) }
     end
 
-    envtask 'import:5min:last' do
+    envtask 'import:5min:close' do
       dates = [ENV['date'] ? ENV['date'].to_date : Current.today]
       dates = Current.last_n_weeks(2) #  - ['2021-07-02'.to_date]
       dates = [Current.today, Current.yesterday]
       instruments = Instrument.tinkoff.usd.abc
       dates.each do |date|
         Current.parallelize_instruments(instruments, 3) do |inst|
-          Tinkoff.load_last_5m_candles(inst, date)
+          Tinkoff.import_closing_5m_candles(inst, date)
         end
       end
     end

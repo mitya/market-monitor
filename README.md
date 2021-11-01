@@ -55,7 +55,7 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers=''
+export tickers='PBR'
 rake tinkoff:premium:import
 
 ## Tinkoff

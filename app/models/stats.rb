@@ -73,6 +73,10 @@ class Stats < ApplicationRecord
     update! avg_volume: instrument.day_candles.where('date > ?', 6.months.ago).average(:volume).to_i
   end
 
+  def set_average_change(n_candles = 20)
+    update! avg_change: instrument.candles.last(n_candles).map(&:rel_true_range).compact.average.round(3)
+  end
+
   def set_d5_money_volume
     update! d5_money_volume: instrument.day_candles.order(:date).last(5).pluck(:volume).sum * instrument.lot * instrument.last
   end

@@ -123,57 +123,6 @@ class PriceSignal < ApplicationRecord
       find_breakouts [instrument], dates: [date], direction: :down
     end
 
-    def analyze_intraday_history(instruments, dates)
-      Instrument.normalize(instruments).each do |inst|
-        dates.each do |date|
-          inst.m3_candles.where(date: date).each do |candle|
-            analyze_intraday candle
-          end
-        end
-      end
-    end
-
-    def analyze_intraday(candle)
-      curr = candle
-      return if not curr
-
-      siblings = candle&.same_day_siblings
-      curr_index = siblings.index(curr)
-      return if curr_index < 5 || curr_index > siblings.size - 5
-
-      recent = siblings[curr_index - 5 ... curr_index]
-      recent_low = recent.map(&:low).min
-      recent_max_change = recent.map(&:rel_change).max
-
-      if curr.down? && curr.rel_change.abs >= 0.005 && curr.low < recent_low && curr.rel_change.abs > recent_max_change.abs
-        puts "Found #{curr.date} #{curr.time.to_s :time} #{curr.ticker}"
-      end
-
-      # curr.update! analyzed: true
-      #
-      # signal_attrs = { instrument: curr.instrument, date: curr.date, base_date: curr.date, time: curr.time, interval: candle.interval }
-      #
-      # if match = (curr.absorb?(prev, 0.0) && curr.range_spread_percent > 0.015)
-      #   puts "Detect for #{instrument.ticker.ljust 8} at #{curr.time.in_time_zone Current.msk} outside-bar"
-      #   create! signal_attrs.merge kind: 'outside-bar',
-      #     accuracy: (curr.spread / prev.spread).to_f.round(2),
-      #     exact: match == true,
-      #     direction: curr.direction, enter: curr.close, stop: curr.min,
-      #     stop_size: curr.close_min_rel.abs.to_f.round(4)
-      # end
-      #
-      # pin_vector, ratio = curr.tail_bar?(prev)
-      # if pin_vector && ratio > 0.015
-      #   puts "Detect for #{instrument.ticker.ljust 8} at #{curr.time.in_time_zone Current.msk} tail-bar #{pin_vector} #{ratio&.round(4)}"
-      #   create! signal_attrs.merge kind: 'tail-bar',
-      #     direction: pin_vector,
-      #     enter: pin_vector == 'up' ? curr.high : curr.low,
-      #     stop: pin_vector == 'up' ? curr.low : curr.high,
-      #     stop_size: curr.max_min_rel.abs.to_f.round(4),
-      #     accuracy: ratio.to_f.round(4)
-      # end
-    end
-
     def find_breakouts(instruments = Instrument.all, dates: Current.ytd..Current.date, direction: :up)
       max_move_in_prev_2w = 0.20
       min_change = 0.05
@@ -243,6 +192,78 @@ class PriceSignal < ApplicationRecord
               break
             end
           end
+        end
+      end
+    end
+
+    concerning :Intraday do
+      def analyze_intraday_history(instruments, dates)
+        Instrument.normalize(instruments).each do |inst|
+          dates.each do |date|
+            inst.m3_candles.where(date: date).each do |candle|
+              analyze_intraday candle
+            end
+          end
+        end
+      end
+
+      def analyze_intraday(candle)
+        curr = candle
+
+        puts "Analyze #{candle}".cyan
+        curr.update! analyzed: true
+        return
+
+        return if not curr
+
+        siblings = candle&.same_day_siblings
+        curr_index = siblings.index(curr)
+        return if curr_index < 5 || curr_index > siblings.size - 5
+
+        recent = siblings[curr_index - 5 ... curr_index]
+        recent_low = recent.map(&:low).min
+        recent_max_change = recent.map(&:rel_change).max
+
+        if curr.down? && curr.rel_change.abs >= 0.005 && curr.low < recent_low && curr.rel_change.abs > recent_max_change.abs
+          puts "Found #{curr.date} #{curr.time.to_s :time} #{curr.ticker}"
+        end
+
+        # find day high / low breakout
+        # find yesterday high / low breakout
+        # find day high / low retest (± .2%)
+        # find .5% moves in 2 candles (open - close)
+        # find predefined level hits, DMA hits, prev 7 day extremum hits (if there was signinficant)
+        # * find volume spikes (3x above average, especially without large move)
+
+
+        curr.update! analyzed: true
+        #
+        # signal_attrs = { instrument: curr.instrument, date: curr.date, base_date: curr.date, time: curr.time, interval: candle.interval }
+        #
+        # if match = (curr.absorb?(prev, 0.0) && curr.range_spread_percent > 0.015)
+        #   puts "Detect for #{instrument.ticker.ljust 8} at #{curr.time.in_time_zone Current.msk} outside-bar"
+        #   create! signal_attrs.merge kind: 'outside-bar',
+        #     accuracy: (curr.spread / prev.spread).to_f.round(2),
+        #     exact: match == true,
+        #     direction: curr.direction, enter: curr.close, stop: curr.min,
+        #     stop_size: curr.close_min_rel.abs.to_f.round(4)
+        # end
+        #
+        # pin_vector, ratio = curr.tail_bar?(prev)
+        # if pin_vector && ratio > 0.015
+        #   puts "Detect for #{instrument.ticker.ljust 8} at #{curr.time.in_time_zone Current.msk} tail-bar #{pin_vector} #{ratio&.round(4)}"
+        #   create! signal_attrs.merge kind: 'tail-bar',
+        #     direction: pin_vector,
+        #     enter: pin_vector == 'up' ? curr.high : curr.low,
+        #     stop: pin_vector == 'up' ? curr.low : curr.high,
+        #     stop_size: curr.max_min_rel.abs.to_f.round(4),
+        #     accuracy: ratio.to_f.round(4)
+        # end
+      end
+
+      def analyze_intraday_for(instrument, interval)
+        Candle.interval_class_for(interval).where(instrument: instrument, date: Current.date, analyzed: false).order(:time).each do |candle|
+          analyze_intraday candle
         end
       end
     end

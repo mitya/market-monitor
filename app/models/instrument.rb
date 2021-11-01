@@ -156,8 +156,12 @@ class Instrument < ApplicationRecord
 
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)
+  def market_open_time = (rub? || eur?) ? Current.ru_market_open_time : Current.us_market_open_time
+  def time_zone = usd?? Current.est : Current.msk
+  def session_start_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
+  def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 01) : date.end_of_day
 
-  MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA MTLRP OKEY SIBN SMLT].to_set
+  MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA RASP MTLR MTLRP OKEY SIBN SMLT].to_set
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase

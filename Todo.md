@@ -13,12 +13,14 @@
 + news UI
 + news sync process
 + add prev candle close to each daily candle
++ calc ATRs
++ intraday candle loader
++ run analyze each time a candle is loaded
 
-- calc ATRs
-- list changes in ATRs
+- look for simplest things — .5% move in 2 candles
+- look for predefined levels
 
 - intraday scanner
-  - 3m candle loader (maybe 1m later)
   - limited set of tickers
   - scans omi first 15 & last 15 mins
   - scans:
@@ -30,7 +32,7 @@
     - predefined level checks with tolerance
 
 - try to get the evening data from NASDAQ
-
+- list changes in ATRs
 
 # Next
 
