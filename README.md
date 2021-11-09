@@ -55,24 +55,17 @@ rake tinkoff:hours:import
 # Adding new tickers
 
 ## IEX
-export tickers='PBR'
 rake tinkoff:premium:import
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty
-rake tinkoff:logos:download
-
-rake tinkoff:days:year tinkoff:days:special tickers='KSPI@GS'
-
-## All
-rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
+export tickers='SFTL CIAN RENI'
+rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
+rake tinkoff:days:year tinkoff:days:special
 rake iex:days:missing since=2020-01-01 special=1 ok=1
-rake candles:set_prev_closes
-rake candles:set_average_change
-
-rake set_average_volume
+rake candles:set_prev_closes candles:set_average_change
 
 ## Optional
 rake iex:symbols:refresh

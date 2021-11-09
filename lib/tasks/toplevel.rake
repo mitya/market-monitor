@@ -32,6 +32,7 @@ task 'a' => %w[aggregate analyze]
 task 'import' => %w[levels:import signals:import]
 task 'close' => 'tinkoff:candles:import:5min:last'
 task 'pre' => 'tinkoff:prices:pre'
+task 'trade' => 'intraday:sync'
 
 
 envtask(:SetIexTickers) { SetIexTickers.call }

@@ -19,19 +19,18 @@
 + load 3m candles
 + look for simplest things — .5% moves
 
+- show volume as marketcap %
+- update the intraday UI once in 15 seconds
 - look for .5 moves in 2 candles
 - look for predefined levels
+- scans should omit first 15 & last 15 mins
+- check if IEX intraday data is 15m delayed
 
-- intraday scanner
-  - limited set of tickers
-  - scans omi first 15 & last 15 mins
-  - scans:
-    - 2% change in 5 mins
-    - HOD retest when high > 2% && low since high < -2%
-    - HOD 2%+ open down break
-    - yesterday HOD / LOD retests
-    - 4% fall — first green 3m bar, min 0.4%
-    - predefined level checks with tolerance
+- HOD retest when high > 2% && low since high < -2%
+- HOD 2%+ open down break
+- yesterday HOD / LOD retests
+- 4% fall — first green 3m bar, min 0.4%
+- predefined level checks with tolerance
 
 - try to get the evening data from NASDAQ
 - list changes in ATRs

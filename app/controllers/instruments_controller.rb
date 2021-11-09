@@ -100,6 +100,7 @@ class InstrumentsController < ApplicationController
     yield:                 "stats.dividend_yield desc",
     marketcap:             "stats.marketcap desc",
     d5_money_volume:       "stats.d5_money_volume desc",
+    d5_marketcap_volume:   "stats.d5_marketcap_volume desc",
     days_up:               "aggregates.days_up desc",
     lowest_day_date:       "aggregates.lowest_day_date desc",
     lowest_day_gain:       "aggregates.lowest_day_gain desc",

@@ -59,7 +59,7 @@ namespace :candles do
 
   envtask(:set_average_volume)  { Stats.find_each &:set_average_volume  }
   envtask(:set_average_change)  { Stats.find_each &:set_average_change  }
-  envtask(:set_d5_money_volume) { Stats.find_each &:set_d5_money_volume }
+  envtask(:set_d5_volume) { Stats.find_each &:set_d5_volume }
 end
 
 

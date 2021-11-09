@@ -216,6 +216,7 @@ module InstrumentsHelper
     beta:                  "ß",
     yield:                 "Yield",
     marketcap:             "Capitalization",
+    d5_marketcap_volume:   "5-day Marketcap-relative Volume",
     d5_money_volume:       "5-day Money Volume",
     d1_money_volume:       "Yesterday Money Volume",
     days_up:               "Days Up",

@@ -77,8 +77,10 @@ class Stats < ApplicationRecord
     update! avg_change: instrument.candles.last(n_candles).map(&:rel_true_range).compact.average.round(3)
   end
 
-  def set_d5_money_volume
-    update! d5_money_volume: instrument.day_candles.order(:date).last(5).pluck(:volume).sum * instrument.lot * instrument.last
+  def set_d5_volume
+    money_vol = instrument.day_candles.order(:date).last(5).pluck(:volume).sum * instrument.lot * instrument.last
+    marketcap_vol = (money_vol / marketcap).round(3) if marketcap
+    update! d5_money_volume: money_vol, d5_marketcap_volume: marketcap_vol
   end
 
   def sync_earning_dates
