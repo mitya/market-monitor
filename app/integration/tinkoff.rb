@@ -102,7 +102,6 @@ class Tinkoff
 
   concerning :CandlesApi do
     def load_intervals(instrument, interval, since, till, delay: 0)
-      $log_tinkoff = true
       call_js_api "candles #{instrument.figi} #{interval} #{since.xmlschema} #{till.xmlschema}", delay: delay
     end
 

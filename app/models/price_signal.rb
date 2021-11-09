@@ -37,7 +37,11 @@ class PriceSignal < ApplicationRecord
     in_money?(current) ? ratio.abs : -ratio.abs
   end
 
-  def candle = instrument.day_candles!.find_date(date)
+  def candle
+    interval == 'day' ?
+      instrument.day_candles!.find_date(date) :
+      Candle.interval_class_for(interval).find_by(ticker: ticker, date: date, time: time)
+  end
 
   def current = instrument.last
   def enter_to_current_ratio = (current && enter ? current / enter - 1.0 : 0)
@@ -230,25 +234,44 @@ class PriceSignal < ApplicationRecord
         recent_low = recent.map(&:low).min
         recent_max_change = recent.map(&:rel_change).max
 
+        prev = recent[curr_index - 1]
+        prev_rel_change = (curr.close - prev.open) / prev.open if prev
+
         candle_attrs = { instrument: candle.instrument, date: candle.date, time: candle.time, interval: candle.interval, direction: candle.direction }
 
-        if curr.rel_close_change.abs > 0.005
-          PriceSignal.create! candle_attrs.merge kind: 'intraday.big-change'
+
+        # .5% change in a candle
+        if curr.rel_close_change.abs >= 0.005
+          PriceSignal.create! candle_attrs.merge kind: 'intraday.big-change', data: { change: curr.rel_close_change.to_f }
+
+        # .5% change in 2 candles
+      elsif prev_rel_change.to_f.abs >= 0.005
+          PriceSignal.create! candle_attrs.merge kind: 'intraday.big-change-2', data: { change: prev_rel_change.to_f }
         end
 
-        curr.analyzed!
+        if curr.volatility_above >= 0.01
+          PriceSignal.create! candle_attrs.merge kind: 'intraday.up-spike', direction: 'down', data: { change: candle.volatility_above.to_f }
+        end
 
-        # if curr.down? && curr.rel_change.abs >= 0.005 && curr.low < recent_low && curr.rel_change.abs > recent_max_change.abs
-        #   puts "Found #{curr.date} #{curr.time.to_s :time} #{curr.ticker}"
-        # end
+        if curr.volatility_below >= 0.01
+          PriceSignal.create! candle_attrs.merge kind: 'intraday.down-spike', direction: 'up', data: { change: candle.volatility_below.to_f }
+        end
+
+        # remember signals in candle
 
         # find day high / low breakout
         # find yesterday high / low breakout
         # find day high / low retest (± .2%)
-        # find .5% moves in 2 candles (open - close)
         # find predefined level hits, DMA hits, prev 7 day extremum hits (if there was signinficant)
         # * find volume spikes (3x above average, especially without large move)
 
+
+        curr.analyzed!
+
+
+        # if curr.down? && curr.rel_change.abs >= 0.005 && curr.low < recent_low && curr.rel_change.abs > recent_max_change.abs
+        #   puts "Found #{curr.date} #{curr.time.to_s :time} #{curr.ticker}"
+        # end
         #
         # signal_attrs = { instrument: curr.instrument, date: curr.date, base_date: curr.date, time: curr.time, interval: candle.interval }
         #

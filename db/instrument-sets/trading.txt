@@ -1,6 +1,6 @@
 clf
-rig
-zim
 dk
-mtlrp
-rasp
+osur
+rig
+veon
+zim

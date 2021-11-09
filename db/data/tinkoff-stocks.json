@@ -4680,12 +4680,12 @@
     },
     {
       "figi": "BBG000BP46T2",
-      "ticker": "MLHR",
+      "ticker": "MLKN",
       "isin": "US6005441000",
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Herman Miller Inc",
+      "name": "MillerKnoll",
       "type": "Stock"
     },
     {
@@ -13713,6 +13713,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG012YQ6P43",
+      "ticker": "CIAN",
+      "isin": "US83418T1088",
+      "minPriceIncrement": 0.2,
+      "lot": 1,
+      "currency": "RUB",
+      "name": "АДР Циан",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG00JPRDQH1",
       "ticker": "BH",
       "isin": "US08986R3093",
@@ -18077,5 +18087,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1809
+  "total": 1810
 }

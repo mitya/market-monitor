@@ -14,15 +14,18 @@ main.container-fluid
               tr
                 / th
                 th Ticker
-                th.money-cell 1d
+                / th.money-cell d1
+                th.money-cell w2
             tbody
-              - instruments = set.instruments
+              - instruments = set.instruments.includes(:aggregate)
               - instruments = instruments.sort_by(&:d1_change).reverse
               - instruments.each do |inst|
+                - aggr = inst.aggregate
                 tr
                   / td= instrument_logo_button inst
                   td(title=inst.name)= inst.ticker
                   / td.money-cell= relative_price inst.d1_ago_close, inst.d2_ago_close, unit: inst.currency, format: 'relative', precision: 2
                   / td.money-cell= colorized_percentage inst.d1_ago_close, inst.d2_ago_close, unit: inst.currency, precision: 1, format: '%n'
-                  td.money-cell= colorized_ratio inst.d1_change, precision: 1, format: '%n'
+                  / td.money-cell= colorized_ratio inst.d1_change, precision: 1, format: '%n'
+                  td.money-cell= colorized_ratio aggr.data.dig('gains', 'w2'), precision: 1, format: '%n'
                   / td.money-cell= inst.price!.change

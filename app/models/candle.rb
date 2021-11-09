@@ -181,7 +181,7 @@ class Candle < ApplicationRecord
   end
 
   class Intraday < Candle
-    def previous = time && siblings.find_by(time: time - interval_duration)
+    def previous = time && siblings.find_by(date: date, time: time - interval_duration)
     def datetime = instrument.time_zone.parse("#{date} #{hhmm}")
     def to_s = "<#{ticker}:#{interval}:#{date}T#{hhmm}>"
     def to_full_s = "#{to_s} #{ohlc_str} P#{prev_close} #{close_change} #{rel_close_change}"

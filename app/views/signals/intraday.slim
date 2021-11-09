@@ -48,15 +48,17 @@ main.container-fluid
       - signals.each do |signal|
         - inst = instrument = signal.instrument
         - info = instrument.info
+        - candle = signal.candle
         - red_green_klass = red_green_class(signal.up?)
         tr
-          td= l signal&.time.in_time_zone(Current.msk), format: '%H:%M'
+          td= candle.hhmm
           td= instrument_logo_button inst
-          td(class=red_green_klass)= instrument.ticker
+          td(class=red_green_klass)= link_to inst.ticker, url_for(tickers: inst.ticker), tabindex: '-1'
           td.instrument-name= instrument.name
           td.signal-name(class=red_green_klass)= signal.kind.underscore.humanize.downcase
-          td.money-cell= format_price instrument.last, unit: instrument.currency
-          td.money-cell(class=red_green_klass)= ratio_percentage signal.candle.rel_close_change, precision: 1
+          td.money-cell= format_price candle.close, unit: instrument.currency
+          / td.money-cell(class=red_green_class(candle.rel_close_change > 0))= ratio_percentage signal.data['change'], precision: 2
+          td.money-cell(class=red_green_class(candle.rel_close_change > 0))= ratio_percentage candle.rel_close_change, precision: 2
           td.money-cell= tag.span 'Yes', class: 'badge bg-success' if signal.on_level?
 
   = paginate @signals, window: 20
