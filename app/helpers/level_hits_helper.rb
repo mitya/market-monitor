@@ -10,4 +10,9 @@ module LevelHitsHelper
   def livel_hit_kind_button_color(kind)
     PriceLevelHit::PositiveKinds.include?(kind) ? 'btn-outline-success' : 'btn-outline-danger' if kind.present?
   end
+
+  def ma_badge(length)
+    badge_class = length == 50 ? 'bg-success' : 'bg-danger'
+    tag.span "MA #{length}", class: "badge #{badge_class}"    
+  end
 end

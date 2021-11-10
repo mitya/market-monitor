@@ -12,6 +12,7 @@ class Candle < ApplicationRecord
   scope :by_time, -> { order :date, :time }
   scope :iex, -> { where source: 'iex' }
   scope :tinkoff, -> { where source: 'tinkoff' }
+  scope :before, -> candle { where 'date < ?', candle.to_date }
 
   before_create { self.prev_close ||= previous&.close }
 
@@ -35,6 +36,8 @@ class Candle < ApplicationRecord
   def max = up?? high : low
   alias body_low range_low
   alias body_high range_high
+
+  def to_date = date
 
   def change = close - open
   def rel_change = (change / open).round(4)
@@ -124,6 +127,7 @@ class Candle < ApplicationRecord
   end
 
   def overlaps?(other) = range.overlaps?(other.range)
+  def include?(price) = range.include?(price)
 
   def pin_bar?(min_pin_height: 0.03)
     return if shadow_to_body_ratio <= 2

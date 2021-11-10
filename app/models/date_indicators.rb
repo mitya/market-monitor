@@ -77,7 +77,6 @@ __END__
 MarketCalendar.open_days(4.month.ago, Date.yesterday).each { |date| DateIndicators.create_for_all date: date, instruments: Instrument.all }
 DateIndicators.set_current
 DateIndicators.create_recursive instr('AAPL')
-DateIndicators.recreate_for_all
-DateIndicators.recreate_for_all %w[AAPL MSFT]
+DateIndicators.recreate_for_all %w[PEN]
 DateIndicators.recreate_for_all ["ACOR", "BBD", "APH"]
 DateIndicators.recreate_for_all %w[SLG FIZZ TTD GE SWI SHW CSGP VRNS KAP@GS APH NEOG]

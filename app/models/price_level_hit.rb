@@ -27,7 +27,9 @@ class PriceLevelHit < ApplicationRecord
   end
 
   class << self
-    def analyze(instrument, date: Current.yesterday, levels: instrument.levels)
+    def analyze(instrument, date: Current.yesterday, levels: nil)
+      instrument = Instrument[instrument]
+      levels ||= instrument.levels
       curr = instrument.day_candles!.find_date(date)
       prev = curr&.previous
       return unless curr && prev
@@ -73,7 +75,7 @@ class PriceLevelHit < ApplicationRecord
       end
 
       indicators = instrument.indicators_history.find_by(date: curr.date)
-      { 50 => indicators.ema_50, 200 => indicators.ema_200 }.each do |length, value|
+      { 50 => indicators&.ema_50, 200 => indicators&.ema_200 }.each do |length, value|
         next unless value
         attrs = { source: 'ma', ma_length: length, date: curr.date, ticker: instrument.ticker, level_value: value }
         check_level curr, prev, value, attrs
@@ -84,8 +86,8 @@ class PriceLevelHit < ApplicationRecord
       Instrument.all.abc.each { |inst| analyze inst }
     end
 
-    def analyze_manual(date: Current.yesterday)
-      Instrument.all.abc.each { |inst| analyze inst, levels: inst.levels.manual, date: date }; nil
+    def analyze_manual(instruments: Instrument.all.abc, date: Current.yesterday)
+      instruments.each { |inst| analyze inst, levels: inst.levels.manual, date: date }; nil
     end
 
     def analyze_dates(dates)
@@ -99,6 +101,10 @@ class PriceLevelHit < ApplicationRecord
       low     = curr.low
       y_close = prev.close
       attrs[:close_distance] = ((close - value).abs / value.to_d).round(3)
+
+      last_day_crossed = curr.instrument.candles.before(curr).order(:date).last(60).reverse.detect{ |candle| candle.include?(value) }&.date
+      attrs[:days_since_last] = last_day_crossed ? curr.date - last_day_crossed : 99
+      attrs[:rel_vol] = curr.volume_to_average.to_f.round(3)
 
       case
       when open < value && close >= value
@@ -128,20 +134,6 @@ end
 __END__
 PriceLevelHit.delete_all
 PriceLevelHit.analyze_manual date: Current.yesterday
-PriceLevelHit.analyze_manual date: Current.yesterday - 1
 
-level
-fall
-rise
-rebound-up/down (was on level in 6c, tested level, closed up)
-
-
-down-test
-down-break
-down-gap
-
-up-test open lower & close lower & high higher
-up-break open lower & close higher
-up-gap open higher & close higher & yesterday.close lower
-
-ticker, date, kind=(down-test, down-break, ...), target=(level/ma), level, ma, manual, positive
+DateIndicators.recreate_for_all %w[PEN]
+PriceLevelHit.analyze 'PEN'

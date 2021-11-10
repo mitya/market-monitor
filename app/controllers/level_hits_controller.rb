@@ -27,6 +27,9 @@ class LevelHitsController < ApplicationController
     @hits = @hits.where positive: true                                        if params[:direction] == 'up'
     @hits = @hits.where positive: false                                       if params[:direction] == 'down'
 
+    @hits = @hits.where 'days_since_last > ?', params[:days_since_last]       if params[:days_since_last].present?
+    @hits = @hits.where 'rel_vol > ?', params[:rvol].to_f / 100               if params[:rvol].present?
+
     @hits = @hits.page(params[:page]).per(params[:per_page])
     @hits = @hits.order('date desc, ticker')
 

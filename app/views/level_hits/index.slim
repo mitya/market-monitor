@@ -22,6 +22,12 @@ main.container-fluid
             = bs_check_box :exact, 'Exact', inline: true
             = bs_check_box :important, 'Important', inline: true, default: '1'
             = bs_check_box :manual, 'Manual', inline: true
+        = form_field 'Since Last:', [2, 2] do
+          = number_field_tag :days_since_last, params[:days_since_last], class: "form-control form-control-sm"
+        = form_field 'Rel Vol:', [2, 2] do
+          = number_field_tag :rvol, params[:rvol], class: "form-control form-control-sm"
+
+
       .col
         = render 'instruments/filter_by_set'
         = render 'instruments/filter_by_currency'
@@ -39,6 +45,8 @@ main.container-fluid
         th MA
         th.money-cell Level
         th Type
+        th.money-cell Last
+        th.money-cell Rvol
         th Cl
         th Dp
         th Name
@@ -62,9 +70,11 @@ main.container-fluid
           td= known_icon instrument unless prev_is_same
           td= type_icon instrument unless prev_is_same
           td= link_to inst.ticker, url_for(tickers: inst.ticker) unless prev_is_same
-          td= hit.source == 'ma' ? "MA #{hit.ma_length}" : 'Level'
+          td= hit.source == 'ma' ? ma_badge(hit.ma_length) : 'Level'
           td.money-cell.open-chart= price_span hit.level_value, unit: instrument.currency
           td(class=class_names(level_hit_color(hit)))= hit.kind
+          td.money-cell= hit.days_since_last
+          td.money-cell= ratio_percentage hit.rel_vol, precision: 0
           td= percentage_bar hit.close_distance, classes: red_green_class(hit.positive?)
           td= percentage_bar hit.max_distance, classes: red_green_class(!hit.positive?)
           td.instrument-name= instrument.name unless prev_is_same
