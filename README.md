@@ -44,6 +44,7 @@ rake tinkoff:candles:import:5min:last
 rake tinkoff:prices:pre
 rake options:day
 rake iex:insider_transactions
+rake iex:days:missing ok=1 since=2021-07-01
 
 // rake iex:candles:days:previous iex:prices:all iex:candles:days:today
 // rake tinkoff:candles:day:latest tinkoff:prices:uniq
@@ -61,22 +62,18 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty
-export tickers='SFTL CIAN RENI'
+export tickers=''
 rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
-rake tinkoff:days:year tinkoff:days:special
-rake iex:days:missing since=2020-01-01 special=1 ok=1
+rake iex:days:missing since=2020-01-01 special=1 ok=1 # rake tinkoff:days:year tinkoff:days:special
 rake candles:set_prev_closes candles:set_average_change
 
 ## Optional
-rake iex:symbols:refresh
+rake set_first_date_auto tickers='GTX'
 rake set_first_date ticker=GRUB date=2021-03-25
-rake set_first_date_auto tickers='LPRO SLQT PFSI MP LSPD CRNC DM'
-rake iex:symbols:load iex:symbols:otc:load
-rake destroy ticker=CHK ok=1
+rake iex:symbols:load iex:symbols:refresh
 rake iex:days:period period=ytd
-rake iex:symbols:refresh
-rake tinkoff:days:special
-rake tinkoff:days:year tickers=FLOT
+rake t:destroy ticker=CHK ok=1
+rake tinkoff:days:year tinkoff:days:special tickers=FLOT
 
 ## Import List
 rake list:clear tickers=''

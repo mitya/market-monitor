@@ -18,14 +18,18 @@
 + run analyze each time a candle is loaded
 + load 3m candles
 + look for simplest things — .5% moves
++ look for .5 moves in 2 candles
++ show volume as marketcap %
 
-- show volume as marketcap %
-- update the intraday UI once in 15 seconds
-- look for .5 moves in 2 candles
+- 100 MA data
+- for MA retests / breakouts add days since last cross
+- for MA breakouts add relvol & o-c change
+
+- update intraday UI once in 15 seconds
+- update intraday UI with cable
+- a button to refresh prices (and then reload with cable)
+
 - look for predefined levels
-- scans should omit first 15 & last 15 mins
-- check if IEX intraday data is 15m delayed
-
 - HOD retest when high > 2% && low since high < -2%
 - HOD 2%+ open down break
 - yesterday HOD / LOD retests
