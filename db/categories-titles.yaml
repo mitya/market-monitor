@@ -1,5 +1,4 @@
 ---
-biotech: atra hrtx gthx icpt achv osur qdel mrna goss
 energy.coal: Coal
 energy.coal.met: Met Coal
 energy.gas: Gas
@@ -12,7 +11,7 @@ finance.other: Fintech
 hardware.chip: Semiconductors
 it.faang: FAANG
 it.games: Games
-it.hot: Tech Hot
+it.hot: Tech
 it.rus: Tech Rus
 it.security: Sec
 mining.gold: Gold

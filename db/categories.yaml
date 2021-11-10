@@ -12,7 +12,7 @@ energy.coal: hcc arch btu ceix mtlrp mtlr rasp
 energy.coal.met: metc amr
 energy.gas: eqt ar et am rrc swn cog
 energy.gas.rus: gazp nvtk
-energy.oil: xom cvx rds.a clr cop fang pxd eog mro oxy dvn tte pump apa hes
+energy.oil: xom cvx rds.a clr cop fang pxd eog mro oxy dvn pump apa hes
 energy.oil.other: gte
 energy.oil.refinery: dk pbf alto chx vlo mpc psx
 energy.oil.service: rig slb fti snd ois oii
@@ -25,7 +25,7 @@ hardware.office: xrx hell hpq logi
 hardware.other: crus sitm
 holdings: brk.b afks
 indexes: spy
-it.faang: aapl amzn msft fb googl nflx
+it.faang: aapl amzn msft fb googl nflx tsla nvda tsm v baba adbe
 it.forgotten: band yext ever mfgp uber lyft roku okta ibm
 it.games: atvi ttwo znga
 it.hot: twlo docu shop etsy plan asan fsly estc twtr ayx ebay net twtr pins snap upwk
@@ -36,7 +36,7 @@ mining.gold: poly pogr plzl kgc nugt
 mining.misc: vale gmkn fcx rual aa enpg kap@gs ccj mos uec vsmo
 mining.steel: x clf
 mining.steel.rus: magn chmf nlmk amez chmk
-reits: mac spg
+reit: mac spg
 retail: m gps rl bbby coty uaa levi hog cnk
 retail.other: tup
 retail.rus: five lnta okey mvid

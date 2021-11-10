@@ -24,10 +24,15 @@
 + for MA breakouts add relvol & o-c change
 + sets dashboard
 + data field selection / sorting
++ show multiple sets in 1 column
++ filter sets by tickers
++ filter sets by currency / premium
++ filter form hiding
 
-- show multiple sets in 1 column
-- filter sets by tickers
 - a button to refresh prices (and then reload with cable)
+- load tops as csv
+- dashboard with mine / top gainers / top losers columns
+- a row with indexes / commodity futures
 
 - update intraday UI once in 15 seconds
 - update intraday UI with cable
