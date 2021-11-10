@@ -2,19 +2,19 @@ class Instrument < ApplicationRecord
   self.inheritance_column = nil
 
   has_many :candles,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
+  has_many :m1_candles,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M1'
+  has_many :m3_candles,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M3'
+  has_many :m5_candles,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M5'
   has_many :aggregates,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :indicators_history,            foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'DateIndicators'
-  has_many :day_candles, -> { day },       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
-  has_many :m1_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M1', dependent: :delete_all
-  has_many :m3_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M3', dependent: :delete_all
-  has_many :m5_candles,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle::M5', dependent: :delete_all
+  has_many :signal_results,                foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceSignalResult'
+  has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceSignal'
   has_many :price_targets,                 foreign_key: 'ticker', inverse_of: :instrument
-  has_many :signal_results,                foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignalResult', dependent: :delete_all
-  has_many :signals,                       foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceSignal', dependent: :delete_all
   has_many :recommendations,               foreign_key: 'ticker', inverse_of: :instrument
   has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument
-  has_many :level_hits,                    foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevelHit', dependent: :delete_all
-  has_many :levels,                        foreign_key: 'ticker', inverse_of: :instrument, class_name: 'PriceLevel', dependent: :delete_all
+  has_many :level_hits,                    foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceLevelHit'
+  has_many :levels,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceLevel'
   has_many :insider_transactions,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :insider_summaries,             foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :institution_holdings,          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
@@ -26,7 +26,7 @@ class Instrument < ApplicationRecord
   has_many :extremums,                     foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :spikes,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :splits,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
-
+  has_many :missing_dates,                 foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_one :recommendation, -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current }, foreign_key: 'ticker', inverse_of: :instrument
   has_one :aggregate,                      foreign_key: 'ticker', inverse_of: :instrument
@@ -37,7 +37,6 @@ class Instrument < ApplicationRecord
   has_one :insider_aggregate,              foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :orderbook,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
-  validates_presence_of :ticker, :name
 
   scope :with_flag, -> flag { where "? = any(flags)", flag }
   scope :tinkoff, -> { with_flag 'tinkoff' }
@@ -60,18 +59,25 @@ class Instrument < ApplicationRecord
   scope :with_alarm, -> { joins(:levels).where(levels: { manual: true }) }
   scope :before, -> ticker { where 'instruments.ticker < ?', ticker }
   scope :after, -> ticker { where 'instruments.ticker >= ?', ticker }
-
   scope :mature, -> { where first_date: MatureDate }
   scope :with_first_date, -> { where.not first_date: nil }
   scope :without_first_date, -> { where first_date: nil }
-
   scope :vtb_spb_long, -> { where "stats.extra->>'vtb_list_2' = 'true'" }
   scope :vtb_moex_short, -> { where "stats.extra->>'vtb_can_short' = 'true'" }
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
 
 
+  validates_presence_of :ticker, :name
+
+  after_create { |inst| SetIexTicker.process(inst) }
+
+  attribute :current_price_selector, default: "last"
+
+
   MatureDate = Current.y2017
   DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].map { |period| "#{period}_ago" }
+  MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA RASP MTLR MTLRP OKEY SIBN SMLT].to_set
+
 
   DateSelectors.each do |selector|
     define_method("#{selector}") do
@@ -80,9 +86,6 @@ class Instrument < ApplicationRecord
     end
   end
 
-  # def feb19         = @feb19 ||= day_candles!.find_date(Current.feb19)
-  # def mar23         = @mar23 ||= day_candles!.find_date(Current.mar23)
-  # def nov06         = @nov06 ||= day_candles!.find_date(Current.nov06)
   def y2017         = @y2017 ||= day_candles!.find_date(Current.y2017)
   def y2018         = @y2018 ||= day_candles!.find_date(Current.y2018)
   def y2019         = @y2019 ||= day_candles!.find_date(Current.y2019)
@@ -104,7 +107,6 @@ class Instrument < ApplicationRecord
     end
   end
 
-  attribute :current_price_selector, default: "last"
   def base_price = send(current_price_selector)
 
   def diff(old_price, new_price = current_price_selector)
@@ -161,18 +163,15 @@ class Instrument < ApplicationRecord
   def session_start_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
   def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 01) : date.end_of_day
 
-  MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA RASP MTLR MTLRP OKEY SIBN SMLT].to_set
-
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase
   def global_iex_ticker = rub?? "#{ticker}-RX" : eur?? ticker.gsub('@DE', '-GF') : iex_ticker
 
   def lowest_body_in(period) = day_candles!.find_dates_in(period).min_by(&:range_low)
 
-  after_create def fix_iex_ticker
-    return update! iex_ticker: nil if not usd?
-    return update! iex_ticker: self.class.iex_ticker_for(ticker)
-  end
+  # after_create def fix_iex_ticker
+  #   update! iex_ticker: usd? ? self.class.iex_ticker_for(ticker) : nil
+  # end
 
   def set_first_date!
     first_candle_date = candles.day.asc.first&.date
@@ -211,8 +210,8 @@ class Instrument < ApplicationRecord
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
 
-    IEX_TICKERS = { 'KAP@GS' => nil }
-    def iex_ticker_for(ticker) = IEX_TICKERS.include?(ticker) ? IEX_TICKERS[ticker] : (ticker.include?('@GS') ? nil : ticker.sub(/\.US|@US/, ''))
+    # IEX_TICKERS = { 'KAP@GS' => nil }
+    # def iex_ticker_for(ticker) = IEX_TICKERS.include?(ticker) ? IEX_TICKERS[ticker] : (ticker.include?('@GS') ? nil : ticker.sub(/\.US|@US/, ''))
 
     def moex_liquid_tickers = joins(:info).vtb_moex_short.pluck(:ticker)
     def moex_illiquid_tickers = rub.pluck(:ticker) - moex_liquid_tickers

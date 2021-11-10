@@ -103,8 +103,10 @@ namespace :iex do
   envtask('tops:set_sectors' => :tops) { Stats.load_sector_codes_from_tops }
 
   namespace :symbols do
-    envtask(:load)      { File.write "cache/iex/symbols #{Current.date.to_s :number}.json", Iex.symbols.to_json }
-    envtask('otc:load') { File.write "cache/iex/symbols-otc #{Current.date.to_s :number}.json", Iex.otc_symbols.to_json }
+    envtask :load do
+      File.write "cache/iex/symbols.json", Iex.symbols.to_json
+      File.write "cache/iex/symbols-otc.json", Iex.otc_symbols.to_json
+    end
     envtask :refresh do
       items = Iex.all_symbols_cache
       index = items.index_by(&:symbol)
