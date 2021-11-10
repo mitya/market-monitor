@@ -1,0 +1,27 @@
+---
+biotech: atra hrtx gthx icpt achv osur qdel mrna goss
+energy.coal: Coal
+energy.coal.met: Met Coal
+energy.gas: Gas
+energy.oil: Oil
+energy.oil.refinery: Oil Refinery
+energy.oil.service: Oil Service
+energy.oil.rus: Oil Rus
+finance.banks: Banks
+finance.other: Fintech
+hardware.chip: Semiconductors
+it.faang: FAANG
+it.games: Games
+it.hot: Tech Hot
+it.rus: Tech Rus
+it.security: Sec
+mining.gold: Gold
+mining.misc: Metals
+mining.steel: Steel
+mining.steel.rus: Steel Rus
+shipping.bulk: Bulk
+shipping.conainers: Containers
+shipping.lng: LNG
+shipping.oil: Tankers
+shipping.ports: Ports
+transportation.airlines: Airlines

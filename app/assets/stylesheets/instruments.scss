@@ -185,3 +185,7 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .news-title-positive { color: green; }
 .news-title-negative { color: red; }
 .news-title-mixed { color: orange; }
+
+
+.table-sm-v      > :not(caption) > * > * { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+.table-no-border > :not(caption) > * > * { border-bottom-width: 0; }

@@ -84,7 +84,7 @@ class MarketCalendar
     end
 
     def current_recent_years
-      [2021, 2020, 2019, 2018, 2017]
+      Aggregates::Years
     end
   end
 end

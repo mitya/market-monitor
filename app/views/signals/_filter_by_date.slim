@@ -4,4 +4,5 @@
     - %w[0 1 2 3 4 5].each do |n|
       - next if n == '0' && Current.workday? && params[:interval] == 'day'
       - date = Current.send("d#{n}_ago")
-      = bs_check_box "dates[]", date_as_wday(date), id: "dates_#{n}", value: date.to_s, inline: true, checked: params[:dates].to_a.include?(date.to_s)
+      / = bs_check_box "dates[]", date_as_wday(date), id: "dates_#{n}", value: date.to_s, inline: true, checked: params[:dates].to_a.include?(date.to_s)
+      = bs_radio_button "dates[]", date.to_s, date_as_wday(date), id: "dates_#{n}", checked: params[:dates].to_a.include?(date.to_s)

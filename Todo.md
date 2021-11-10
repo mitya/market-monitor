@@ -20,14 +20,17 @@
 + look for simplest things — .5% moves
 + look for .5 moves in 2 candles
 + show volume as marketcap %
++ for MA retests / breakouts add days since last cross
++ for MA breakouts add relvol & o-c change
++ sets dashboard
++ data field selection / sorting
 
-- 100 MA data
-- for MA retests / breakouts add days since last cross
-- for MA breakouts add relvol & o-c change
+- show multiple sets in 1 column
+- filter sets by tickers
+- a button to refresh prices (and then reload with cable)
 
 - update intraday UI once in 15 seconds
 - update intraday UI with cable
-- a button to refresh prices (and then reload with cable)
 
 - look for predefined levels
 - HOD retest when high > 2% && low since high < -2%
@@ -36,6 +39,7 @@
 - 4% fall — first green 3m bar, min 0.4%
 - predefined level checks with tolerance
 
+- 100 MA data
 - try to get the evening data from NASDAQ
 - list changes in ATRs
 

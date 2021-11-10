@@ -1,24 +1,30 @@
 class InstrumentSet
-  attr :key
+  attr :key, :source
 
-  def initialize(key)
+  def initialize(key, source = :file)
     @key = key&.to_sym
+    @source = source
   end
 
   def name = key ? key.to_s.humanize : 'All'
 
   def symbols
     @symbols ||= begin
-      file = Pathname("db/instrument-sets/#{key}.txt")
-      stored_symbols = file.exist?? file.readlines(chomp: true).map { |sym| sym.split(':').last.upcase } : []
-      virtual_symbols = case key
-        when :portfolio then PortfolioItem.pluck(:ticker)
-        when :recommendations then PublicSignal.pluck(:ticker)
-        when :alarms then PriceLevel.manual.distinct.pluck(:ticker)
-        when :categorized then self.class.categories.values.flatten.sort
-        else []
+      if source == :category
+        self.class.symbols_for_category(key)
+      else
+        file = Pathname("db/instrument-sets/#{key}.txt")
+        stored_symbols = file.exist?? file.readlines(chomp: true).map { |sym| sym.split(':').last.upcase } : []
+        virtual_symbols = case key
+          when :portfolio then PortfolioItem.pluck(:ticker)
+          when :recommendations then PublicSignal.pluck(:ticker)
+          when :alarms then PriceLevel.manual.distinct.pluck(:ticker)
+          when :categorized then self.class.categories.values.flatten.sort
+          else []
+        end
+        (stored_symbols + virtual_symbols).uniq.sort
       end
-      (stored_symbols + virtual_symbols).uniq.sort
+
     end
   end
 
@@ -54,6 +60,18 @@ class InstrumentSet
       @categories ||= YAML.load_file("db/categories.yaml").transform_values { |str| str.to_s.split.compact.map(&:upcase).uniq.sort }
     end
 
+    def category_titles
+      @category_titles ||= YAML.load_file("db/categories-titles.yaml")
+    end
+
+    def symbols_for_category(key)
+      if key.to_s.end_with?('*')
+        categories.values_at(*categories.keys.grep(Regexp.new key.to_s)).flatten
+      else
+        categories[key.to_s]
+      end
+    end
+
     def main = new(:main)
     def portfolio = @portfolio ||= new(:portfolio)
     def insiders = @insiders ||= new(:insiders)
@@ -72,3 +90,4 @@ end
 __END__
 
 InstrumentSet.new(:main).symbols
+InstrumentSet.symbols_for_category('shipping*')

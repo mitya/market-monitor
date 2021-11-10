@@ -125,14 +125,15 @@ class Instrument < ApplicationRecord
   end
 
   def gain_since_close = rel_diff(:d1_ago_close, :last, default: 0)
+  alias gain_since rel_diff_value
 
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
 
   def d1_change = @d1_change ||= d1_ago_close / d2_ago_close - 1.0 rescue 0
-
-  alias gain_since rel_diff_value
+  def price_change = @price_change ||= price!.change rescue 0
+  def stored_gain_since(date_specifier) = date_specifier == 'last' ? price_change : aggregate.gains[date_specifier]
 
   def logo_path = Pathname("public/logos/#{ticker}.png")
   def check_logo = update_column(:has_logo, logo_path.exist?)

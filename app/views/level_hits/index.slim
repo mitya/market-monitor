@@ -74,7 +74,8 @@ main.container-fluid
           td.money-cell.open-chart= price_span hit.level_value, unit: instrument.currency
           td(class=class_names(level_hit_color(hit)))= hit.kind
           td.money-cell= hit.days_since_last
-          td.money-cell= ratio_percentage hit.rel_vol, precision: 0
+          / td.money-cell= ratio_percentage hit.rel_vol, precision: 0
+          td.money-cell= percentage_bar hit.rel_vol.to_f / 100.0
           td= percentage_bar hit.close_distance, classes: red_green_class(hit.positive?)
           td= percentage_bar hit.max_distance, classes: red_green_class(!hit.positive?)
           td.instrument-name= instrument.name unless prev_is_same

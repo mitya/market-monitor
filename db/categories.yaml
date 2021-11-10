@@ -14,9 +14,9 @@ energy.gas: eqt ar et am rrc swn cog
 energy.gas.rus: gazp nvtk
 energy.oil: xom cvx rds.a clr cop fang pxd eog mro oxy dvn tte pump apa hes
 energy.oil.other: gte
-energy.oil.refineries: dk pbf alto chx vlo mpc psx
+energy.oil.refinery: dk pbf alto chx vlo mpc psx
+energy.oil.service: rig slb fti snd ois oii
 energy.oil.rus: rosn lkoh sibn sngsp tatn banep rnft
-energy.oil.services: rig slb fti snd ois oii
 finance.banks: wfc sber vtbr qiwi tcsg
 finance.other: payo lc coin pypl ehth bx ivz gs ms
 food: agro unfi tsn

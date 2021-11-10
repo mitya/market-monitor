@@ -439,6 +439,11 @@ module InstrumentsHelper
     tag.span "#{reversed.to_f.round(1)}x", title: number_to_percentage(ratio, precision: 0)
     number_to_percentage(ratio, precision: 0)
   end
+
+  def category_title(key)
+    clean_key = key.to_s.gsub('*', '')
+    InstrumentSet.category_titles[clean_key] || clean_key.humanize
+  end
 end
 
 __END__

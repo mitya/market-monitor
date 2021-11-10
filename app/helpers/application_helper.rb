@@ -35,10 +35,10 @@ module ApplicationHelper
     %w[100 200 300 400 500 1000 5000]
   end
 
-  def bs_radio_button(name, value, label)
+  def bs_radio_button(name, value, label, **attrs)
     tag.div class: 'form-check form-check-inline' do
-      radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'form-check-input') +
-      label_tag("#{name}_#{value}", label, class: 'form-check-label')
+      radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'form-check-input', **attrs) +
+      label_tag("#{name}_#{value}", label, class: 'form-check-label', for: attrs[:id] || name)
     end
   end
 

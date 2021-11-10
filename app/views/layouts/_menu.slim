@@ -1,6 +1,6 @@
 nav class="navbar navbar-expand-lg navbar-light bg-light"
   div class="container-fluid"
-    a class="navbar-brand" href="#" Trading
+    a class="navbar-brand" href=set_comparision_path Trading
     button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       span class="navbar-toggler-icon"
 
@@ -10,12 +10,12 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Views
           ul class="dropdown-menu"
+            li= link_to 'Dashboard', set_comparision_path, class: 'dropdown-item'
             li= link_to 'Grouped', grouped_instruments_path, class: 'dropdown-item'
             li= link_to 'Spb', spb_instruments_path, class: 'dropdown-item'
             li= link_to 'Gainers US', instruments_path(order: 'prices.change desc', currency: 'USD', per_page: 300), class: 'dropdown-item'
             li= link_to 'Gainers RU', instruments_path(order: 'prices.change desc', currency: 'RUB'), class: 'dropdown-item'
             li= link_to 'Moving Averages', instruments_path(ema_trends: 1, extremums: 1, recent_prices: 0, order: 'aggregates.d1_volume desc', volume_diff: 1, ma_50: 1), class: 'dropdown-item'
-            li= link_to 'Dash', set_comparision_path, class: 'dropdown-item'
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" TA
           ul class="dropdown-menu"
@@ -26,7 +26,7 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
             li= link_to 'Recommendations', recommendations_path, class: 'dropdown-item'
             li= link_to 'Opinions', public_signals_path, class: 'dropdown-item'
             li= link_to 'Compare', comparision_path, class: 'dropdown-item'
-            li= link_to 'Hits', level_hits_path, class: 'dropdown-item'
+            li= link_to 'Hits', level_hits_path(days_since_last: 10, rvol: 100, availability: 'tinkoff'), class: 'dropdown-item'
             li= link_to 'Spikes', spikes_path, class: 'dropdown-item'
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Insiders

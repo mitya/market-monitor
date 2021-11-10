@@ -1,31 +1,30 @@
-main.container-fluid
-  h1.display-3 ETFs
+- selector = params[:selector].presence || 'price_change'
+- selector_is_historic = true
+- selector = selector
 
+main.container-fluid
   form#list-config(action=set_comparision_path class='my-2')
     = render 'instruments/filter_by_tickers'
+    = bs_select :selector, 'Selector:', %w[last] + Aggregate::Selectors + MarketCalendar.special_dates
+    hr
 
   .container-fluid
     .row
       - @sets.each do |set|
         .col
-          h6= set.name
-          table.table.table-sm.table-hover.table-font-sm.tickers-table.w-auto
-            thead
-              tr
-                / th
-                th Ticker
-                / th.money-cell d1
-                th.money-cell w2
+          h6.ps-1= category_title set.key
+          table.table.table-sm.table-hover.table-font-sm.tickers-table.table-no-border.table-sm-v.w-auto
             tbody
               - instruments = set.instruments.includes(:aggregate)
-              - instruments = instruments.sort_by(&:d1_change).reverse
+              / - instruments = instruments.sort_by(&selector).reverse
+              - instruments = instruments.sort_by { |ir| ir.stored_gain_since(selector) || 0 }.reverse
               - instruments.each do |inst|
                 - aggr = inst.aggregate
+                - value = inst.stored_gain_since(selector)
                 tr
-                  / td= instrument_logo_button inst
                   td(title=inst.name)= inst.ticker
-                  / td.money-cell= relative_price inst.d1_ago_close, inst.d2_ago_close, unit: inst.currency, format: 'relative', precision: 2
-                  / td.money-cell= colorized_percentage inst.d1_ago_close, inst.d2_ago_close, unit: inst.currency, precision: 1, format: '%n'
-                  / td.money-cell= colorized_ratio inst.d1_change, precision: 1, format: '%n'
-                  td.money-cell= colorized_ratio aggr.data.dig('gains', 'w2'), precision: 1, format: '%n'
-                  / td.money-cell= inst.price!.change
+                  td.money-cell
+                    - if selector == :price_change
+                      = colorized_ratio value, precision: 1, format: '%n'
+                    - elsif selector_is_historic
+                      = colorized_ratio value, precision: 1, format: '%n'

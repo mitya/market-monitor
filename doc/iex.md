@@ -1,7 +1,6 @@
 https://iexcloud.io/docs/api
 https://github.com/dblock/iex-ruby-client
 
-curl -s "https://cloud.iexapis.com/stable/time-series/CORE_ESTIMATES/FCX?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/FCX/ohlc?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/FCX/splits?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/book?token=$IEX_SECRET_KEY" | jq
@@ -10,13 +9,7 @@ curl -s "https://cloud.iexapis.com/stable/stock/clf/insider-summary?token=$IEX_S
 curl -s "https://cloud.iexapis.com/stable/stock/clf/institutional-ownership?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/clf/fund-ownership?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/clf/largest-trades?token=$IEX_SECRET_KEY" | jq 'sort_by(.time)'
-curl -s "https://cloud.iexapis.com/stable/deep/trades?symbols=CLF&token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable/deep/book?symbols=yelp&token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/yelp/book?token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable/ref-data/exchange/MIC/symbols?token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable/ref-data/region/RU/symbols?token=$IEX_SECRET_KEY" | jq
-
-
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/quote?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/previous?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/chart/ytd?token=$IEX_SECRET_KEY" | jq
@@ -34,33 +27,39 @@ curl -s "https://cloud.iexapis.com/stable/stock/aapl/peers?token=$IEX_SECRET_KEY
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/volume-by-venue?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/insider-transactions?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/insider-transactions?token=$IEX_SECRET_KEY" > tmp/insiders-AAON.json
-curl -s "https://cloud.iexapis.com/stable/tops?symbols=aapl,fb,twtr&token=$IEX_SECRET_KEY"
-curl -s "https://cloud.iexapis.com/stable/time-series/INSIDER_TRANSACTIONS/BH?from=2021-04-01&token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable/time-series/INSIDER_TRANSACTIONS/AAPL?from=2021-06-13&token=$IEX_SECRET_KEY" | jq
-
-curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY"
-curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY" > cache/iex/tops.json
-curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY&format=csv" > tmp/tops.csv
-curl -s "https://cloud.iexapis.com/stable/stock/TUP/insider-transactions?token=$IEX_SECRET_KEY" | jq
-
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/options?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/stock/aapl/options/20210618?token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/recommendation-trends?token=$IEX_SECRET_KEY" > cache/iex-ratings/AAPL.json
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/estimates?token=$IEX_SECRET_KEY" > cache/iex-estimates/AAPL.json
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/price-target?token=$IEX_SECRET_KEY" > cache/iex-price-targets/AAPL.json
 
-curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_TEST_SECRET_KEY" | jq
 
-curl -s "https://cloud.iexapis.com/stable/stock/aapl/options?token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable/stock/aapl/options/20210618?token=$IEX_SECRET_KEY" | jq
-
+curl -s "https://cloud.iexapis.com/stable/tops?symbols=aapl,fb,twtr&token=$IEX_SECRET_KEY"
+curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY"
+curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY" > cache/iex/tops.json
+curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY&format=csv" > tmp/tops.csv
+curl -s "https://cloud.iexapis.com/stable/data-points/market/GASDESW?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/deep/trades?symbols=CLF&token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/deep/book?symbols=yelp&token=$IEX_SECRET_KEY" | jq
 curl -s "https://cloud.iexapis.com/stable/options/AAL20210716P00011000/chart?range=1m&token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols?token=$IEX_SECRET_KEY" | jq
-curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols/spy?token=$IEX_SECRET_KEY" > tmp/option-dates.json
-curl -s "https://cloud.iexapis.com/stable//ref-data/options/symbols/fcx?token=$IEX_SECRET_KEY" > tmp/option-dates-dk.json
-curl -s "https://cloud.iexapis.com/stable//ref-data/exchanges?token=$IEX_SECRET_KEY" > tmp/exchanges.json
-curl -s "https://cloud.iexapis.com/stable//ref-data/region/DE/symbols?token=$IEX_SECRET_KEY" > tmp/region-DE.json
-curl -s "https://cloud.iexapis.com/stable//ref-data/exchange/FRA/symbols?token=$IEX_SECRET_KEY" > tmp/exchange-FRA.json
+
+curl -s "https://cloud.iexapis.com/stable/time-series/CORE_ESTIMATES/FCX?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/time-series/INSIDER_TRANSACTIONS/BH?from=2021-04-01&token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/time-series/INSIDER_TRANSACTIONS/AAPL?from=2021-06-13&token=$IEX_SECRET_KEY" | jq
+
+curl -s "https://cloud.iexapis.com/stable/ref-data/exchange/MIC/symbols?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/ref-data/region/RU/symbols?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/ref-data/options/symbols?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/ref-data/options/symbols/spy?token=$IEX_SECRET_KEY" > tmp/option-dates.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/options/symbols/fcx?token=$IEX_SECRET_KEY" > tmp/option-dates-dk.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/exchanges?token=$IEX_SECRET_KEY" > tmp/exchanges.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/region/DE/symbols?token=$IEX_SECRET_KEY" > tmp/region-DE.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/exchange/FRA/symbols?token=$IEX_SECRET_KEY" > tmp/exchange-FRA.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/futures/symbols?token=$IEX_SECRET_KEY" > tmp/futures.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/futures/symbols/es?token=$IEX_SECRET_KEY" > tmp/futures.json
 
 
+curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_TEST_SECRET_KEY" | jq
 
 # Cost
 
