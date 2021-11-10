@@ -3,14 +3,12 @@ envtask :main do
   rake 'tinkoff:days:previous'
   if Current.weekend?
     rake 'iex:prices'          unless R.false?(:price)
-    # rake 'iex:days:today'      unless R.false?(:today)
   elsif Current.us_market_open?
     rake 'iex:prices'          unless R.false?(:price)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
   elsif Current.uk_market_open?
     rake 'iex:prices:uniq'     unless R.false?(:price)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
-    # rake 'iex:days:today'          if R.true?(:today)
   else
     rake 'iex:prices:uniq'     unless R.false?(:price)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
@@ -19,20 +17,14 @@ envtask :main do
 end
 
 
-envtask :pantini do
-  PantiniArbitrageParser.connect 'XFRA'
-  PantiniArbitrageParser.connect 'US'
-  PantiniArbitrageParser.connect 'TG'
-end
-
-
-task 'prices' => %w[iex:prices]
+task 'missing'    => %w[iex:days:missing]
+task 'prices'     => %w[iex:prices]
 task 'prices:all' => %w[iex:prices tinkoff:prices:uniq]
-task 'a' => %w[aggregate analyze]
-task 'import' => %w[levels:import signals:import]
-task 'close' => 'tinkoff:candles:import:5min:last'
-task 'pre' => 'tinkoff:prices:pre'
-task 'trade' => 'intraday:sync'
+task 'a'          => %w[aggregate analyze]
+task 'import'     => %w[levels:import signals:import]
+task 'close'      => %w[tinkoff:candles:import:5min:last]
+task 'pre'        => %w[tinkoff:prices:pre]
+task 'trade'      => %w[intraday:sync]
 
 
 envtask(:SetIexTickers) { SetIexTickers.call }
@@ -47,5 +39,11 @@ envtask(:arb)    { Synchronizer.call }
 envtask(:spikes) { Spike.scan_all since: 1.week.ago }
 envtask(:news)   { Synchronizer.sync_news }
 
+
+envtask :pantini do
+  PantiniArbitrageParser.connect 'XFRA'
+  PantiniArbitrageParser.connect 'US'
+  PantiniArbitrageParser.connect 'TG'
+end
 
 __END__
