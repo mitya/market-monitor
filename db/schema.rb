@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_130752) do
+ActiveRecord::Schema.define(version: 2021_11_10_133602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,42 +21,10 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.boolean "current", default: false, null: false
     t.decimal "close", precision: 20, scale: 4
     t.float "close_change"
-    t.float "d1"
-    t.float "d2"
-    t.float "d3"
-    t.float "d4"
-    t.float "w1"
-    t.float "w2"
-    t.float "m1"
-    t.float "d1_vol"
-    t.float "d2_vol"
-    t.float "d3_vol"
-    t.float "d4_vol"
-    t.float "w1_vol"
-    t.float "w2_vol"
-    t.float "m1_vol"
-    t.float "d1_volume"
-    t.float "d2_volume"
-    t.float "d3_volume"
-    t.float "d4_volume"
-    t.float "w1_volume"
-    t.float "w2_volume"
-    t.float "m1_volume"
-    t.float "d2020_0323"
-    t.float "d2020_0219"
-    t.float "d2020_1106"
-    t.float "d2021_0512"
-    t.float "d2021_0820"
-    t.float "y2017"
-    t.float "y2018"
-    t.float "y2019"
-    t.float "y2020"
-    t.float "y2021"
     t.integer "days_up"
     t.date "lowest_day_date"
     t.float "lowest_day_gain"
     t.jsonb "data", default: {}
-    t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "d1_money_volume"
     t.float "y1_high_change"
@@ -68,11 +36,8 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.date "y1_low_date"
     t.date "y3_low_date"
     t.index ["current"], name: "index_aggregates_on_current"
-    t.index ["d2021_0512"], name: "index_aggregates_on_d2021_0512"
-    t.index ["d2021_0820"], name: "index_aggregates_on_d2021_0820"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
-    t.index ["y2021"], name: "index_aggregates_on_y2021"
   end
 
   create_table "arbitrage_cases", force: :cascade do |t|
@@ -100,18 +65,17 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
   create_table "candles", force: :cascade do |t|
     t.string "ticker"
     t.string "interval", null: false
-    t.datetime "time", null: false
+    t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
     t.string "source"
-    t.datetime "created_at", default: -> { "CURRENT_DATE" }, null: false
     t.date "date"
     t.boolean "ongoing", default: false
-    t.datetime "updated_at"
     t.boolean "analyzed"
+    t.decimal "prev_close", precision: 20, scale: 4
     t.index ["ticker", "interval", "date"], name: "index_candles_on_ticker_interval_date"
     t.index ["ticker", "interval", "date"], name: "uniq_ticker_date_for_days", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "index_candles_on_ticker"
@@ -121,7 +85,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.string "ticker", null: false
     t.string "interval", default: "day", null: false
     t.date "date", null: false
-    t.datetime "time", null: false
+    t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
     t.decimal "high", precision: 20, scale: 4, null: false
@@ -130,8 +94,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.string "source", default: "tinkoff", null: false
     t.boolean "ongoing", default: false, null: false
     t.boolean "analyzed", default: false, null: false
-    t.datetime "created_at", default: -> { "now()" }, null: false
-    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.decimal "prev_close", precision: 20, scale: 4
     t.index ["ticker", "date"], name: "candles_d1_tinkoff_ticker_interval_date_idx"
     t.index ["ticker"], name: "candles_d1_tinkoff_ticker_idx"
   end
@@ -139,18 +102,17 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
   create_table "candles_h1", force: :cascade do |t|
     t.string "ticker"
     t.string "interval", null: false
-    t.datetime "time", null: false
+    t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
     t.string "source"
-    t.datetime "created_at", default: -> { "CURRENT_DATE" }, null: false
     t.date "date"
     t.boolean "ongoing", default: false
-    t.datetime "updated_at"
     t.boolean "analyzed"
+    t.decimal "prev_close", precision: 20, scale: 4
     t.index ["ticker", "interval", "date"], name: "candles_1h_ticker_interval_date_idx"
     t.index ["ticker", "interval", "date"], name: "candles_1h_ticker_interval_date_idx1", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "candles_1h_ticker_idx"
@@ -169,15 +131,32 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.string "source", default: "iex", null: false
     t.boolean "ongoing", default: false, null: false
     t.boolean "analyzed", default: false, null: false
-    t.datetime "created_at", default: -> { "now()" }, null: false
-    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.decimal "prev_close", precision: 20, scale: 4
     t.index ["ticker", "date"], name: "candles_m1_ticker_interval_date_idx"
     t.index ["ticker"], name: "candles_m1_ticker_idx"
   end
 
+  create_table "candles_m3", force: :cascade do |t|
+    t.string "ticker"
+    t.string "interval", limit: 4, null: false
+    t.date "date", null: false
+    t.time "time", null: false
+    t.decimal "open", precision: 20, scale: 4, null: false
+    t.decimal "close", precision: 20, scale: 4, null: false
+    t.decimal "high", precision: 20, scale: 4, null: false
+    t.decimal "low", precision: 20, scale: 4, null: false
+    t.integer "volume", null: false
+    t.string "source", null: false
+    t.boolean "ongoing", default: false, null: false
+    t.boolean "analyzed", default: false, null: false
+    t.decimal "prev_close", precision: 20, scale: 4
+    t.index ["ticker", "date"], name: "candles_m3_ticker_date_idx"
+    t.index ["ticker"], name: "candles_m3_ticker_idx"
+  end
+
   create_table "candles_m5", force: :cascade do |t|
     t.string "ticker"
-    t.string "interval", null: false
+    t.string "interval", limit: 4, null: false
     t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
@@ -185,11 +164,10 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
     t.string "source"
-    t.datetime "created_at", default: -> { "CURRENT_DATE" }, null: false
     t.date "date"
     t.boolean "ongoing", default: false
-    t.datetime "updated_at"
-    t.boolean "analyzed"
+    t.boolean "analyzed", default: false
+    t.decimal "prev_close", precision: 20, scale: 4
     t.index ["ticker", "interval", "date"], name: "candles_5m_ticker_interval_date_idx"
     t.index ["ticker", "interval", "date"], name: "candles_5m_ticker_interval_date_idx1", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "candles_5m_ticker_idx"
@@ -219,6 +197,8 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.integer "ema_20_trend"
     t.integer "ema_50_trend"
     t.integer "ema_200_trend"
+    t.decimal "ema_100", precision: 20, scale: 4
+    t.integer "ema_100_trend"
     t.index ["current"], name: "index_date_indicators_on_current"
     t.index ["ticker", "current"], name: "index_date_indicators_on_ticker_and_current", where: "(current = true)"
     t.index ["ticker", "date"], name: "index_date_indicators_on_ticker_and_date", unique: true
@@ -318,6 +298,12 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.index ["isin"], name: "index_instruments_on_isin", unique: true
   end
 
+  create_table "missing_dates", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.date "date", null: false
+    t.index ["ticker"], name: "index_missing_dates_on_ticker"
+  end
+
   create_table "news", force: :cascade do |t|
     t.string "title"
     t.string "body"
@@ -414,14 +400,20 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
 
   create_table "price_level_hits", force: :cascade do |t|
     t.string "ticker", null: false
-    t.bigint "level_id", null: false
+    t.bigint "level_id"
     t.decimal "level_value", precision: 20, scale: 4
     t.string "kind"
     t.boolean "exact"
     t.boolean "important"
     t.date "date"
     t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.string "source"
+    t.boolean "manual"
+    t.integer "ma_length"
+    t.boolean "positive"
+    t.boolean "continuation"
+    t.float "close_distance"
+    t.float "max_distance"
     t.index ["level_id"], name: "index_price_level_hits_on_level_id"
   end
 
@@ -517,7 +509,6 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.boolean "exact"
     t.float "accuracy"
     t.jsonb "data"
-    t.datetime "created_at"
     t.decimal "enter", precision: 20, scale: 4
     t.decimal "stop", precision: 20, scale: 4
     t.float "stop_size"
@@ -550,6 +541,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.decimal "low", precision: 20, scale: 4
     t.integer "volume"
     t.float "change"
+    t.float "change_atr"
     t.index ["ticker"], name: "index_prices_on_ticker", unique: true
   end
 
@@ -638,6 +630,8 @@ ActiveRecord::Schema.define(version: 2021_09_24_130752) do
     t.integer "avg_volume"
     t.bigint "d5_money_volume"
     t.date "earning_dates", array: true
+    t.float "avg_change"
+    t.float "d5_marketcap_volume"
   end
 
   add_foreign_key "price_level_hits", "price_levels", column: "level_id"

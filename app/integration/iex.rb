@@ -41,14 +41,21 @@ class Iex
 
   def import_day_candles(instrument, date: nil, period: nil)
     return if date && instrument.candles.day.final.where(date: date, source: 'iex').exists?
+    return if date && instrument.missing_dates.exists?(date: date)
     return if period == 'previous' && instrument.candles.day.final.where(date: Current.last_closed_day_as_iex).exists?
 
-    candles_data =
-      date ? day_on(instrument.iex_ticker, date) :
-      period == 'previous' ? [previous(instrument.iex_ticker)] :
-      days_for(instrument.iex_ticker, period)
+    candles_data = case
+      when date then day_on(instrument.iex_ticker, date)
+      when period == 'previous' then [previous(instrument.iex_ticker)]
+      else days_for(instrument.iex_ticker, period)
+    end
 
-    return puts "No IEX data on #{date || period} for #{instrument}".light_yellow if candles_data.none?
+    if candles_data.none?
+      instrument.missing_dates.find_or_create_by! date: date if date
+      puts "No IEX data on #{date || period} for #{instrument}".light_yellow
+      puts "#{instrument} has #{instrument.missing_dates.count} missing dates".light_cyan if instrument.missing_dates.count > 5
+      return
+    end
 
     Candle.transaction do
       candles_data.each do |hash|
@@ -130,8 +137,8 @@ class Iex
 
   end
 
-  def symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols *.json').last.read, object_class: OpenStruct)
-  def otc_symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols-otc *.json').last.read, object_class: OpenStruct)
+  def symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols.json').last.read, object_class: OpenStruct)
+  def otc_symbols_cache = JSON.parse(Pathname.glob('cache/iex/symbols-otc.json').last.read, object_class: OpenStruct)
   def all_symbols_cache = symbols_cache + otc_symbols_cache
 
   def convert_type(type)
