@@ -37,34 +37,8 @@ namespace :iex do
 
   namespace :days do
     envtask :missing do
-      dates = []
-      dates += ENV['dates'].to_s.split(',').presence           if ENV['dates']
-      dates += Current.last_n_weeks(ENV['weeks'].to_i)         if ENV['weeks']
-      dates += Current.weekdays_since(Date.parse ENV['since']) if ENV['since']
-      dates += Current::SpecialDates.dates_plus                if R.true?('special')
-      dates -= [Current.date]
-
-      if till = ENV['till'].to_s.to_date
-        dates.reject! { |date| date > till }
-      end
-
-      dates = Current.last_2_weeks if dates.empty?
-      dates = dates - MarketCalendar.nyse_holidays.to_a
-      dates.uniq.sort.reverse.each do |date|
-        date = Date.parse(date) if String === date
-        instruments = (R.instruments_from_env || Instrument.iex_sourceable).abc
-        instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date } unless R.true?('force')
-        instruments = instruments.select(&:iex_ticker)
-        with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
-
-        puts if date.monday?
-        puts "#{date} #{date.strftime '%a'} #{with_missing_date.count} #{with_missing_date.join(',')}".yellow
-
-        next unless R.confirmed?
-
-        # with_missing_date.each { |inst| Iex.import_day_candles inst, date: date }
-        Current.parallelize_instruments(with_missing_date, IEX_RPS) { | inst| Iex.import_day_candles inst, date: date }
-      end
+      CheckMissingDates.call dates: ENV['dates'], weeks: ENV['weeks'], since: ENV['since'], till: ENV['till'],
+                             special: R.true?('special'), force: R.true?('force'), confirmed: R.confirmed?
     end
 
     envtask :period do
