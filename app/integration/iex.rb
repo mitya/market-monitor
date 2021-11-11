@@ -145,6 +145,10 @@ class Iex
     TypeMapping[type.to_s.to_sym] || type
   end
 
+  def tops_csv(*symbols)
+    RestClient.get "#{BASE}/tops", params: { token: ENV['IEX_SECRET_KEY'], format: 'csv', symbols: symbols.join(',').presence }.compact
+  end
+
   private
 
   def get(path, params = {})
@@ -173,5 +177,5 @@ Iex.import_day_candle Instrument.get('FANG'), Date.parse('2021-01-04')
 Iex.import_today_candle Instrument['PVAC']
 Iex.day_on('ARCH', Date.parse('2021-03-01'))
 Iex.import_intraday_candles('aapl', '2021-06-17'); nil
-
 Iex.insider_transactions_series('AAPL')
+Iex.tops_csv

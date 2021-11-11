@@ -8,13 +8,14 @@ class Price < ApplicationRecord
   def today? = last_at && last_at > Current.date.midnight
   def low_lower?(percentage) = value && low && value - low >= value * percentage
 
-  after_update def update_change
+  before_update def update_change
     close = instrument.d1_ago_close
     atr = instrument.info&.avg_change
     return unless value && close
     change = value / close - 1.0
-    update_columns change: change.round(3), change_atr: atr && (change / atr).round(3)
+    assign_attributes change: change.round(3), change_atr: atr && (change / atr).round(3)
   end
+
 
   class << self
     def refresh_from_tinkoff(instruments)
@@ -38,35 +39,8 @@ class Price < ApplicationRecord
       instrument.price!.update! value: last, last_at: candle['time'], source: 'tinkoff', low: low, volume: volume if last
     end
 
-
-    def refresh_from_iex(symbols = [])
-      prices = ApiCache.get "cache/iex/tops.json", skip_if: symbols.any?, ttl: 15.minutes do
-        puts "Load new prices from IEX..."
-        Iex.tops(*symbols)
-      end
-      prices.sort_by { |p| p['symbol'] }.each do |result|
-        if instrument = Instrument.get_by_iex_ticker(result['symbol'])
-          next unless instrument.usd?
-
-          price = result['lastSalePrice']
-          last_at = Time.ms(result['lastUpdated'])
-          next if instrument.price!.last_at && instrument.price!.last_at > last_at
-          next if price.to_f == 0
-
-          instrument.price!.update! value: price, last_at: last_at, source: 'iex', low: nil, volume: nil
-        end
-      end
-      set_missing_prices_to_close
-    end
-
-    def refresh_premium_from_iex
-      refresh_from_iex Instrument.premium.map(&:iex_ticker)
-      set_missing_prices_to_close
-    end
-
-
     def set_missing_prices_to_close
-      Price.missing.each do |price|
+      missing.each do |price|
         if yesterday = price.instrument.d1_ago
           price.update! source: 'close',
             value:   yesterday.close,
@@ -78,8 +52,3 @@ class Price < ApplicationRecord
 end
 
 __END__
-Price.refresh
-Price.refresh_premium_from_iex
-Price.refresh_from_iex %w[aapl msft twtr]
-
-Iex.tops Instrument.premium.map(&:ticker)

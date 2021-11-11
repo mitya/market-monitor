@@ -107,8 +107,8 @@ namespace :iex do
 
 
   namespace :prices do
-    envtask(:uniq) { Price.refresh_premium_from_iex }
-    envtask(:all)  { Price.refresh_from_iex }
+    envtask(:uniq) { RefreshPricesFromIex.refresh_premium }
+    envtask(:all)  { RefreshPricesFromIex.refresh }
   end
   task :prices => 'prices:all'
 

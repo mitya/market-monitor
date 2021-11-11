@@ -28,9 +28,13 @@
 + filter sets by tickers
 + filter sets by currency / premium
 + filter form hiding
++ load tops as csv
 
-- a button to refresh prices (and then reload with cable)
-- load tops as csv
+- send ws notification when the prices are updated
+- listen for 'reload' notification on the UI side
+- an ajax button to trigger price update
+- request price update every 3 mins on dashboard page
+
 - dashboard with mine / top gainers / top losers columns
 - a row with indexes / commodity futures
 
