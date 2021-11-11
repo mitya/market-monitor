@@ -35,4 +35,6 @@ Rails.application.routes.draw do
   resource :comparision
   resource :set_comparision
   resources :news
+
+  mount ActionCable.server => '/cable'
 end

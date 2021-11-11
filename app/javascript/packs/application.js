@@ -10,7 +10,7 @@ import 'pages/init'
 import 'pages/charts'
 import 'pages/sync'
 import 'pages/dashboard'
-// import "channels"
+import "channels"
 
 document.addEventListener("turbolinks:load", () => {
   document.querySelector('#list-config')?.addEventListener("change", e => {

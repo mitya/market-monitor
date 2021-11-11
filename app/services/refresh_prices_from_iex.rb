@@ -3,30 +3,30 @@ require 'csv'
 class RefreshPricesFromIex
   include StaticService
 
-  def refresh
+  def refresh(symbols = [])
     csv = Iex.tops_csv.body
     Pathname("cache/iex/tops.csv").write(csv)
     Price.transaction do
       CSV.parse(csv, headers: true).each { |row| process_result row }
       Price.set_missing_prices_to_close
     end
-    nil
+    SyncChannel.push 'prices'
   end
 
-  def refresh_json(symbols = [])
-    prices = ApiCache.get "cache/iex/tops.json", skip_if: symbols.any?, ttl: 15.minutes do
-      puts "Load new prices from IEX..."
-      Iex.tops(*symbols)
-    end
-    Price.transaction do
-      prices.sort_by { |p| p['symbol'] }.each { |result| process_result result }
-      Price.set_missing_prices_to_close
-    end
-    nil
-  end
+  # def refresh_json(symbols = [])
+  #   prices = ApiCache.get "cache/iex/tops.json", skip_if: symbols.any?, ttl: 15.minutes do
+  #     puts "Load new prices from IEX..."
+  #     Iex.tops(*symbols)
+  #   end
+  #   Price.transaction do
+  #     prices.sort_by { |p| p['symbol'] }.each { |result| process_result result }
+  #     Price.set_missing_prices_to_close
+  #   end
+  #   SyncChannel.push 'prices'
+  # end
 
   def refresh_premium
-    refresh_json Instrument.premium.map(&:iex_ticker)
+    refresh Instrument.premium.map(&:iex_ticker)
   end
 
   alias call refresh

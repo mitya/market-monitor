@@ -77,10 +77,10 @@ namespace :tinkoff do
 
 
   namespace :prices do
-    envtask(:pre)     { Price.refresh_from_tinkoff Instrument.tinkoff.abc }
-    envtask(:all)     { Price.refresh_from_tinkoff Instrument.tinkoff.in_set(ENV['set']).abc   }
-    envtask(:uniq)    { Price.refresh_from_tinkoff Instrument.non_iex.abc }
-    envtask(:signals) { Price.refresh_from_tinkoff Instrument.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
+    envtask(:pre)     { RefreshPricesFromTinkoff.call Instrument.tinkoff.abc }
+    envtask(:all)     { RefreshPricesFromTinkoff.call Instrument.tinkoff.in_set(ENV['set']).abc   }
+    envtask(:uniq)    { RefreshPricesFromTinkoff.call Instrument.non_iex.abc }
+    envtask(:signals) { RefreshPricesFromTinkoff.call Instrument.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
   end
   task :prices => 'prices:all'
 

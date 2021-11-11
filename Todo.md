@@ -29,9 +29,10 @@
 + filter sets by currency / premium
 + filter form hiding
 + load tops as csv
++ send ws notification when the prices are updated
++ listen for 'reload' notification on the UI side
 
-- send ws notification when the prices are updated
-- listen for 'reload' notification on the UI side
+- show the last update timestamp
 - an ajax button to trigger price update
 - request price update every 3 mins on dashboard page
 
