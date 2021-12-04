@@ -59,7 +59,7 @@ class MarketCalendar
         2021-03-08
         2021-02-23
         2021-01-07
-        
+
         2020-12-31
       ].map { |str| Date.parse str }.to_set
     end
@@ -92,7 +92,7 @@ class MarketCalendar
         2021-05-12
         2021-08-20
         2021-09-21
-        2021-10-27
+        2021-10-26
       ].map(&:to_date).sort.reverse
     end
 

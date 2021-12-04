@@ -68,7 +68,7 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty
-export tickers='VEON-RX KAZTP BLNG YAKG KAZT AZTA KD LYLT RIVN SPBE TSVT'
+export tickers='TEN'
 rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 # rake tinkoff:days:year tinkoff:days:special
 rake candles:set_prev_closes candles:set_average_change

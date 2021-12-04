@@ -229,7 +229,7 @@ module InstrumentsHelper
     ema_20_trend:          "EMA 20",
     ema_50_trend:          "EMA 50",
     ema_200_trend:         "EMA 200",
-    portfolio_cost:        "Portfolio Cost",
+    'portfolio.cost_in_usd': "Portfolio Cost",
     portfolio_ideal_cost:  "Portfolio Cost Ideal",
     portfolio_cost_diff:   "Portfolio Cost Ideal",
     change:                "Change",

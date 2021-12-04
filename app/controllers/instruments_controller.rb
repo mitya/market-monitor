@@ -86,8 +86,12 @@ class InstrumentsController < ApplicationController
         "data->'volumes'->'#{period_selector}' desc"
       when /volatility/
         "data->'volatilities'->'#{period_selector}' desc"
+      when /portfolio/
+        nil
     end
 
+
+    p order_expression
     order_expression ||= "instruments.ticker"
 
     Arel.sql("#{order_expression} nulls last")

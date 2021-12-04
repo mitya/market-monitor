@@ -3,7 +3,7 @@ class CurrencyConverter
 
   ExchangeRates = {
     CNY: 0.15,
-    RUB: 75.0,
+    RUB: 73.90,
   }
 
   def convert(amount, from_currency, to_currency)
