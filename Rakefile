@@ -35,6 +35,7 @@ module R
   end
 
   def confirmed? = true?(:ok)
+  def ok? = confirmed?
   def true?(variable) = ENV[variable.to_s] == '1'
   def true_or_nil?(variable) = true?(variable) || ENV[variable.to_s].blank?
   def false?(variable) = ENV[variable.to_s] == '0'

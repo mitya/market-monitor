@@ -13,7 +13,7 @@ class SetIexTickers
   end
 
   def iex_ticker_for(ticker)
-    ticker_fixes = { 'KAP@GS' => nil }
+    ticker_fixes = { 'KAP@GS' => nil, 'SPBE' => nil }
     ticker_fixes.include?(ticker) ?
       ticker_fixes[ticker] :
       ticker.include?('@GS') ?

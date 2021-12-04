@@ -30,7 +30,6 @@ task 'trade'      => %w[intraday:sync]
 envtask(:SetIexTickers) { SetIexTickers.call }
 envtask(:LoadMissingIexCandles) { LoadMissingIexCandles.call }
 envtask(:ReplaceTinkoffCandlesWithIex) { ReplaceTinkoffCandlesWithIex.call }
-envtask(:empty) { puts Instrument.all.select { |inst| inst.candles.none? }.join(' ') }
 envtask(:set_first_date) { Instrument.get(ENV['ticker']).update! first_date: ENV['date'] }
 envtask(:set_first_date_auto) { (R.instruments_from_env || Instrument.all).to_a.each { |inst| inst.set_first_date! } }
 envtask(:service){ Module.const_get(ENV['s']).call }
@@ -39,6 +38,9 @@ envtask(:arb)    { Synchronizer.call }
 envtask(:spikes) { Spike.scan_all since: 1.week.ago }
 envtask(:news)   { Synchronizer.sync_news }
 
+
+envtask('empty:iex')     { puts Instrument.iex_sourceable.select { |inst| inst.candles.none? }.join(' ') }
+envtask('empty:tinkoff') { puts Instrument.non_iex.select { |inst| inst.candles.none? }.join(' ') }
 
 envtask :pantini do
   PantiniArbitrageParser.connect 'XFRA'

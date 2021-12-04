@@ -17,16 +17,20 @@ class CheckMissingDates
 
     dates.uniq.sort.reverse.each do |date|
       date = Date.parse(date) if String === date
-      instruments = (R.instruments_from_env || Instrument.iex_sourceable).abc
-      instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date } unless force
-      instruments = instruments.select(&:iex_ticker)
-      with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
 
+      instruments = (R.instruments_from_env || Instrument.all).abc
+      instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date } unless force
+      with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
+      missing_tinkoff_instruments = with_missing_date.reject(&:iex_ticker)
+      missing_iex_instruments     = with_missing_date.select(&:iex_ticker)
+
+      missing_tinkoff_instruments = [] if MarketCalendar.moex_holidays.include?(date)
+
+      puts "#{date} #{date.strftime '%a'} #{with_missing_date.count.to_s.rjust 4} #{missing_iex_instruments.join(' ').blue} #{missing_tinkoff_instruments.join(' ').yellow}"
       puts if date.monday?
-      puts "#{date} #{date.strftime '%a'} #{with_missing_date.count} #{with_missing_date.join(',')}".yellow
 
       next unless confirmed
-      Current.parallelize_instruments(with_missing_date, IEX_RPS) { | inst| Iex.import_day_candles inst, date: date }
+      Current.parallelize_instruments(missing_iex_instruments, IEX_RPS) { | inst| Iex.import_day_candles inst, date: date }
     end
   end
 end

@@ -33,8 +33,14 @@ rake iex:stats
 rake iex:price_targets
 rake iex:insider_transactions iex:insider_transactions:cache
 rake iex:days:missing
+rake tinkoff:days:missing ok=1 tickers='SPBE' since=2021-09-01
+rake tinkoff:days:year tickers='KAPVEON-RX KAZTP BLNG YAKG KAZT'
 rake set_average_volume
 rake levels:hits:week
+
+AZTA KD LYLT RIVN SPBE TSVT
+VEON-RX KAZTP BLNG YAKG KAZT
+VEON-RX KAZTP BLNG YAKG KAZT AZTA KD LYLT RIVN SPBE TSVT
 
 # Run daily
 
@@ -62,13 +68,13 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty
-export tickers=''
+export tickers='VEON-RX KAZTP BLNG YAKG KAZT AZTA KD LYLT RIVN SPBE TSVT'
 rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 # rake tinkoff:days:year tinkoff:days:special
 rake candles:set_prev_closes candles:set_average_change
 
 ## Optional
-rake set_first_date_auto tickers='GTX'
+rake set_first_date_auto tickers='VEON-RX SPBE'
 rake set_first_date ticker=GRUB date=2021-03-25
 rake iex:symbols:load iex:symbols:refresh
 rake iex:days:period period=ytd

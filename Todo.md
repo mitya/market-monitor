@@ -32,7 +32,7 @@
 + send ws notification when the prices are updated
 + listen for 'reload' notification on the UI side
 
-- show the last update timestamp
+- store/show the last update timestamp
 - an ajax button to trigger price update
 - request price update every 3 mins on dashboard page
 

@@ -11,8 +11,13 @@ namespace :tinkoff do
 
   namespace :days do
     envtask :missing do
-      instruments = Instrument.tinkoff.select { |inst| inst.yesterday == nil }
-      puts "Instruments without candles: #{instruments.map(&:ticker).join(' ')}"
+      # instruments = Instrument.non_usd.select { |inst| inst.yesterday == nil }
+      # puts "Instruments without yesterday candles: #{instruments.map(&:ticker).join(' ')}"
+
+      next unless R.confirmed?
+      R.instruments_from_env.non_iex.abc.each do |inst|
+        Tinkoff.import_day_candles inst, since: (ENV['since'].to_date || 2.months.ago)
+      end
     end
 
     desc "Loads day candles for missing latest days & for today"

@@ -69,7 +69,7 @@ class Instrument < ApplicationRecord
 
   validates_presence_of :ticker, :name
 
-  after_create { |inst| SetIexTicker.process(inst) }
+  after_create { |inst| SetIexTickers.process(inst) }
 
   attribute :current_price_selector, default: "last"
 

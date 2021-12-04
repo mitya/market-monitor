@@ -47,7 +47,20 @@ class MarketCalendar
         2021-05-31
         2021-07-05
         2021-09-06
+        2021-11-25
         2021-12-24
+      ].map { |str| Date.parse str }.to_set
+    end
+
+    def moex_holidays
+      @moex_holidays ||= %w[
+        2021-11-04
+        2021-05-03
+        2021-03-08
+        2021-02-23
+        2021-01-07
+        
+        2020-12-31
       ].map { |str| Date.parse str }.to_set
     end
 

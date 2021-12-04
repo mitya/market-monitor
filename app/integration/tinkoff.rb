@@ -6,7 +6,7 @@ class Tinkoff
     AGN AIMT AOBC APY AVP AXE BEAT BFYT BMCH CHA CHL CXO CY DLPH DNKN ENPL ETFC FTRE HDS HIIQ IMMU LM LOGM LVGO MINI MYL
     MYOK NBL PRSC PRTK RUSP SERV SINA TECD TIF TRCN TSS UTX VAR VRTU WYND ACIA FLIR EV PLT PS VIE CBPO MTSC PRSP RP MQ TE
     MNK GSH FTR CTB TOT VZRZP ALNU TCS CLGX MSGN WORK PRAH KBTK HOME LMNX CCIV ALXN CLNY GTT CNST LB TLND SYKE PFPT QTS
-    CHK CREE CSOD GRA QADA STMP XEC CLDR
+    CHK CREE CSOD GRA QADA STMP XEC CLDR ECHO XLRN CHEP
   ].uniq
 
   TickerWithSomeDatesMIssing = %w[
@@ -190,7 +190,7 @@ class Tinkoff
     end
 
     # import_day_candles_between
-    def import_day_candles(instrument, since:, till:, delay: 0.1, candle_class: nil)
+    def import_day_candles(instrument, since:, till: Date.tomorrow, delay: 0.1, candle_class: nil)
       data = load_day instrument, since, till
       import_candles_from_hash instrument, data, candle_class: candle_class
       sleep delay

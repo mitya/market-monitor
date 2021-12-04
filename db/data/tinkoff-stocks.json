@@ -1800,16 +1800,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BLN497",
-      "ticker": "SKM",
-      "isin": "US78440P1084",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "SK Telecom Co.",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BVMGF2",
       "ticker": "ALL",
       "isin": "US0200021014",
@@ -2600,6 +2590,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG012QVD574",
+      "ticker": "LYLT",
+      "isin": "US54911Q1076",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Loyalty Ventures",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BVYN55",
       "ticker": "UGI",
       "isin": "US9026811052",
@@ -2956,16 +2956,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Equitrans Midstream Corporation",
-      "type": "Stock"
-    },
-    {
-      "figi": "BBG000BHFHP8",
-      "ticker": "UFS",
-      "isin": "US2575592033",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Domtar Corp",
       "type": "Stock"
     },
     {
@@ -4129,6 +4119,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG00R4Z2NT4",
+      "ticker": "VEON-RX",
+      "isin": "BMG9349W1038",
+      "minPriceIncrement": 0.02,
+      "lot": 10,
+      "currency": "RUB",
+      "name": "VEON",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG0078Y1D92",
       "ticker": "SYNH",
       "isin": "US87166B1026",
@@ -4155,7 +4155,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Avnet, Inc.",
+      "name": "Avnet",
       "type": "Stock"
     },
     {
@@ -4526,6 +4526,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Ford",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG002B9T6Y1",
+      "ticker": "KAZTP",
+      "isin": "RU000A0B9BW0",
+      "minPriceIncrement": 0.2,
+      "lot": 10,
+      "currency": "RUB",
+      "name": "КуйбышевАзот - Акции привилегированные",
       "type": "Stock"
     },
     {
@@ -7847,6 +7857,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG00741Y1N2",
+      "ticker": "RIVN",
+      "isin": "US76954A1034",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Rivian Automotive",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000C7P5M7",
       "ticker": "MRKY",
       "isin": "RU000A0JPPG8",
@@ -7898,12 +7918,12 @@
     },
     {
       "figi": "BBG000DX9JV7",
-      "ticker": "BRKS",
+      "ticker": "AZTA",
       "isin": "US1143401024",
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Brooks Automation, Inc.",
+      "name": "Azenta",
       "type": "Stock"
     },
     {
@@ -9912,7 +9932,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "F5 Networks",
+      "name": "F5",
       "type": "Stock"
     },
     {
@@ -11183,6 +11203,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Sherwin-Williams",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG012W99DN6",
+      "ticker": "KD",
+      "isin": "US50155Q1004",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Kyndryl Holdings",
       "type": "Stock"
     },
     {
@@ -12765,6 +12795,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG000VQWH86",
+      "ticker": "BLNG",
+      "isin": "RU000A0J2QG8",
+      "minPriceIncrement": 0.005,
+      "lot": 100,
+      "currency": "RUB",
+      "name": "Белон",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG004S687W8",
       "ticker": "MSNG",
       "isin": "RU0008958863",
@@ -13301,7 +13341,7 @@
       "minPriceIncrement": 0.2,
       "lot": 1,
       "currency": "RUB",
-      "name": "MAIL.RU",
+      "name": "VK Company",
       "type": "Stock"
     },
     {
@@ -15367,7 +15407,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Apartment Income REIT Corp.",
+      "name": "Apartment Income",
       "type": "Stock"
     },
     {
@@ -15980,6 +16020,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG002B298N6",
+      "ticker": "YAKG",
+      "isin": "RU0007796819",
+      "minPriceIncrement": 0.05,
+      "lot": 10,
+      "currency": "RUB",
+      "name": "ЯТЭК",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG007DLZ601",
       "ticker": "RYTM",
       "isin": "US76243J1051",
@@ -16287,6 +16337,16 @@
       "lot": 1,
       "currency": "RUB",
       "name": "Лензолото - привилегированные акции",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG002GHV6L9",
+      "ticker": "SPBE",
+      "isin": "RU000A0JQ9P9",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "СПБ Биржа",
       "type": "Stock"
     },
     {
@@ -16997,6 +17057,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "NortonLifeLock Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG00YV1J622",
+      "ticker": "TSVT",
+      "isin": "US9013841070",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "2seventy bio",
       "type": "Stock"
     },
     {
@@ -18297,6 +18367,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG002B9MYC1",
+      "ticker": "KAZT",
+      "isin": "RU000A0B9BV2",
+      "minPriceIncrement": 0.2,
+      "lot": 10,
+      "currency": "RUB",
+      "name": "КуйбышевАзот",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BBD070",
       "ticker": "HES",
       "isin": "US42809H1077",
@@ -18487,5 +18567,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1850
+  "total": 1858
 }
