@@ -134,7 +134,6 @@ namespace :tinkoff do
     end
 
     envtask :import do
-      ApiCache.get("cache/iex/symbols #{Date.current.to_s :number}.json") { Iex.symbols }
       iex_items = Iex.all_symbols_cache
 
       tickers = ENV['tickers'].split # File.read("db/data/tinkoff-premium.txt").split.map &:upcase

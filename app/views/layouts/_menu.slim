@@ -16,6 +16,7 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
             li= link_to 'Gainers US', instruments_path(order: 'prices.change desc', currency: 'USD', per_page: 300), class: 'dropdown-item'
             li= link_to 'Gainers RU', instruments_path(order: 'prices.change desc', currency: 'RUB'), class: 'dropdown-item'
             li= link_to 'Moving Averages', instruments_path(ema_trends: 1, extremums: 1, recent_prices: 0, order: 'aggregates.d1_volume desc', volume_diff: 1, ma_50: 1), class: 'dropdown-item'
+            li= link_to 'Portfolio', instruments_path(set: 'portfolio', portfolio: 1, recent_prices: 0, order: 'portfolio.cost_in_usd'), class: 'dropdown-item'
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" TA
           ul class="dropdown-menu"

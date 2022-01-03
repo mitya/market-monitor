@@ -29,57 +29,58 @@ https://www.interactivebrokers.com/en/index.php?f=14193
 
 # Run once in a while
 
+rake iex:insider_transactions
 rake iex:stats
 rake iex:price_targets
-rake iex:insider_transactions iex:insider_transactions:cache
+rake iex:recommendations
+rake set_average_volume
+
 rake iex:days:missing
 rake tinkoff:days:missing ok=1 tickers='SPBE' since=2021-09-01
-rake tinkoff:days:year tickers='KAPVEON-RX KAZTP BLNG YAKG KAZT'
-rake set_average_volume
+rake tinkoff:days:year tickers=''
+
 rake levels:hits:week
 
-AZTA KD LYLT RIVN SPBE TSVT
-VEON-RX KAZTP BLNG YAKG KAZT
-VEON-RX KAZTP BLNG YAKG KAZT AZTA KD LYLT RIVN SPBE TSVT
-
 # Run daily
-
 rake main
 rake prices
+
 rake tinkoff:candles:import:5min:last
 rake tinkoff:prices:pre
 rake options:day
-rake iex:insider_transactions
-rake iex:days:missing ok=1 since=2021-07-01
 
-// rake iex:candles:days:previous iex:prices:all iex:candles:days:today
-// rake tinkoff:candles:day:latest tinkoff:prices:uniq
-// rake iex:prices:all tinkoff:prices:uniq
-// rake iex:prices:premium tinkoff:prices:all
 
-rake tinkoff:hours:import
+# Run if haven't used for a whilte
+rake     iex:days:missing ok=1 since=2021-12-20
+rake tinkoff:days:missing ok=1 since=2021-12-20 tickers='1COV@DE ABRD ADS@DE AFKS AFLT'
+
+# Destroying tickers
+
+rake t:destroy ticker=ICBK ok=1
+rake tinkoff:instruments:sync ok=1
+
 
 # Adding new tickers
 
 ## IEX
+rake iex:symbols:load
 rake tinkoff:premium:import
 
 ## Tinkoff
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
-rake empty
-export tickers='TEN'
+rake empty:iex
+export tickers='DUOL PBA PUBM AMCR LAC RKLB SGMO ALC LCID CWEN FCFS FVRR FSR GPRO ESTC'
 rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 # rake tinkoff:days:year tinkoff:days:special
 rake candles:set_prev_closes candles:set_average_change
 
 ## Optional
-rake set_first_date_auto tickers='VEON-RX SPBE'
+rake set_first_date_auto tickers='DUOL'
 rake set_first_date ticker=GRUB date=2021-03-25
 rake iex:symbols:load iex:symbols:refresh
 rake iex:days:period period=ytd
-rake t:destroy ticker=CHK ok=1
-rake tinkoff:days:year tinkoff:days:special tickers=FLOT
+rake tinkoff:days:year tinkoff:days:special tickers='VKCO LENT POSI'
 
 ## Import List
 rake list:clear tickers=''

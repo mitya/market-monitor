@@ -152,6 +152,8 @@ class Stats < ApplicationRecord
     'Sweden'           => 'swe',
     'Switzerland'      => 'che',
     'US'               => 'usa',
+    'Greece'           => 'grc',
+    'United States'    => 'usa',
   }
 end
 
