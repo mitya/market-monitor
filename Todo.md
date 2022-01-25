@@ -1,9 +1,4 @@
-- fix trend indicators
-- sell-off exhaustions scanner
-- DMA hits intraday
-
-- fully automate multiple missing days loading 
-
++ fix trend indicators
 + search for MA retests
 + search for custom level retest
 + show all recent dates in the hits list
@@ -37,6 +32,11 @@
 + load tops as csv
 + send ws notification when the prices are updated
 + listen for 'reload' notification on the UI side
+
+- mark the last day of trend
+- sell-off exhaustions scanner
+- DMA hits intraday
+- fully automate multiple missing days loading 
 
 - store/show the last update timestamp
 - an ajax button to trigger price update

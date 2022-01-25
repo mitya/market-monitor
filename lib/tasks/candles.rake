@@ -44,13 +44,13 @@ end
 namespace :candles do
   envtask :set_prev_closes do
       klasses = [Candle]
-      klasses = [Candle::H1, Candle::M1, Candle::M3, Candle::M5, Candle::DayTinkoff]
+      # klasses = [Candle::H1, Candle::M1, Candle::M3, Candle::M5, Candle::DayTinkoff]
       klasses.each do |klass|
-        klass.where(prev_close: nil).includes(:instrument).find_in_batches do |candles|
+        klass.where('date >= ?', '2021-12-01').includes(:instrument).find_in_batches do |candles|
           klass.transaction do
             candles.each do |candle|
               puts "#{candle.class} #{candle.ticker}"
-              candle.update! prev_close: candle.previous&.close unless candle.prev_close
+              candle.update! prev_close: candle.previous&.close # unless candle.prev_close
             end
           end
         end

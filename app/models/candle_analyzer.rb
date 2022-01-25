@@ -4,7 +4,7 @@ class CandleAnalyzer
   def initialize(instrument, date)
     @instrument = Instrument[instrument]
     @date = date.to_date
-    @candle = instrument.candles.day.find_date_before(date)
+    @candle = instrument.candles.day.find_date(date)
   end
 
   def green_days_count

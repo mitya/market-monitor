@@ -342,10 +342,8 @@ module InstrumentsHelper
     # aggregate.days_up.abs.in?([0, 1]) ? nil :
     #   aggregate.days_up.to_i > 0 ? tag.span(aggregate.days_up, class: "badge bg-success") :
     #   tag.span(aggregate.days_down, class: "badge bg-danger")
-    unless aggregate.days_up.abs.in?([0, 1])
-      tag.div(class: red_green_class(aggregate.days_up.to_i > 0) ) do
-        count_bar aggregate.days_up.abs
-      end
+    tag.div(class: red_green_class(aggregate.days_up.to_i > 0) ) do
+      count_bar aggregate.days_up.abs
     end
   end
 

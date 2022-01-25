@@ -15,7 +15,7 @@ class CheckMissingDates
     dates = Current.last_2_weeks if dates.empty?
     dates = dates - MarketCalendar.nyse_holidays.to_a
 
-    dates.uniq.sort.reverse.each do |date|
+    dates.uniq.sort.each do |date|
       date = Date.parse(date) if String === date
 
       instruments = (R.instruments_from_env || Instrument.all).abc
