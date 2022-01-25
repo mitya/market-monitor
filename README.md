@@ -11,6 +11,20 @@
 — UI для просмотра списка бумаг с фильтрами
 — опционы?
 
+## Swing
++ MA scanner — look for those who visit the MA first time in a while
+* Sell-off exhaustions scanner — look for the first green on spiked up day after a downtrend
+* Future charts — keep an eye on all commodity futures on one page
+* Random date comparer
+* Low volume scan — lowest vol in N days
+
+## Intraday
+* DMA hits intraday
+* double tops (0.5%) on 5m charts (with 2+ bars between hits)
+* breakouts of today top, brewakouts of yesterday top (& breakdowns)
+* retests of day open / yesterday close after 1%+ move
+* x-large volume on 1/3/5m charts
+* Low volume scan — lowest vol in N bars
 
 
 # Data Sources
@@ -51,12 +65,12 @@ rake options:day
 
 
 # Run if haven't used for a whilte
-rake     iex:days:missing ok=1 since=2021-12-20
-rake tinkoff:days:missing ok=1 since=2021-12-20 tickers='1COV@DE ABRD ADS@DE AFKS AFLT'
+rake     iex:days:missing since=2022-01-01 ok=1
+rake tinkoff:days:missing since=2022-01-01 ok=1 tickers=''
 
 # Destroying tickers
 
-rake t:destroy ticker=ICBK ok=1
+rake t:destroy ticker=NCNO ok=1
 rake tinkoff:instruments:sync ok=1
 
 
@@ -70,13 +84,13 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty:iex
-export tickers='DUOL PBA PUBM AMCR LAC RKLB SGMO ALC LCID CWEN FCFS FVRR FSR GPRO ESTC'
+export tickers='TWST WTW ONL TPG NCNO'
 rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 # rake tinkoff:days:year tinkoff:days:special
 rake candles:set_prev_closes candles:set_average_change
 
 ## Optional
-rake set_first_date_auto tickers='DUOL'
+rake set_first_date_auto tickers='ONL'
 rake set_first_date ticker=GRUB date=2021-03-25
 rake iex:symbols:load iex:symbols:refresh
 rake iex:days:period period=ytd

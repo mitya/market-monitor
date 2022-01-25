@@ -91,6 +91,7 @@ class Instrument < ApplicationRecord
   def y2019         = @y2019 ||= day_candles!.find_date(Current.y2019)
   def y2020         = @y2020 ||= day_candles!.find_date(Current.y2020)
   def y2021         = @y2021 ||= day_candles!.find_date(Current.y2021)
+  def y2022         = @y2022 ||= day_candles!.find_date(Current.y2022)
   def last          = @last  ||= price!.last_at && yesterday_candle&.close_time ? (price!.last_at < yesterday_candle.close_time ? yesterday_candle.close : price!.value) : price!.value
   def last_low      = @last_low ||= price!.low
   def last_or_open  = last || today_open
@@ -98,7 +99,7 @@ class Instrument < ApplicationRecord
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
   %w[low high open close volume volatility volatility_range direction].each do |selector|
-    (DateSelectors + %w[y2017 y2018 y2019 y2020 y2021]).each do |date|
+    (DateSelectors + %w[y2017 y2018 y2019 y2020 y2021 y2022]).each do |date|
       define_method("#{date}_#{selector}") { send(date).try(selector) }
       if selector.in? %w[low high open close]
         define_method("#{date}_#{selector}_rel")  { |curr_price = 'last'| rel_diff "#{date}_#{selector}", curr_price }

@@ -1,3 +1,9 @@
+- fix trend indicators
+- sell-off exhaustions scanner
+- DMA hits intraday
+
+- fully automate multiple missing days loading 
+
 + search for MA retests
 + search for custom level retest
 + show all recent dates in the hits list

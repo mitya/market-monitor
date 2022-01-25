@@ -5,7 +5,7 @@ class Aggregate < ApplicationRecord
   scope :old, -> { where current: false }
 
   RecentDaySelectors = %w[d1 d2 d3 d4 w1 w2 m1 m3 y1]
-  Years = [2021, 2020, 2019, 2018, 2017]
+  Years = [2022, 2021, 2020, 2019, 2018, 2017]
   Selectors = RecentDaySelectors + Years
 
   RecentDayAccessors = RecentDaySelectors.map { |p| "#{p}_ago" }

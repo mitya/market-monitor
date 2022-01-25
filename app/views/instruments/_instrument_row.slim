@@ -72,7 +72,7 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell                  = relative_price inst.w2_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
     td.money-cell                  = relative_price inst.m1_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
     td.money-cell                  = relative_price inst.m3_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
-    td.money-cell                  = relative_price inst.y2021_open,   inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
+    td.money-cell                  = relative_price inst.y2022_open,   inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
     td.money-cell.border-end.pe-2  = relative_price inst.y1_ago_close, inst.d1_ago_close, unit: inst.currency, format: @past_price_format, inverse: true
 
   - if @show_sa
