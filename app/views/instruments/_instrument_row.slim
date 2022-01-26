@@ -149,4 +149,5 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell(title=format_date_as_text_with_days(aggregate.y3_low_date)) = colorized_ratio aggregate.y3_low_change if aggregate.y3_low_change != aggregate.y1_low_change
 
   td= growth_badge aggregate
+  td= change_map aggregate
   td= link_to fa_icon(:adjust), instrument_options_path(inst) if inst.usd?

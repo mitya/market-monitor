@@ -32,9 +32,11 @@
 + load tops as csv
 + send ws notification when the prices are updated
 + listen for 'reload' notification on the UI side
++ change maps
 
-- mark the last day of trend
-- sell-off exhaustions scanner
+- turn-around scanner
+- min vol scanner
+
 - DMA hits intraday
 - fully automate multiple missing days loading 
 

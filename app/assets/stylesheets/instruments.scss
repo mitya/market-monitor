@@ -90,12 +90,24 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 .opacity-05 { opacity: 0.5; }
 
-.wide-bars .percentage-bar { width: 8px; margin-right: 1px; }
-.percentage-bar { display: inline-block; width: 4px; margin-right: 2px;  }
-.percentage-bars { height: 20px; white-space: nowrap; }
-.percentage-bar { background-color: gray; }
-.is-green .percentage-bar { background-color: green; }
-.is-red .percentage-bar { background-color: red; }
+.percentage-bars { height: 20px; white-space: nowrap; display: flex; align-items: end; }
+
+.percentage-bar {
+  background-color: gray; 
+  display: inline-block; 
+  width: 4px; height: 100%; margin-right: 2px;
+  
+  &.turn { height: 50% !important; }
+  &.turn-down { align-self: start; }
+  &.spike { width: 2px; }
+  
+  &.is-green, .is-green & { background-color: green; }
+  &.is-red, .is-red & { background-color: red; }
+
+  .wide-bars & { width: 8px; margin-right: 1px; }  
+  .wide-bars &.spike { width: 2px; margin-right: 4px; margin-left: 3px; }
+}
+
 
 .open-chart, .open-row-chart { cursor: pointer; }
 

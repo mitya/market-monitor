@@ -346,6 +346,22 @@ module InstrumentsHelper
       count_bar aggregate.days_up.abs
     end
   end
+  
+  def change_map(aggregate)
+    tag.div class: class_names('percentage-bars wide-bars') do
+      aggregate.change_map.to_s.each_char.map do |code|
+        classes = case code 
+          when 'U' then 'is-green'
+          when 'D' then 'is-red'
+          when 't' then 'is-green turn'
+          when 's' then 'is-green spike'
+          when 'T' then 'is-red turn turn-down'
+          when 'S' then 'is-red spike'
+        end
+        tag.span class: class_names("percentage-bar", classes), data: { code: code }
+      end.join.html_safe
+    end
+  end
 
   def trading_view_url(instrument)
     "https://www.tradingview.com/chart/?symbol=#{instrument.exchange_ticker}"

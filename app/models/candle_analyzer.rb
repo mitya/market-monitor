@@ -22,6 +22,10 @@ class CandleAnalyzer
   def days_down_count
     @candle&.days_down
   end
+  
+  def change_map
+    @candle&.change_map(5)
+  end
 
   def lowest_day_since(period_start)
     falling_period = period_start.to_date .. Current.date

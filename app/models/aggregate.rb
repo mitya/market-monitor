@@ -20,6 +20,8 @@ class Aggregate < ApplicationRecord
   def gains        = data['gains'] ||= {}
   def volumes      = data['volumes'] ||= {}
   def volatilities = data['volatilities'] ||= {}
+    
+  def candle = @candle ||= instrument.candles.day.find_date(date)
 
   class << self
     def create_for(instrument, date: Current.yesterday, gains: true, analyze: true, volume: true, force: true, year_highs: true)
@@ -70,6 +72,7 @@ class Aggregate < ApplicationRecord
       if analyze
         analyzer = CandleAnalyzer.new(instrument, date)
         aggregate.days_up = analyzer.days_up_count&.nonzero? || -analyzer.days_down_count.to_i
+        aggregate.change_map = analyzer.change_map
 
         if lowest_day = analyzer.lowest_day_since(3.months.ago)
           aggregate.lowest_day_date = lowest_day.date

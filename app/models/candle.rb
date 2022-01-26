@@ -85,7 +85,24 @@ class Candle < ApplicationRecord
   def trend_down? = prev_close && close <= prev_close
   def days_up = previous && trend_up? ? 1 + previous.days_up : 0
   def days_down = previous && trend_down? ? 1 + previous.days_down : 0
-
+    
+  def change_key 
+    case 
+      when prev_close == nil then '-'
+      when close == prev_close then '='
+        
+      when close > prev_close && down? then 'T'
+      when close > prev_close && volatility_above > 0.04 then 'S'
+      when close > prev_close then 'U'
+        
+      when close < prev_close && up? then 't'
+      when close < prev_close && volatility_below > 0.04 then 's'
+      when close < prev_close then 'D'
+      else '-'
+    end
+  end
+  
+  def change_map(length = 10) = previous_n(length, including: true).map(&:change_key).join
 
   # def up_for?(period_count)
   #   prev_candles = n_previous(period_count)
@@ -99,7 +116,7 @@ class Candle < ApplicationRecord
   def siblings = self.class.where(ticker: ticker, interval: interval)
   def same_day_siblings = siblings.where(date: date)
   def previous = @previous ||= siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
-  def previous_n(n) = siblings.where('date < ?', date).order(:date).last(n)
+  def previous_n(n, including: false) = siblings.where("date #{including ? '<=' : '<'} ?", date).order(:date).last(n)
   def next = @next ||= siblings.find_by(date: MarketCalendar.next(date)) || siblings.where('date > ?', date).order(:date).first
   def after_n_days(n) = siblings.find_by(date: MarketCalendar.next(date + n)) || siblings.where('date > ?', date + n).order(:date).first
 
