@@ -24,3 +24,10 @@ https://broker.vtb.ru/trade/margins/#marginlist
     Array.from(document.querySelectorAll('.table.table-hover.table-borderless.table-sm tbody td:nth-child(3)')).map(n => n.innerText).join(' ')
 
     Array.from(document.querySelectorAll('.wp-block-kadence-column.inner-column-1.kadence-column_5eae3b-9f td:nth-child(1)')).map(n => n.innerText).join(' ')
+
+
+## Charting libs
+
+* https://github.com/tradingview/lightweight-charts
+* https://github.com/tvjsx/trading-vue-js
+* https://github.com/rrag/react-stockcharts

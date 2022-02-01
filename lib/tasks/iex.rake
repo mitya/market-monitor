@@ -38,7 +38,7 @@ namespace :iex do
   namespace :days do
     envtask :missing do
       CheckMissingDates.call dates: ENV['dates'], weeks: ENV['weeks'], since: ENV['since'], till: ENV['till'],
-                             special: R.true?('special'), force: R.true?('force'), confirmed: R.confirmed?
+                             special: R.true?('special'), force: R.true?('force'), confirmed: R.confirmed?, reverse: ENV['reverse']
     end
 
     envtask :period do

@@ -1,7 +1,7 @@
 class CheckMissingDates
   include StaticService
 
-  def call(dates: nil, weeks: nil, since: nil, till: nil, special: false, confirmed: false, force: false)
+  def call(dates: nil, weeks: nil, since: nil, till: nil, special: false, confirmed: false, force: false, reverse: false)
     dates = dates ? dates.to_s.split(',').presence : []
     dates += Current.last_n_weeks(weeks.to_i)         if weeks
     dates += Current.weekdays_since(since.to_date)    if since
@@ -14,6 +14,9 @@ class CheckMissingDates
 
     dates = Current.last_2_weeks if dates.empty?
     dates = dates - MarketCalendar.nyse_holidays.to_a
+
+    dates = dates.uniq.sort
+    dates = dates.reverse if reverse
 
     dates.uniq.sort.each do |date|
       date = Date.parse(date) if String === date

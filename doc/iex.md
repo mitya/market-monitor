@@ -33,6 +33,10 @@ curl -s "https://cloud.iexapis.com/stable/stock/aapl/recommendation-trends?token
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/estimates?token=$IEX_SECRET_KEY" > cache/iex-estimates/AAPL.json
 curl -s "https://cloud.iexapis.com/stable/stock/aapl/price-target?token=$IEX_SECRET_KEY" > cache/iex-price-targets/AAPL.json
 
+curl -s "https://cloud.iexapis.com/stable/futures/ES22M:F/chart?token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/futures/ES22M:F/chart?range=1m&token=$IEX_SECRET_KEY" | jq
+curl -s "https://cloud.iexapis.com/stable/futures/ES22M:F/chart?from=2022-01-20&token=$IEX_SECRET_KEY" | jq
+
 
 curl -s "https://cloud.iexapis.com/stable/tops?symbols=aapl,fb,twtr&token=$IEX_SECRET_KEY"
 curl -s "https://cloud.iexapis.com/stable/tops?token=$IEX_SECRET_KEY"
@@ -56,7 +60,9 @@ curl -s "https://cloud.iexapis.com/stable/ref-data/exchanges?token=$IEX_SECRET_K
 curl -s "https://cloud.iexapis.com/stable/ref-data/region/DE/symbols?token=$IEX_SECRET_KEY" > tmp/region-DE.json
 curl -s "https://cloud.iexapis.com/stable/ref-data/exchange/FRA/symbols?token=$IEX_SECRET_KEY" > tmp/exchange-FRA.json
 curl -s "https://cloud.iexapis.com/stable/ref-data/futures/symbols?token=$IEX_SECRET_KEY" > tmp/futures.json
-curl -s "https://cloud.iexapis.com/stable/ref-data/futures/symbols/es?token=$IEX_SECRET_KEY" > tmp/futures.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/futures/symbols/HRC?token=$IEX_SECRET_KEY" > tmp/futures-hrc.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/futures/symbols/CL?token=$IEX_SECRET_KEY" > tmp/futures-cl.json
+curl -s "https://cloud.iexapis.com/stable/ref-data/futures/symbols/MTF?token=$IEX_SECRET_KEY" > tmp/futures-mtf.json
 
 
 curl -s "https://sandbox.iexapis.com/stable/stock/aapl/chart/date/20210104?chartByDay=true&token=$IEX_TEST_SECRET_KEY" | jq

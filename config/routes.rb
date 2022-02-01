@@ -27,13 +27,15 @@ Rails.application.routes.draw do
     post :limit_order, :cancel_order, on: :collection
   end
   resources :orders, only: %i[index]
-  resources :operations, only: %i[index]
+  resources :operations, only: %i[index]  
   resource :trading, only: %i[], controller: :trading do
     get :dashboard
     get :activities
+    get :intraday
+    get :candles
   end
   resource :comparision
-  resource :set_comparision
+  resource :set_comparision  
   resources :news
 
   mount ActionCable.server => '/cable'

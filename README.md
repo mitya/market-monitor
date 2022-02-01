@@ -12,9 +12,9 @@
 — опционы?
 
 ## Swing
+* Future charts — keep an eye on all commodity futures on one page
 + MA scanner — look for those who visit the MA first time in a while
 * Sell-off exhaustions scanner — look for the first green on spiked up day after a downtrend
-* Future charts — keep an eye on all commodity futures on one page
 * Random date comparer
 * Low volume scan — lowest vol in N days
 
@@ -25,6 +25,7 @@
 * retests of day open / yesterday close after 1%+ move
 * x-large volume on 1/3/5m charts
 * Low volume scan — lowest vol in N bars
+* intraday low-high change, low-current change, last 10 min change
 
 
 # Data Sources
@@ -70,7 +71,7 @@ rake tinkoff:days:missing since=2022-01-01 ok=1 tickers=''
 
 # Destroying tickers
 
-rake t:destroy ticker=NCNO ok=1
+rake t:destroy ticker=SLG ok=1
 rake tinkoff:instruments:sync ok=1
 
 
@@ -84,28 +85,26 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty:iex
-export tickers='TWST WTW ONL TPG NCNO'
-rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
-rake iex:days:missing since=2020-01-01 special=1 ok=1 # rake tinkoff:days:year tinkoff:days:special
+export tickers=''
+rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download 
+rake iex:symbols:peers iex:price_targets
+rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1
 rake candles:set_prev_closes candles:set_average_change
 
+
 ## Optional
-rake set_first_date_auto tickers='ONL'
+rake set_first_date_auto tickers='AORT'
 rake set_first_date ticker=GRUB date=2021-03-25
 rake iex:symbols:load iex:symbols:refresh
 rake iex:days:period period=ytd
 rake tinkoff:days:year tinkoff:days:special tickers='VKCO LENT POSI'
+rake tinkoff:days:year tinkoff:days:special
 
 ## Import List
 rake list:clear tickers=''
 rake list:import list=portfolio
 
 
-rake options:day
-rake options:week
-rake signals:import
+## Intraday
 
-
-## Dates
-
-* splits were synced on 2021-09-11
+rake intraday:sync

@@ -1,0 +1,17 @@
+.intraday-charts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 15px;
+}
+
+.intraday-chart {
+  flex-basis: 48%;
+  min-height: 100px;
+  // padding: 5px;
+  // border: 1px solid #ccc;
+}
+
+// #chart-1 { background-color: rgba(red, 0.2); }
+// #chart-2 { background-color: rgba(green, 0.2); }
+// #chart-3 { background-color: rgba(blue, 0.2); }

@@ -34,9 +34,13 @@
 + listen for 'reload' notification on the UI side
 + change maps
 
+- load 1m market data
+- push/pull that data to the browser
+- intraday chart
+- multiple intraday charts on screen
+
 - turn-around scanner
 - min vol scanner
-
 - DMA hits intraday
 - fully automate multiple missing days loading 
 
@@ -46,9 +50,6 @@
 
 - dashboard with mine / top gainers / top losers columns
 - a row with indexes / commodity futures
-
-- update intraday UI once in 15 seconds
-- update intraday UI with cable
 
 - look for predefined levels
 - HOD retest when high > 2% && low since high < -2%

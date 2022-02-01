@@ -46,4 +46,16 @@ class TradingController < ApplicationController
       }
     end
   end
+  
+  def intraday    
+  end
+  
+  def candles
+    tickers = %w[CLF DK OSUR RIG VEON ZIM]
+    candles = tickers.inject({}) do |map, ticker| 
+      map[ticker] = Candle::M3.where(ticker: ticker).includes(:instrument).last(1000).map { |c| [c.datetime.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
+      map 
+    end
+    render json: candles
+  end
 end
