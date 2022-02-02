@@ -14322,6 +14322,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG014KFRNP7",
+      "ticker": "CEG",
+      "isin": "US21037T1097",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Constellation Energy",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000PXZFW2",
       "ticker": "WLK",
       "isin": "US9604131022",
@@ -18976,5 +18986,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1899
+  "total": 1900
 }

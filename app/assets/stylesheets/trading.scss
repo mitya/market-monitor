@@ -6,10 +6,17 @@
 }
 
 .intraday-chart {
+  position: relative;
   flex-basis: 48%;
   min-height: 100px;
   // padding: 5px;
   // border: 1px solid #ccc;
+  
+  &-legend {
+    position: absolute; left: 0; top: 0; z-index: 100;
+    
+    .chart-ticker { font-weight: bold; }
+  }
 }
 
 // #chart-1 { background-color: rgba(red, 0.2); }
