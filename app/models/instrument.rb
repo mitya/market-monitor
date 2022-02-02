@@ -163,7 +163,7 @@ class Instrument < ApplicationRecord
   def market_open_time = (rub? || eur?) ? Current.ru_market_open_time : Current.us_market_open_time
   def time_zone = usd?? Current.est : Current.msk
   def session_start_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
-  def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 01) : date.end_of_day
+  def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 00, second: 01) : date.end_of_day
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase

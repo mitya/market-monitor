@@ -33,16 +33,33 @@
 + send ws notification when the prices are updated
 + listen for 'reload' notification on the UI side
 + change maps
++ intraday chart
++ multiple intraday charts on screen
++ load all recent intraday candles for tickers
 
-- load 1m market data
-- push/pull that data to the browser
-- intraday chart
-- multiple intraday charts on screen
+- realtime load intraday market data for tickers
+- 15s data pull to the browser
+
+- custom levels, open/close lines, DMA lines on intraday charts
+
+- chart period change
+
+- ticker sets for intraday charts
+
+- list of intraday scans
+- show scan ticker in the next available intraday chart
+
+- daily / 1h on-chart vertical comparisions 
+
+- top gain / loss / vol gainers/losers dashboards (with set filters)
+- brief MA hits
+- soon MA hits
 
 - turn-around scanner
 - min vol scanner
 - DMA hits intraday
 - fully automate multiple missing days loading 
+- show intraday scans on the chart
 
 - store/show the last update timestamp
 - an ajax button to trigger price update

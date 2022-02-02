@@ -219,6 +219,8 @@ class Tinkoff
     def import_intraday_candles(instrument, interval, since: nil, till: nil)
       return if !instrument.tinkoff?
       return if !instrument.market_open?
+      
+      since = since.change(min: 00) if interval == 'hour' && instrument.usd? &&  since.hour == 9 && since.min == 30
 
       day_start = instrument.market_open_time
       last_loaded_candle = Candle.interval_class_for(interval).where(instrument: instrument).today.by_time.last
@@ -323,7 +325,7 @@ class Tinkoff
   def call_js_api(command, parse: true, delay: 0, account: nil)
     command = "coffee bin/tinkoff.coffee #{command}"
     command = "TINKOFF_ACCOUNT=#{account} #{command}" if account
-    puts command.purple if $log_tinkoff
+    puts command.purple if $log_tinkoff || ENV['TLOG']
     response = `#{command}`
     sleep delay if delay.to_f > 0
     parse ? JSON.parse(response) : response
