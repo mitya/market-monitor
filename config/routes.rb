@@ -31,8 +31,7 @@ Rails.application.routes.draw do
   resource :trading, only: %i[], controller: :trading do
     get :dashboard
     get :activities
-    get :intraday
-    get :candles
+    get :intraday, :candles
   end
   resource :comparision
   resource :set_comparision  

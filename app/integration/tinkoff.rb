@@ -218,7 +218,7 @@ class Tinkoff
 
     def import_intraday_candles(instrument, interval, since: nil, till: nil)
       return if !instrument.tinkoff?
-      return if !instrument.market_open?
+      return if !instrument.market_open? && since.today?
       
       since = since.change(min: 00) if interval == 'hour' && instrument.usd? &&  since.hour == 9 && since.min == 30
 

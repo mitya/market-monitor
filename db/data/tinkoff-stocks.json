@@ -8077,6 +8077,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG000BVP5P2",
+      "ticker": "SLG",
+      "isin": "US78440X8873",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "SL Green REIT",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000F6ZWH2",
       "ticker": "DKS",
       "isin": "US2533931026",
@@ -18986,5 +18996,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1900
+  "total": 1901
 }

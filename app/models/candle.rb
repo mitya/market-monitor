@@ -176,6 +176,7 @@ class Candle < ApplicationRecord
     def last_loaded_date = final.maximum(:date)
 
     def interval_class_for(interval)
+      interval = minutes_to_interval(interval) if interval.is_a?(Numeric)
       { 'hour' => H1, '5min' => M5, '3min' => M3, '1min' => M1, 'day' => self }[interval]
     end
 
@@ -187,6 +188,11 @@ class Candle < ApplicationRecord
         when 'hour' then 1.hour
         when 'day'  then 1.day
       end
+    end
+    
+    MinutesToIntervals = { 1 => '1min', 3 => '3min', 5 => '5min', 60 => 'hour' }
+    def minutes_to_interval(minutes)
+      MinutesToIntervals[minutes]
     end
 
     def remove_dups

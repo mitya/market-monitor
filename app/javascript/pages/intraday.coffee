@@ -1,7 +1,16 @@
 import { createChart, CrosshairMode, LineStyle } from 'lightweight-charts'
 
+charts = {}
+
+window.getCharts = -> charts
+
 chartsContainer = -> document.querySelector('.intraday-charts')
-clearChartContainer = -> chartsContainer().innerHTML = ''
+clearCharts = -> 
+  chartsContainer().innerHTML = ''
+  charts = {}
+  
+dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
+dataRowToVolume = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
 
 makeChart = (ticker, data) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
@@ -16,14 +25,15 @@ makeChart = (ticker, data) ->
   legend = container.querySelector('.intraday-chart-legend')
   
   candles = data[ticker]
-  candlesData = candles.map (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
-  volumeData = candles.map (row) -> { time: row[0], value: row[5] }    
+  candlesData = candles.map dataRowToCandle
+  volumeData = candles.map dataRowToVolume
 
   priceFormatter = (price) -> if price < 100 then String(price.toFixed(2)).padStart(7, ' ') else price
   
   chart = createChart container, { 
     width: 0, height: 280, 
     timeScale: { timeVisible: true, secondsVisible: false },
+    priceScale: { entireTextOnly: true },
     localization: {
       priceFormatter: priceFormatter
     },
@@ -49,6 +59,9 @@ makeChart = (ticker, data) ->
     else
       legend.querySelector('.candle-change').innerText = ''
   
+  
+  charts[ticker] = { chart: chart, candles: lineSeries, volume: volumeSeries }
+  
   # # circle arrowDown arrowUp
   # lineSeries.setMarkers [
   #   { time: candlesData[candlesData.length - 10].time, position: 'aboveBar', color: 'red', shape: 'arrowDown', text: '2Top' },
@@ -57,9 +70,21 @@ makeChart = (ticker, data) ->
 
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
-    data = await $fetchJSON "/trading/candles"
-    console.log data
+    period = 3
+    tickers = 'CLF VEON MOMO ZIM'    
+    tickers = tickers.replaceAll(' ', '+')    
+
+    loadCharts = ->
+      data = await $fetchJSON "/trading/candles?tickers=#{tickers}&period=#{period}"    
+      clearCharts()
+      for ticker, candles of data
+        makeChart ticker, data
+      
+    refreshCharts = ->
+      data = await $fetchJSON "/trading/candles?limit=1&tickers=#{tickers}&period=#{period}"
+      for ticker, rows of data
+        candle = dataRowToCandle rows[0]
+        charts[ticker].candles.update candle
     
-    clearChartContainer()
-    for ticker, candles of data
-      makeChart ticker, data
+    loadCharts()
+    setInterval refreshCharts, 10_000

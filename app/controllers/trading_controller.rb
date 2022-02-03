@@ -51,13 +51,19 @@ class TradingController < ApplicationController
   end
   
   def candles
-    tickers = %w[CLF DK OSUR RIG VEON ZIM]
+    repo = Candle.interval_class_for(params[:period].to_i.nonzero? || 3)
+    tickers = params[:tickers].split
+    
     candles = tickers.inject({}) do |map, ticker| 
-      map[ticker] = Candle::M3.where(ticker: ticker).includes(:instrument).order(:date, :time).last(1000).map do |c|
-        [c.datetime.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume]
-      end
+      map[ticker] = repo.where(ticker: ticker).includes(:instrument).order(:date, :time).last(params[:limit] || 500).map { |c| render_candle(c) }
       map 
     end
     render json: candles
   end
+  
+  private
+  
+    def render_candle(c)
+      [c.datetime.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume]
+    end
 end
