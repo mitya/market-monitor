@@ -2776,7 +2776,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "SiTime Corp",
+      "name": "SiTime",
       "type": "Stock"
     },
     {
@@ -4285,7 +4285,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "FirstEnergy Corp",
+      "name": "FirstEnergy",
       "type": "Stock"
     },
     {
@@ -9023,7 +9023,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Hannon Armstrong",
+      "name": "Hannon Armstrong REIT",
       "type": "Stock"
     },
     {
@@ -10471,7 +10471,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Nikola Corporation",
+      "name": "Nikola",
       "type": "Stock"
     },
     {
@@ -12991,7 +12991,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Starwood Property Trust",
+      "name": "Starwood Property Trust REIT",
       "type": "Stock"
     },
     {
@@ -13854,6 +13854,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG000RNBH63",
+      "ticker": "MC",
+      "isin": "US60786M1053",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Moelis & Co",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG009DTD8H2",
       "ticker": "UA",
       "isin": "US9043112062",
@@ -14258,7 +14268,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "StoneCo Ltd",
+      "name": "StoneCo",
       "type": "Stock"
     },
     {
@@ -18996,5 +19006,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1901
+  "total": 1902
 }

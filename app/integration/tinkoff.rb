@@ -163,7 +163,7 @@ class Tinkoff
 
           candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time, date: date
           # puts "Import Tinkoff #{date} #{time} #{interval} candle for #{instrument}".green if candle.new_record?
-          puts "Import Tinkoff #{date} #{time} #{interval} candle for #{instrument}".colorize(candle.new_record?? :green : :yellow)
+          puts "Import Tinkoff #{date} #{time} #{interval} #{instrument}".colorize(candle.new_record?? :green : :yellow)
 
           candle.ticker  = instrument.ticker
           candle.source  = 'tinkoff'
@@ -230,7 +230,7 @@ class Tinkoff
 
       return if since + Candle.interval_duration(interval) > Time.current
 
-      data = load_intervals instrument, interval, since, till, delay: 0.1
+      data = load_intervals instrument, interval, since, till, delay: 0.05
       import_candles_from_hash instrument, data, tz: instrument.time_zone
     end
 

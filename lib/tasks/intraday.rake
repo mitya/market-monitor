@@ -14,16 +14,19 @@ class IntradayCandleLoader
 
     last_synced_interval = nil
     loop do
+      # tickers = Setting.get('sync_tickers', [])
+      
+      
       intervals_since_midnight = (Time.current.hour * 60 + Time.current.min) / duration
 
       next if last_synced_interval != nil && Time.current.sec < 50
 
       if last_synced_interval != intervals_since_midnight
-        puts "Sync #{interval}..."
-        instruments.each do |inst|
+        instruments.abc.each do |inst|
           Tinkoff.import_intraday_candles inst, interval
           PriceSignal.analyze_intraday_for inst, interval if analyze
         end
+        puts
         last_synced_interval = intervals_since_midnight
       end
 
@@ -52,14 +55,33 @@ class IntradayCandleLoader
     end    
   end
   
+  def check_moex_closings
+    moex_1 = []
+    moex_2 = []
+    Instrument.rub.abc.each do |inst|
+      data = Tinkoff.load_intervals inst, '1min', '2022-02-02T22:00:00+03:00'.to_time, '2022-02-02T22:01:00+03:00'.to_time
+      if data['candles'].any?
+        moex_1 << inst.ticker
+        puts "\t #{inst}"
+      else
+        puts inst
+        moex_2 << inst.ticker
+      end
+    end    
+    
+    puts "1st: #{moex_1.join(' ')}"
+    puts "2nd: #{moex_2.join(' ')}"
+  end
+  
   private
   
-  def recent_dates = MarketCalendar.open_days(8.days.ago).last(5)
+  def days_to_load = ENV['days'].to_i.nonzero? || 8
+  def recent_dates = MarketCalendar.open_days(days_to_load.days.ago).last(5)
   
   CLOSE_TIMES = { 
     '16:00' => { 1 => '15:59', 3 => '15:57', 5 => '15:55', 60 => '15:00' },
-    '00:00' => { 1 => '23:59', 3 => '23:57', 5 => '23:55', 60 => '23:00' },
-    '18:40' => { 1 => '18:39', 3 => '18:37', 5 => '18:35', 60 => '18:00' },
+    '23:50' => { 1 => '23:49', 3 => '23:48', 5 => '23:45', 60 => '23:00' },
+    '18:45' => { 1 => '18:45', 3 => '18:45', 5 => '18:45', 60 => '18:00' },
   }  
 end
 
@@ -68,10 +90,12 @@ end
 namespace :intraday do
   envtask(:sync) { IntradayCandleLoader.new.sync }
   envtask(:load) { IntradayCandleLoader.new.load }
+  
+  envtask(:check_moex_closings) { IntradayCandleLoader.new.check_moex_closings }
 end
 
 
 
 __END__
-rake intraday:load tickers='OZON SBER GAZP FIVE' period=1 force=1
-rake intraday:sync tickers='OZON SBER GAZP FIVE' period=1
+rake intraday:load tickers='AGRO' period=3 force=1 days=1
+rake intraday:sync tickers='OZON SBER GAZP FIVE MVID' period=3

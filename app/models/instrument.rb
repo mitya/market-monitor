@@ -76,7 +76,6 @@ class Instrument < ApplicationRecord
 
   MatureDate = Current.y2017
   DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].map { |period| "#{period}_ago" }
-  MoexSecondary = %w[AGRO AMEZ RNFT ETLN FESH KRKNP LNTA RASP MTLR MTLRP OKEY SIBN SMLT].to_set
 
 
   DateSelectors.each do |selector|
@@ -154,7 +153,7 @@ class Instrument < ApplicationRecord
   def nasdaq? = exchange_name == 'NASDAQ'
   def exchange_name = rub? ? 'MOEX' : exchange
   def moex? = rub?
-  def moex_2nd? = MoexSecondary.include?(ticker)
+  def moex_2nd? = MarketInfo::Moex2.include?(ticker)
   def marginal? = info&.tinkoff_long_risk != nil
   def shortable? = info&.tinkoff_can_short?
 
@@ -164,7 +163,7 @@ class Instrument < ApplicationRecord
   def time_zone = usd?? Current.est : Current.msk
   def session_start_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
   def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 00, second: 01) : date.end_of_day
-  def close_hhmm = usd?? '16:00' : moex_2nd? ? '18:40' : '00:00'
+  def close_hhmm = usd?? '16:00' : moex_2nd? ? '18:45' : '23:50'
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase
