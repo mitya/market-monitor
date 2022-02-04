@@ -41,8 +41,8 @@
 + chart period change
 + dash for top gain / loss, same in RU, my US / RU tickers change
 + dash changes as bars
++ mine / watch us / watch ru column on dashboard
 
-- mine tickers column on dashboard
 - price update process
 
 - catch new sync tickers without the process restart (pull db every second)

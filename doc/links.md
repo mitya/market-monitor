@@ -31,3 +31,13 @@ https://broker.vtb.ru/trade/margins/#marginlist
 * https://github.com/tradingview/lightweight-charts
 * https://github.com/tvjsx/trading-vue-js
 * https://github.com/rrag/react-stockcharts
+
+# Data Sources
+
+https://financialmodelingprep.com/
+https://gocharting.com/
+https://github.com/rrag/react-stockcharts
+https://icebergh.io
+https://www.interactivebrokers.com/en/index.php?f=14193
+https://spbexchange.ru/ru/listing/securities/list/
+  iconv -f CP1251 -t UTF8 db/data/spbex.csv > db/data/spbex-utf.csv

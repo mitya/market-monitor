@@ -5,6 +5,7 @@ biotech: atra hrtx gthx icpt achv osur qdel mrna goss
 biotech.big: pfe mrk
 cannabis: tlry
 china: tal gotu baba yy vips ftch bidu jd cyd
+covid: chef dkng play mcri
 developers.rus: etln smlt pikk lsrg
 energy: nrg klxe sji
 energy.chemicals: nknc nkncp kzos kzosp lyb
@@ -15,8 +16,8 @@ energy.gas.rus: gazp nvtk
 energy.oil: xom cvx shel tti clr cop fang pxd eog mro oxy dvn pump apa hes
 energy.oil.other: gte
 energy.oil.refinery: dk pbf alto chx vlo mpc psx
-energy.oil.service: rig slb fti snd ois oii
 energy.oil.rus: rosn lkoh sibn sngsp tatn banep rnft
+energy.oil.service: rig slb fti snd ois oii
 finance.banks: wfc sber vtbr qiwi tcsg
 finance.other: payo lc coin pypl ehth bx ivz gs ms
 food: agro unfi tsn
@@ -24,6 +25,7 @@ hardware.chip: intc amd xlnx tsm qrvo mu qcom nvda
 hardware.office: xrx hell hpq logi
 hardware.other: crus sitm
 holdings: brk.b afks
+hot: bynd
 indexes: spy
 it.faang: aapl amzn msft fb googl nflx tsla nvda tsm v baba adbe
 it.forgotten: band yext ever mfgp uber lyft roku okta ibm
@@ -32,9 +34,11 @@ it.hot: twlo docu shop etsy plan asan fsly estc twtr ayx ebay net twtr pins snap
 it.rus: yndx mail ozon hhru
 it.security: tenb chkp z
 meme: spce zyne nok gme pltr bbby hood mstr amc rwlk
+mine.ru: agro etln five gazp mvid sber
+mine.us: btu clf momo sblk ship veon x
 mining.gold: poly pogr plzl kgc nugt
-mining.misc: vale gmkn fcx rual aa enpg kap@gs ccj mos uec vsmo
-mining.steel: x clf
+mining.misc: vale gmkn fcx rual aa enpg kap@gs ccj mos uec vsmo cf
+mining.steel: x clf nue
 mining.steel.rus: magn chmf nlmk amez chmk
 reit: mac spg
 retail: m gps rl bbby coty uaa levi hog cnk
@@ -52,6 +56,6 @@ telecom: veon atex
 transportation.airlines: aal dal alk luv aflt spr ba save ual
 transportation.industrial: gltr uwgn
 travelling: h mar car ccl rcl nclh hlt trip bkng abnb expe
+watch.ru: ozon mtlrp
+watch.us: ftch hood CCJ
 zzz: pbi band yext ever
-hot: bynd
-covid: chef dkng play mcri

@@ -28,20 +28,6 @@
 * intraday low-high change, low-current change, last 10 min change
 
 
-# Data Sources
-
-https://financialmodelingprep.com/
-https://gocharting.com/
-https://github.com/rrag/react-stockcharts
-https://icebergh.io
-https://www.interactivebrokers.com/en/index.php?f=14193
-
-    coffee bin/tinkoff.coffee stocks > db/data/stocks.json
-
-    https://spbexchange.ru/ru/listing/securities/list/
-    iconv -f CP1251 -t UTF8 db/data/spbex.csv > db/data/spbex-utf.csv
-
-
 # Run once in a while
 
 rake iex:insider_transactions

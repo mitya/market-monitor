@@ -1,5 +1,8 @@
 require 'csv'
 
+# Source
+# https://spbexchange.ru/ru/listing/securities/list/
+# iconv -f CP1251 -t UTF8 db/data/spbex.csv > db/data/spbex-utf.csv
 class SpbEx
   include StaticService
 

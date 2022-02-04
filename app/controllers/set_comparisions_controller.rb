@@ -8,6 +8,8 @@ class SetComparisionsController < ApplicationController
       %w[losers_us],
       %w[gainers_ru],
       %w[losers_ru],
+      %w[mine.us mine.ru],
+      %w[watch.us watch.ru],
       %w[energy.oil energy.oil.refinery energy.oil.service],
       %w[energy.gas energy.coal*],
       %w[mining.steel mining.gold mining.misc],
