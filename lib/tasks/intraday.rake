@@ -1,26 +1,31 @@
 class IntradayCandleLoader
   def instruments = R.instruments_from_env || Setting.synced_instruments
   def interval = ENV['period'] || Setting.charted_period
-  def duration = Candle.interval_duration(interval) / 60
+  def duration = (Candle.interval_duration(interval) / 60)
   
   def sync
-    analyze = ENV['analyze'] == '1'
-
     load_history
 
+    analyze = ENV['analyze'] == '1'
     last_synced_interval = nil
+    last_prices_update_time = 1.minute.ago
+    
     loop do
-      intervals_since_midnight = (Time.current.hour * 60 + Time.current.min) / duration
-
       next if last_synced_interval != nil && Time.current.sec < 50
 
+      intervals_since_midnight = (Time.current.hour * 60 + Time.current.min) / duration
       if last_synced_interval != intervals_since_midnight
         instruments.abc.each do |inst|
           Tinkoff.import_intraday_candles inst, interval
           PriceSignal.analyze_intraday_for inst, interval if analyze
         end
-        puts
         last_synced_interval = intervals_since_midnight
+      end
+
+      if last_prices_update_time < 5.minutes.ago
+        RefreshPricesFromIex.refresh 
+        puts "Refreshed prices from IEX".green
+        last_prices_update_time = Time.current
       end
 
       sleep 10
@@ -37,6 +42,7 @@ class IntradayCandleLoader
   end
   
   def load_history
+    return if interval == 'day'
     instruments.abc.each do |inst|
       dates = recent_dates - [Current.date]      
       close_time = CLOSE_TIMES[inst.close_hhmm][duration.to_i]
@@ -83,7 +89,7 @@ end
 namespace :intraday do
   envtask(:sync) { IntradayCandleLoader.new.sync }
   envtask(:load) { IntradayCandleLoader.new.load }
-  envtask(:load_history) { IntradayCandleLoader.new.load_history }
+  envtask(:history) { IntradayCandleLoader.new.load_history }
   
   envtask(:check_moex_closings) { IntradayCandleLoader.new.check_moex_closings }
 end

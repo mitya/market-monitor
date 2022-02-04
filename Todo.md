@@ -42,10 +42,11 @@
 + dash for top gain / loss, same in RU, my US / RU tickers change
 + dash changes as bars
 + mine / watch us / watch ru column on dashboard
++ price update process
 
-- price update process
-
+- reload dashboard on price update only if sorted by today price
 - catch new sync tickers without the process restart (pull db every second)
+
 - try to get the diff between VEON and others
 - mark day opens
 - open/close & DMA lines on intraday charts
