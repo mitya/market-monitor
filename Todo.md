@@ -36,24 +36,31 @@
 + intraday chart
 + multiple intraday charts on screen
 + load all recent intraday candles for tickers
++ realtime load intraday market data for tickers
++ data pull to the browser
++ chart period change
++ dash for top gain / loss, same in RU, my US / RU tickers change
++ dash changes as bars
 
-- realtime load intraday market data for tickers
-- 15s data pull to the browser
+- mine tickers column on dashboard
+- price update process
 
-- custom levels, open/close lines, DMA lines on intraday charts
-
-- chart period change
+- catch new sync tickers without the process restart (pull db every second)
+- try to get the diff between VEON and others
+- mark day opens
+- open/close & DMA lines on intraday charts
 
 - ticker sets for intraday charts
+- custom levels editor & custom levels on charts
 
+- deactivate non-liquid RUS tickers
+- try to unify chart scales
 - list of intraday scans
 - show scan ticker in the next available intraday chart
-
 - daily / 1h on-chart vertical comparisions 
 
-- top gain / loss / vol gainers/losers dashboards (with set filters)
-- brief MA hits
-- soon MA hits
+- dash for MA hits, volume gainers, expected MA hits
+- tabs on dash (tops+categories / EOD indicators)
 
 - turn-around scanner
 - min vol scanner
@@ -65,7 +72,6 @@
 - an ajax button to trigger price update
 - request price update every 3 mins on dashboard page
 
-- dashboard with mine / top gainers / top losers columns
 - a row with indexes / commodity futures
 
 - look for predefined levels

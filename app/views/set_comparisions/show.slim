@@ -4,9 +4,10 @@
 - currency = params[:currency].presence
 - availability = params[:availability].presence
 
-main.container-fluid
+main.container-fluid.gainers-dashboard
   details.my-2.mx-3
     summary
+      = tag.span params[:selector].presence || 'Today', class: "badge bg-secondary"    
     form#list-config(action=set_comparision_path class='my-2')
       .row
         .col
@@ -19,7 +20,7 @@ main.container-fluid
   .container-fluid
     .row
       - @set_groups.each do |sets|
-        .col
+        .col.flex-grow-0.gainers-col
           - sets.each do |set|
             h6.ps-1= category_title set.key
             table.table.table-sm.table-hover.table-font-sm.tickers-table.table-no-border.table-sm-v.dash-table
@@ -29,11 +30,15 @@ main.container-fluid
                 - instruments = instruments.select { |ir| ir.currency == currency } if currency
                 - instruments = instruments.select { |ir| ir.premium? } if availability == 'premium'
                 - instruments = instruments.reject { |ir| ir.premium? } if availability == 'tinkoff'
-                - instruments = instruments.sort_by { |ir| ir.stored_gain_since(selector) || -1 }.reverse
+                - instruments = instruments.sort_by { |ir| ir.stored_gain_since(selector) || -1 }
+                - instruments = instruments.reverse unless set.key.to_s.include?('losers')
                 - instruments.each do |inst|
                   - value = inst.stored_gain_since(selector)
                   tr
                     td.ticker-cell(title=inst.name)= inst.clean_ticker
                     td.money-cell.price-cell= format_price inst.last, unit: inst.currency
                     td.money-cell.change-cell
-                      = colorized_ratio value, precision: precision, format: '%n'
+                      - if value.abs >= 0.07
+                        = colorized_ratio value, precision: precision, format: '%n'
+                      - else
+                        = percentage_bar value, classes: class_names(red_green_class(value > 0), 'solid-narrow float-end'), rtl: true

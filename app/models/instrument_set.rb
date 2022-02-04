@@ -1,9 +1,10 @@
 class InstrumentSet
-  attr :key, :source
+  attr :key, :source, :params
 
-  def initialize(key, source = :file)
+  def initialize(key, source = :file, **params)
     @key = key&.to_sym
     @source = source
+    @params = params || {}
   end
 
   def name = key ? key.to_s.humanize : 'All'
@@ -11,7 +12,11 @@ class InstrumentSet
   def symbols
     @symbols ||= begin
       if source == :category
-        self.class.symbols_for_category(key)
+        if Tops.respond_to?(key)
+          Tops.send(key, **params)
+        else
+          self.class.symbols_for_category(key)
+        end
       else
         file = Pathname("db/instrument-sets/#{key}.txt")
         stored_symbols = file.exist?? file.readlines(chomp: true).map { |sym| sym.split(':').last.upcase } : []

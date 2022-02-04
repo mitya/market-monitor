@@ -90,8 +90,6 @@ class InstrumentsController < ApplicationController
         nil
     end
 
-
-    p order_expression
     order_expression ||= "instruments.ticker"
 
     Arel.sql("#{order_expression} nulls last")

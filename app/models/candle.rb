@@ -38,6 +38,7 @@ class Candle < ApplicationRecord
   alias body_high range_high
 
   def to_date = date
+  def datetime = date.end_of_day
 
   def change = close - open
   def rel_change = (change / open).round(4)
@@ -190,10 +191,14 @@ class Candle < ApplicationRecord
       end
     end
     
-    MinutesToIntervals = { 1 => '1min', 3 => '3min', 5 => '5min', 60 => 'hour' }
-    def minutes_to_interval(minutes)
-      MinutesToIntervals[minutes]
-    end
+    IntervalShorthands = {
+      1 => '1min', 3 => '3min', 5 => '5min', 60 => 'hour',
+      '1' => '1min', '3' => '3min', '5' => '5min', '60' => 'hour',
+      '1m' => '1min', '3m' => '3min', '5m' => '5min', '1h' => 'hour', '1d' => 'day'
+    }
+    
+    def normalize_interval(shorthand) = IntervalShorthands[shorthand] || shorthand
+    alias minutes_to_interval normalize_interval
 
     def remove_dups
       iex.find_each do |candle|

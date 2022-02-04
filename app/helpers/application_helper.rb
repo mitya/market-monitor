@@ -58,7 +58,7 @@ module ApplicationHelper
   end
 
   def bs_select(name, label, options, mb: 1, blank: true, select_class: nil, style: nil)
-    tag.div class: "row mb-#{mb}" do
+    tag.div class: "row mb-#{mb} w-auto" do
       tag.div(class: 'col-sm-2') do
         label_tag name, label, class: 'col-form-label'
       end +
@@ -154,7 +154,7 @@ module ApplicationHelper
     tag.span IntervalTitles[interval], class: 'badge bg-secondary'
   end
 
-  def percentage_bar(value, classes: nil)
+  def percentage_bar(value, classes: nil, rtl: false)
     value = (value.to_f.abs * 100).round(3)
     full_percents = value.to_i
     last_percent = (value % 1 * 100).to_i
@@ -168,9 +168,11 @@ module ApplicationHelper
     title = number_to_percentage(value, precision: 1)
     last_bar = last_percent.nonzero?? tag.span(class: "percentage-bar", style: "height: #{last_percent}%") : ''
     tag.div class: class_names('percentage-bars', classes), title: title, 'data-value': value do
-      (full_percents).times.map do |n|
+      full_bars = (full_percents).times.map do |n|
         tag.span class: "percentage-bar", style: "height: 100%"
-      end.join.html_safe + last_bar + (too_much ? '!!!' : '')
+      end.join.html_safe
+      too_much_sign = too_much ? '!!!' : ''
+      ((rtl ? (last_bar + full_bars) : (full_bars + last_bar)) + too_much_sign).html_safe
     end
   end
 

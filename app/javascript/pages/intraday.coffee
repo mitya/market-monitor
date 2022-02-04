@@ -10,7 +10,7 @@ clearCharts = ->
   charts = {}
   
 dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
-dataRowToVolume = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
+dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
 makeChart = (ticker, data) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
@@ -74,6 +74,10 @@ document.addEventListener "turbolinks:load", ->
     tickers = 'CLF VEON MOMO ZIM'    
     tickers = tickers.replaceAll(' ', '+')    
 
+    intervalSelector = $qs(".trading-page .interval-selector")
+    chartedTickersField = $qs(".trading-page .charted-tickers-field")
+    syncedTickersField = $qs(".trading-page .synced-tickers-field")
+
     loadCharts = ->
       data = await $fetchJSON "/trading/candles?tickers=#{tickers}&period=#{period}"    
       clearCharts()
@@ -86,5 +90,26 @@ document.addEventListener "turbolinks:load", ->
         candle = dataRowToCandle rows[0]
         charts[ticker].candles.update candle
     
+    updateChartSettings = ->
+      charted_tickers = chartedTickersField.value
+      synced_tickers = syncedTickersField.value
+      period = intervalSelector.querySelector('.btn.active').dataset.interval
+      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { charted_tickers, synced_tickers, period }
+        
+    bindToolbar = ->
+      
+      $bind intervalSelector, 'click', (e) ->
+        button = $qs(e.target)
+        other.classList.remove('active') for other in button.closest('.btn-group').querySelectorAll('.btn')
+        button.classList.add('active')
+        button.blur()
+        updateChartSettings()
+      intervalSelector.querySelector(".btn[data-interval='#{intervalSelector.dataset.initial}']").classList.add('active')
+
+      $bind chartedTickersField, 'change', (e) -> updateChartSettings()
+      $bind syncedTickersField, 'change', (e) -> updateChartSettings()
+    
+    
+    bindToolbar()
     loadCharts()
     setInterval refreshCharts, 10_000

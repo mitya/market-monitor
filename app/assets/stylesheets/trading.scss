@@ -1,3 +1,9 @@
+.trading-page {
+  .tickers-field {
+    width: 250px;
+  }
+}
+
 .intraday-charts {
   display: flex;
   flex-wrap: wrap;
@@ -19,6 +25,6 @@
   }
 }
 
-// #chart-1 { background-color: rgba(red, 0.2); }
-// #chart-2 { background-color: rgba(green, 0.2); }
-// #chart-3 { background-color: rgba(blue, 0.2); }
+.gainers-dashboard {
+  .gainers-col { width: 194px; }
+}

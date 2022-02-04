@@ -106,6 +106,8 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
   .wide-bars & { width: 8px; margin-right: 1px; }  
   .wide-bars &.spike { width: 2px; margin-right: 4px; margin-left: 3px; }
+  
+  .solid-narrow & { margin-right: 0; width: 3px; }
 }
 
 

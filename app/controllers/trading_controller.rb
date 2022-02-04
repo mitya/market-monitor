@@ -1,4 +1,6 @@
 class TradingController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  
   def dashboard
     @is_morning = !Current.us_market_open?
     @market_open_time_in_mins = @is_morning ? 0 * 60 : 9 * 60 + 30
@@ -48,17 +50,25 @@ class TradingController < ApplicationController
   end
   
   def intraday    
+    @charted_tickers = Setting.charted_tickers.join(' ')
+    @synced_tickers = Setting.synced_tickers.join(' ')
+    @period = Setting.charted_period || '3min'
   end
   
   def candles
-    repo = Candle.interval_class_for(params[:period].to_i.nonzero? || 3)
-    tickers = params[:tickers].split
-    
-    candles = tickers.inject({}) do |map, ticker| 
+    repo = Candle.interval_class_for(Setting.charted_period)
+    candles = Setting.charted_tickers.inject({}) do |map, ticker| 
       map[ticker] = repo.where(ticker: ticker).includes(:instrument).order(:date, :time).last(params[:limit] || 500).map { |c| render_candle(c) }
       map 
     end
     render json: candles
+  end
+  
+  def update_chart_settings
+    Setting.save 'charted_tickers', params[:charted_tickers].split.map(&:upcase)
+    Setting.save 'synced_tickers', params[:synced_tickers].split.map(&:upcase).sort
+    Setting.save 'charted_period', Candle.normalize_interval(params[:period])
+    render json: { }
   end
   
   private

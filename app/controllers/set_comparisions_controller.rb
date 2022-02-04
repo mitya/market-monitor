@@ -4,12 +4,16 @@ class SetComparisionsController < ApplicationController
     # @set_keys = %w[xbi xhb xhs xlc xlf xli xlk xlp xlu xsd xlv xme xle xop xes xlb]
 
     @set_groups = [
+      %w[gainers_us],
+      %w[losers_us],
+      %w[gainers_ru],
+      %w[losers_ru],
       %w[energy.oil energy.oil.refinery energy.oil.service],
       %w[energy.gas energy.coal*],
       %w[mining.steel mining.gold mining.misc],
       %w[shipping*],
-      %w[biotech*],
       %w[it.faang it.hot it.games],
+      %w[biotech*],
       %w[reit retail],
       %w[china travelling transportation.airlines],
     ]
@@ -17,7 +21,7 @@ class SetComparisionsController < ApplicationController
     # retail covid
 
     @set_groups = @set_groups.map do |keys|
-      Array(keys).map { |k| InstrumentSet.new(k, :category) }
+      Array(keys).map { |k| InstrumentSet.new k, :category, period: params[:selector] }
     end
 
     Current.preload_day_candles_with :all, [] #, dates: [Current.yesterday]
