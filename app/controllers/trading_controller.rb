@@ -56,12 +56,22 @@ class TradingController < ApplicationController
   end
   
   def candles
+    is_update = params[:limit] == '1'
     repo = Candle.interval_class_for(Setting.charted_period)
-    candles = Setting.charted_tickers.inject({}) do |map, ticker| 
-      candles = repo.where(ticker: ticker).includes(:instrument).order(:date, :time).last(params[:limit] || 500)
+    instruments = Instrument.for_tickers(Setting.charted_tickers).includes(:indicators)
+    candles = instruments.inject({}) do |map, instrument|      
+      ticker = instrument.ticker
+      candles = repo.where(ticker: instrument).includes(:instrument).order(:date, :time).last(params[:limit] || 500)
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { render_candle _1 }
-      map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime.to_i }
+      unless is_update
+        map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime.to_i }
+        map[ticker][:levels] = {
+          MA20:  instrument.indicators.ema_20.to_f,
+          MA50:  instrument.indicators.ema_50.to_f,
+          MA200: instrument.indicators.ema_200.to_f,
+        }
+      end
       map 
     end
     render json: candles

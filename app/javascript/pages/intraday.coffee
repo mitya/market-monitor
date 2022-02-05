@@ -12,7 +12,7 @@ clearCharts = ->
 dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
 dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
-makeChart = ({ ticker, candles, opens }) ->
+makeChart = ({ ticker, candles, opens, levels }) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
     <div class='intraday-chart'>
       <div class='intraday-chart-legend'>
@@ -38,15 +38,14 @@ makeChart = ({ ticker, candles, opens }) ->
     },
   }
   
-  lineSeries = chart.addCandlestickSeries()  
-  lineSeries.setData candlesData
+  candlesSeries = chart.addCandlestickSeries()  
+  candlesSeries.setData candlesData
 
-  volumeSeries = chart.addHistogramSeries({
-    priceFormat: { type: 'volume' }, 
-    priceLineVisible: false, 
-    color: 'rgba(76, 76, 76, 0.5)', 
-    priceScaleId: 'x', scaleMargins: { top: 0.85, bottom: 0 },
-  })  
+  volumeSeries = chart.addHistogramSeries
+    priceFormat: { type: 'volume' }
+    priceLineVisible: false
+    color: 'rgba(76, 76, 76, 0.5)'
+    priceScaleId: 'x', scaleMargins: { top: 0.85, bottom: 0 }
   volumeSeries.setData volumeData
   
   legend.querySelector('.chart-ticker').innerText = ticker
@@ -59,9 +58,23 @@ makeChart = ({ ticker, candles, opens }) ->
       legend.querySelector('.candle-change').innerText = ''
   
   
-  charts[ticker] = { chart: chart, candles: lineSeries, volume: volumeSeries }
+  charts[ticker] = { chart: chart, candles: candlesSeries, volume: volumeSeries }
   
-  lineSeries.setMarkers opens.map (openingTime) -> { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
+  candlesSeries.setMarkers opens.map (openingTime) -> { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
+    
+  maColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000' }
+    
+  for title, level of levels
+    candlesSeries.createPriceLine
+      price: level
+      color: maColors[title]
+      opacity: 0.5
+      lineWidth: 3
+      lineStyle: LineStyle.Dashed
+      axisLabelVisible: false
+      title: title
+
+  # chart.timeScale().fitContent()
     
   # # circle arrowDown arrowUp
   # lineSeries.setMarkers [
