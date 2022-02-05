@@ -38,7 +38,11 @@ main.container-fluid.gainers-dashboard
                     td.ticker-cell(title=inst.name)= inst.clean_ticker
                     td.money-cell.price-cell= format_price inst.last, unit: inst.currency
                     td.money-cell.change-cell
-                      - if value.abs >= 0.08
-                        = colorized_ratio value, precision: precision, format: '%n'
-                      - else
-                        = percentage_bar value, classes: class_names(red_green_class(value > 0), 'solid-narrow float-end'), rtl: true
+                      - if value
+                        - if value.abs >= 0.08
+                          = colorized_ratio value, precision: precision, format: '%n'
+                        - else
+                          = percentage_bar value, classes: class_names(red_green_class(value > 0), 'solid-narrow float-end'), rtl: true
+
+javascript:
+  window.DashboardPeriod = "#{ params[:selector] }"

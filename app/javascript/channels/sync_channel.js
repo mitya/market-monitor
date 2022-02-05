@@ -9,7 +9,7 @@ consumer.subscriptions.create("SyncChannel", {
 
   received(data) {
     console.log('SyncChannel received data', data)
-    if (data.reason == 'prices') {
+    if (data.reason == 'prices' && window.DashboardPeriod == '') {
       location.reload()
     }
   }

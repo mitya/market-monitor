@@ -45,8 +45,8 @@
 + price update process
 + mark day opens
 + DMA lines on intraday charts
++ reload dashboard on price update only if sorted by today price
 
-- reload dashboard on price update only if sorted by today price
 - open/close lines on intraday charts
 - ticker sets for intraday charts +editor
 - custom levels on charts +editor
