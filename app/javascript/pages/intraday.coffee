@@ -12,7 +12,7 @@ clearCharts = ->
 dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
 dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
-makeChart = (ticker, data) ->
+makeChart = ({ ticker, candles, opens }) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
     <div class='intraday-chart'>
       <div class='intraday-chart-legend'>
@@ -24,7 +24,6 @@ makeChart = (ticker, data) ->
   container = chartsContainer().lastChild
   legend = container.querySelector('.intraday-chart-legend')
   
-  candles = data[ticker]
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
 
@@ -62,6 +61,8 @@ makeChart = (ticker, data) ->
   
   charts[ticker] = { chart: chart, candles: lineSeries, volume: volumeSeries }
   
+  lineSeries.setMarkers opens.map (openingTime) -> { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
+    
   # # circle arrowDown arrowUp
   # lineSeries.setMarkers [
   #   { time: candlesData[candlesData.length - 10].time, position: 'aboveBar', color: 'red', shape: 'arrowDown', text: '2Top' },
@@ -70,25 +71,21 @@ makeChart = (ticker, data) ->
 
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
-    period = 3
-    tickers = 'CLF VEON MOMO ZIM'    
-    tickers = tickers.replaceAll(' ', '+')    
-
     intervalSelector = $qs(".trading-page .interval-selector")
     chartedTickersField = $qs(".trading-page .charted-tickers-field")
     syncedTickersField = $qs(".trading-page .synced-tickers-field")
 
     loadCharts = ->
-      data = await $fetchJSON "/trading/candles?tickers=#{tickers}&period=#{period}"    
+      data = await $fetchJSON "/trading/candles"    
+      console.log data
       clearCharts()
-      for ticker, candles of data
-        makeChart ticker, data
+      for ticker, payload of data
+        makeChart payload
       
     refreshCharts = ->
-      data = await $fetchJSON "/trading/candles?limit=1&tickers=#{tickers}&period=#{period}"
-      for ticker, rows of data
-        candle = dataRowToCandle rows[0]
-        charts[ticker].candles.update candle
+      data = await $fetchJSON "/trading/candles?limit=1"
+      for ticker, payload of data
+        charts[ticker].candles.update dataRowToCandle payload.candles[0]
     
     updateChartSettings = ->
       charted_tickers = chartedTickersField.value

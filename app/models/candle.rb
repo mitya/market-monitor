@@ -39,6 +39,8 @@ class Candle < ApplicationRecord
 
   def to_date = date
   def datetime = date.end_of_day
+  def opening? = MarketInfo.ticker_opening_time(ticker) == time.strftime('%H:%M')
+  # def opening? = prev_close == nil
 
   def change = close - open
   def rel_change = (change / open).round(4)

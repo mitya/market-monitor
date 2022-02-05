@@ -43,45 +43,42 @@
 + dash changes as bars
 + mine / watch us / watch ru column on dashboard
 + price update process
++ mark day opens
 
 - reload dashboard on price update only if sorted by today price
-- catch new sync tickers without the process restart (pull db every second)
-
 - try to get the diff between VEON and others
-- mark day opens
 - open/close & DMA lines on intraday charts
+- ticker sets for intraday charts +editor
+- custom levels on charts +editor
 
-- ticker sets for intraday charts
-- custom levels editor & custom levels on charts
+- catch new sync tickers without the process restart (pull db every second)
+- protection from sync when daily charts are used
 
+
+
+- load all period history at once ?
 - deactivate non-liquid RUS tickers
 - try to unify chart scales
 - list of intraday scans
 - show scan ticker in the next available intraday chart
 - daily / 1h on-chart vertical comparisions 
-
 - dash for MA hits, volume gainers, expected MA hits
 - tabs on dash (tops+categories / EOD indicators)
-
 - turn-around scanner
 - min vol scanner
 - DMA hits intraday
 - fully automate multiple missing days loading 
 - show intraday scans on the chart
-
 - store/show the last update timestamp
 - an ajax button to trigger price update
 - request price update every 3 mins on dashboard page
-
 - a row with indexes / commodity futures
-
 - look for predefined levels
 - HOD retest when high > 2% && low since high < -2%
 - HOD 2%+ open down break
 - yesterday HOD / LOD retests
 - 4% fall — first green 3m bar, min 0.4%
 - predefined level checks with tolerance
-
 - 100 MA data
 - try to get the evening data from NASDAQ
 - list changes in ATRs

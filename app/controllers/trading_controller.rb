@@ -58,7 +58,10 @@ class TradingController < ApplicationController
   def candles
     repo = Candle.interval_class_for(Setting.charted_period)
     candles = Setting.charted_tickers.inject({}) do |map, ticker| 
-      map[ticker] = repo.where(ticker: ticker).includes(:instrument).order(:date, :time).last(params[:limit] || 500).map { |c| render_candle(c) }
+      candles = repo.where(ticker: ticker).includes(:instrument).order(:date, :time).last(params[:limit] || 500)
+      map[ticker] = { ticker: ticker }
+      map[ticker][:candles] = candles.map { render_candle _1 }
+      map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime.to_i }
       map 
     end
     render json: candles
