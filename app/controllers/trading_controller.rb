@@ -70,6 +70,8 @@ class TradingController < ApplicationController
           MA20:  instrument.indicators.ema_20.to_f,
           MA50:  instrument.indicators.ema_50.to_f,
           MA200: instrument.indicators.ema_200.to_f,
+          open:  instrument.today&.open,
+          close:  instrument.yesterday&.close,
         }
       end
       map 

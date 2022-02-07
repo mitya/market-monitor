@@ -62,15 +62,17 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   
   candlesSeries.setMarkers opens.map (openingTime) -> { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
     
-  maColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000' }
-    
+  levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'gray' }
+  levelLineStyles = (name) -> if name.includes('MA') then LineStyle.Dashed else LineStyle.Dotted
+  levelLineWidths = (name) -> if name.includes('MA') then 3 else 2
+  
   for title, level of levels
     candlesSeries.createPriceLine
       price: level
-      color: maColors[title]
+      color: levelColors[title]
       opacity: 0.5
-      lineWidth: 3
-      lineStyle: LineStyle.Dashed
+      lineWidth: levelLineWidths(title)
+      lineStyle: levelLineStyles(title)
       axisLabelVisible: false
       title: title
 
@@ -81,6 +83,9 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   #   { time: candlesData[candlesData.length - 10].time, position: 'aboveBar', color: 'red', shape: 'arrowDown', text: '2Top' },
   #   { time: candlesData[candlesData.length - 20].time, position: 'belowBar', color: 'green', shape: 'arrowUp', text: 'Level' },
   # ]
+
+
+
 
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')

@@ -46,10 +46,10 @@
 + mark day opens
 + DMA lines on intraday charts
 + reload dashboard on price update only if sorted by today price
++ open/close lines on intraday charts
 
-- open/close lines on intraday charts
-- ticker sets for intraday charts +editor
 - custom levels on charts +editor
+- ticker sets for intraday charts +editor
 - try to get the diff between VEON and others
 
 - catch new sync tickers without the process restart (pull db every second)
