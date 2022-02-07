@@ -49,8 +49,9 @@
 + open/close lines on intraday charts
 + custom levels on charts +editor
 + ticker sets editor
-- ticker sets list near charts
++ ticker sets list near charts
 
+- mark active ticker set
 - try to get the diff between VEON and others
 - catch new sync tickers without the process restart (pull db every second)
 - protection from sync when daily charts are used

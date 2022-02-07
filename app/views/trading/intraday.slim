@@ -11,6 +11,11 @@
     .col-11
       .intraday-charts
     .col-1
+      .list-group.ticker-set-selector
+        - @ticker_sets.each do |set|
+          button type="button" class="list-group-item list-group-item-action small-caps" data-tickers=set.tickers.join(' ') data-key=set.key
+            = set.key
+      
   .toolbar.row.my-4
     .col-11
       input.synced-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-100" value=@synced_tickers)

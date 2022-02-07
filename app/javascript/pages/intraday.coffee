@@ -27,7 +27,7 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
 
-  priceFormatter = (price) -> if price < 100 then String(price.toFixed(2)).padStart(7, ' ') else price
+  priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '0') else price
   
   chart = createChart container, { 
     width: 0, height: 280, 
@@ -60,7 +60,9 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   
   charts[ticker] = { chart: chart, candles: candlesSeries, volume: volumeSeries }
   
-  candlesSeries.setMarkers opens.map (openingTime) -> { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
+  if opens
+    candlesSeries.setMarkers opens.map (openingTime) -> 
+      { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
     
   levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'gray', intraday: 'gray' }
   levelLineStyles = (name) -> if name.includes('MA') then LineStyle.Dashed else if name.includes('intraday') then LineStyle.Solid else LineStyle.Dotted
@@ -123,7 +125,11 @@ document.addEventListener "turbolinks:load", ->
       text = $qs('.ticker-sets textarea').value
       await $fetchJSON "/trading/update_ticker_sets", method: 'POST', data: { text }
 
-      
+    selectTickerSet = (btn) ->
+      chartedTickersField.value = btn.dataset.tickers
+      other.classList.remove('active') for other in btn.closest('.list-group').querySelectorAll('.list-group-item')
+      btn.classList.add('active')
+      updateChartSettings()
         
     bindToolbar = ->
       $bind intervalSelector, 'click', (e) ->
@@ -138,6 +144,7 @@ document.addEventListener "turbolinks:load", ->
       $bind syncedTickersField, 'change', updateChartSettings
       $bind $qs('.intraday-levels .btn'), 'click', updateIntradayLevels
       $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
+      $delegate '.ticker-set-selector', '.list-group-item-action', 'click', selectTickerSet
     
     
     bindToolbar()

@@ -61,8 +61,10 @@ class TradingController < ApplicationController
   
   def candles
     is_update = params[:limit] == '1'
-    repo = Candle.interval_class_for(Setting.charted_period)
+    period = Setting.charted_period
+    repo = Candle.interval_class_for(period)
     instruments = Instrument.for_tickers(Setting.charted_tickers).includes(:indicators, :annotation)
+    instruments = Setting.charted_tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
     
     candles = instruments.inject({}) do |map, instrument|      
       ticker = instrument.ticker
@@ -70,15 +72,18 @@ class TradingController < ApplicationController
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.datetime.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
       unless is_update
-        map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime.to_i }
-        map[ticker][:levels] = {
-          MA20:  instrument.indicators.ema_20.to_f,
-          MA50:  instrument.indicators.ema_50.to_f,
-          MA200: instrument.indicators.ema_200.to_f,
-          open:  instrument.today&.open,
-          close:  instrument.yesterday&.close,
-          intraday: instrument.annotation&.intraday_levels,
-        }
+        map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime.to_i } unless period == 'day'
+        map[ticker][:levels] = { } 
+        unless period == 'day'
+          map[ticker][:levels].merge!(
+            MA20:  instrument.indicators.ema_20.to_f,
+            MA50:  instrument.indicators.ema_50.to_f,
+            MA200: instrument.indicators.ema_200.to_f,            
+            open:  instrument.today&.open,
+            close:  instrument.yesterday&.close,
+            intraday: instrument.annotation&.intraday_levels,
+          )
+        end
       end
       map 
     end
