@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_10_133602) do
+ActiveRecord::Schema.define(version: 2022_02_07_131353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2021_11_10_133602) do
     t.float "y3_low_change"
     t.date "y1_low_date"
     t.date "y3_low_date"
+    t.string "change_map"
     t.index ["current"], name: "index_aggregates_on_current"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
@@ -279,6 +280,12 @@ ActiveRecord::Schema.define(version: 2021_11_10_133602) do
     t.index ["holder"], name: "index_institution_holdings_on_holder"
   end
 
+  create_table "instrument_annotations", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.decimal "intraday_levels", precision: 20, scale: 4, array: true
+    t.datetime "updated_at"
+  end
+
   create_table "instruments", primary_key: "ticker", id: :string, force: :cascade do |t|
     t.string "isin"
     t.string "figi"
@@ -301,6 +308,7 @@ ActiveRecord::Schema.define(version: 2021_11_10_133602) do
   create_table "missing_dates", force: :cascade do |t|
     t.string "ticker", null: false
     t.date "date", null: false
+    t.index ["ticker", "date"], name: "index_missing_dates_on_ticker_date", unique: true
     t.index ["ticker"], name: "index_missing_dates_on_ticker"
   end
 
@@ -414,6 +422,8 @@ ActiveRecord::Schema.define(version: 2021_11_10_133602) do
     t.boolean "continuation"
     t.float "close_distance"
     t.float "max_distance"
+    t.integer "days_since_last"
+    t.float "rel_vol"
     t.index ["level_id"], name: "index_price_level_hits_on_level_id"
   end
 

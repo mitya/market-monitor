@@ -47,15 +47,15 @@
 + DMA lines on intraday charts
 + reload dashboard on price update only if sorted by today price
 + open/close lines on intraday charts
++ custom levels on charts +editor
 
-- custom levels on charts +editor
 - ticker sets for intraday charts +editor
-- try to get the diff between VEON and others
 
+- try to get the diff between VEON and others
 - catch new sync tickers without the process restart (pull db every second)
 - protection from sync when daily charts are used
 
-
+ 
 
 - load all period history at once ?
 - deactivate non-liquid RUS tickers

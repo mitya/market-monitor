@@ -53,12 +53,15 @@ class TradingController < ApplicationController
     @charted_tickers = Setting.charted_tickers.join(' ')
     @synced_tickers = Setting.synced_tickers.join(' ')
     @period = Setting.charted_period || '3min'
+    @intraday_levels = InstrumentAnnotation.with_intraday_levels
+    @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
   end
   
   def candles
     is_update = params[:limit] == '1'
     repo = Candle.interval_class_for(Setting.charted_period)
-    instruments = Instrument.for_tickers(Setting.charted_tickers).includes(:indicators)
+    instruments = Instrument.for_tickers(Setting.charted_tickers).includes(:indicators, :annotation)
+    
     candles = instruments.inject({}) do |map, instrument|      
       ticker = instrument.ticker
       candles = repo.where(ticker: instrument).includes(:instrument).order(:date, :time).last(params[:limit] || 500)
@@ -72,6 +75,7 @@ class TradingController < ApplicationController
           MA200: instrument.indicators.ema_200.to_f,
           open:  instrument.today&.open,
           close:  instrument.yesterday&.close,
+          intraday: instrument.annotation&.intraday_levels,
         }
       end
       map 
@@ -83,6 +87,12 @@ class TradingController < ApplicationController
     Setting.save 'charted_tickers', params[:charted_tickers].split.map(&:upcase)
     Setting.save 'synced_tickers', params[:synced_tickers].split.map(&:upcase).sort
     Setting.save 'charted_period', Candle.normalize_interval(params[:period])
+    render json: { }
+  end
+  
+  def update_intraday_levels
+    lines = params[:text].split("\n").map(&:squish).reject(&:blank?)
+    InstrumentAnnotation.update_intraday_levels_from_lines lines
     render json: { }
   end
   

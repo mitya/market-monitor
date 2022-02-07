@@ -62,19 +62,23 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   
   candlesSeries.setMarkers opens.map (openingTime) -> { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
     
-  levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'gray' }
-  levelLineStyles = (name) -> if name.includes('MA') then LineStyle.Dashed else LineStyle.Dotted
-  levelLineWidths = (name) -> if name.includes('MA') then 3 else 2
+  levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'gray', intraday: 'gray' }
+  levelLineStyles = (name) -> if name.includes('MA') then LineStyle.Dashed else if name.includes('intraday') then LineStyle.Solid else LineStyle.Dotted
+  levelLineWidths = (name) -> if name.includes('MA') then 3 else if name.includes('intraday') then 2 else 2
   
-  for title, level of levels
-    candlesSeries.createPriceLine
-      price: level
-      color: levelColors[title]
-      opacity: 0.5
-      lineWidth: levelLineWidths(title)
-      lineStyle: levelLineStyles(title)
-      axisLabelVisible: false
-      title: title
+  for title, values of levels
+    continue if values == null
+    values = [values] unless values instanceof Array
+    for level in values
+      console.log "#{ticker} #{title} #{level}"
+      candlesSeries.createPriceLine
+        price: Number(level)
+        color: levelColors[title]
+        opacity: 0.5
+        lineWidth: levelLineWidths(title)
+        lineStyle: levelLineStyles(title)
+        axisLabelVisible: false
+        title: title
 
   # chart.timeScale().fitContent()
     
@@ -92,10 +96,10 @@ document.addEventListener "turbolinks:load", ->
     intervalSelector = $qs(".trading-page .interval-selector")
     chartedTickersField = $qs(".trading-page .charted-tickers-field")
     syncedTickersField = $qs(".trading-page .synced-tickers-field")
+    intradayLevelsField = $qs(".trading-page .intraday-levels-field")
 
     loadCharts = ->
       data = await $fetchJSON "/trading/candles"    
-      console.log data
       clearCharts()
       for ticker, payload of data
         makeChart payload
@@ -110,9 +114,12 @@ document.addEventListener "turbolinks:load", ->
       synced_tickers = syncedTickersField.value
       period = intervalSelector.querySelector('.btn.active').dataset.interval
       await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { charted_tickers, synced_tickers, period }
+
+    updateIntradayLevels = ->
+      text = intradayLevelsField.value
+      await $fetchJSON "/trading/update_intraday_levels", method: 'POST', data: { text }
         
     bindToolbar = ->
-      
       $bind intervalSelector, 'click', (e) ->
         button = $qs(e.target)
         other.classList.remove('active') for other in button.closest('.btn-group').querySelectorAll('.btn')
@@ -121,8 +128,9 @@ document.addEventListener "turbolinks:load", ->
         updateChartSettings()
       intervalSelector.querySelector(".btn[data-interval='#{intervalSelector.dataset.initial}']").classList.add('active')
 
-      $bind chartedTickersField, 'change', (e) -> updateChartSettings()
-      $bind syncedTickersField, 'change', (e) -> updateChartSettings()
+      $bind chartedTickersField, 'change', updateChartSettings
+      $bind syncedTickersField, 'change', updateChartSettings
+      $bind $qs('.save-intraday-levels'), 'click', updateIntradayLevels
     
     
     bindToolbar()

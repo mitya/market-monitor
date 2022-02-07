@@ -36,6 +36,7 @@ class Instrument < ApplicationRecord
   has_one :portfolio_item,                 foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :insider_aggregate,              foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :orderbook,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :annotation,                     foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete, class_name: 'InstrumentAnnotation'
 
 
   scope :with_flag, -> flag { where "? = any(flags)", flag }
@@ -141,6 +142,7 @@ class Instrument < ApplicationRecord
   def price! = Current.prices_cache&.for_instrument(self) || price || create_price!
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
   def info! = info || create_info
+  def annotation! = annotation || create_annotation
 
   def today_candle = day_candles!.find_date(Current.date)
   def yesterday_candle = day_candles!.find_date(Current.yesterday)

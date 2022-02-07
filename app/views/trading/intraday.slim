@@ -1,6 +1,6 @@
 .container-fluid.trading-page
   .toolbar.row.mb-2.mt-1.mx-2
-    input(type="text" class="charted-tickers-field form-control form-control-sm text-uppercase w-25" value=@charted_tickers)
+    input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@charted_tickers)
     .btn-group.btn-group-sm.w-auto.interval-selector(data-initial=@period)
       button type="button" data-interval="1min" class="btn btn-outline-secondary" 1m
       button type="button" data-interval="3min" class="btn btn-outline-secondary" 3m
@@ -13,4 +13,10 @@
     .col-1
   .toolbar.row.my-4
     .col-11
-      input(type="text" class="synced-tickers-field form-control form-control-sm text-uppercase w-100" value=@synced_tickers)
+      input.synced-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-100" value=@synced_tickers)
+  .toolbar.row.my-4
+    .col-6
+      textarea.intraday-levels-field(type="text" class="form-control form-control-sm text-uppercase w-100")= @intraday_levels_text
+    .col-6.d-flex.align-items-center
+      button.save-intraday-levels(class="btn btn-outline-primary btn-sm") Save
+
