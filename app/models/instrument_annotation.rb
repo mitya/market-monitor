@@ -13,7 +13,7 @@ class InstrumentAnnotation < ApplicationRecord
     def update_intraday_levels_from_lines(lines)
       transaction do
         lines.each do |line|
-          ticker, *levels = line.split(' ')
+          ticker, *levels = line.squish.split(' ')
           levels = levels.map(&:to_d)
           if inst = Instrument.get(ticker)
             inst.annotation!.update! intraday_levels: levels.sort

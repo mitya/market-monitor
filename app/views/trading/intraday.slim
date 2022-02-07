@@ -14,9 +14,14 @@
   .toolbar.row.my-4
     .col-11
       input.synced-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-100" value=@synced_tickers)
-  .toolbar.row.my-4
+  .toolbar.row.my-4.intraday-levels
     .col-6
-      textarea.intraday-levels-field(type="text" class="form-control form-control-sm text-uppercase w-100")= @intraday_levels_text
+      textarea(type="text" class="form-control form-control-sm text-uppercase w-100")= @intraday_levels_text
     .col-6.d-flex.align-items-center
-      button.save-intraday-levels(class="btn btn-outline-primary btn-sm") Save
+      button(class="btn btn-outline-primary btn-sm") Save
+  .toolbar.row.my-4.ticker-sets
+    .col-6
+      textarea(type="text" class="form-control form-control-sm text-uppercase w-100")= @ticker_sets_text
+    .col-6.d-flex.align-items-center
+      button(class="btn btn-outline-primary btn-sm") Save
 

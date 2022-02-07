@@ -55,6 +55,8 @@ class TradingController < ApplicationController
     @period = Setting.charted_period || '3min'
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
+    @ticker_sets = TickerSet.order(:key)
+    @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
   end
   
   def candles
@@ -66,7 +68,7 @@ class TradingController < ApplicationController
       ticker = instrument.ticker
       candles = repo.where(ticker: instrument).includes(:instrument).order(:date, :time).last(params[:limit] || 500)
       map[ticker] = { ticker: ticker }
-      map[ticker][:candles] = candles.map { render_candle _1 }
+      map[ticker][:candles] = candles.map { |c| [c.datetime.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
       unless is_update
         map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime.to_i }
         map[ticker][:levels] = {
@@ -96,9 +98,8 @@ class TradingController < ApplicationController
     render json: { }
   end
   
-  private
-  
-    def render_candle(c)
-      [c.datetime.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume]
-    end
+  def update_ticker_sets
+    TickerSet.update_from_lines params[:text].split("\n")
+    render json: { }    
+  end  
 end

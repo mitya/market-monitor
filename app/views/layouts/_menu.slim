@@ -10,7 +10,6 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Views
           ul class="dropdown-menu"
-            li= link_to 'Dashboard', set_comparision_path, class: 'dropdown-item'
             li= link_to 'Grouped', grouped_instruments_path, class: 'dropdown-item'
             li= link_to 'Spb', spb_instruments_path, class: 'dropdown-item'
             li= link_to 'Gainers US', instruments_path(order: 'prices.change desc', currency: 'USD', per_page: 300), class: 'dropdown-item'
@@ -38,6 +37,7 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Trading
           ul class="dropdown-menu"
+            li= link_to 'Dashboard', set_comparision_path, class: 'dropdown-item'          
             li= link_to 'Arbitrage', arbitrages_path, class: 'dropdown-item'
             li= link_to 'Activity', activities_trading_path, class: 'dropdown-item'
             li= link_to 'Trading', dashboard_trading_path, class: 'dropdown-item'

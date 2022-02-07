@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_131353) do
+ActiveRecord::Schema.define(version: 2022_02_07_150800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -642,6 +642,12 @@ ActiveRecord::Schema.define(version: 2022_02_07_131353) do
     t.date "earning_dates", array: true
     t.float "avg_change"
     t.float "d5_marketcap_volume"
+  end
+
+  create_table "ticker_sets", force: :cascade do |t|
+    t.string "key"
+    t.string "tickers", array: true
+    t.datetime "updated_at"
   end
 
   add_foreign_key "price_level_hits", "price_levels", column: "level_id"

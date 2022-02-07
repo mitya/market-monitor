@@ -64,13 +64,12 @@ makeChart = ({ ticker, candles, opens, levels }) ->
     
   levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'gray', intraday: 'gray' }
   levelLineStyles = (name) -> if name.includes('MA') then LineStyle.Dashed else if name.includes('intraday') then LineStyle.Solid else LineStyle.Dotted
-  levelLineWidths = (name) -> if name.includes('MA') then 3 else if name.includes('intraday') then 2 else 2
+  levelLineWidths = (name) -> if name.includes('MA') then 2 else if name.includes('intraday') then 2 else 2
   
   for title, values of levels
     continue if values == null
     values = [values] unless values instanceof Array
     for level in values
-      console.log "#{ticker} #{title} #{level}"
       candlesSeries.createPriceLine
         price: Number(level)
         color: levelColors[title]
@@ -96,10 +95,11 @@ document.addEventListener "turbolinks:load", ->
     intervalSelector = $qs(".trading-page .interval-selector")
     chartedTickersField = $qs(".trading-page .charted-tickers-field")
     syncedTickersField = $qs(".trading-page .synced-tickers-field")
-    intradayLevelsField = $qs(".trading-page .intraday-levels-field")
+    intradayLevelsField = $qs(".trading-page .intraday-levels textarea")
 
     loadCharts = ->
       data = await $fetchJSON "/trading/candles"    
+      console.log data
       clearCharts()
       for ticker, payload of data
         makeChart payload
@@ -118,6 +118,12 @@ document.addEventListener "turbolinks:load", ->
     updateIntradayLevels = ->
       text = intradayLevelsField.value
       await $fetchJSON "/trading/update_intraday_levels", method: 'POST', data: { text }
+      
+    updateTickerSets = ->
+      text = $qs('.ticker-sets textarea').value
+      await $fetchJSON "/trading/update_ticker_sets", method: 'POST', data: { text }
+
+      
         
     bindToolbar = ->
       $bind intervalSelector, 'click', (e) ->
@@ -130,7 +136,8 @@ document.addEventListener "turbolinks:load", ->
 
       $bind chartedTickersField, 'change', updateChartSettings
       $bind syncedTickersField, 'change', updateChartSettings
-      $bind $qs('.save-intraday-levels'), 'click', updateIntradayLevels
+      $bind $qs('.intraday-levels .btn'), 'click', updateIntradayLevels
+      $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
     
     
     bindToolbar()
