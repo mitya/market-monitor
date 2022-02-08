@@ -14,10 +14,12 @@ dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
 makeChart = ({ ticker, candles, opens, levels }) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
-    <div class='intraday-chart'>
-      <div class='intraday-chart-legend'>
-        <span class='chart-ticker'></span>
-        <span class='candle-change'></span>
+    <div class='intraday-chart col ps-4 pe-4 pb-4 pt-2'>
+      <div class='intraday-chart-content'>
+        <div class='intraday-chart-legend'>
+          <span class='chart-ticker'></span>
+          <span class='candle-change'></span>
+        </div>
       </div>
     </div>
   ")
@@ -27,9 +29,9 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
 
-  priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '0') else price
+  priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
   
-  chart = createChart container, { 
+  chart = createChart container.querySelector('.intraday-chart-content'), { 
     width: 0, height: 280, 
     timeScale: { timeVisible: true, secondsVisible: false },
     priceScale: { entireTextOnly: true },
@@ -62,7 +64,7 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   
   if opens
     candlesSeries.setMarkers opens.map (openingTime) -> 
-      { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'Open' }
+      { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'O' }
     
   levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'gray', intraday: 'gray' }
   levelLineStyles = (name) -> if name.includes('MA') then LineStyle.Dashed else if name.includes('intraday') then LineStyle.Solid else LineStyle.Dotted
@@ -95,9 +97,13 @@ makeChart = ({ ticker, candles, opens, levels }) ->
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
     intervalSelector = $qs(".trading-page .interval-selector")
+    columnsSelector = $qs(".trading-page .columns-selector")
     chartedTickersField = $qs(".trading-page .charted-tickers-field")
     syncedTickersField = $qs(".trading-page .synced-tickers-field")
     intradayLevelsField = $qs(".trading-page .intraday-levels textarea")
+
+    reload = ->
+      location.reload()
 
     loadCharts = ->
       data = await $fetchJSON "/trading/candles"    
@@ -114,31 +120,37 @@ document.addEventListener "turbolinks:load", ->
     updateChartSettings = ->
       charted_tickers = chartedTickersField.value
       synced_tickers = syncedTickersField.value
-      period = intervalSelector.querySelector('.btn.active').dataset.interval
-      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { charted_tickers, synced_tickers, period }
+      period = intervalSelector.querySelector('.btn.active').dataset.value
+      columns = columnsSelector.querySelector('.btn.active').dataset.value
+      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { charted_tickers, synced_tickers, period, columns }
+      reload()
 
     updateIntradayLevels = ->
       text = intradayLevelsField.value
       await $fetchJSON "/trading/update_intraday_levels", method: 'POST', data: { text }
+      reload()
       
     updateTickerSets = ->
       text = $qs('.ticker-sets textarea').value
       await $fetchJSON "/trading/update_ticker_sets", method: 'POST', data: { text }
+      reload()
 
     selectTickerSet = (btn) ->
       chartedTickersField.value = btn.dataset.tickers
       other.classList.remove('active') for other in btn.closest('.list-group').querySelectorAll('.list-group-item')
       btn.classList.add('active')
       updateChartSettings()
+      reload()
         
     bindToolbar = ->
-      $bind intervalSelector, 'click', (e) ->
-        button = $qs(e.target)
+      $delegate '.trading-page', '.js-btn-group .btn', 'click', (button) ->
         other.classList.remove('active') for other in button.closest('.btn-group').querySelectorAll('.btn')
         button.classList.add('active')
         button.blur()
         updateChartSettings()
-      intervalSelector.querySelector(".btn[data-interval='#{intervalSelector.dataset.initial}']").classList.add('active')
+        
+      intervalSelector.querySelector(".btn[data-value='#{intervalSelector.dataset.initial}']").classList.add('active')
+      columnsSelector.querySelector(".btn[data-value='#{columnsSelector.dataset.initial}']").classList.add('active')
 
       $bind chartedTickersField, 'change', updateChartSettings
       $bind syncedTickersField, 'change', updateChartSettings

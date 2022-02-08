@@ -53,6 +53,7 @@ class TradingController < ApplicationController
     @charted_tickers = Setting.charted_tickers.join(' ')
     @synced_tickers = Setting.synced_tickers.join(' ')
     @period = Setting.charted_period || '3min'
+    @columns = Setting.chart_columns.presence || 2
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
     @ticker_sets = TickerSet.order(:key)
@@ -65,6 +66,8 @@ class TradingController < ApplicationController
     repo = Candle.interval_class_for(period)
     instruments = Instrument.for_tickers(Setting.charted_tickers).includes(:indicators, :annotation)
     instruments = Setting.charted_tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
+    # openings = Candle::M3.openings.where(ticker: instruments).index_by(&:ticker)
+    openings = {}
     
     candles = instruments.inject({}) do |map, instrument|      
       ticker = instrument.ticker
@@ -79,7 +82,7 @@ class TradingController < ApplicationController
             MA20:  instrument.indicators.ema_20.to_f,
             MA50:  instrument.indicators.ema_50.to_f,
             MA200: instrument.indicators.ema_200.to_f,            
-            open:  instrument.today&.open,
+            open:  openings[instrument.ticker]&.open,
             close:  instrument.yesterday&.close,
             intraday: instrument.annotation&.intraday_levels,
           )
@@ -94,6 +97,7 @@ class TradingController < ApplicationController
     Setting.save 'charted_tickers', params[:charted_tickers].split.map(&:upcase)
     Setting.save 'synced_tickers', params[:synced_tickers].split.map(&:upcase).sort
     Setting.save 'charted_period', Candle.normalize_interval(params[:period])
+    Setting.save 'chart_columns', params[:columns].to_i.nonzero?
     render json: { }
   end
   

@@ -168,6 +168,7 @@ class Instrument < ApplicationRecord
   def session_start_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
   def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 00, second: 01) : date.end_of_day
   def close_hhmm = MarketInfo.ticker_closing_time(ticker)
+  def open_hhmm = MarketInfo.ticker_opening_time(ticker)
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase

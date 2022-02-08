@@ -23,7 +23,7 @@ class InstrumentAnnotation < ApplicationRecord
     end
     
     def with_intraday_levels
-      where.not(intraday_levels: nil).order(:ticker)
+      where("cardinality(intraday_levels) > 0").order(:ticker)
     end
   end
 end

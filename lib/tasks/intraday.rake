@@ -1,92 +1,4 @@
-class IntradayCandleLoader
-  def instruments = R.instruments_from_env || Setting.synced_instruments
-  def interval = ENV['period'] || Setting.charted_period
-  def duration = (Candle.interval_duration(interval) / 60)
-  
-  def sync
-    load_history
-
-    analyze = ENV['analyze'] == '1'
-    last_synced_interval = nil
-    last_prices_update_time = 1.minute.ago
-    
-    loop do
-      next if last_synced_interval != nil && Time.current.sec < 50
-
-      intervals_since_midnight = (Time.current.hour * 60 + Time.current.min) / duration
-      if last_synced_interval != intervals_since_midnight
-        instruments.abc.each do |inst|
-          Tinkoff.import_intraday_candles inst, interval
-          PriceSignal.analyze_intraday_for inst, interval if analyze
-        end
-        last_synced_interval = intervals_since_midnight
-      end
-
-      if last_prices_update_time < 5.minutes.ago
-        RefreshPricesFromIex.refresh 
-        puts "Refreshed prices from IEX".green
-        last_prices_update_time = Time.current
-      end
-
-      sleep 10
-    end
-  end
-  
-  def load
-    instruments.abc.each do |inst|
-      dates = recent_dates
-      last = Candle.interval_class_for(interval).where(ticker: inst.ticker).order(:date, :time).last
-      dates.reject! { |date| date < last.date } if last unless ENV['force']
-      Tinkoff.import_intraday_candles_for_dates(inst, interval,  dates: dates)
-    end
-  end
-  
-  def load_history
-    return if interval == 'day'
-    instruments.abc.each do |inst|
-      dates = recent_dates - [Current.date]      
-      close_time = CLOSE_TIMES[inst.close_hhmm][duration.to_i]
-      dates.each do |date|
-        unless Candle.interval_class_for(interval).exists?(ticker: inst.ticker, date: date, time: close_time)
-          Tinkoff.import_intraday_candles_for_dates(inst, interval, dates: [date])
-        end        
-      end
-    end    
-  end
-  
-  def check_moex_closings
-    moex_1 = []
-    moex_2 = []
-    Instrument.rub.abc.each do |inst|
-      data = Tinkoff.load_intervals inst, '1min', '2022-02-02T22:00:00+03:00'.to_time, '2022-02-02T22:01:00+03:00'.to_time
-      if data['candles'].any?
-        moex_1 << inst.ticker
-        puts "\t #{inst}"
-      else
-        puts inst
-        moex_2 << inst.ticker
-      end
-    end    
-    
-    puts "1st: #{moex_1.join(' ')}"
-    puts "2nd: #{moex_2.join(' ')}"
-  end
-  
-  private
-  
-  def days_to_load = ENV['days'].to_i.nonzero? || 8
-  def recent_dates = MarketCalendar.open_days(days_to_load.days.ago).last(5)
-  
-  CLOSE_TIMES = { 
-    '16:00' => { 1 => '15:59', 3 => '15:57', 5 => '15:55', 60 => '15:00' },
-    '23:50' => { 1 => '23:49', 3 => '23:48', 5 => '23:45', 60 => '23:00' },
-    '18:45' => { 1 => '18:45', 3 => '18:45', 5 => '18:45', 60 => '18:00' },
-  }  
-end
-
-
-
-namespace :intraday do
+namespace :id do
   envtask(:sync) { IntradayCandleLoader.new.sync }
   envtask(:load) { IntradayCandleLoader.new.load }
   envtask(:history) { IntradayCandleLoader.new.load_history }
@@ -97,5 +9,5 @@ end
 
 
 __END__
-rake intraday:load tickers='AGRO' period=3 force=1 days=1
-rake intraday:sync tickers='OZON SBER GAZP FIVE MVID' period=3
+rake id:load tickers='AGRO' period=3 force=1 days=1
+rake id:sync tickers='OZON SBER GAZP FIVE MVID' period=3

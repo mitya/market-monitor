@@ -21,8 +21,12 @@ end
 module R
   module_function
 
+  def tickers_from_env
+    ENV['ticker'].presence || ENV['t'].presence || ENV['tickers'].presence
+  end
+
   def instruments_from_env
-    tickers = ENV['ticker'].presence || ENV['t'].presence || ENV['tickers'].presence
+    tickers = tickers_from_env
     tickers ?
       Instrument.for_tickers(tickers.split(/\s|,/)) :
       ENV['set'] ?

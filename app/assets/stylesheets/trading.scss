@@ -9,18 +9,22 @@
 }
 
 .intraday-charts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 15px;
+  // display: flex;
+  // flex-wrap: wrap;
+  // justify-content: flex-start;
+  // gap: 15px;
 }
 
-.intraday-chart {
-  position: relative;
-  flex-basis: 47%;
+.intraday-chart {  
   min-height: 100px;
+  // flex-basis: 47%;
   // padding: 5px;
   // border: 1px solid #ccc;
+  // border-right: 2px solid rgba(black, 0.2);
+  
+  &-content {
+    position: relative;
+  }
   
   &-legend {
     position: absolute; left: 0; top: 0; z-index: 100;

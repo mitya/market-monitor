@@ -1,13 +1,9 @@
-- an ajax button to trigger price update
-
-- catch new sync tickers without the process restart (pull db every second)
-- protection from sync when daily charts are used
+- mark opening / closing intraday candles
+- ajax buttons to trigger IEX / T price updates / specific interval loading
 - try to get the diff between VEON and others
-- load opening candle for all charted tickers
-- load all period history at once ?
-- try to unify chart scales
-- daily / 1h on-chart vertical comparisions 
-
+- increase the chart scale
+- check why some tickers are loading after the EOD
+- load the timeframe used on chart (Mx)
 
 - dash for MA hits, volume gainers, expected MA hits
 - tabs on dash (tops+categories / EOD indicators)
@@ -86,6 +82,8 @@
 – comparision to a random date
 - column selection
 - terminal-based UI
+- store the already loaded intraday dates for each interval (perf text vs close check)
+
 
 
 # Done
@@ -366,3 +364,6 @@
 + mark OTC / non-liquid tickers on dashboard
 + list changes in ATRs
 + store/show the last update timestamp
++ catch new sync tickers without the process restart (pull db every second)
++ reload charts after period/tickers/levels change
++ chart columns selector + daily / 1h on-chart vertical comparisions

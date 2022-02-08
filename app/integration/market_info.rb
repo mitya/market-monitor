@@ -12,7 +12,7 @@ class MarketInfo
                 VRSB MGTSP PRFN DVEC MRKV TORS OKEY MRKZ KLSB IRKT TGKBP MSTT MRKS RBCM MRKU CHMK PMSBP RUGR KROT RKKE NKHP UNKL].to_set
   
   OpeningTimes = { US: '09:30', Moex1: '07:00', Moex2: '10:00' }
-  ClosingTimes = { US: '16:00', Moex1: '18:45', Moex2: '23:50' }
+  ClosingTimes = { US: '16:00', Moex1: '23:50', Moex2: '18:45' }
   
   class << self
     def us_tickers = @us_tickers ||= Instrument.usd.pluck(:ticker).to_set
