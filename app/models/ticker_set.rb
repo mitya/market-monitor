@@ -1,7 +1,6 @@
 class TickerSet < ApplicationRecord
-  def as_line
-    "#{key}  #{tickers.to_a.sort.join(' ')}"
-  end
+  def as_line = "#{key}  #{tickers_line}"
+  def tickers_line = tickers.sort.join(' ').upcase
   
   class << self
     def update_from_lines(lines)
@@ -9,7 +8,7 @@ class TickerSet < ApplicationRecord
         lines.each do |line|
           key, *tickers = line.split(' ')
           set = find_or_create_by(key: key)
-          set.update! tickers: tickers.sort
+          set.update! tickers: tickers.sort.map(&:upcase)
         end      
       end      
     end

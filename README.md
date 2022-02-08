@@ -35,6 +35,7 @@ rake iex:stats
 rake iex:price_targets
 rake iex:recommendations
 rake set_average_volume
+rake candles:set_d5_volume
 
 rake iex:days:missing
 rake tinkoff:days:missing ok=1 tickers='SPBE' since=2021-09-01

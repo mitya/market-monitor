@@ -13,7 +13,9 @@
     .col-1
       .list-group.ticker-set-selector
         - @ticker_sets.each do |set|
-          button type="button" class="list-group-item list-group-item-action small-caps" data-tickers=set.tickers.join(' ') data-key=set.key
+          - tickers_line = set.tickers_line
+          - is_active = @charted_tickers == tickers_line
+          button type="button" class=class_names("list-group-item list-group-item-action small-caps", active: is_active) data-tickers=tickers_line data-key=set.key
             = set.key
       
   .toolbar.row.my-4

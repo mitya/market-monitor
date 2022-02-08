@@ -35,7 +35,7 @@ main.container-fluid.gainers-dashboard
                 - instruments.each do |inst|
                   - value = inst.stored_gain_since(selector)
                   tr
-                    td.ticker-cell(title=inst.name)= inst.clean_ticker
+                    td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
                     td.money-cell.price-cell= format_price inst.last, unit: inst.currency
                     td.money-cell.change-cell
                       - if value

@@ -50,40 +50,41 @@
 + custom levels on charts +editor
 + ticker sets editor
 + ticker sets list near charts
++ identify non-liquid RUS tickers
++ mark OTC / non-liquid tickers on dashboard
 
-- mark active ticker set
-- try to get the diff between VEON and others
+
 - catch new sync tickers without the process restart (pull db every second)
 - protection from sync when daily charts are used
 
- 
+- try to get the diff between VEON and others
 - load opening candle for all charted tickers
 - load all period history at once ?
-- deactivate non-liquid RUS tickers
 - try to unify chart scales
-- list of intraday scans
-- show scan ticker in the next available intraday chart
 - daily / 1h on-chart vertical comparisions 
+
 - dash for MA hits, volume gainers, expected MA hits
 - tabs on dash (tops+categories / EOD indicators)
+- 100 MA data & recalc others
+- list changes in ATRs
+- store/show the last update timestamp
+- an ajax button to trigger price update
+- a row with indexes / commodity futures
+
+- list of intraday scans
+- show scan ticker in the next available intraday chart
 - turn-around scanner
 - min vol scanner
 - DMA hits intraday
-- fully automate multiple missing days loading 
 - show intraday scans on the chart
-- store/show the last update timestamp
-- an ajax button to trigger price update
-- request price update every 3 mins on dashboard page
-- a row with indexes / commodity futures
 - look for predefined levels
 - HOD retest when high > 2% && low since high < -2%
 - HOD 2%+ open down break
 - yesterday HOD / LOD retests
 - 4% fall — first green 3m bar, min 0.4%
 - predefined level checks with tolerance
-- 100 MA data
-- try to get the evening data from NASDAQ
-- list changes in ATRs
+
+- fully automate multiple missing days loading 
 
 # Next
 

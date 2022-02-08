@@ -65,6 +65,8 @@ class InstrumentsController < ApplicationController
       @instruments = @instruments.where('aggregates.lowest_day_gain >= ?', params[:low_gain].to_f / 100) if params[:low_gain ].present?
     end
 
+    # @instruments = @instruments.where('aggregates.d1_money_volume <= ?', 10_000_000)
+    
     @instruments = @instruments.order(determine_sort_order)
     @instruments = @instruments.page(params[:page]).per(params[:per_page])
 

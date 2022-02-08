@@ -8267,16 +8267,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG00Y4RPMM1",
-      "ticker": "TRIT",
-      "isin": "KYG9103H1020",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Triterras",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00ZNRRJM2",
       "ticker": "DV",
       "isin": "US25862V1052",
@@ -19006,5 +18996,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1902
+  "total": 1901
 }

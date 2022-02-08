@@ -171,3 +171,4 @@ Stats.find_each &:sync_earning_dates
 Stats.find_each {  |s| p (s.earning_dates.to_a + [s.next_earnings_date]).uniq.compact.sort }; nil
 
 Stats.load_non_us_info
+Instrument.rub.each &:info!
