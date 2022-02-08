@@ -49,9 +49,9 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" = fa_icon :sync
           ul class="dropdown-menu dropdown-menu-end"
             li
-              .dropdown-item.text-muted 17:03 US
+              .dropdown-item.text-muted= "US #{time_ago_in_words(Setting.iex_last_update)} ago"
             li
-              .dropdown-item.text-muted 17:05 RU
+              .dropdown-item.text-muted= "RU #{time_ago_in_words(Setting.tinkoff_last_update)} ago" 
             li
               hr.dropdown-divider
             li= link_to 'Reload Prices', spb_instruments_path, class: 'dropdown-item'

@@ -10,6 +10,7 @@ class RefreshPricesFromIex
       CSV.parse(csv, headers: true).each { |row| process_result row }
       Price.set_missing_prices_to_close
     end
+    Setting.save 'iex_last_update', Time.current
     SyncChannel.push 'prices'
   end
 

@@ -4,6 +4,7 @@ class RefreshPricesFromTinkoff
   def refresh(instruments)
     instruments = Instrument.get_all(instruments).sort_by(&:ticker).reject(&:premium?)
     Current.parallelize_instruments(instruments, 1) { | inst| update_tinkoff_price inst }
+    Setting.save 'tinkoff_last_update', Time.current
     SyncChannel.push 'prices'
   end
 

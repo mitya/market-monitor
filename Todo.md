@@ -1,4 +1,3 @@
-- store/show the last update timestamp
 - an ajax button to trigger price update
 
 - catch new sync tickers without the process restart (pull db every second)
@@ -366,3 +365,4 @@
 + identify non-liquid RUS tickers
 + mark OTC / non-liquid tickers on dashboard
 + list changes in ATRs
++ store/show the last update timestamp
