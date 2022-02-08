@@ -28,6 +28,7 @@
 - @show_extremums = params[:extremums] == '1'
 - @vtb_marginal_info = params[:margin_factors]
 - @tinkoff_marginal_info = params[:margin_factors]
+- @show_changes_in_atr = params[:changes_in_atr] == '1'
 
 main.container-fluid.mb-4
   form#list-config(action=(@categories ? grouped_instruments_path : instruments_path) class='my-2')
@@ -55,7 +56,9 @@ main.container-fluid.mb-4
             br
             = bs_check_box :price_targets, 'Price targets', inline: true
             = bs_check_box :relative_price_targets, 'relative', inline: true
-            = bs_check_box :relative_past_prices, 'Use relative past prices', default: true
+            br
+            = bs_check_box :relative_past_prices, 'Use relative past prices', default: true, inline: true
+            = bs_check_box :changes_in_atr, 'Changes in ATR', default: false, inline: true
             = bs_check_box :recent_prices, 'Recent prices', default: true
             = bs_check_box :sa, 'Seeking Alpha', inline: true
             = bs_check_box :margin_factors, 'Margin Factors', inline: true

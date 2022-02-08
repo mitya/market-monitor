@@ -233,6 +233,7 @@ module InstrumentsHelper
     portfolio_ideal_cost:  "Portfolio Cost Ideal",
     portfolio_cost_diff:   "Portfolio Cost Ideal",
     change:                "Change",
+    change_atr:            "ATR Change",
   }.stringify_keys.invert.to_a
 
   def instrument_order_options

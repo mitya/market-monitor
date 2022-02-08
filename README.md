@@ -35,6 +35,7 @@ rake iex:stats
 rake iex:price_targets
 rake iex:recommendations
 rake set_average_volume
+rake candles:set_average_change
 rake candles:set_d5_volume
 
 rake iex:days:missing

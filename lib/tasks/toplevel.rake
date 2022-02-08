@@ -19,7 +19,8 @@ end
 
 task 'missing'    => %w[iex:days:missing]
 task 'prices'     => %w[iex:prices]
-task 'prices:rus'  => %w[tinkoff:prices:uniq]
+task 'prices+'    => %w[iex:prices tinkoff:prices:liquid]
+task 'prices:rus' => %w[tinkoff:prices:uniq]
 task 'prices:all' => %w[iex:prices tinkoff:prices:uniq]
 task 'a'          => %w[aggregate analyze]
 task 'import'     => %w[levels:import signals:import]

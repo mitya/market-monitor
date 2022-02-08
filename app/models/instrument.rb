@@ -66,6 +66,7 @@ class Instrument < ApplicationRecord
   scope :vtb_spb_long, -> { where "stats.extra->>'vtb_list_2' = 'true'" }
   scope :vtb_moex_short, -> { where "stats.extra->>'vtb_can_short' = 'true'" }
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
+  scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
 
 
   validates_presence_of :ticker, :name

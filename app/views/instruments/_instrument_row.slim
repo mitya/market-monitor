@@ -60,7 +60,11 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     - else
       = colorized_price inst.last, inst.d1_ago_close, unit: inst.currency
 
-  td.money-cell= colorized_ratio inst.price!.change, precision: 1
+  td.money-cell
+    - if @show_changes_in_atr
+      = colorized_ratio inst.price!.change_atr, precision: 0
+    - else
+      = colorized_ratio inst.price!.change, precision: 1
 
   - if @show_open
     td.money-cell.border-end.pe-2  = relative_price inst.today_open,   inst.base_price, unit: inst.currency, format: @past_price_format, inverse: true

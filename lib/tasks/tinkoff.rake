@@ -85,6 +85,7 @@ namespace :tinkoff do
     envtask(:pre)     { RefreshPricesFromTinkoff.call Instrument.tinkoff.abc }
     envtask(:all)     { RefreshPricesFromTinkoff.call Instrument.tinkoff.in_set(ENV['set']).abc   }
     envtask(:uniq)    { RefreshPricesFromTinkoff.call Instrument.non_iex.abc }
+    envtask(:liquid)  { RefreshPricesFromTinkoff.call Instrument.rus.liquid }
     envtask(:signals) { RefreshPricesFromTinkoff.call Instrument.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
   end
   task :prices => 'prices:all'

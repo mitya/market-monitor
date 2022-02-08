@@ -120,6 +120,7 @@ class InstrumentsController < ApplicationController
     portfolio_ideal_cost:  "portfolio.ideal_cost_in_usd",
     portfolio_cost_diff:   "portfolio.cost_diff",
     change:                "prices.change desc",
+    change_atr:            "prices.change_atr desc",
   }.stringify_keys
 end
 

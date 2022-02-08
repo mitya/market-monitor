@@ -1,75 +1,21 @@
-+ fix trend indicators
-+ search for MA retests
-+ search for custom level retest
-+ show all recent dates in the hits list
-+ break / test depth
-+ hit continuation check
-+ recalculate MA200s (load 2018)
-+ show margin factors
-+ show hits for single ticker
-+ custom level import
-+ compile the Known list & categorize everything in it
-+ compare gains since random date
-+ 3m & 1y comparisions
-+ news UI
-+ news sync process
-+ add prev candle close to each daily candle
-+ calc ATRs
-+ intraday candle loader
-+ run analyze each time a candle is loaded
-+ load 3m candles
-+ look for simplest things — .5% moves
-+ look for .5 moves in 2 candles
-+ show volume as marketcap %
-+ for MA retests / breakouts add days since last cross
-+ for MA breakouts add relvol & o-c change
-+ sets dashboard
-+ data field selection / sorting
-+ show multiple sets in 1 column
-+ filter sets by tickers
-+ filter sets by currency / premium
-+ filter form hiding
-+ load tops as csv
-+ send ws notification when the prices are updated
-+ listen for 'reload' notification on the UI side
-+ change maps
-+ intraday chart
-+ multiple intraday charts on screen
-+ load all recent intraday candles for tickers
-+ realtime load intraday market data for tickers
-+ data pull to the browser
-+ chart period change
-+ dash for top gain / loss, same in RU, my US / RU tickers change
-+ dash changes as bars
-+ mine / watch us / watch ru column on dashboard
-+ price update process
-+ mark day opens
-+ DMA lines on intraday charts
-+ reload dashboard on price update only if sorted by today price
-+ open/close lines on intraday charts
-+ custom levels on charts +editor
-+ ticker sets editor
-+ ticker sets list near charts
-+ identify non-liquid RUS tickers
-+ mark OTC / non-liquid tickers on dashboard
-
+- store/show the last update timestamp
+- an ajax button to trigger price update
 
 - catch new sync tickers without the process restart (pull db every second)
 - protection from sync when daily charts are used
-
 - try to get the diff between VEON and others
 - load opening candle for all charted tickers
 - load all period history at once ?
 - try to unify chart scales
 - daily / 1h on-chart vertical comparisions 
 
+
 - dash for MA hits, volume gainers, expected MA hits
 - tabs on dash (tops+categories / EOD indicators)
 - 100 MA data & recalc others
-- list changes in ATRs
-- store/show the last update timestamp
-- an ajax button to trigger price update
 - a row with indexes / commodity futures
+- fully automate multiple missing days loading 
+
 
 - list of intraday scans
 - show scan ticker in the next available intraday chart
@@ -84,10 +30,8 @@
 - 4% fall — first green 3m bar, min 0.4%
 - predefined level checks with tolerance
 
-- fully automate multiple missing days loading 
 
 # Next
-
 - use dropdown for sets
 - search for stable tops / bottoms
 - list all the institutional holders & find last quarter institutional transactions
@@ -140,9 +84,6 @@
 - maintain average volume for last N months
 - ticker selection & commands
 - change insider transactions to new API with `from` parameter
-
-
-# Probably Never
 – comparision to a random date
 - column selection
 - terminal-based UI
@@ -370,3 +311,58 @@
 + predefined links for MA analysis
 + tinkoff marginal list
 + add news parser
++ fix trend indicators
++ search for MA retests
++ search for custom level retest
++ show all recent dates in the hits list
++ break / test depth
++ hit continuation check
++ recalculate MA200s (load 2018)
++ show margin factors
++ show hits for single ticker
++ custom level import
++ compile the Known list & categorize everything in it
++ compare gains since random date
++ 3m & 1y comparisions
++ news UI
++ news sync process
++ add prev candle close to each daily candle
++ calc ATRs
++ intraday candle loader
++ run analyze each time a candle is loaded
++ load 3m candles
++ look for simplest things — .5% moves
++ look for .5 moves in 2 candles
++ show volume as marketcap %
++ for MA retests / breakouts add days since last cross
++ for MA breakouts add relvol & o-c change
++ sets dashboard
++ data field selection / sorting
++ show multiple sets in 1 column
++ filter sets by tickers
++ filter sets by currency / premium
++ filter form hiding
++ load tops as csv
++ send ws notification when the prices are updated
++ listen for 'reload' notification on the UI side
++ change maps
++ intraday chart
++ multiple intraday charts on screen
++ load all recent intraday candles for tickers
++ realtime load intraday market data for tickers
++ data pull to the browser
++ chart period change
++ dash for top gain / loss, same in RU, my US / RU tickers change
++ dash changes as bars
++ mine / watch us / watch ru column on dashboard
++ price update process
++ mark day opens
++ DMA lines on intraday charts
++ reload dashboard on price update only if sorted by today price
++ open/close lines on intraday charts
++ custom levels on charts +editor
++ ticker sets editor
++ ticker sets list near charts
++ identify non-liquid RUS tickers
++ mark OTC / non-liquid tickers on dashboard
++ list changes in ATRs
