@@ -1,4 +1,4 @@
-namespace :id do
+namespace :intraday do
   envtask(:sync) { IntradayCandleLoader.new.sync }
   envtask(:load) { IntradayCandleLoader.new.load }
   envtask(:history) { IntradayCandleLoader.new.load_history }

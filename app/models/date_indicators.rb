@@ -55,6 +55,8 @@ class DateIndicators < ApplicationRecord
     end
 
     def recreate_for_all(instruments = Instrument.all)
+      # try without the threads at all
+      # delete_all
       Current.parallelize_instruments(Instrument.normalize(instruments), 6) { |inst| recreate_for inst }
     end
 

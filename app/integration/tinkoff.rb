@@ -155,7 +155,7 @@ class Tinkoff
       return "Missing candles for #{instrument}".red if candle_class == nil
 
       candle_class.transaction do
-        candles.each do |hash|
+        candles.map do |hash|
           time = Time.parse hash['time']
           time = time.in_time_zone(tz) if tz
           date = time.to_date
@@ -181,6 +181,7 @@ class Tinkoff
           end
                     
           candle.save!
+          candle
         end
       end
     end
@@ -237,7 +238,17 @@ class Tinkoff
 
       puts "load tinkoff #{instrument} #{since} #{till}".magenta
       data = load_intervals instrument, interval, since, till, delay: 0.05
-      import_candles_from_hash instrument, data, tz: instrument.time_zone
+      candles = import_candles_from_hash instrument, data, tz: instrument.time_zone
+      
+      # inject empty candles for illiquid names
+      # candles.select { !_1.prev_close && !_1.is_opening? }.each do |candle|
+      #   last_prev = candle.whatever_previous
+      #   candle.times_between(last_prev).each do |time|
+      #     candle.class.create! ticker: instrument, date: candle.date, time: time,
+      #       open: candle.open, close: candle.open, high: candle.open, log: candle.open, volume: 0, 
+      #       source: candle.source, prev_close: last_prev.close
+      #   end
+      # end
       
       instrument.candles_for(interval).for_date(since.to_date).order(:time).last&.is_closing! if full_day
     end

@@ -1,10 +1,7 @@
-- dash for MA hits, volume gainers, expected MA hits
-- fully automate multiple missing days loading 
-- inject missing intraday candles
 - check partial candles
+- dash for MA hits & volume gainers
 
 - list of intraday scans
-- show scan ticker in the next available intraday chart
 - turn-around scanner
 - min vol scanner
 - DMA hits intraday
@@ -15,9 +12,12 @@
 - yesterday HOD / LOD retests
 - 4% fall — first green 3m bar, min 0.4%
 - predefined level checks with tolerance
+- show scan ticker in the next available intraday chart
 
 
 # Next
+- expected MA hits analysis
+- fully automate multiple missing days loading 
 - inject fake candles when ticker with different start times are shown
 - use dropdown for sets
 - search for stable tops / bottoms
@@ -76,7 +76,7 @@
 - terminal-based UI
 - store the already loaded intraday dates for each interval (perf text vs close check)
 - a row with indexes / commodity futures [needs intraday futures data]
-
+- inject missing intraday candles
 - refactor JS
 - Ruby 3.1
 - Rails 7
