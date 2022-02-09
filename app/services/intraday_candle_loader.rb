@@ -97,7 +97,7 @@ class IntradayCandleLoader
   def sync_latest(analyze: should_analyze)
     puts 'sync latest'
     instruments.abc.each do |inst|
-      Tinkoff.import_intraday_candles inst, interval
+      Tinkoff.import_intraday_candles_for_today inst, interval
       PriceSignal.analyze_intraday_for inst, interval if analyze
     end    
   end

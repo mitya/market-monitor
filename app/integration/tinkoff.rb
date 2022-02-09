@@ -227,23 +227,34 @@ class Tinkoff
       return if !instrument.market_open? && since&.today?
       
       since = since.change(min: 00) if interval == 'hour' && instrument.usd? && since && since.hour == 9 && since.min == 30
+      till ||= since.end_of_day
 
-      day_start = instrument.market_open_time
-      last_loaded_candle = Candle.interval_class_for(interval).where(instrument: instrument).today.by_time.last
-
-      since ||= last_loaded_candle ? last_loaded_candle.datetime + 1 : day_start
-      till  ||= since.end_of_day
+      # day_start = instrument.market_open_time
+      # last_loaded_candle = instrument.candles_for(interval).today.by_time.last
+      # since ||= last_loaded_candle ? last_loaded_candle.datetime + 1 : day_start
 
       return if since + Candle.interval_duration(interval) > Time.current
 
+      puts "load tinkoff #{instrument} #{since} #{till}".magenta
       data = load_intervals instrument, interval, since, till, delay: 0.05
       import_candles_from_hash instrument, data, tz: instrument.time_zone
       
-      if full_day
-        last_candle = Candle.interval_class_for(interval).where(ticker: instrument.ticker, date: since.to_date).order(:time).last
-        last_candle&.update! is_closing: true
-      end
+      instrument.candles_for(interval).for_date(since.to_date).order(:time).last&.is_closing! if full_day
     end
+    
+    def import_intraday_candles_for_today(instrument, interval)
+      last_loaded_candle = instrument.candles_for(interval).today.by_time.last
+      return if last_loaded_candle.is_closing?
+      
+      since = last_loaded_candle ? last_loaded_candle.datetime + 1 : instrument.market_open_time
+      till  = instrument.market_close_time
+
+      import_intraday_candles instrument, interval, since: since, till: till
+      
+      if Time.current > instrument.market_close_time
+        instrument.candles_for(interval).for_date(since.to_date).order(:time).last&.is_closing!
+      end
+    end    
 
     def import_intraday_candles_for_dates(instrument, interval, dates: [Current.date])
       dates.each do |date|

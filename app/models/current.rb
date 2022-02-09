@@ -21,11 +21,11 @@ class Current < ActiveSupport::CurrentAttributes
 
   def us_market_open_time      = Current.us_time.change(hour:  9, min: 30)
   def us_market_close_time     = Current.us_time.change(hour: 16, min: 00)
-  def ru_premarket_open_time   = Current.ru_time.change(hour: 7, min: 00)
+  def ru_premarket_open_time   = Current.ru_time.change(hour:  7, min: 00)
   def ru_market_open_time      = Current.ru_time.change(hour: 10, min: 00)
-  def ru_market_close_time     = Current.ru_time.change(hour: 22, min: 00)
+  def ru_market_close_time     = Current.ru_time.change(hour: 23, min: 50)
   def ru_2nd_market_open_time  = Current.ru_time.change(hour: 10, min: 00)
-  def ru_2nd_market_close_time = Current.ru_time.change(hour: 19, min: 30)
+  def ru_2nd_market_close_time = Current.ru_time.change(hour: 18, min: 45)
   def us_market_work_period     = us_market_open_time..us_market_close_time
   def ru_market_work_period     = ru_market_open_time..ru_market_close_time
   def ru_2nd_market_work_period = ru_2nd_market_open_time..ru_2nd_market_close_time

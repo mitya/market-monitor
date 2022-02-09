@@ -227,6 +227,9 @@ class Candle < ApplicationRecord
       
     scope :openings, -> { where is_opening: true }
     
+    def is_closing! = update!(is_closing: true)
+    def is_opening! = update!(is_opening: true)
+    
     ValidIntervals = %w[hour 5min 3min 1min]
   end
 

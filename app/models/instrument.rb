@@ -142,6 +142,8 @@ class Instrument < ApplicationRecord
 
   def price! = Current.prices_cache&.for_instrument(self) || price || create_price!
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
+  def candles_for(interval) = Candle.interval_class_for(interval).where(ticker: ticker)
+    
   def info! = info || create_info
   def annotation! = annotation || create_annotation
 
@@ -163,7 +165,9 @@ class Instrument < ApplicationRecord
 
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)
-  def market_open_time = (rub? || eur?) ? Current.ru_market_open_time : Current.us_market_open_time
+  def market_open_time  = (rub? || eur?) ? Current.ru_market_open_time  : Current.us_market_open_time
+  def market_close_time = (rub? || eur?) ? Current.ru_market_close_time : Current.us_market_close_time
+    
   def time_zone = usd?? Current.est : Current.msk
   def session_start_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
   def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 00, second: 01) : date.end_of_day
