@@ -226,6 +226,8 @@ class Candle < ApplicationRecord
     def self.intraday? = true
       
     scope :openings, -> { where is_opening: true }
+    
+    ValidIntervals = %w[hour 5min 3min 1min]
   end
 
   class H1 < Intraday

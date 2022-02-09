@@ -1,15 +1,15 @@
-- add buttons to show hide time/price scales
-- load the timeframe used on chart (Mx)
+- go to realtime button
+- scales togglers
 - ajax buttons to trigger IEX / T price updates / specific interval loading
 - try to get the diff between VEON and others
 - check why some tickers are loading after the EOD
+- show last bar price in chart header
+- inject missing intraday candles
+- option to disable ticker set sync
 
-- dash for MA hits, volume gainers, expected MA hits
-- tabs on dash (tops+categories / EOD indicators)
 - 100 MA data & recalc others
-- a row with indexes / commodity futures
+- dash for MA hits, volume gainers, expected MA hits
 - fully automate multiple missing days loading 
-- show last price in chart header
 
 
 - list of intraday scans
@@ -27,6 +27,7 @@
 
 
 # Next
+- inject fake candles when ticker with different start times are shown
 - use dropdown for sets
 - search for stable tops / bottoms
 - list all the institutional holders & find last quarter institutional transactions
@@ -83,6 +84,7 @@
 - column selection
 - terminal-based UI
 - store the already loaded intraday dates for each interval (perf text vs close check)
+- a row with indexes / commodity futures [needs intraday futures data]
 
 - refactor JS
 - Ruby 3.1
@@ -374,3 +376,4 @@
 + mark opening intraday candles
 + increase the chart scale
 + add buttons to inc/dec prices scale
++ load the timeframe used on chart (Mx)

@@ -4,54 +4,65 @@ class IntradayCandleLoader
     
     tickers = Setting.synced_tickers
     tickers += Setting.chart_tickers
-    tickers += TickerSet.pluck(:tickers).flatten
+    # tickers += TickerSet.pluck(:tickers).flatten
     tickers.sort
   end
-  def instruments = Instrument.for_tickers(tickers).abc  
-  def interval = ENV['period'] || '3min'
-  def duration = (Candle.interval_duration(interval) / 60)
   
-  def schedule
-    loop do
-      once_in 10,     :load_intraday
-      once_in 5 * 60, :load_prices
-    end
+  def instruments = Instrument.for_tickers(tickers).abc  
+  
+  def interval
+    value = ENV['period'] || Setting.chart_period
+    value = '3min' unless value.in?(Candle::Intraday::ValidIntervals)
+    value
   end
   
+  def interval_in_seconds = (Candle.interval_duration(interval) / 60)
+    
+  def should_analyze = ENV['analyze'] == '1'
+  
+  # def schedule
+  #   loop do
+  #     once_in 10,     :load_intraday
+  #     once_in 5 * 60, :load_prices
+  #   end
+  # end
+  
   def sync
-    analyze = ENV['analyze'] == '1'
-    last_synced_interval = nil
-    last_synced_tickers = nil
-    last_prices_update_time = Setting.iex_last_update
+    last_tickers = nil
+    last_interval = nil
+    last_interval_index = nil
+    last_iex_update_time = Setting.iex_last_update
 
     loop do
-      current_interval = (Time.current.hour * 60 + Time.current.min) / duration
       current_tickers = tickers      
-      puts "tick #{Time.current} - #{current_interval} - last #{last_synced_interval}"
+      current_interval = interval
+      current_interval_index = (Time.current.hour * 60 + Time.current.min) / interval_in_seconds
+      puts "tick #{Time.current} - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
 
-      if last_synced_tickers != current_tickers
-        load_history 
-        last_synced_tickers = current_tickers
+      change_last_params = -> do
+        last_tickers = current_tickers
+        last_interval = current_interval
+        last_interval_index = current_interval_index
       end
+            
+      if last_tickers != current_tickers || last_interval != current_interval
+        load_history
+        sync_latest
+        change_last_params.call
+      elsif last_interval_index != current_interval_index
+        unless current_interval_index - last_interval_index == 1 && Time.current.sec < 50
+          sync_latest
+          change_last_params.call
+        end
+      end      
 
-      if last_synced_interval != current_interval
-        if (current_interval - last_synced_interval.to_i) != 1 || Time.current.sec > 50
-          puts 'sync'
-          instruments.abc.each do |inst|
-            Tinkoff.import_intraday_candles inst, interval
-            PriceSignal.analyze_intraday_for inst, interval if analyze
-          end
-          last_synced_interval = current_interval
-        end        
-      end
-
-      if last_prices_update_time < 5.minutes.ago
+      if last_iex_update_time < 5.minutes.ago && Current.us_market_open?
         RefreshPricesFromIex.refresh 
-        puts "Refresh prices from IEX".green
-        last_prices_update_time = Time.current
+        puts "refresh IEX prices".green
+        last_iex_update_time = Time.current
       end
 
-      sleep 10
+      sleep 5
     end
   end
   
@@ -65,13 +76,24 @@ class IntradayCandleLoader
   end
   
   def load_history
-    puts 'Checking history...'
+    puts 'check history...'
     instruments.abc.each do |inst|
       dates = recent_dates - [Current.date]
-      close_time = CLOSE_TIMES[inst.close_hhmm][duration.to_i]
-      missing_dates = dates.reject { |date| Candle.interval_class_for(interval).exists?(ticker: inst.ticker, date: date, time: close_time) }
+      close_time = CLOSE_TIMES[inst.close_hhmm][interval_in_seconds.to_i]
+      missing_dates = dates.reject do |date|
+        Candle.interval_class_for(interval).exists?(ticker: inst.ticker, date: date, time: close_time) ||
+        Candle.interval_class_for(interval).exists?(ticker: inst.ticker, date: date, is_closing: true)
+      end
       missing_dates << Current.date if missing_dates.any?
       Tinkoff.import_intraday_candles_for_dates inst, interval, dates: missing_dates
+    end    
+  end
+  
+  def sync_latest(analyze: should_analyze)
+    puts 'sync latest'
+    instruments.abc.each do |inst|
+      Tinkoff.import_intraday_candles inst, interval
+      PriceSignal.analyze_intraday_for inst, interval if analyze
     end    
   end
   

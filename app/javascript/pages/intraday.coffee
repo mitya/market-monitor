@@ -34,9 +34,8 @@ makeChart = ({ ticker, candles, opens, levels }) ->
   scalesVisible = false
   chart = createChart container.querySelector('.intraday-chart-content'), { 
     width: 0, height: 280, 
-    timeScale: { timeVisible: true, secondsVisible: false },
-    priceScale: { entireTextOnly: true, visible: scalesVisible },
-    timeScale: { visible: scalesVisible, barSpacing: 10 },
+    timeScale: { timeVisible: true, secondsVisible: false, visible: scalesVisible, barSpacing: 10 },
+    rightPriceScale: { entireTextOnly: true, visible: scalesVisible },
     localization: {
       priceFormatter: priceFormatter
     },

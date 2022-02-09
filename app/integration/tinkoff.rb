@@ -222,7 +222,7 @@ class Tinkoff
     end
 
 
-    def import_intraday_candles(instrument, interval, since: nil, till: nil)
+    def import_intraday_candles(instrument, interval, since: nil, till: nil, full_day: nil)
       return if !instrument.tinkoff?
       return if !instrument.market_open? && since&.today?
       
@@ -238,11 +238,16 @@ class Tinkoff
 
       data = load_intervals instrument, interval, since, till, delay: 0.05
       import_candles_from_hash instrument, data, tz: instrument.time_zone
+      
+      if full_day
+        last_candle = Candle.interval_class_for(interval).where(ticker: instrument.ticker, date: since.to_date).order(:time).last
+        last_candle&.update! is_closing: true
+      end
     end
 
     def import_intraday_candles_for_dates(instrument, interval, dates: [Current.date])
       dates.each do |date|
-        import_intraday_candles instrument, interval, since: instrument.session_start_time_on(date), till: instrument.session_end_time_on(date)
+        import_intraday_candles instrument, interval, since: instrument.session_start_time_on(date), till: instrument.session_end_time_on(date), full_day: true
       end
     end
 
