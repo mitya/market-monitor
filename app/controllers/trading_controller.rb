@@ -66,8 +66,7 @@ class TradingController < ApplicationController
     repo = Candle.interval_class_for(period)
     instruments = Instrument.for_tickers(Setting.chart_tickers).includes(:indicators, :annotation)
     instruments = Setting.chart_tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
-    # openings = Candle::M3.openings.where(ticker: instruments).index_by(&:ticker)
-    openings = {}
+    openings = Candle::M3.openings.where(ticker: instruments).index_by(&:ticker)
     
     candles = instruments.inject({}) do |map, instrument|      
       ticker = instrument.ticker

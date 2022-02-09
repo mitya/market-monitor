@@ -212,6 +212,8 @@ class Candle < ApplicationRecord
         end
       end
     end
+    
+    def intraday? = false
   end
 
   class Intraday < Candle
@@ -220,6 +222,10 @@ class Candle < ApplicationRecord
     def to_s = "<#{ticker}:#{interval}:#{date}T#{hhmm}>"
     def to_full_s = "#{to_s} #{ohlc_str} P#{prev_close} #{close_change} #{rel_close_change}"
     def hhmm = time_before_type_cast.first(5)
+      
+    def self.intraday? = true
+      
+    scope :openings, -> { where is_opening: true }
   end
 
   class H1 < Intraday

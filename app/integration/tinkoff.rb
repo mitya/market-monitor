@@ -156,12 +156,10 @@ class Tinkoff
 
       candle_class.transaction do
         candles.each do |hash|
-          is_intraday = candle_class == Candle::M5 || candle_class == Candle::M3 || candle_class == Candle::M1
-          
           time = Time.parse hash['time']
           time = time.in_time_zone(tz) if tz
           date = time.to_date
-          time = time.to_s(:time) if is_intraday          
+          time = time.to_s(:time) if candle_class.intraday?
 
           candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time, date: date
           # puts "Import Tinkoff #{date} #{time} #{interval} candle for #{instrument}".green if candle.new_record?
@@ -177,11 +175,10 @@ class Tinkoff
           candle.date    = date
           candle.ongoing = interval == 'day' && date == Current.date && !Current.weekend?
           
-          # if is_intraday
-          #   hhmm = time.strftime('%H:%M')
-          #   candle.is_opening = hhmm == instrument.open_hhmm  
-          #   candle.is_closing = hhmm == instrument.close_hhmm
-          # end
+          if candle_class.intraday? && !candle_class.is_a?(Candle::H1)
+            candle.is_opening = (time == instrument.open_hhmm).presence
+            # candle.is_closing = hhmm == instrument.close_hhmm_for_interval
+          end
                     
           candle.save!
         end

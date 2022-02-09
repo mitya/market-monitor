@@ -1,7 +1,6 @@
-- mark opening / closing intraday candles
-- ajax buttons to trigger IEX / T price updates / specific interval loading
 - increase the chart scale
 - load the timeframe used on chart (Mx)
+- ajax buttons to trigger IEX / T price updates / specific interval loading
 - try to get the diff between VEON and others
 - check why some tickers are loading after the EOD
 
@@ -371,3 +370,4 @@
 + catch new sync tickers without the process restart (pull db every second)
 + reload charts after period/tickers/levels change
 + chart columns selector + daily / 1h on-chart vertical comparisions
++ mark opening intraday candles
