@@ -1,10 +1,11 @@
 class RefreshPricesFromTinkoff
   include StaticService
 
-  def refresh(instruments)
+  def refresh(instruments = Instrument.non_iex.abc)
     instruments = Instrument.get_all(instruments).sort_by(&:ticker).reject(&:premium?)
     Current.parallelize_instruments(instruments, 1) { | inst| update_tinkoff_price inst }
     Setting.save 'tinkoff_last_update', Time.current
+    Setting.save 'tinkoff_update_pending', false
     SyncChannel.push 'prices'
   end
 
@@ -24,7 +25,7 @@ class RefreshPricesFromTinkoff
     low = candles.map { |c| c['l'] }.min
     volume = candles.map { |c| c['v'] }.sum
 
-    printf "Refresh Tinkoff price for %-7s %3i candles last=#{last}\n", instrument.ticker, candles.count
+    printf "Refresh Tinkoff price for %-7s %3i candles last=#{last}\n".green, instrument.ticker, candles.count
     instrument.price!.update! value: last, last_at: candle['time'], source: 'tinkoff', low: low, volume: volume if last
   end
 end

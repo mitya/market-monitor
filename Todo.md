@@ -1,6 +1,6 @@
+- ajax buttons to trigger IEX / T price updates / specific interval loading
 - check why some tickers are loading after the EOD
 - inject missing intraday candles
-- ajax buttons to trigger IEX / T price updates / specific interval loading
 - check partial candles
 - show last bar price in chart header
 

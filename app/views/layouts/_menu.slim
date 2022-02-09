@@ -1,4 +1,4 @@
-nav class="navbar navbar-expand-lg navbar-light bg-light"
+nav class="navbar navbar-expand-lg navbar-light bg-light main-navbar"
   div class="container-fluid"
     a class="navbar-brand" href=set_comparision_path Trading
     button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -49,9 +49,9 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" = fa_icon :sync
           ul class="dropdown-menu dropdown-menu-end"
             li
-              .dropdown-item.text-muted= "US #{time_ago_in_words(Setting.iex_last_update)} ago"
+              .dropdown-item(class="x-refresh-prices text-muted cursor-pointer" data-scope='us')= "US #{time_ago_in_words(Setting.iex_last_update)} ago"
             li
-              .dropdown-item.text-muted= "RU #{time_ago_in_words(Setting.tinkoff_last_update)} ago" 
+              .dropdown-item(class="x-refresh-prices text-muted cursor-pointer" data-scope='ru')= "RU #{time_ago_in_words(Setting.tinkoff_last_update)} ago" 
             li
               hr.dropdown-divider
             li= link_to 'Reload Prices', spb_instruments_path, class: 'dropdown-item'

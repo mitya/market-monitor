@@ -56,10 +56,15 @@ class IntradayCandleLoader
         end
       end      
 
-      if last_iex_update_time < 5.minutes.ago && Current.us_market_open?
+      if Current.us_market_open? && (Setting.iex_update_pending? || last_iex_update_time < 5.minutes.ago)
         RefreshPricesFromIex.refresh 
         puts "refresh IEX prices".green
         last_iex_update_time = Time.current
+      end
+
+      if Setting.tinkoff_update_pending?
+        RefreshPricesFromTinkoff.refresh Instrument.rub.abc
+        puts "refresh Tinkoff prices".green
       end
 
       sleep 5

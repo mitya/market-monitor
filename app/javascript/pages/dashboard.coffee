@@ -33,3 +33,7 @@ document.addEventListener "turbolinks:load", ->
     $delegate '.orders-container', '.cancel-order-button', 'click', (button, e) ->
       e.stopPropagation()
       await $fetchJSON "/arbitrages/cancel_order", method: 'POST', data: { id: button.dataset.orderId }
+
+  if $qs('.main-navbar')
+    $delegate '.main-navbar', '.x-refresh-prices', 'click', (button, e) ->
+      await $fetchJSON "/trading/refresh", method: 'POST', data: { scope: button.dataset.scope }

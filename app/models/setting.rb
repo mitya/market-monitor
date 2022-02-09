@@ -3,13 +3,15 @@ class Setting < ApplicationRecord
     def get(key, default = nil) = find_by_key(key)&.value || default
     def save(key, value) = find_or_create_by(key: key).update(value: value)
     def merge(key, hash) = save(key, get(key, {}).merge(hash.stringify_keys))
+    alias set save
       
     def sync_tickers       = get('sync_tickers')
-    def sync_ticker_sets   = chart_settings['sync_ticker_sets'] || false
-    def synced_instruments = Instrument.for_tickers(synced_tickers)
+    def sync_ticker_sets   = get('sync_ticker_sets') || false
       
-    def iex_last_update     = get('iex_last_update')&.to_time || 1.week.ago
-    def tinkoff_last_update = get('tinkoff_last_update')&.to_time || 1.week.ago
+    def iex_last_update         = get('iex_last_update')&.to_time || 1.week.ago
+    def iex_update_pending?     = get('iex_update_pending') || false
+    def tinkoff_last_update     = get('tinkoff_last_update')&.to_time || 1.week.ago
+    def tinkoff_update_pending? = get('tinkoff_update_pending') || false
       
     def chart_settings = get('chart_settings') || {}
     def chart_tickers  = chart_settings['tickers']

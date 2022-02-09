@@ -11,6 +11,7 @@ class RefreshPricesFromIex
       Price.set_missing_prices_to_close
     end
     Setting.save 'iex_last_update', Time.current
+    Setting.save 'iex_update_pending', false
     SyncChannel.push 'prices'
   end
 

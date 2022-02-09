@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     get :dashboard
     get :activities
     get :intraday, :candles
-    post :update_chart_settings, :update_intraday_levels, :update_ticker_sets
+    post :update_chart_settings, :update_intraday_levels, :update_ticker_sets, :refresh
   end
   resource :comparision
   resource :set_comparision  

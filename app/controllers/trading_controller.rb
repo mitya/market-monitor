@@ -120,4 +120,10 @@ class TradingController < ApplicationController
     TickerSet.update_from_lines params[:text].split("\n")
     render json: { }    
   end  
+  
+  def refresh
+    key = { ru: :tinkoff_update_pending, us: :iex_update_pending }[params[:scope].to_s.to_sym]
+    Setting.set key, true
+    render json: nil
+  end
 end
