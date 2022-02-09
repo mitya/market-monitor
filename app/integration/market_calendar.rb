@@ -63,6 +63,8 @@ class MarketCalendar
 
     def moex_holidays
       @moex_holidays ||= %w[
+        2022-01-07  
+        
         2021-12-31
         2021-11-04
         2021-05-03

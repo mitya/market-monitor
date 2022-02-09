@@ -1,4 +1,3 @@
-- 100 MA data & recalc others
 - dash for MA hits, volume gainers, expected MA hits
 - fully automate multiple missing days loading 
 - inject missing intraday candles
@@ -375,3 +374,4 @@
 + ajax buttons to trigger IEX / T price updates
 + check why some tickers are loading after the EOD
 + show last bar price in chart header
++ 100 MA data & recalc others

@@ -11,7 +11,7 @@ class DateIndicators < ApplicationRecord
       MarketCalendar.open_days(last_indicator&.date || 1.year.ago, date).each { |date| create_for instrument, date: date }
     end
 
-    def create_for(instrument, date: Current.yesterday)
+    def create_for(instrument, date: Current.yesterday, length_min_dates: nil)
       candle = instrument.day_candles!.find_date(date) || return
       close = candle.close
 
@@ -19,7 +19,9 @@ class DateIndicators < ApplicationRecord
       record = find_or_initialize_by instrument: instrument, date: date
       return if record.persisted?
 
-      {20 => 20, 50 => 50, 200 => 200}.each do |length, real_length|
+      {20 => 20, 50 => 50, 100 => 100, 200 => 200}.each do |length, real_length|
+        next if length_min_dates && length_min_dates[length] && date < length_min_dates[length]
+        
         accessor = "ema_#{length}"
 
         if close < 0.02
@@ -60,7 +62,13 @@ class DateIndicators < ApplicationRecord
       instrument = Instrument[instrument]
       transaction do
         instrument.indicators_history.delete_all
-        MarketCalendar.open_days(since, Date.yesterday).each { |date| DateIndicators.create_for instrument, date: date }
+        MarketCalendar.open_days(since, Date.yesterday).each do |date|
+          DateIndicators.create_for instrument, date: date, length_min_dates: {
+             20 =>  4.months.ago,
+             50 =>  9.months.ago,
+            100 => 20.months.ago,
+          }
+        end
         instrument.indicators_history.reload.last.update! current: true
       end
     end
@@ -77,6 +85,4 @@ __END__
 MarketCalendar.open_days(4.month.ago, Date.yesterday).each { |date| DateIndicators.create_for_all date: date, instruments: Instrument.all }
 DateIndicators.set_current
 DateIndicators.create_recursive instr('AAPL')
-DateIndicators.recreate_for_all %w[PEN]
-DateIndicators.recreate_for_all ["ACOR", "BBD", "APH"]
-DateIndicators.recreate_for_all %w[SLG FIZZ TTD GE SWI SHW CSGP VRNS KAP@GS APH NEOG]
+DateIndicators.recreate_for_all %w[RIOT]

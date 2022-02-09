@@ -54,6 +54,7 @@ rake options:day
 
 
 # Run if haven't used for a whilte
+rake     iex:days:missing since=2021-01-01
 rake     iex:days:missing since=2022-01-01 ok=1
 rake tinkoff:days:missing since=2022-01-01 ok=1 tickers=''
 
@@ -78,6 +79,8 @@ rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:d
 rake iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1
 rake candles:set_prev_closes candles:set_average_change
+
+rake iex:days:missing since=2021-12-01 special=1 ok=1 reverse=1 tickers='NU'
 
 
 ## Optional

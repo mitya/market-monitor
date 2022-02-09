@@ -72,9 +72,9 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     candlesSeries.setMarkers opens.map (openingTime) -> 
       { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'O' }
     
-  levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'gray', intraday: 'gray' }
-  levelLineStyles = (name) -> if name.includes('MA') then LineStyle.Dashed else if name.includes('intraday') then LineStyle.Solid else LineStyle.Dotted
-  levelLineWidths = (name) -> if name.includes('MA') then 2 else if name.includes('intraday') then 2 else 2
+  levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'black', intraday: 'gray' }
+  levelLineStyles = { MA20: 'Dashed', MA50: 'Dashed', MA100: 'Dashed', MA200: 'Dashed', open: 'Solid', close: 'Dashed', intraday: 'Dotted' }
+  levelLineWidths = { MA20: 2, MA50: 2, MA100: 2, MA200: 2, open: 2, close: 2, intraday: 2 }
   
   for title, values of levels
     continue if values == null
@@ -84,8 +84,8 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
         price: Number(level)
         color: levelColors[title]
         opacity: 0.5
-        lineWidth: levelLineWidths(title)
-        lineStyle: levelLineStyles(title)
+        lineWidth: levelLineWidths[title]
+        lineStyle: LineStyle[levelLineStyles[title]]
         axisLabelVisible: false
         title: title
 
@@ -117,6 +117,7 @@ document.addEventListener "turbolinks:load", ->
 
     loadCharts = ->
       data = await $fetchJSON "/trading/candles"    
+      console.log data
       clearCharts()
       for ticker, payload of data
         makeChart { ...payload, timeScaleVisible: timeScaleToggle.checked, priceScaleVisible: priceScaleToggle.checked }
