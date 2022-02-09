@@ -1,5 +1,3 @@
-+ increase the chart scale
-- add buttons to inc/dec prices scale
 - add buttons to show hide time/price scales
 - load the timeframe used on chart (Mx)
 - ajax buttons to trigger IEX / T price updates / specific interval loading
@@ -11,6 +9,7 @@
 - 100 MA data & recalc others
 - a row with indexes / commodity futures
 - fully automate multiple missing days loading 
+- show last price in chart header
 
 
 - list of intraday scans
@@ -373,3 +372,5 @@
 + reload charts after period/tickers/levels change
 + chart columns selector + daily / 1h on-chart vertical comparisions
 + mark opening intraday candles
++ increase the chart scale
++ add buttons to inc/dec prices scale

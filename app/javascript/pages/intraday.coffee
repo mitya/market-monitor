@@ -160,6 +160,14 @@ document.addEventListener "turbolinks:load", ->
       $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
       $delegate '.ticker-set-selector', '.list-group-item-action', 'click', selectTickerSet
     
+      $delegate '.trading-page', '.zoom-chart', 'click', (target) ->
+        target.blur()
+        step = Number(target.dataset.value)
+        for ticker, { chart } of charts
+          current = chart.timeScale().options().barSpacing
+          chart.timeScale().applyOptions(barSpacing: current + step)
+          chart.timeScale().scrollToRealTime()
+    
     
     bindToolbar()
     loadCharts()
