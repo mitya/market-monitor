@@ -50,12 +50,16 @@ class TradingController < ApplicationController
   end
   
   def intraday    
-    @chart_tickers = Setting.chart_tickers.join(' ')
+    @chart_settings = Setting.chart_settings
+    @chart_settings['columns'] ||= 2
+    @chart_settings['period'] ||= '3min'
+    @chart_settings['tickers'] ||= []
+
     @synced_tickers = Setting.synced_tickers.join(' ')
-    @period = Setting.chart_period || '3min'
-    @columns = Setting.chart_columns.presence || 2
+
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
+
     @ticker_sets = TickerSet.order(:key)
     @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
   end
@@ -93,10 +97,15 @@ class TradingController < ApplicationController
   end
   
   def update_chart_settings
-    Setting.save 'synced_tickers', params[:synced_tickers].split.map(&:upcase).sort
-    Setting.save 'chart_tickers',  params[:chart_tickers].split.map(&:upcase)
-    Setting.save 'chart_period',   Candle.normalize_interval(params[:period])
-    Setting.save 'chart_columns',  params[:columns].to_i.nonzero?
+    Setting.save 'sync_tickers', params[:synced_tickers].split.map(&:upcase).sort
+    Setting.merge 'chart_settings', { 
+      tickers: params[:chart_tickers].split.map(&:upcase), 
+      columns: params[:columns].to_i.nonzero?,
+      period: Candle.normalize_interval(params[:period]),
+      time_shown: params[:time_shown],
+      price_shown: params[:price_shown],
+    }
+
     render json: { }
   end
   

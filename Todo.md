@@ -1,5 +1,3 @@
-- go to realtime button
-- scales togglers
 - ajax buttons to trigger IEX / T price updates / specific interval loading
 - try to get the diff between VEON and others
 - check why some tickers are loading after the EOD
@@ -377,3 +375,5 @@
 + increase the chart scale
 + add buttons to inc/dec prices scale
 + load the timeframe used on chart (Mx)
++ go to realtime button
++ scales togglers
