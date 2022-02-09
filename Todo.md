@@ -1,9 +1,9 @@
 - mark opening / closing intraday candles
 - ajax buttons to trigger IEX / T price updates / specific interval loading
-- try to get the diff between VEON and others
 - increase the chart scale
-- check why some tickers are loading after the EOD
 - load the timeframe used on chart (Mx)
+- try to get the diff between VEON and others
+- check why some tickers are loading after the EOD
 
 - dash for MA hits, volume gainers, expected MA hits
 - tabs on dash (tops+categories / EOD indicators)
@@ -83,6 +83,10 @@
 - column selection
 - terminal-based UI
 - store the already loaded intraday dates for each interval (perf text vs close check)
+
+- refactor JS
+- Ruby 3.1
+- Rails 7
 
 
 

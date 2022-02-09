@@ -50,9 +50,9 @@ class TradingController < ApplicationController
   end
   
   def intraday    
-    @charted_tickers = Setting.charted_tickers.join(' ')
+    @chart_tickers = Setting.chart_tickers.join(' ')
     @synced_tickers = Setting.synced_tickers.join(' ')
-    @period = Setting.charted_period || '3min'
+    @period = Setting.chart_period || '3min'
     @columns = Setting.chart_columns.presence || 2
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
@@ -62,10 +62,10 @@ class TradingController < ApplicationController
   
   def candles
     is_update = params[:limit] == '1'
-    period = Setting.charted_period
+    period = Setting.chart_period
     repo = Candle.interval_class_for(period)
-    instruments = Instrument.for_tickers(Setting.charted_tickers).includes(:indicators, :annotation)
-    instruments = Setting.charted_tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
+    instruments = Instrument.for_tickers(Setting.chart_tickers).includes(:indicators, :annotation)
+    instruments = Setting.chart_tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
     # openings = Candle::M3.openings.where(ticker: instruments).index_by(&:ticker)
     openings = {}
     
@@ -94,10 +94,10 @@ class TradingController < ApplicationController
   end
   
   def update_chart_settings
-    Setting.save 'charted_tickers', params[:charted_tickers].split.map(&:upcase)
     Setting.save 'synced_tickers', params[:synced_tickers].split.map(&:upcase).sort
-    Setting.save 'charted_period', Candle.normalize_interval(params[:period])
-    Setting.save 'chart_columns', params[:columns].to_i.nonzero?
+    Setting.save 'chart_tickers',  params[:chart_tickers].split.map(&:upcase)
+    Setting.save 'chart_period',   Candle.normalize_interval(params[:period])
+    Setting.save 'chart_columns',  params[:columns].to_i.nonzero?
     render json: { }
   end
   

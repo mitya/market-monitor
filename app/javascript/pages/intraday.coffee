@@ -118,11 +118,11 @@ document.addEventListener "turbolinks:load", ->
         charts[ticker].candles.update dataRowToCandle payload.candles[0]
     
     updateChartSettings = ->
-      charted_tickers = chartedTickersField.value
+      chart_tickers = chartedTickersField.value
       synced_tickers = syncedTickersField.value
       period = intervalSelector.querySelector('.btn.active').dataset.value
       columns = columnsSelector.querySelector('.btn.active').dataset.value
-      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { charted_tickers, synced_tickers, period, columns }
+      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { chart_tickers, synced_tickers, period, columns }
       reload()
 
     updateIntradayLevels = ->

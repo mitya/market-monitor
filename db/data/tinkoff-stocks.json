@@ -12375,6 +12375,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG000BCVMH9",
+      "ticker": "CP",
+      "isin": "CA13645T1003",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Canadian Pacific Railway",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BD2NY8",
       "ticker": "BF.B",
       "isin": "US1156372096",
@@ -18996,5 +19006,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1901
+  "total": 1902
 }

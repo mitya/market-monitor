@@ -1,6 +1,6 @@
 .container-fluid.trading-page
   .toolbar.row.m-2.justify-content-center
-    input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@charted_tickers)
+    input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_tickers)
     .btn-group.btn-group-sm.w-auto.interval-selector.js-btn-group(data-initial=@period)
       button type="button" data-value="1min" class="btn btn-outline-secondary" 1m
       button type="button" data-value="3min" class="btn btn-outline-secondary" 3m
@@ -20,7 +20,7 @@
       .list-group.ticker-set-selector
         - @ticker_sets.each do |set|
           - tickers_line = set.tickers_line
-          - is_active = @charted_tickers == tickers_line
+          - is_active = @chart_tickers == tickers_line
           button type="button" class=class_names("list-group-item list-group-item-action small-caps", active: is_active) data-tickers=tickers_line data-key=set.key
             = set.key.downcase
       

@@ -3,7 +3,7 @@ class IntradayCandleLoader
     return R.tickers_from_env if R.tickers_from_env.present?
     
     tickers = Setting.synced_tickers
-    tickers += Setting.charted_tickers
+    tickers += Setting.chart_tickers
     tickers += TickerSet.pluck(:tickers).flatten
     tickers.sort
   end
