@@ -1,11 +1,8 @@
-- show last bar price in chart header
-- inject missing intraday candles
-- check partial candles
-
 - 100 MA data & recalc others
 - dash for MA hits, volume gainers, expected MA hits
 - fully automate multiple missing days loading 
-
+- inject missing intraday candles
+- check partial candles
 
 - list of intraday scans
 - show scan ticker in the next available intraday chart
@@ -377,3 +374,4 @@
 + option to disable ticker set sync
 + ajax buttons to trigger IEX / T price updates
 + check why some tickers are loading after the EOD
++ show last bar price in chart header

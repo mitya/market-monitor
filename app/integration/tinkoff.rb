@@ -244,7 +244,7 @@ class Tinkoff
     
     def import_intraday_candles_for_today(instrument, interval)
       last_loaded_candle = instrument.candles_for(interval).today.by_time.last
-      return if last_loaded_candle.is_closing?
+      return if last_loaded_candle&.is_closing?
       
       since = last_loaded_candle ? last_loaded_candle.datetime + 1 : instrument.market_open_time
       till  = instrument.market_close_time

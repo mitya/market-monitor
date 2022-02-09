@@ -28,7 +28,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
-
+  
   priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
   
   chart = createChart container.querySelector('.intraday-chart-content'), { 
@@ -52,15 +52,21 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   
   legend.querySelector('.chart-ticker').innerText = ticker
   
+  charts[ticker] = { chart: chart, candles: candlesSeries, volume: volumeSeries, lastCandle: candlesData[candlesData.length - 1] }
+  
+  setDefaultLegend = ->
+    lastCandle = charts[ticker].lastCandle
+    defaultText = if lastCandle then lastCandle.close.toFixed(2) else ''
+    changeBox = legend.querySelector('.candle-change')
+    changeBox.innerText = defaultText
+  setDefaultLegend()
+  
   chart.subscribeCrosshairMove (param) -> 
     if (param.time)
       candle = Array.from( param.seriesPrices.values() )[0]
       legend.querySelector('.candle-change').innerText = candle.close.toFixed(2)
     else
-      legend.querySelector('.candle-change').innerText = ''
-  
-  
-  charts[ticker] = { chart: chart, candles: candlesSeries, volume: volumeSeries }
+      setDefaultLegend()
   
   if opens
     candlesSeries.setMarkers opens.map (openingTime) -> 
@@ -111,7 +117,6 @@ document.addEventListener "turbolinks:load", ->
 
     loadCharts = ->
       data = await $fetchJSON "/trading/candles"    
-      console.log data
       clearCharts()
       for ticker, payload of data
         makeChart { ...payload, timeScaleVisible: timeScaleToggle.checked, priceScaleVisible: priceScaleToggle.checked }
@@ -119,7 +124,9 @@ document.addEventListener "turbolinks:load", ->
     refreshCharts = ->
       data = await $fetchJSON "/trading/candles?limit=1"
       for ticker, payload of data
-        charts[ticker].candles.update dataRowToCandle payload.candles[0]
+        newCandle = dataRowToCandle payload.candles[0]
+        charts[ticker].lastCandle = newCandle
+        charts[ticker].candles.update newCandle
     
     updateChartSettings = (options = {}) ->
       chart_tickers = chartedTickersField.value
