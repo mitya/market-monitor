@@ -31,10 +31,12 @@ makeChart = ({ ticker, candles, opens, levels }) ->
 
   priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
   
+  scalesVisible = false
   chart = createChart container.querySelector('.intraday-chart-content'), { 
     width: 0, height: 280, 
     timeScale: { timeVisible: true, secondsVisible: false },
-    priceScale: { entireTextOnly: true },
+    priceScale: { entireTextOnly: true, visible: scalesVisible },
+    timeScale: { visible: scalesVisible, barSpacing: 10 },
     localization: {
       priceFormatter: priceFormatter
     },

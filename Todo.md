@@ -1,4 +1,6 @@
-- increase the chart scale
++ increase the chart scale
+- add buttons to inc/dec prices scale
+- add buttons to show hide time/price scales
 - load the timeframe used on chart (Mx)
 - ajax buttons to trigger IEX / T price updates / specific interval loading
 - try to get the diff between VEON and others
