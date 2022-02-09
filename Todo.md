@@ -1,9 +1,8 @@
-- ajax buttons to trigger IEX / T price updates / specific interval loading
-- try to get the diff between VEON and others
 - check why some tickers are loading after the EOD
-- show last bar price in chart header
 - inject missing intraday candles
-- option to disable ticker set sync
+- ajax buttons to trigger IEX / T price updates / specific interval loading
+- check partial candles
+- show last bar price in chart header
 
 - 100 MA data & recalc others
 - dash for MA hits, volume gainers, expected MA hits
@@ -377,3 +376,4 @@
 + load the timeframe used on chart (Mx)
 + go to realtime button
 + scales togglers
++ option to disable ticker set sync

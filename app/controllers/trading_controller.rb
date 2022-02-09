@@ -55,7 +55,7 @@ class TradingController < ApplicationController
     @chart_settings['period'] ||= '3min'
     @chart_settings['tickers'] ||= []
 
-    @synced_tickers = Setting.synced_tickers.join(' ')
+    @synced_tickers = Setting.sync_tickers.join(' ')
 
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
@@ -98,12 +98,13 @@ class TradingController < ApplicationController
   
   def update_chart_settings
     Setting.save 'sync_tickers', params[:synced_tickers].split.map(&:upcase).sort
+    Setting.save 'sync_ticker_sets', params[:sync_ticker_sets]
     Setting.merge 'chart_settings', { 
       tickers: params[:chart_tickers].split.map(&:upcase), 
       columns: params[:columns].to_i.nonzero?,
       period: Candle.normalize_interval(params[:period]),
       time_shown: params[:time_shown],
-      price_shown: params[:price_shown],
+      price_shown: params[:price_shown]      
     }
 
     render json: { }

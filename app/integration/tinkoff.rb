@@ -226,7 +226,7 @@ class Tinkoff
       return if !instrument.tinkoff?
       return if !instrument.market_open? && since&.today?
       
-      since = since.change(min: 00) if interval == 'hour' && instrument.usd? &&  since.hour == 9 && since.min == 30
+      since = since.change(min: 00) if interval == 'hour' && instrument.usd? && since && since.hour == 9 && since.min == 30
 
       day_start = instrument.market_open_time
       last_loaded_candle = Candle.interval_class_for(interval).where(instrument: instrument).today.by_time.last

@@ -104,6 +104,7 @@ document.addEventListener "turbolinks:load", ->
     timeScaleToggle     = $qs('.trading-page #toggle-time')
     priceScaleToggle    = $qs('.trading-page #toggle-price')
     gotoEndButton       = $qs('.trading-page .go-to-end')
+    syncTickerSetsToggle= $qs('.trading-page #sync-ticker-sets-toggle')
 
     reload = ->
       location.reload()
@@ -127,7 +128,10 @@ document.addEventListener "turbolinks:load", ->
       columns = columnsSelector.querySelector('.btn.active').dataset.value
       time_shown = timeScaleToggle.checked
       price_shown = priceScaleToggle.checked
-      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { chart_tickers, synced_tickers, period, columns, time_shown, price_shown }
+      sync_ticker_sets = syncTickerSetsToggle.checked
+      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { 
+        chart_tickers, synced_tickers, period, columns, time_shown, price_shown, sync_ticker_sets 
+      }
       reload() unless options?.reload == false
 
     updateIntradayLevels = ->
@@ -172,6 +176,7 @@ document.addEventListener "turbolinks:load", ->
       
       $bind chartedTickersField, 'change', updateChartSettings
       $bind syncedTickersField, 'change', updateChartSettings
+      $bind syncTickerSetsToggle, 'change', -> updateChartSettings reload: false
       $bind $qs('.intraday-levels .btn'), 'click', updateIntradayLevels
       $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
       $delegate '.ticker-set-selector', '.list-group-item-action', 'click', selectTickerSet
