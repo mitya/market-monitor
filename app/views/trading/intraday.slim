@@ -26,6 +26,7 @@
       input type="checkbox" class="btn-check" id="toggle-price" autocomplete="off" checked=@chart_settings['price_shown']
       label class="btn btn-outline-secondary" for="toggle-price" $
       button type="button" class="btn btn-outline-secondary go-to-end" = "≥"
+      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = "FS"
       
     select class="ticker-set-selector form-select w-auto"
       option

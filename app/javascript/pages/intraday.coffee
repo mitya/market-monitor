@@ -137,6 +137,14 @@ formatTime = (ms) ->
   hours = time.getHours()
   minutes = time.getMinutes()
   "#{padNumber hours}:#{padNumber minutes}"
+  
+toggleUrlParam = (name) ->
+  url = new URL(location.href)
+  if url.searchParams.get(name) == '1'
+    url.searchParams.delete name
+  else
+    url.searchParams.set name, '1'
+  location.assign url
 
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
@@ -226,11 +234,13 @@ document.addEventListener "turbolinks:load", ->
       $bind $qs('.intraday-levels .btn'), 'click', updateIntradayLevels
       $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
 
+      $bind $qs('.toggle-full-screen'), 'click', -> toggleUrlParam "full-screen"
+        
+      
       $bind $qs('.ticker-set-selector'), 'change', (e) ->
         tickersLine = e.target.value
         chartedTickersField.value = tickersLine
-        updateChartSettings()
-      
+        updateChartSettings()      
     
       $delegate '.trading-page', '.zoom-chart', 'click', (target) ->
         target.blur()

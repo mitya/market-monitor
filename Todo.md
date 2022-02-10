@@ -1,5 +1,3 @@
-+ calculate charts height
-- full screen mode
 - remember chart scales
 - check partial candles
 - dash for MA hits & volume gainers
@@ -385,3 +383,5 @@
 + load far history after today loading
 + show % change since open in legend
 + show candle time in legend
++ calculate charts height
++ full screen mode
