@@ -27,15 +27,17 @@ class Tinkoff
       return "Missing candles for #{instrument}".red if candle_class == nil
 
       candle_class.transaction do
+        candles = candles.sort_by { _1['time' ]}
         candles.map do |hash|
-          time = Time.parse hash['time']
-          time = time.in_time_zone(instrument.time_zone) if candle_class.intraday?
-          date = time.to_date
-          time = time.to_s(:time) if candle_class.intraday?
+          timestamp = Time.parse(hash['time']).in_time_zone(instrument.time_zone)
+          date = timestamp.to_date
+          hhmm = timestamp.to_s(:time)
+          ongoing = interval == 'day' && date == Current.date && !Current.weekend? ||
+                    candle_class.intraday? && timestamp + candle_class.interval_duration >= Time.current
 
-          candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: time, date: date
-          # puts "Import Tinkoff #{date} #{time} #{interval} candle for #{instrument}".green if candle.new_record?
-          puts "Import Tinkoff #{date} #{time} #{interval} #{instrument}".colorize(candle.new_record?? :green : :yellow)
+          candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: hhmm, date: date
+          # puts "Import Tinkoff #{date} #{hhmm} #{interval} candle for #{instrument}".green if candle.new_record?
+          puts "Import Tinkoff #{date} #{hhmm} #{interval} #{instrument} #{ongoing ? '...' : ''}".colorize(candle.new_record?? :green : :yellow)
 
           candle.ticker  = instrument.ticker
           candle.source  = 'tinkoff'
@@ -45,12 +47,12 @@ class Tinkoff
           candle.low     = hash['l']
           candle.volume  = hash['v'] > Integer::Max31 ? Integer::Max31 : hash['v']
           candle.date    = date
-          candle.ongoing = interval == 'day' && date == Current.date && !Current.weekend?
-          
+          candle.ongoing = ongoing
+
           if candle_class.intraday? && !candle_class.is_a?(Candle::H1)
-            candle.is_opening! if time == instrument.opening_hhmm
+            candle.is_opening! if hhmm == instrument.opening_hhmm
           end
-                    
+
           candle.save!
           candle
         end
@@ -97,7 +99,7 @@ class Tinkoff
     def import_intraday_candles(instrument, interval, since: nil, till: nil)
       return if !instrument.tinkoff?
       # return if !instrument.market_open? && since&.today?
-      
+
       since = since.change(min: 00) if interval == 'hour' && instrument.usd? && since && since.hour == 9 && since.min == 30
       till ||= since.end_of_day
 
@@ -105,45 +107,47 @@ class Tinkoff
       # last_loaded_candle = instrument.candles_for(interval).today.by_time.last
       # since ||= last_loaded_candle ? last_loaded_candle.datetime + 1 : day_start
 
-      return if since + Candle.interval_duration(interval) > Time.current
+      return if since + Candle.interval_duration_for(interval) > Time.current
 
       puts "load tinkoff #{instrument} #{since} #{till}".magenta
       data = load_intervals instrument, interval, since, till, delay: 0.05
       candles = import_candles_from_hash data
-      
+
       # inject empty candles for illiquid names
       # candles.select { !_1.prev_close && !_1.is_opening? }.each do |candle|
       #   last_prev = candle.whatever_previous
       #   candle.times_between(last_prev).each do |time|
       #     candle.class.create! ticker: instrument, date: candle.date, time: time,
-      #       open: candle.open, close: candle.open, high: candle.open, log: candle.open, volume: 0, 
+      #       open: candle.open, close: candle.open, high: candle.open, log: candle.open, volume: 0,
       #       source: candle.source, prev_close: last_prev.close
       #   end
       # end
-      
+
     end
-    
+
     def import_intraday_candles_for_today(instrument, interval)
-      last_loaded_candle = instrument.candles_for(interval).today.by_time.last
-      return if last_loaded_candle&.is_closing?
-      
-      since = last_loaded_candle ? last_loaded_candle.datetime + 1.second : instrument.today_opening
+      last_loaded = instrument.candles_for(interval).today.by_time.last
+      return if last_loaded&.is_closing?
+
+      since = last_loaded ?
+        last_loaded.datetime + (last_loaded.ongoing? ? 0 : 1.second) :
+        instrument.today_opening
       till  = instrument.today_closing
 
       import_intraday_candles instrument, interval, since: since, till: till
-      
+
       if Time.current > instrument.today_closing
         instrument.candles_for(interval).on(since.to_date).order(:time).last&.is_closing!
       end
-    end    
+    end
 
     def import_intraday_candles_for_dates(instrument, interval, dates: [Current.date])
       dates.each do |date|
         import_intraday_candles instrument, interval, since: instrument.opening_on(date), till: instrument.closing_on(date)
-        
+
         if date.past? || Time.current > instrument.today_closing
-          instrument.candles_for(interval).on(date).order(:time).last&.is_closing! 
-        end        
+          instrument.candles_for(interval).on(date).order(:time).last&.is_closing!
+        end
       end
     end
 

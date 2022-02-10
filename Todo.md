@@ -1,4 +1,3 @@
-- check partial candles
 - dash for MA hits & volume gainers
 
 - list of intraday scans
@@ -385,3 +384,4 @@
 + calculate charts height
 + full screen mode
 + remember chart scales
++ mark ongoing intraday candles

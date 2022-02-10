@@ -18,11 +18,10 @@ class Candle < ApplicationRecord
 
   before_create { self.prev_close ||= previous&.close }
 
-  def self.find_date_before(date)    = order(date: :desc).where('date <  ?', date.to_date).take
-  def self.find_date_or_before(date) = order(date: :desc).where('date <= ?', date.to_date).take
-  def self.find_date_or_after(date)  = order(date: :asc) .where('date >= ?', date.to_date).take
-  def self.find_date(date)        = for_date(date).take
-  def self.find_dates_in(period)  = where(date: period)
+
+  Intraday
+  extend ClassMethods
+
 
   def final? = !ongoing?
   def range = low..high
@@ -43,7 +42,6 @@ class Candle < ApplicationRecord
   def datetime = date.end_of_day
   def datetime_as_msk = datetime + 3.hours
   def opening? = is_opening?
-  # def opening? = MarketInfo.ticker_opening_time(ticker) == time.strftime('%H:%M')
 
   def change = close - open
   def rel_change = (change / open).round(4)
@@ -91,23 +89,23 @@ class Candle < ApplicationRecord
   def trend_down? = prev_close && close <= prev_close
   def days_up = previous && trend_up? ? 1 + previous.days_up : 0
   def days_down = previous && trend_down? ? 1 + previous.days_down : 0
-    
-  def change_key 
-    case 
+
+  def change_key
+    case
       when prev_close == nil then '-'
       when close == prev_close then '='
-        
+
       when close > prev_close && down? then 'T'
       when close > prev_close && volatility_above > 0.04 then 'S'
       when close > prev_close then 'U'
-        
+
       when close < prev_close && up? then 't'
       when close < prev_close && volatility_below > 0.04 then 's'
       when close < prev_close then 'D'
       else '-'
     end
   end
-  
+
   def change_map(length = 10) = previous_n(length, including: true).map(&:change_key).join
 
   # def up_for?(period_count)
@@ -170,111 +168,13 @@ class Candle < ApplicationRecord
     return ['down',  high / prev.high - 1] if high > prev.high
   end
 
-  def interval_duration = self.class.interval_duration(interval)
+  def interval_duration = self.class.interval_duration
   def abs_to_percent(value, base) = close * percent
 
   def average_prior_volume(days: 10) = siblings.where('date < ?', date).take(days).pluck(:volume).average
   def volume_change(days: 10) = volume.to_f / average_prior_volume(days: days)
 
   def volume_to_average = volume.to_f / instrument.info&.avg_volume rescue nil
-
-  class << self
-    def last_loaded_date = final.maximum(:date)
-
-    def interval_class_for(interval)
-      interval = minutes_to_interval(interval) if interval.is_a?(Numeric)
-      { 'hour' => H1, '5min' => M5, '3min' => M3, '1min' => M1, 'day' => self }[interval]
-    end
-
-    def interval_duration(interval)
-      case interval
-        when '5min' then 5.minutes
-        when '3min' then 3.minutes
-        when '1min' then 1.minute
-        when 'hour' then 1.hour
-        when 'day'  then 1.day
-      end
-    end
-    
-    IntervalShorthands = {
-      1 => '1min', 3 => '3min', 5 => '5min', 60 => 'hour',
-      '1' => '1min', '3' => '3min', '5' => '5min', '60' => 'hour',
-      '1m' => '1min', '3m' => '3min', '5m' => '5min', '1h' => 'hour', '1d' => 'day'
-    }
-    
-    def normalize_interval(shorthand) = IntervalShorthands[shorthand] || shorthand
-    alias minutes_to_interval normalize_interval
-
-    def remove_dups
-      iex.find_each do |candle|
-        exist = logger.silence do
-          day.where.not(id: candle.id).where(ticker: candle.ticker, date: candle.date).exists?
-        end
-        if exist
-          day.where.not(id: candle.id).where(ticker: candle.ticker, date: candle.date).delete_all
-        end
-      end
-    end
-    
-    def intraday? = false
-  end
-
-  class Intraday < Candle
-    ValidIntervals = %w[hour 5min 3min 1min]
-    
-    scope :openings, -> { where is_opening: true }
-    scope :closings, -> { where is_closing: true }
-        
-    def previous = time && siblings.find_by(date: date, time: time - interval_duration)
-    def whatever_previous = siblings.where(date: date).where('time < ?', time).order(:time).last
-    
-    def to_s = "<#{ticker}:#{interval}:#{date}T#{hhmm}>"
-    def to_full_s = "#{to_s} #{ohlc_str} P#{prev_close} #{close_change} #{rel_close_change}"
-    
-    def datetime = instrument.time_zone.parse("#{date} #{hhmm}")
-    def hhmm = time_before_type_cast.first(5)
-    
-    def interval_duration_in_mins = interval_duration / 60  
-    def interval_index = (time.hour * 60 + time.min) / interval_duration_in_mins
-    def interval_indexes_between(other) = other ? other.interval_index.upto(interval_index).to_a[1...-1] : []
-    def times_between(other) = interval_indexes_between(other).map { self.class.interval_index_to_time _1, interval_duration_in_mins }
-
-    def is_closing! = update!(is_closing: true)
-    def is_opening! = update!(is_opening: true)
-          
-    class << self
-      def intraday? = true
-      
-      def interval_index_to_time(index, interval_duration_in_mins)
-        mins_since_midnight = index * interval_duration_in_mins
-        hours, mins = mins_since_midnight.divmod(60)
-        "#{hours.to_s.rjust(2, '0')}:#{mins.to_s.rjust(2, '0')}"
-      end
-    end
-  end
-
-  class H1 < Intraday
-    self.table_name = "candles_h1"
-  end
-
-  class M5 < Intraday
-    self.table_name = "candles_m5"
-  end
-
-  class M3 < Intraday
-    self.table_name = "candles_m3"
-  end
-
-  class M1 < Intraday
-    self.table_name = "candles_m1"
-  end
-
-  class DayTinkoff < Candle
-    self.table_name = "candles_d1_tinkoff"
-  end
 end
 
 __END__
-
-select distinct c.ticker from candles_m5 c left join instruments i on c.ticker = i.ticker where i.ticker is null
-delete from candles_m5 where ticker in (select distinct c.ticker from candles_m5 c left join instruments i on c.ticker = i.ticker where i.ticker is null)
