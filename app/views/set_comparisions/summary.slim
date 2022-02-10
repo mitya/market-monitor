@@ -1,28 +1,23 @@
-- selector = params[:selector].presence || 'last'
-- precision = selector.in?(%w[last d1 d2 d3 d4 w1 w2]) ? 1 : 0
 - tickers = params[:tickers].split.map(&:upcase).compact.uniq.to_set if params[:tickers].present?
 - currency = params[:currency].presence
 - availability = params[:availability].presence
+- selector = 'last'
+- precision = 1
 
 main.container-fluid.gainers-dashboard
   details.my-2.mx-3
     summary
-      = tag.span params[:selector].presence || 'Today', class: "badge bg-secondary"
-    form#list-config(action=set_comparision_path class='my-2')
-      .row
-        .col
-          = render 'instruments/filter_by_tickers'
-          = bs_select :selector, 'Selector:', %w[last] + Aggregate::Selectors + MarketCalendar.special_dates - %w[d1]
-        .col
-          = render 'instruments/filter_by_currency', lw: 2
-          = render 'instruments/filter_by_availability', lw: 2
+    form#list-config(action=summary_set_comparision_path class='my-2')
+      = render 'instruments/filter_by_currency', lw: 2
+      = render 'instruments/filter_by_availability', lw: 2
 
   .container-fluid
     .row
       - @set_groups.each do |sets|
         .col.flex-grow-0.gainers-col
           - sets.each do |set|
-            h6.ps-1= category_title set.key
+            h6.ps-1(class=class_names('is-green': set.key =~ /up_break|up_test/, 'is-red': set.key =~ /down_break|down_test/))
+              = category_title set.key
             table.table.table-sm.table-hover.table-font-sm.tickers-table.table-no-border.table-sm-v.dash-table
               tbody
                 - instruments = set.instruments.includes(:aggregate)
@@ -31,7 +26,7 @@ main.container-fluid.gainers-dashboard
                 - instruments = instruments.select { _1.premium? } if availability == 'premium'
                 - instruments = instruments.reject { _1.premium? } if availability == 'tinkoff'
                 - instruments = instruments.sort_by { _1.stored_gain_since(selector) || -1 }
-                - instruments = instruments.reverse unless set.key.to_s.include?('losers')
+                - instruments = instruments.reverse
                 - instruments.each do |inst|
                   - value = inst.stored_gain_since(selector)
                   tr

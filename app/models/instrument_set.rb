@@ -11,12 +11,15 @@ class InstrumentSet
 
   def symbols
     @symbols ||= begin
-      if source == :category
+      case source
+      when :category
         if Tops.respond_to?(key)
           Tops.send(key, **params)
         else
           self.class.symbols_for_category(key)
         end
+      when :static
+        params[:items].map(&:upcase)
       else
         file = Pathname("db/instrument-sets/#{key}.txt")
         stored_symbols = file.exist?? file.readlines(chomp: true).map { |sym| sym.split(':').last.upcase } : []
@@ -29,7 +32,6 @@ class InstrumentSet
         end
         (stored_symbols + virtual_symbols).uniq.sort
       end
-
     end
   end
 
@@ -63,6 +65,10 @@ class InstrumentSet
 
     def categories
       @categories ||= YAML.load_file("db/categories.yaml").transform_values { |str| str.to_s.split.compact.map(&:upcase).uniq.sort }
+    end
+
+    def reload_categories!
+      @categories = nil
     end
 
     def category_titles

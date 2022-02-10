@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     post :limit_order, :cancel_order, on: :collection
   end
   resources :orders, only: %i[index]
-  resources :operations, only: %i[index]  
+  resources :operations, only: %i[index]
   resource :trading, only: %i[], controller: :trading do
     get :dashboard
     get :activities
@@ -35,11 +35,13 @@ Rails.application.routes.draw do
     post :update_chart_settings, :update_intraday_levels, :update_ticker_sets, :refresh
   end
   resource :comparision
-  resource :set_comparision  
+  resource :set_comparision  do
+    get :summary
+  end
   resources :news
 
   mount ActionCable.server => '/cable'
-  
+
   mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql" if Rails.env.development?
-  post "/graphql", to: "graphql#execute"  
+  post "/graphql", to: "graphql#execute"
 end

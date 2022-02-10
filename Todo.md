@@ -1,4 +1,8 @@
-- dash for MA hits & volume gainers
+- show rel vold & days since last for MA dash
+- quick currency / source selectors for dashboards (in summary)
+- volume gainers dash
+- spikes dash
+- alarms dash
 
 - list of intraday scans
 - hits for today open & yesterday close
@@ -385,3 +389,4 @@
 + full screen mode
 + remember chart scales
 + mark ongoing intraday candles
++ dash for MA hits
