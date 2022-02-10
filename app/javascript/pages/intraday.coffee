@@ -1,14 +1,15 @@
 import { createChart, CrosshairMode, LineStyle, PriceScaleMode } from 'lightweight-charts'
 
 charts = {}
+currentBarSpacing = 7
 
 window.getCharts = -> charts
 
 chartsContainer = -> document.querySelector('.intraday-charts')
-clearCharts = -> 
+clearCharts = ->
   chartsContainer().innerHTML = ''
   charts = {}
-  
+
 dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
 dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
@@ -27,32 +28,34 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   ")
   container = chartsContainer().lastChild
   legend = container.querySelector('.intraday-chart-legend')
-  
+  currentBarSpacing = parseInt(chartsContainer().dataset.barSpacing)
+  console.log currentBarSpacing
+
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
-  
+
   priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
-  
+
   windowHeight = window.innerHeight
   navbarHeight = document.querySelector('.main-navbar').offsetHeight
   toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight
   chartContainerHeight = windowHeight - navbarHeight - toolbarHeight
   chartHeight = chartContainerHeight / 2 - 20 * 2
-  
-  chart = createChart container.querySelector('.intraday-chart-content'), { 
-    width: 0, height: chartHeight, 
-    timeScale: { timeVisible: true, secondsVisible: false, visible: timeScaleVisible, barSpacing: 7 },
-    rightPriceScale: { 
-      entireTextOnly: true, 
+
+  chart = createChart container.querySelector('.intraday-chart-content'), {
+    width: 0, height: chartHeight,
+    timeScale: { timeVisible: true, secondsVisible: false, visible: timeScaleVisible, barSpacing: currentBarSpacing },
+    rightPriceScale: {
+      entireTextOnly: true,
       visible: priceScaleVisible,
       mode: PriceScaleMode.Percentage,
-    },   		
+    },
     localization: {
       priceFormatter: priceFormatter
     },
   }
-  
-  candlesSeries = chart.addCandlestickSeries()  
+
+  candlesSeries = chart.addCandlestickSeries()
   candlesSeries.setData candlesData
 
   volumeSeries = chart.addHistogramSeries
@@ -61,16 +64,16 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     color: 'rgba(76, 76, 76, 0.5)'
     priceScaleId: '', scaleMargins: { top: 0.85, bottom: 0 }
   volumeSeries.setData volumeData
-  
+
   legend.querySelector('.chart-ticker').innerText = ticker
-  
+
   charts[ticker] = { chart: chart, candles: candlesSeries, volume: volumeSeries, lastCandle: candlesData[candlesData.length - 1] }
-  
+
   setLegendFromCandle = (candle) ->
     changeBox = legend.querySelector('.change-percent')
     if candle
       formattedPrice = candle.close.toFixed(2)
-      formattedTime = formatTime(candle.time - 3 * 60 * 60)      
+      formattedTime = formatTime(candle.time - 3 * 60 * 60)
       legend.querySelector('.candle-time').innerText = formattedTime
       legend.querySelector('.candle-price').innerText = formattedPrice
 
@@ -84,29 +87,29 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
           changeBox.classList.remove('is-red')
         else
           changeBox.classList.add('is-red')
-          changeBox.classList.remove('is-green')        
+          changeBox.classList.remove('is-green')
     else
       legend.querySelector('.candle-time').innerText = ''
       legend.querySelector('.candle-price').innerText = ''
       changeBox.innerText = ''
-  
+
   setLegendFromCandle charts[ticker].lastCandle
-  
-  chart.subscribeCrosshairMove (param) -> 
+
+  chart.subscribeCrosshairMove (param) ->
     if (param.time)
       candle = Array.from( param.seriesPrices.values() )[0]
       setLegendFromCandle { ...candle, time: param.time }
     else
       setLegendFromCandle charts[ticker].lastCandle
-  
+
   if opens
-    candlesSeries.setMarkers opens.map (openingTime) -> 
+    candlesSeries.setMarkers opens.map (openingTime) ->
       { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'O' }
-    
+
   levelColors =     { MA20: 'cyan',   MA50: 'magenta', MA100: 'magenta', MA200: 'magenta', open: 'orange', close: 'black',  intraday: 'gray' }
   levelLineStyles = { MA20: 'Solid',  MA50: 'Solid',   MA100: 'Solid',   MA200: 'Solid',   open: 'Solid',  close: 'Solid',  intraday: 'Dotted' }
   levelLineWidths = { MA20: 2,        MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,        intraday: 2 }
-  
+
   for title, values of levels
     continue if values == null
     values = [values] unless values instanceof Array
@@ -121,7 +124,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
         title: title
 
   # chart.timeScale().fitContent()
-    
+
   # # circle arrowDown arrowUp
   # lineSeries.setMarkers [
   #   { time: candlesData[candlesData.length - 10].time, position: 'aboveBar', color: 'red', shape: 'arrowDown', text: '2Top' },
@@ -137,7 +140,7 @@ formatTime = (ms) ->
   hours = time.getHours()
   minutes = time.getMinutes()
   "#{padNumber hours}:#{padNumber minutes}"
-  
+
 toggleUrlParam = (name) ->
   url = new URL(location.href)
   if url.searchParams.get(name) == '1'
@@ -162,19 +165,19 @@ document.addEventListener "turbolinks:load", ->
       location.reload()
 
     loadCharts = ->
-      data = await $fetchJSON "/trading/candles"    
+      data = await $fetchJSON "/trading/candles"
       console.log data
       clearCharts()
       for ticker, payload of data
         makeChart { ...payload, timeScaleVisible: timeScaleToggle.checked, priceScaleVisible: priceScaleToggle.checked }
-      
+
     refreshCharts = ->
       data = await $fetchJSON "/trading/candles?limit=1"
       for ticker, payload of data
         newCandle = dataRowToCandle payload.candles[0]
         charts[ticker].lastCandle = newCandle
         charts[ticker].candles.update newCandle
-    
+
     updateChartSettings = (options = {}) ->
       chart_tickers = chartedTickersField.value
       synced_tickers = syncedTickersField.value
@@ -183,8 +186,10 @@ document.addEventListener "turbolinks:load", ->
       time_shown = timeScaleToggle.checked
       price_shown = priceScaleToggle.checked
       sync_ticker_sets = syncTickerSetsToggle.checked
-      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: { 
-        chart_tickers, synced_tickers, period, columns, time_shown, price_shown, sync_ticker_sets 
+      bar_spacing = currentBarSpacing
+
+      await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: {
+        chart_tickers, synced_tickers, period, columns, time_shown, price_shown, sync_ticker_sets, bar_spacing
       }
       reload() unless options?.reload == false
 
@@ -192,7 +197,7 @@ document.addEventListener "turbolinks:load", ->
       text = intradayLevelsField.value
       await $fetchJSON "/trading/update_intraday_levels", method: 'POST', data: { text }
       reload()
-      
+
     updateTickerSets = ->
       text = $qs('.ticker-sets textarea').value
       await $fetchJSON "/trading/update_ticker_sets", method: 'POST', data: { text }
@@ -204,30 +209,30 @@ document.addEventListener "turbolinks:load", ->
       btn.classList.add('active')
       updateChartSettings()
       reload()
-        
+
     bindToolbar = ->
       $delegate '.trading-page', '.js-btn-group .btn', 'click', (button) ->
         other.classList.remove('active') for other in button.closest('.btn-group').querySelectorAll('.btn')
         button.classList.add('active')
         button.blur()
         updateChartSettings()
-        
+
       intervalSelector.querySelector(".btn[data-value='#{intervalSelector.dataset.initial}']").classList.add('active')
       columnsSelector.querySelector(".btn[data-value='#{columnsSelector.dataset.initial}']").classList.add('active')
 
       $bind timeScaleToggle, 'change', ->
         for ticker, { chart } of charts
-          chart.applyOptions timeScale: { visible: timeScaleToggle.checked } 
+          chart.applyOptions timeScale: { visible: timeScaleToggle.checked }
         updateChartSettings reload: false
 
       $bind priceScaleToggle, 'change', ->
         for ticker, { chart } of charts
-          chart.applyOptions priceScale: { visible: priceScaleToggle.checked } 
-        updateChartSettings reload: false      
-      
+          chart.applyOptions priceScale: { visible: priceScaleToggle.checked }
+        updateChartSettings reload: false
+
       $bind gotoEndButton, 'click', ->
         chart.timeScale().scrollToRealTime() for ticker, { chart } of charts
-      
+
       $bind chartedTickersField, 'change', updateChartSettings
       $bind syncedTickersField, 'change', updateChartSettings
       $bind syncTickerSetsToggle, 'change', -> updateChartSettings reload: false
@@ -235,24 +240,23 @@ document.addEventListener "turbolinks:load", ->
       $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
 
       $bind $qs('.toggle-full-screen'), 'click', -> toggleUrlParam "full-screen"
-        
-      
+
+
       $bind $qs('.ticker-set-selector'), 'change', (e) ->
         tickersLine = e.target.value
         chartedTickersField.value = tickersLine
-        updateChartSettings()      
-    
+        updateChartSettings()
+
       $delegate '.trading-page', '.zoom-chart', 'click', (target) ->
         target.blur()
         step = Number(target.dataset.value)
+        currentBarSpacing = currentBarSpacing + step
         for ticker, { chart } of charts
-          current = chart.timeScale().options().barSpacing
-          chart.timeScale().applyOptions(barSpacing: current + step)
+          # current = chart.timeScale().options().barSpacing
+          chart.timeScale().applyOptions(barSpacing: currentBarSpacing)
           chart.timeScale().scrollToRealTime()
-    
-    
+        updateChartSettings reload: false
+
     bindToolbar()
     loadCharts()
     setInterval refreshCharts, 10_000
-
-

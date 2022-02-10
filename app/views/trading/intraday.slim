@@ -1,25 +1,25 @@
 .container-fluid.trading-page
   .toolbar.row.m-2.justify-content-center.trading-toolbar
     input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_settings['tickers'].join(' '))
-    
+
     .btn-group.btn-group-sm.w-auto.interval-selector.js-btn-group(data-initial=@chart_settings['period'])
       button type="button" data-value="1min" class="btn btn-outline-secondary" 1m
       button type="button" data-value="3min" class="btn btn-outline-secondary" 3m
       button type="button" data-value="5min" class="btn btn-outline-secondary" 5m
       button type="button" data-value="hour" class="btn btn-outline-secondary" 1h
       button type="button" data-value="day"  class="btn btn-outline-secondary" 1d
-      
+
     .btn-group.btn-group-sm.w-auto.columns-selector.js-btn-group(data-initial=@chart_settings['columns'])
       button type="button" data-value="1" class="btn btn-outline-secondary" 1
       button type="button" data-value="2" class="btn btn-outline-secondary" 2
       button type="button" data-value="3" class="btn btn-outline-secondary" 3
       button type="button" data-value="4" class="btn btn-outline-secondary" 4
       button type="button" data-value="5" class="btn btn-outline-secondary" 5
-      
+
     .btn-group.btn-group-sm.w-auto
       button type="button" data-value="+4" class="btn btn-outline-secondary zoom-chart" +
       button type="button" data-value="-4" class="btn btn-outline-secondary zoom-chart" –
-      
+
     .btn-group.btn-group-sm.w-auto.align-items-center
       input type="checkbox" class="btn-check" id="toggle-time" autocomplete="off" checked=@chart_settings['time_shown']
       label class="btn btn-outline-secondary" for="toggle-time" T
@@ -27,18 +27,18 @@
       label class="btn btn-outline-secondary" for="toggle-price" $
       button type="button" class="btn btn-outline-secondary go-to-end" = "≥"
       button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = "FS"
-      
+
     select class="ticker-set-selector form-select w-auto"
       option
       - @ticker_sets.each do |set|
         - tickers_line = set.tickers_line
         option(data-id=set.id value=tickers_line selected=@chart_tickers==tickers_line)
           = set.key.downcase
-      
+
   .row
     .col-12.px-4
-      .intraday-charts.row(class="row-cols-#{@chart_settings['columns']}")
-      
+      .intraday-charts.row(class="row-cols-#{@chart_settings['columns']}" data-bar-spacing=@chart_settings['bar_spacing'])
+
   .toolbar.row.my-4
     .col-11
       input.synced-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-100" value=@synced_tickers)
@@ -47,7 +47,7 @@
       textarea(type="text" class="form-control form-control-sm text-uppercase w-100")= @intraday_levels_text
     .col-6.d-flex.align-items-center
       button(class="btn btn-outline-primary btn-sm") Save
-      
+
   .toolbar.row.my-4.ticker-sets
     .col-12
       .form-check
@@ -57,4 +57,3 @@
       textarea(type="text" class="form-control form-control-sm text-uppercase w-100")= @ticker_sets_text
     .col-6.d-flex.align-items-center
       button(class="btn btn-outline-primary btn-sm") Save
-

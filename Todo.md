@@ -1,4 +1,3 @@
-- remember chart scales
 - check partial candles
 - dash for MA hits & volume gainers
 
@@ -21,7 +20,7 @@
 - dash for changes in last N mins
 - expected MA hits analysis
 - save MA data for some recent date
-- fully automate multiple missing days loading 
+- fully automate multiple missing days loading
 - inject fake candles when ticker with different start times are shown
 - use dropdown for sets
 - search for stable tops / bottoms
@@ -385,3 +384,4 @@
 + show candle time in legend
 + calculate charts height
 + full screen mode
++ remember chart scales

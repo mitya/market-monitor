@@ -104,7 +104,8 @@ class TradingController < ApplicationController
       columns: params[:columns].to_i.nonzero?,
       period: Candle.normalize_interval(params[:period]),
       time_shown: params[:time_shown],
-      price_shown: params[:price_shown]      
+      price_shown: params[:price_shown],
+      bar_spacing: params[:bar_spacing],
     }
 
     render json: { }
