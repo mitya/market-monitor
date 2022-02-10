@@ -33,8 +33,14 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   
   priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
   
+  windowHeight = window.innerHeight
+  navbarHeight = document.querySelector('.main-navbar').offsetHeight
+  toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight
+  chartContainerHeight = windowHeight - navbarHeight - toolbarHeight
+  chartHeight = chartContainerHeight / 2 - 20 * 2
+  
   chart = createChart container.querySelector('.intraday-chart-content'), { 
-    width: 0, height: 400, 
+    width: 0, height: chartHeight, 
     timeScale: { timeVisible: true, secondsVisible: false, visible: timeScaleVisible, barSpacing: 7 },
     rightPriceScale: { 
       entireTextOnly: true, 
@@ -65,19 +71,20 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     if candle
       formattedPrice = candle.close.toFixed(2)
       formattedTime = formatTime(candle.time - 3 * 60 * 60)      
+      legend.querySelector('.candle-time').innerText = formattedTime
+      legend.querySelector('.candle-price').innerText = formattedPrice
+
       if openPrice = levels.open
         changeSinceOpen = candle.close - openPrice
         percentage = changeSinceOpen / openPrice
         formattedChange = (percentage * 100).toFixed(1) + '%'
-      legend.querySelector('.candle-time').innerText = formattedTime
-      legend.querySelector('.candle-price').innerText = formattedPrice
-      changeBox.innerText = formattedChange
-      if percentage > 0
-        changeBox.classList.add('is-green')
-        changeBox.classList.remove('is-red')
-      else
-        changeBox.classList.add('is-red')
-        changeBox.classList.remove('is-green')        
+        changeBox.innerText = formattedChange
+        if percentage > 0
+          changeBox.classList.add('is-green')
+          changeBox.classList.remove('is-red')
+        else
+          changeBox.classList.add('is-red')
+          changeBox.classList.remove('is-green')        
     else
       legend.querySelector('.candle-time').innerText = ''
       legend.querySelector('.candle-price').innerText = ''

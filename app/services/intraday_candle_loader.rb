@@ -81,7 +81,7 @@ class IntradayCandleLoader
     end
   end
   
-  def load_history(days: 10, include_today: false)
+  def load_history(days: interval == 'hour' ? 30 : 10, include_today: false)
     puts 'check history...'
     dates = recent_dates(days) - [Current.date]
     instruments.abc.each do |inst|      

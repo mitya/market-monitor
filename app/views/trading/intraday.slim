@@ -1,5 +1,5 @@
 .container-fluid.trading-page
-  .toolbar.row.m-2.justify-content-center
+  .toolbar.row.m-2.justify-content-center.trading-toolbar
     input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_settings['tickers'].join(' '))
     
     .btn-group.btn-group-sm.w-auto.interval-selector.js-btn-group(data-initial=@chart_settings['period'])

@@ -1,7 +1,7 @@
-- check partial candles
++ calculate charts height
 - full screen mode
-- adjust charts to fit 2 on screen
 - remember chart scales
+- check partial candles
 - dash for MA hits & volume gainers
 
 - list of intraday scans
