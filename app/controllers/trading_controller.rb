@@ -85,8 +85,8 @@ class TradingController < ApplicationController
             MA20:  instrument.indicators.ema_20.to_f,
             MA50:  instrument.indicators.ema_50.to_f,
             MA200: instrument.indicators.ema_200.to_f,            
-            open:  openings[instrument.ticker]&.open,
-            close:  instrument.yesterday&.close,
+            open:  openings[instrument.ticker]&.open&.to_f,
+            close:  instrument.yesterday&.close&.to_f,
             intraday: instrument.annotation&.intraday_levels,
           )
         end

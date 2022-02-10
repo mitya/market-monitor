@@ -91,7 +91,8 @@ class IntradayCandleLoader
         inst.candles_for(interval).on(date).where(time: close_time).exists?
       end
       missing_dates << Current.date if include_today && missing_dates.any?
-      Tinkoff.import_intraday_candles_for_dates inst, interval, dates: missing_dates
+      Tinkoff.import_intraday_candles_for_dates inst, interval, dates: missing_dates      
+      Tinkoff.import_today_opening_candle inst if interval != '3min'
     end    
   end
   

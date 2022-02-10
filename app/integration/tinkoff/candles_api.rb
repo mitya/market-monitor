@@ -16,20 +16,20 @@ class Tinkoff
       load_intervals instrument, 'day', since, till
     end
 
-    def import_candles_from_hash(_, data, candle_class: nil, tz: nil)
+    def import_candles_from_hash(data)
       interval = data['interval']
       instrument = Instrument.find_by!(figi: data['figi'])
       candles = data['candles'].to_a
 
       # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
       # puts "Import #{candles.count} #{interval} candles for #{instrument}"
-      candle_class ||= Candle.interval_class_for(interval)
+      candle_class = Candle.interval_class_for(interval)
       return "Missing candles for #{instrument}".red if candle_class == nil
 
       candle_class.transaction do
         candles.map do |hash|
           time = Time.parse hash['time']
-          time = time.in_time_zone(tz) if tz
+          time = time.in_time_zone(instrument.time_zone) if candle_class.intraday?
           date = time.to_date
           time = time.to_s(:time) if candle_class.intraday?
 
@@ -61,7 +61,7 @@ class Tinkoff
     def import_day_candle(instrument, date, delay: 0.25)
       return if instrument.candles.day.final.tinkoff.where(date: date).exists?
       data = load_day instrument, date - 1, date
-      import_candles_from_hash instrument, data
+      import_candles_from_hash data
       sleep delay
     rescue
       puts "Import #{instrument} failed: #{$!}"
@@ -70,7 +70,7 @@ class Tinkoff
     # import_day_candles_between
     def import_day_candles(instrument, since:, till: Date.tomorrow, delay: 0.1, candle_class: nil)
       data = load_day instrument, since, till
-      import_candles_from_hash instrument, data, candle_class: candle_class
+      import_candles_from_hash data, candle_class: candle_class
       sleep delay
     rescue
       puts "Import #{instrument} failed: #{$!}"
@@ -109,7 +109,7 @@ class Tinkoff
 
       puts "load tinkoff #{instrument} #{since} #{till}".magenta
       data = load_intervals instrument, interval, since, till, delay: 0.05
-      candles = import_candles_from_hash instrument, data, tz: instrument.time_zone
+      candles = import_candles_from_hash data
       
       # inject empty candles for illiquid names
       # candles.select { !_1.prev_close && !_1.is_opening? }.each do |candle|
@@ -147,14 +147,20 @@ class Tinkoff
       end
     end
 
+
+    def import_today_opening_candle(instrument, interval: '3min')
+      return if !instrument.tinkoff?
+      return if instrument.candles_for(interval).today.openings.exists?
+      import_candles_from_hash load_intervals instrument, interval, instrument.today_opening, instrument.today_opening + 1.second
+    end
+
     def import_closing_5m_candles(instruments)
       return if !instrument.tinkoff?
       return if instrument.rub? || instrument.eur?
       return puts "Last 5m already loaded on #{date} for #{instrument}".yellow if Candle::M5.where(instrument: instrument, date: date, time: '19:55').exists?
 
       est_midnight = date.in_time_zone Current.est
-      data = load_intervals instrument, '5min', est_midnight.change(hour: 15, min: 50), est_midnight.change(hour: 16, min: 00), delay: 0.1
-      import_candles_from_hash instrument, data
+      import_candles_from_hash load_intervals instrument, '5min', est_midnight.change(hour: 15, min: 50), est_midnight.change(hour: 16, min: 00), delay: 0.1
     end
   end
 end

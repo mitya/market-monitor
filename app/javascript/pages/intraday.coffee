@@ -18,7 +18,9 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
       <div class='intraday-chart-content'>
         <div class='intraday-chart-legend'>
           <span class='chart-ticker'></span>
-          <span class='candle-change'></span>
+          <span class='candle-price'></span>
+          <span class='candle-time px-1'></span>
+          <span class='change-percent'></span>
         </div>
       </div>
     </div>
@@ -32,8 +34,8 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
   
   chart = createChart container.querySelector('.intraday-chart-content'), { 
-    width: 0, height: 420, 
-    timeScale: { timeVisible: true, secondsVisible: false, visible: timeScaleVisible, barSpacing: 10 },
+    width: 0, height: 400, 
+    timeScale: { timeVisible: true, secondsVisible: false, visible: timeScaleVisible, barSpacing: 7 },
     rightPriceScale: { 
       entireTextOnly: true, 
       visible: priceScaleVisible,
@@ -58,19 +60,37 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   
   charts[ticker] = { chart: chart, candles: candlesSeries, volume: volumeSeries, lastCandle: candlesData[candlesData.length - 1] }
   
-  setDefaultLegend = ->
-    lastCandle = charts[ticker].lastCandle
-    defaultText = if lastCandle then lastCandle.close.toFixed(2) else ''
-    changeBox = legend.querySelector('.candle-change')
-    changeBox.innerText = defaultText
-  setDefaultLegend()
+  setLegendFromCandle = (candle) ->
+    changeBox = legend.querySelector('.change-percent')
+    if candle
+      formattedPrice = candle.close.toFixed(2)
+      formattedTime = formatTime(candle.time - 3 * 60 * 60)      
+      if openPrice = levels.open
+        changeSinceOpen = candle.close - openPrice
+        percentage = changeSinceOpen / openPrice
+        formattedChange = (percentage * 100).toFixed(1) + '%'
+      legend.querySelector('.candle-time').innerText = formattedTime
+      legend.querySelector('.candle-price').innerText = formattedPrice
+      changeBox.innerText = formattedChange
+      if percentage > 0
+        changeBox.classList.add('is-green')
+        changeBox.classList.remove('is-red')
+      else
+        changeBox.classList.add('is-red')
+        changeBox.classList.remove('is-green')        
+    else
+      legend.querySelector('.candle-time').innerText = ''
+      legend.querySelector('.candle-price').innerText = ''
+      changeBox.innerText = ''
+  
+  setLegendFromCandle charts[ticker].lastCandle
   
   chart.subscribeCrosshairMove (param) -> 
     if (param.time)
       candle = Array.from( param.seriesPrices.values() )[0]
-      legend.querySelector('.candle-change').innerText = candle.close.toFixed(2)
+      setLegendFromCandle { ...candle, time: param.time }
     else
-      setDefaultLegend()
+      setLegendFromCandle charts[ticker].lastCandle
   
   if opens
     candlesSeries.setMarkers opens.map (openingTime) -> 
@@ -102,7 +122,14 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   # ]
 
 
+padNumber = (number, length = 2, filler = '0') ->
+  number.toString().padStart(length, filler)
 
+formatTime = (ms) ->
+  time = new Date(ms * 1000)
+  hours = time.getHours()
+  minutes = time.getMinutes()
+  "#{padNumber hours}:#{padNumber minutes}"
 
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
@@ -210,3 +237,5 @@ document.addEventListener "turbolinks:load", ->
     bindToolbar()
     loadCharts()
     setInterval refreshCharts, 10_000
+
+

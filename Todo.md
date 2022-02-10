@@ -1,19 +1,21 @@
-- show % change since open in legend
-- show candle time in legend
 - check partial candles
+- full screen mode
+- adjust charts to fit 2 on screen
+- remember chart scales
 - dash for MA hits & volume gainers
 
 - list of intraday scans
-- turn-around scanner
-- min vol scanner
-- DMA hits intraday
-- show intraday scans on the chart
-- look for predefined levels
+- hits for today open & yesterday close
+- hits for yesterday/today HOD / LOD
+- hits for DMA
+- hits for predefined levels
+- long shadows (espesially with volume)
+- volume spikes
+- volume minimizations
 - HOD retest when high > 2% && low since high < -2%
 - HOD 2%+ open down break
-- yesterday HOD / LOD retests
 - 4% fall — first green 3m bar, min 0.4%
-- predefined level checks with tolerance
+- show intraday scans on the chart
 - show scan ticker in the next available intraday chart
 
 
@@ -381,3 +383,5 @@
 + 100 MA data & recalc others
 + move ticker sets to a combo box
 + load far history after today loading
++ show % change since open in legend
++ show candle time in legend
