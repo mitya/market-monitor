@@ -6,6 +6,8 @@ class Candle < ApplicationRecord
   scope :day, -> { where interval: 'day' }
   scope :today, -> { where date: Current.date }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
+  scope :on, -> date { for_date date }
+  scope :for, -> tickers { where ticker: tickers }
   scope :non_analyzed, -> { where analyzed: nil }
   scope :since, -> date { where 'date >= ?', date }
   scope :asc, -> { order :date }
@@ -39,8 +41,9 @@ class Candle < ApplicationRecord
 
   def to_date = date
   def datetime = date.end_of_day
-  def opening? = MarketInfo.ticker_opening_time(ticker) == time.strftime('%H:%M')
-  # def opening? = prev_close == nil
+  def datetime_as_msk = datetime + 3.hours
+  def opening? = is_opening?
+  # def opening? = MarketInfo.ticker_opening_time(ticker) == time.strftime('%H:%M')
 
   def change = close - open
   def rel_change = (change / open).round(4)
@@ -220,6 +223,7 @@ class Candle < ApplicationRecord
     ValidIntervals = %w[hour 5min 3min 1min]
     
     scope :openings, -> { where is_opening: true }
+    scope :closings, -> { where is_closing: true }
         
     def previous = time && siblings.find_by(date: date, time: time - interval_duration)
     def whatever_previous = siblings.where(date: date).where('time < ?', time).order(:time).last

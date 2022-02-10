@@ -165,14 +165,16 @@ class Instrument < ApplicationRecord
 
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)
-  def market_open_time  = (rub? || eur?) ? Current.ru_market_open_time  : Current.us_market_open_time
-  def market_close_time = (rub? || eur?) ? Current.ru_market_close_time : Current.us_market_close_time
-    
-  def time_zone = usd?? Current.est : Current.msk
-  def session_start_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 9,  min: 30) : date.midnight
-  def session_end_time_on(date) = usd? ? date.in_time_zone(Current.est).midnight.change(hour: 16, min: 00, second: 01) : date.end_of_day
-  def close_hhmm = MarketInfo.ticker_closing_time(ticker)
-  def open_hhmm = MarketInfo.ticker_opening_time(ticker)
+
+  def time_zone  = usd?? Current.est : Current.msk
+  def time       = time_zone.now
+  def opening_hhmm  = MarketInfo.ticker_opening_time(ticker)
+  def closing_hhmm  = MarketInfo.ticker_closing_time(ticker)
+  def today_opening = time.change(MarketInfo.ticker_opening_hour_min ticker)
+  def today_closing = time.change(MarketInfo.ticker_closing_hour_min ticker)
+  def opening_on(date) = date.in_time_zone(time_zone).to_time.change(MarketInfo.ticker_opening_hour_min ticker)
+  def closing_on(date) = date.in_time_zone(time_zone).to_time.change(MarketInfo.ticker_closing_hour_min ticker)
+
 
   def to_s = ticker
   def exchange_ticker = "#{exchange}:#{ticker}".upcase

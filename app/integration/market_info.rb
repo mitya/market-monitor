@@ -13,6 +13,8 @@ class MarketInfo
   
   OpeningTimes = { US: '09:30', Moex1: '07:00', Moex2: '10:00' }
   ClosingTimes = { US: '16:00', Moex1: '23:50', Moex2: '18:45' }
+  OpeningHourMins = OpeningTimes.transform_values { |hhmm| h, m = hhmm.split(':').map(&:to_i); { hour: h, min: m } }
+  ClosingHourMins = ClosingTimes.transform_values { |hhmm| h, m = hhmm.split(':').map(&:to_i); { hour: h, min: m } }
   
   class << self
     def us_tickers = @us_tickers ||= Instrument.usd.pluck(:ticker).to_set
@@ -25,7 +27,9 @@ class MarketInfo
       end        
     end
     
-    def ticker_opening_time(ticker) = OpeningTimes[ticker_source_for ticker]
-    def ticker_closing_time(ticker) = ClosingTimes[ticker_source_for ticker]
+    def ticker_opening_time(ticker)     = OpeningTimes[ticker_source_for ticker]
+    def ticker_closing_time(ticker)     = ClosingTimes[ticker_source_for ticker]
+    def ticker_opening_hour_min(ticker) = OpeningHourMins[ticker_source_for ticker]
+    def ticker_closing_hour_min(ticker) = ClosingHourMins[ticker_source_for ticker]
   end 
 end

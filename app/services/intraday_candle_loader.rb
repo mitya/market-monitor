@@ -46,9 +46,10 @@ class IntradayCandleLoader
       end
             
       if last_tickers != current_tickers || last_interval != current_interval
-        load_history
+        load_history days: 2
         sync_latest
         change_last_params.call
+        load_history
       elsif last_interval_index != current_interval_index
         unless current_interval_index - last_interval_index == 1 && Time.current.sec < 50
           sync_latest
@@ -80,16 +81,16 @@ class IntradayCandleLoader
     end
   end
   
-  def load_history
+  def load_history(days: 10, include_today: false)
     puts 'check history...'
-    instruments.abc.each do |inst|
-      dates = recent_dates - [Current.date]
-      close_time = CLOSE_TIMES[inst.close_hhmm][interval_in_seconds.to_i]
+    dates = recent_dates(days) - [Current.date]
+    instruments.abc.each do |inst|      
+      close_time = CLOSE_TIMES[inst.closing_hhmm][interval_in_seconds.to_i]
       missing_dates = dates.reject do |date|
-        Candle.interval_class_for(interval).exists?(ticker: inst.ticker, date: date, time: close_time) ||
-        Candle.interval_class_for(interval).exists?(ticker: inst.ticker, date: date, is_closing: true)
+        inst.candles_for(interval).on(date).closings.exists? ||
+        inst.candles_for(interval).on(date).where(time: close_time).exists?
       end
-      missing_dates << Current.date if missing_dates.any?
+      missing_dates << Current.date if include_today && missing_dates.any?
       Tinkoff.import_intraday_candles_for_dates inst, interval, dates: missing_dates
     end    
   end
@@ -122,8 +123,7 @@ class IntradayCandleLoader
   
   private
   
-  def days_to_load = ENV['days'].to_i.nonzero? || 10
-  def recent_dates = MarketCalendar.open_days(days_to_load.days.ago)
+  def recent_dates(days_number = 10) = MarketCalendar.open_days(days_number.days.ago)
   
   CLOSE_TIMES = { 
     '16:00' => { 1 => '15:59', 3 => '15:57', 5 => '15:55', 60 => '15:00' },

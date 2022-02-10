@@ -1,6 +1,5 @@
 - show % change since open in legend
 - show candle time in legend
-- load far history after today loading
 - check partial candles
 - dash for MA hits & volume gainers
 
@@ -381,3 +380,4 @@
 + show last bar price in chart header
 + 100 MA data & recalc others
 + move ticker sets to a combo box
++ load far history after today loading
