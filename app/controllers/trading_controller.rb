@@ -76,7 +76,7 @@ class TradingController < ApplicationController
       ticker = instrument.ticker
       candles = repo.where(ticker: instrument).includes(:instrument).order(:date, :time).last(params[:limit] || 500)
       map[ticker] = { ticker: ticker }
-      map[ticker][:candles] = candles.map { |c| [c.datetime.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
+      map[ticker][:candles] = candles.map { |c| [(c.datetime + 3.hours).to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
       unless is_update
         map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime.to_i } unless period == 'day'
         map[ticker][:levels] = { } 

@@ -60,7 +60,7 @@ rake tinkoff:days:missing since=2022-01-01 ok=1 tickers=''
 
 # Destroying tickers
 
-rake t:destroy ticker=SLG ok=1
+rake t:destroy ticker='SHEL CEG' ok=1
 rake tinkoff:instruments:sync ok=1
 
 
@@ -74,17 +74,16 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty:iex
-export tickers=''
+export tickers='MC SHEL CP CEG'
 rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download 
 rake iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1
-rake candles:set_prev_closes candles:set_average_change
+rake candles:set_prev_closes candles:set_average_change candles:set_d5_volume
 
 rake iex:days:missing since=2021-12-01 special=1 ok=1 reverse=1 tickers='NU'
-
+rake set_first_date_auto tickers='AORT'
 
 ## Optional
-rake set_first_date_auto tickers='AORT'
 rake set_first_date ticker=GRUB date=2021-03-25
 rake iex:symbols:load iex:symbols:refresh
 rake iex:days:period period=ytd

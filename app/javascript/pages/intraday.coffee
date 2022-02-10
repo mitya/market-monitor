@@ -1,4 +1,4 @@
-import { createChart, CrosshairMode, LineStyle } from 'lightweight-charts'
+import { createChart, CrosshairMode, LineStyle, PriceScaleMode } from 'lightweight-charts'
 
 charts = {}
 
@@ -32,9 +32,13 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
   
   chart = createChart container.querySelector('.intraday-chart-content'), { 
-    width: 0, height: 280, 
+    width: 0, height: 420, 
     timeScale: { timeVisible: true, secondsVisible: false, visible: timeScaleVisible, barSpacing: 10 },
-    rightPriceScale: { entireTextOnly: true, visible: priceScaleVisible },
+    rightPriceScale: { 
+      entireTextOnly: true, 
+      visible: priceScaleVisible,
+      mode: PriceScaleMode.Percentage,
+    },   		
     localization: {
       priceFormatter: priceFormatter
     },
@@ -72,9 +76,9 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     candlesSeries.setMarkers opens.map (openingTime) -> 
       { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'O' }
     
-  levelColors = { MA20: 'blue', MA50: 'green', MA100: 'orange', MA200: '#cc0000', open: 'orange', close: 'black', intraday: 'gray' }
-  levelLineStyles = { MA20: 'Dashed', MA50: 'Dashed', MA100: 'Dashed', MA200: 'Dashed', open: 'Solid', close: 'Dashed', intraday: 'Dotted' }
-  levelLineWidths = { MA20: 2, MA50: 2, MA100: 2, MA200: 2, open: 2, close: 2, intraday: 2 }
+  levelColors =     { MA20: 'cyan',   MA50: 'magenta', MA100: 'magenta', MA200: 'magenta', open: 'orange', close: 'black',  intraday: 'gray' }
+  levelLineStyles = { MA20: 'Solid',  MA50: 'Solid',   MA100: 'Solid',   MA200: 'Solid',   open: 'Solid',  close: 'Solid',  intraday: 'Dotted' }
+  levelLineWidths = { MA20: 2,        MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,        intraday: 2 }
   
   for title, values of levels
     continue if values == null
@@ -187,7 +191,12 @@ document.addEventListener "turbolinks:load", ->
       $bind syncTickerSetsToggle, 'change', -> updateChartSettings reload: false
       $bind $qs('.intraday-levels .btn'), 'click', updateIntradayLevels
       $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
-      $delegate '.ticker-set-selector', '.list-group-item-action', 'click', selectTickerSet
+
+      $bind $qs('.ticker-set-selector'), 'change', (e) ->
+        tickersLine = e.target.value
+        chartedTickersField.value = tickersLine
+        updateChartSettings()
+      
     
       $delegate '.trading-page', '.zoom-chart', 'click', (target) ->
         target.blur()

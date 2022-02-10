@@ -1,3 +1,6 @@
+- show % change since open in legend
+- show candle time in legend
+- load far history after today loading
 - check partial candles
 - dash for MA hits & volume gainers
 
@@ -16,7 +19,9 @@
 
 
 # Next
+- dash for changes in last N mins
 - expected MA hits analysis
+- save MA data for some recent date
 - fully automate multiple missing days loading 
 - inject fake candles when ticker with different start times are shown
 - use dropdown for sets
@@ -375,3 +380,4 @@
 + check why some tickers are loading after the EOD
 + show last bar price in chart header
 + 100 MA data & recalc others
++ move ticker sets to a combo box
