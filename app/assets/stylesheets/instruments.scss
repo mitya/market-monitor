@@ -16,6 +16,8 @@ th[data-sort] { cursor: pointer; }
 
 .changebox-green, .is-green { color: green; }
 .changebox-red, .is-red { color: red; }
+.is-dark-red { color: darkred; }
+.is-dark-green { color: darkgreen; }
 
 .text-green { color: green; }
 .text-red   { color: red; }
@@ -108,7 +110,11 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
   .wide-bars & { width: 8px; margin-right: 1px; }  
   .wide-bars &.spike { width: 2px; margin-right: 4px; margin-left: 3px; }
   
+  .is-light & { background-color: rgba(black, 0.25); }
+  .is-light-blue & { background-color: rgba(blue, 0.25); }
+  
   .solid-narrow & { margin-right: 0; width: 3px; }
+  .solid & { margin-right: 0; }
 }
 
 

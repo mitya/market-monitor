@@ -4,7 +4,7 @@
 - selector = 'last'
 - precision = 1
 
-main.container-fluid.gainers-dashboard
+main.container-fluid.ma-dashboard
   details.my-2.mx-3
     summary
       .d-inline-flex.flex-row.align-items-center.w-75.ps-3
@@ -16,9 +16,9 @@ main.container-fluid.gainers-dashboard
   .container-fluid
     .row
       - @set_groups.each do |sets|
-        .col.flex-grow-0.gainers-col
+        .col.flex-grow-0.dashboard-col
           - sets.each do |set|
-            h6.ps-1(class=class_names('is-green': set.key =~ /up_break|up_test/, 'is-red': set.key =~ /down_break|down_test/))
+            h6.ps-1(class=class_names('is-dark-green': set.key =~ /up_break/, 'is-dark-red': set.key =~ /down_break/))
               = category_title set.key
             table.table.table-sm.table-hover.table-font-sm.tickers-table.table-no-border.table-sm-v.dash-table
               tbody
@@ -31,6 +31,7 @@ main.container-fluid.gainers-dashboard
                 - instruments = instruments.reverse
                 - instruments.each do |inst|
                   - value = inst.stored_gain_since(selector)
+                  - hit = @hits_sets[set.key].detect { inst.ticker == _1.ticker }
                   tr
                     td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
                     td.money-cell.price-cell= format_price inst.last, unit: inst.currency
@@ -39,7 +40,9 @@ main.container-fluid.gainers-dashboard
                         - if value.abs >= 0.08
                           = colorized_ratio value, precision: precision, format: '%n'
                         - else
-                          = percentage_bar value, classes: class_names(red_green_class(value > 0), 'solid-narrow float-end'), rtl: true
+                          = percentage_bar value, classes: class_names(red_green_class(value > 0), 'solid-narrow'), rtl: true
+                    td.money-cell= count_bar hit.days_since_last.to_f / 20.0, classes: 'is-light solid', title: "#{hit.days_since_last} days"
+                    td.money-cell= percentage_bar hit.rel_vol / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_to_percentage hit.rel_vol * 100, precision: 0}"
 
 javascript:
   window.DashboardPeriod = "#{ params[:selector] }"

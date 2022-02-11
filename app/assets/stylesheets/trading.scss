@@ -38,4 +38,9 @@
   .gainers-col { width: 194px; }
 }
 
+.ma-dashboard {
+  .dashboard-col .percentage-bars { width: 25px; }
+  .dashboard-col .change-cell .percentage-bars { justify-content: flex-end; width: 30px; }
+}
+
 .small-caps { font-variant: small-caps; }

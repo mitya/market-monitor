@@ -32,22 +32,27 @@ class SetComparisionsController < ApplicationController
   end
 
   def summary
-    base_scope = PriceLevelHit.where(date: Current.yesterday).where('days_since_last > ?', 20)
-    hits_sets = {
-      ma200_up_tests:    base_scope.where(source: 'ma', ma_length: 200, kind: %w[up-test]),
-      ma200_up_breaks:   base_scope.where(source: 'ma', ma_length: 200, kind: %w[up-break up-gap]),
-      ma200_down_tests:  base_scope.where(source: 'ma', ma_length: 200, kind: %w[down-test]),
-      ma200_down_breaks: base_scope.where(source: 'ma', ma_length: 200, kind: %w[down-break down-gap]),
-      ma50_up_tests:     base_scope.where(source: 'ma', ma_length:  50, kind: %w[up-test]),
-      ma50_up_breaks:    base_scope.where(source: 'ma', ma_length:  50, kind: %w[up-break up-gap]),
-      ma50_down_tests:   base_scope.where(source: 'ma', ma_length:  50, kind: %w[down-test]),
-      ma50_down_breaks:  base_scope.where(source: 'ma', ma_length:  50, kind: %w[down-break down-gap]),
-    }
-
-    @set_groups = hits_sets.map do |key, hit_set|
-      [ InstrumentSet.new(key, :static, items: hit_set.pluck(:ticker)) ]
-    end
-
+    base_scope = PriceLevelHit.where(date: Current.yesterday, source: 'ma').where('days_since_last > ?', 20)
+    @hits = base_scope.all
+    @hits_sets = {
+      ma200_up_tests:    @hits.select { _1.ma_length == 200 && _1.kind.in?(%w[up-test]) },
+      ma200_up_breaks:   @hits.select { _1.ma_length == 200 && _1.kind.in?(%w[up-break up-gap]) },
+      ma200_down_tests:  @hits.select { _1.ma_length == 200 && _1.kind.in?(%w[down-test]) },
+      ma200_down_breaks: @hits.select { _1.ma_length == 200 && _1.kind.in?(%w[down-break down-gap]) },
+      ma50_up_tests:     @hits.select { _1.ma_length ==  50 && _1.kind.in?(%w[up-test]) },
+      ma50_up_breaks:    @hits.select { _1.ma_length ==  50 && _1.kind.in?(%w[up-break up-gap]) },
+      ma50_down_tests:   @hits.select { _1.ma_length ==  50 && _1.kind.in?(%w[down-test]) },
+      ma50_down_breaks:  @hits.select { _1.ma_length ==  50 && _1.kind.in?(%w[down-break down-gap]) },
+    }    
+    
+    get_instruments = -> key { InstrumentSet.new(key, :static, items: @hits_sets[key].pluck(:ticker)) }
+    @set_groups = [
+      [ get_instruments.(:ma200_up_breaks),   get_instruments.(:ma50_up_breaks)   ],
+      [ get_instruments.(:ma200_up_tests),    get_instruments.(:ma50_up_tests)    ],
+      [ get_instruments.(:ma200_down_breaks), get_instruments.(:ma50_down_breaks) ],
+      [ get_instruments.(:ma200_down_tests),  get_instruments.(:ma50_down_tests)  ],
+    ]    
+    
     preload_associations
   end
 
