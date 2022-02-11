@@ -7,9 +7,11 @@
 main.container-fluid.gainers-dashboard
   details.my-2.mx-3
     summary
-    form#list-config(action=summary_set_comparision_path class='my-2')
-      = render 'instruments/filter_by_currency', lw: 2
-      = render 'instruments/filter_by_availability', lw: 2
+      .d-inline-flex.flex-row.align-items-center.w-75.ps-3
+        = render 'instruments/filter_by_currency'
+        = render 'instruments/filter_by_availability'
+    div
+      | Nothing here
 
   .container-fluid
     .row

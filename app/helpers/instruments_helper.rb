@@ -145,7 +145,7 @@ module InstrumentsHelper
 
 
   def currency_sign(currency_code)
-    CurrencySigns[currency_code.to_s.to_sym] || currency_code
+    Const::CurrencySigns[currency_code.to_s.to_sym] || currency_code
   end
 
   def currency_span(currency_code, suffix: nil)
@@ -155,8 +155,6 @@ module InstrumentsHelper
   def red_green_class(is_green)
     is_green ? 'is-green' : 'is-red'
   end
-
-  CurrencySigns = { USD: '$', RUB: '₽', EUR: '€', CNY: '¥', GBP: '£' }
 
   IndustryShortNames = {
     "All Other Telecommunications": "Telecommunications",
@@ -184,72 +182,6 @@ module InstrumentsHelper
 
   def industry_short_name(industry, length: 30)
     truncate IndustryShortNames[industry] || industry, length: length
-  end
-
-  def industry_options
-    Stats.where.not(industry: '').group(:industry).order(count: :desc).count.map { |industry, count| ["#{industry_short_name industry, length: 100} (#{count})", industry] }
-  end
-
-  def sector_options
-    Stats.where.not(sector: '').group(:sector).order(count: :desc).count.map { |sector, count| ["#{sector} (#{count})", sector] }
-  end
-
-  def type_options
-    [%w[Stock Stock], %w[Fund Fund]]
-  end
-
-  def sector_code_options
-    SectorCodeOptions
-  end
-
-  def currency_options
-    CurrencySigns.map { |code, sign| ["#{code} #{sign}", code] }
-  end
-
-  def insider_options_for(ticker)
-    InsiderTransaction.for_ticker(ticker).pluck(:insider_name).uniq.compact.sort.map { |name| [name.titleize, name] }
-  end
-
-  MainSortFields = {
-    ticker:                "Ticker",
-    pe:                    "P/E",
-    beta:                  "ß",
-    yield:                 "Yield",
-    marketcap:             "Capitalization",
-    d5_marketcap_volume:   "5-day Marketcap-relative Volume",
-    d5_money_volume:       "5-day Money Volume",
-    d1_money_volume:       "Yesterday Money Volume",
-    days_up:               "Days Up",
-    lowest_day_date:       "Low Date",
-    lowest_day_gain:       "Low Gain",
-    y1_high_change:        "Since 1Y High",
-    y3_high_change:        "Since 3Y High",
-    y1_low_change:         "Since 1Y Low",
-    y3_low_change:         "Since 3Y Low",
-    ema_20_trend:          "EMA 20",
-    ema_50_trend:          "EMA 50",
-    ema_200_trend:         "EMA 200",
-    'portfolio.cost_in_usd': "Portfolio Cost",
-    portfolio_ideal_cost:  "Portfolio Cost Ideal",
-    portfolio_cost_diff:   "Portfolio Cost Ideal",
-    change:                "Change",
-    change_atr:            "ATR Change",
-  }.stringify_keys.invert.to_a
-
-  def instrument_order_options
-    MainSortFields +
-    Aggregate::RecentDaySelectors.map { |p| "gain.recent.#{p}" } +
-    Aggregate::RecentDaySelectors.map { |p| "volume.#{p}" } +
-    Aggregate::RecentDaySelectors.map { |p| "volatility.#{p}" } +
-    MarketCalendar.current_special_dates.select.map { |d| "gain.date.#{d}" } +
-    MarketCalendar.current_recent_years.select.map { |year| "gain.year.#{year}" }
-  end
-
-  def signal_order_options
-    [
-      ['Ticker', 'ticker'],
-      ['Delta', 'delta'],
-    ]
   end
 
   Sec4TransactionCodesDescriptions = {
@@ -281,39 +213,13 @@ module InstrumentsHelper
     'F' => "Exercise",
   }
 
-  SectorCodeTitles = {
-    "commercialservices"    => ["Commercial",         'primary'],
-    "communications"        => ["Communications"],
-    "consumerdurables"      => ["Consumer Durables"],
-    "consumernon-durables"  => ["Consumer Non-durables"],
-    "consumerservices"      => ["Consumer Services"],
-    "distributionservices"  => ["Distribution"],
-    "electronictechnology"  => ["Electronics",        'warning'],
-    "energyminerals"        => ["Energy",             'success'],
-    "finance"               => ["Finance",            'dark'],
-    "healthservices"        => ["Health Services",    'danger'],
-    "healthtechnology"      => ["Biotech",            'danger'],
-    "industrialservices"    => ["Industrial",         'success'],
-    "miscellaneous"         => ["Misc"],
-    "n/a"                   => ["N/A"],
-    "non-energyminerals"    => ["Minerals",           'success'],
-    "processindustries"     => ["Process Industries", 'success'],
-    "producermanufacturing" => ["Manufactoring"],
-    "retailtrade"           => ["Retail",             'primary'],
-    "technologyservices"    => ["Technology",         'warning'],
-    "transportation"        => ["Transportation"],
-    "utilities"             => ["Utilities"],
-  }
-
-  SectorCodeOptions = SectorCodeTitles.transform_values { |val| val.first }.invert
-
   def sector_badge(instrument, link: true)
     return nil if instrument.rub?
     # return country_flag_icon('RUS') if instrument.rub?
 
     info = instrument&.info
     code = info&.sector_code
-    text, background = *SectorCodeTitles[code] || code || 'N/A'
+    text, background = *Const::SectorCodeTitles[code] || code || 'N/A'
     text, background = ['RUS', 'light'] if instrument.rub?
     background ||= 'secondary'
     foreground = 'text-dark' if background.in?(%w[warning info light])
@@ -327,16 +233,6 @@ module InstrumentsHelper
 
   def sec_tx_code_name(sec_code)
     Sec4TransactionCodesNames[sec_code] || sec_code
-  end
-
-  def days_old_badge(date)
-    return if date.blank?
-    days_ago = (Current.date - date).to_i
-    color = days_ago > 350 ? 'bg-danger' : days_ago > 95 ? 'bg-dark' : days_ago > 35 ? 'bg-dark' : 'bg-secondary'
-    # text = Current.date == date ? 'today' : "#{days_ago} d"
-    # text = Current.date == date ? 'today' : distance_of_time_in_words(date, Current.date, scope: 'datetime.distance_in_words.short')
-    text = date.year == Current.date.year ? l(date, format: :month) : l(date, format: :month_year)
-    tag.span text, class: "badge #{color}", title: date
   end
 
   def growth_badge(aggregate)
@@ -422,9 +318,6 @@ module InstrumentsHelper
     end
   end
 
-  def min_amount_options
-    %w[40_000 50_000 100_000 200_000 500_000 1_000_000]
-  end
 
   def set_button_class(set_key)
     SET_BUTTON_CLASSES[set_key]
@@ -460,11 +353,3 @@ module InstrumentsHelper
     InstrumentSet.category_titles[clean_key] || clean_key.humanize
   end
 end
-
-__END__
-InstrumentsHelper::IndustryShortNames.keys
-InstrumentsHelper::IndustryShortNames.keys.include? Instrument.get('ANIP').info.industry
-Instrument.get('ANIP').info.industry
-Stats.group_by(&:industry)
-
-Stats.group(:industry).count.sort_by(&:second).each { |industry, count| p industry }; nil

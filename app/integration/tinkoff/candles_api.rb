@@ -16,14 +16,14 @@ class Tinkoff
       load_intervals instrument, 'day', since, till
     end
 
-    def import_candles_from_hash(data)
+    def import_candles_from_hash(data, candle_class: nil)
       interval = data['interval']
       instrument = Instrument.find_by!(figi: data['figi'])
       candles = data['candles'].to_a
 
       # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
       # puts "Import #{candles.count} #{interval} candles for #{instrument}"
-      candle_class = Candle.interval_class_for(interval)
+      candle_class ||= Candle.interval_class_for(interval)
       return "Missing candles for #{instrument}".red if candle_class == nil
 
       candle_class.transaction do

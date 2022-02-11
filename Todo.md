@@ -1,5 +1,4 @@
 - show rel vold & days since last for MA dash
-- quick currency / source selectors for dashboards (in summary)
 - volume gainers dash
 - spikes dash
 - alarms dash
@@ -390,3 +389,4 @@
 + remember chart scales
 + mark ongoing intraday candles
 + dash for MA hits
++ quick currency / source selectors for dashboards (in summary)

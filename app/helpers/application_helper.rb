@@ -11,74 +11,6 @@ module ApplicationHelper
     tag.span number_to_currency(amount, unit: currency_sign(unit)), class: 'money-amount'
   end
 
-  def fa_icon(name, small: false, xsmall: false, **options)
-    tag.i class: "fas fa-#{name} #{'fa-sm' if small} #{'fa-xs' if xsmall}".strip, **options
-  end
-
-  def all_option
-    [['All', '']]
-  end
-
-  def options_from_keys(keys)
-    keys.map { |key| [key.underscore.humanize.downcase, key] }
-  end
-
-  def availability_options
-    [['Tinkoff', 'tinkoff'], ['TInkoff Premium', 'premium']]
-  end
-
-  def recent_dates_options
-    1.upto(6).map { |n| ["#{n} #{'week'.pluralize n} ago", n.weeks.ago.to_date.to_s] }
-  end
-
-  def pagination_options
-    %w[100 200 300 400 500 1000 5000]
-  end
-
-  def bs_radio_button(name, value, label, **attrs)
-    tag.div class: 'form-check form-check-inline' do
-      radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'form-check-input', **attrs) +
-      label_tag("#{name}_#{value}", label, class: 'form-check-label', for: attrs[:id] || name)
-    end
-  end
-
-  def bs_toggle_button(name, value, label, classes: nil, btn_class: nil)
-    tag.span class: class_names('me-2', classes) do
-      radio_button_tag(name, value, params[name].to_s == value.to_s, class: 'btn-check') +
-      label_tag("#{name}_#{value}", label, class: class_names('btn btn-sm', btn_class || 'btn-outline-secondary'))
-    end
-  end
-
-  def bs_check_box(name, label, value: '1', false_value: '0', inline: false, switch: false, default: false, id: name, checked: params[name] == value, **options)
-    tag.div class: class_names('form-check', options[:class], 'form-check-inline': inline, 'form-switch': switch) do
-      (default ? hidden_field_tag(name, '0', id: nil) : ''.html_safe) +
-      check_box_tag(name, value, checked, class: 'form-check-input', id: id) +
-      label_tag(name, label, class: 'form-check-label', for: id)
-    end
-  end
-
-  def bs_select(name, label, options, mb: 1, blank: true, select_class: nil, style: nil)
-    tag.div class: "row mb-#{mb} w-auto" do
-      tag.div(class: 'col-sm-2') do
-        label_tag name, label, class: 'col-form-label'
-      end +
-      tag.div(class: 'col-sm-10') do
-        select_tag name, options_for_select(options, params[name]), class: "form-select form-select-sm #{select_class}", include_blank: blank, style: style
-      end
-    end
-  end
-
-  def bs_text_field(name, label, mb: 1, classes: nil, type: 'text')
-    tag.div class: "row mb-#{mb}" do
-      tag.div(class: 'col-sm-2') do
-        label_tag name, label, class: 'col-form-label'
-      end +
-      tag.div(class: 'col-sm-10') do
-        text_field_tag name, params[name], class: "form-control #{classes}", type: type
-      end
-    end
-  end
-
   ExcahngesWithLogos = %w[NYSE NASDAQ MOEX]
   def exchange_logo(exchange_name)
     image_tag "exchange-logos/#{exchange_name}.png", size: '15x15', class: 'exchange-logo' if exchange_name.in?(ExcahngesWithLogos)
@@ -100,52 +32,11 @@ module ApplicationHelper
     string.length > 10 && string.upcase == string ? string.titleize : string
   end
 
-  def format_date(date)
-    l date, format: :long if date
-  end
-
-  def days_ago(date, suffix = ' days ago')
-    if date
-      days = (Current.date - date).to_i
-      "#{days}#{suffix}"
-    end
-  end
-
-  def days_ago_number(date)
-    (Current.date - date).to_i if date
-  end
-
-  def seconds_ago(time)
-    (Time.current - time).round if time
-  end
-
   def sessions_ago(date)
     %w[2 3 4 5 6 7].each do |n|
       return "#{n} ss" if date == Current.send("d#{n}_ago")
     end
     nil
-  end
-
-  def date_in_words(date)
-    return unless date
-    date = date.to_date
-    case
-      when date.to_date == Current.today then 'today'
-      when date.to_date == Current.yesterday then 'yesterday'
-      when date >= Current.d7_ago then sessions_ago(date)
-      else days_ago(date)
-    end
-  end
-
-  def date_as_wday(date)
-    return if !date
-    # return 'Yesterday' if date == Current.yesterday
-    # return 'Today' if date == Current.today
-    "#{l date, format: :wday_name}, #{date.day.ordinalize}"
-  end
-
-  def date_as_mday(date)
-    l date, format: :mday if date
   end
 
   IntervalTitles = { 'hour' => 'H1', '5min' => 'M5' }
@@ -184,9 +75,6 @@ module ApplicationHelper
     locals&.dig(:lw) || @label_width || 1
   end
 
-  def recent_period_options
-    [['All']] + MarketCalendar.periods.map { |period| [period.begin.strftime("%b %Y"), period.to_s] }
-  end
 
   def range_fields(name, type: 'text', classes: 'form-control form-control-sm d-inline w-auto', size: 5, **attrs)
     tag.input(type: type, class: classes, name: "#{name}_from", value: params["#{name}_from"], size: size, **attrs) +
@@ -205,13 +93,5 @@ module ApplicationHelper
     end
   end
 
-  def format_as_minutes_since(since, minutes)
-    minutes = since + minutes
-    hour, minute = minutes.divmod(60)
-    "#{hour.to_s.rjust(2, '0')}:#{minute.to_s.rjust(2, '0')}"
-  end
 
-  def format_date_as_text_with_days(date)
-    "On #{format_date date} | #{days_ago date}"
-  end
 end

@@ -6,8 +6,11 @@ main.container-fluid
   form#list-config(action=spb_instruments_path class='my-2')
     .row.mb-3
       .col
-        = render 'instruments/filter_by_currency', lw: 2
-        = render 'instruments/filter_by_availability', lw: 2
+        .row.mb-2
+          .col-sm-2
+          .col-sm-10.d-flex.flex-row
+            = render 'instruments/filter_by_currency'
+            = render 'instruments/filter_by_availability'
         = render 'instruments/filter_by_tickers'
         = render 'instruments/pagination_options'
       .col

@@ -1,5 +1,9 @@
-.row.mb-1
-  legend class="col-form-label col-sm-#{label_width local_assigns} pt-0" Type
-  .col-sm-10
-    - (all_option + type_options).each do |label, value|
-      = bs_toggle_button :type, value, label
+.btn-group.btn-group-sm.me-3
+  - (all_option + type_options).each do |label, value|
+    = bs_button_group_radio_item :type, value, label
+
+/ .row.mb-1
+/   legend class="col-form-label col-sm-#{label_width local_assigns} pt-0" Type
+/   .col-sm-10
+/     - (all_option + type_options).each do |label, value|
+/       = bs_toggle_button :type, value, label

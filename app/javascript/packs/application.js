@@ -8,7 +8,6 @@ import ApexCharts from 'apexcharts'
 import 'pages/helpers'
 import 'pages/init'
 import 'pages/charts'
-import 'pages/sync'
 import 'pages/dashboard'
 import 'pages/intraday'
 import "channels"

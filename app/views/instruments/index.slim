@@ -34,9 +34,12 @@ main.container-fluid.mb-4
   form#list-config(action=(@categories ? grouped_instruments_path : instruments_path) class='my-2')
     .row.mb-3
       .col
-        = render 'filter_by_currency'
-        = render 'filter_by_availability'
-        = render 'filter_by_type'
+        .row.mb-2
+          .col-sm-2
+          .col-sm-10.d-flex.flex-row
+            = render 'filter_by_currency'
+            = render 'filter_by_availability'
+            = render 'filter_by_type'
         = render 'filter_by_tickers'
         = render 'filter_by_sector'
         = render 'filter_by_sector_code'

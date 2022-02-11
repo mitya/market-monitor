@@ -1,5 +1,9 @@
-.row.mb-1
-  legend class="col-form-label col-sm-#{label_width local_assigns} pt-0" Availability
-  .col-sm-10
-    - (all_option + availability_options).each do |label, value|
-      = bs_toggle_button :availability, value, label
+.btn-group.btn-group-sm.me-3
+  - (all_option + availability_options).each do |label, value|
+    = bs_button_group_radio_item :availability, value, label
+
+/ .row.mb-1
+/   legend class="col-form-label col-sm-#{label_width local_assigns} pt-0" Availability
+/   .col-sm-10
+/     - (all_option + availability_options).each do |label, value|
+/       = bs_toggle_button :availability, value, label
