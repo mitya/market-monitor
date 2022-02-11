@@ -1,10 +1,8 @@
-- volume gainers dash, spikes dash, alarms dash
-
-- list of intraday scans
 - hits for today open & yesterday close
 - hits for yesterday/today HOD / LOD
 - hits for DMA
 - hits for predefined levels
+- list of intraday scans
 - long shadows (espesially with volume)
 - volume spikes
 - volume minimizations
@@ -14,8 +12,10 @@
 - show intraday scans on the chart
 - show scan ticker in the next available intraday chart
 
+- spikes dash
 
 # Next
+- alarms dash
 - dash for changes in last N mins
 - expected MA hits analysis
 - save MA data for some recent date
@@ -83,6 +83,10 @@
 - Ruby 3.1
 - Rails 7
 
+
+# Bugs
+- volume losers don't look correct
+- some days since last MA hit don't look correct
 
 
 # Done
@@ -388,3 +392,4 @@
 + dash for MA hits
 + quick currency / source selectors for dashboards (in summary)
 + show rel vol & days since last for MA dash
++ volume gainers/losers dash

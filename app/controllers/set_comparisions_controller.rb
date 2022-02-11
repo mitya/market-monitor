@@ -32,8 +32,11 @@ class SetComparisionsController < ApplicationController
   end
 
   def summary
-    base_scope = PriceLevelHit.where(date: Current.yesterday, source: 'ma').where('days_since_last > ?', 20)
-    @hits = base_scope.all
+    d1_volume_expr = "data->'volumes'->'d1'"
+    @volume_gainers = Aggregate.current.order(Arel.sql "#{d1_volume_expr} desc nulls last").limit(50).pluck(:ticker)
+    @volume_losers  = Aggregate.current.order(Arel.sql "#{d1_volume_expr}  asc nulls last").where("(#{d1_volume_expr})::float > 0").limit(50).pluck(:ticker)
+
+    @hits = PriceLevelHit.where(date: Current.yesterday, source: 'ma').where('days_since_last > ?', 20).all
     @hits_sets = {
       ma200_up_tests:    @hits.select { _1.ma_length == 200 && _1.kind.in?(%w[up-test]) },
       ma200_up_breaks:   @hits.select { _1.ma_length == 200 && _1.kind.in?(%w[up-break up-gap]) },
@@ -51,6 +54,7 @@ class SetComparisionsController < ApplicationController
       [ get_instruments.(:ma200_up_tests),    get_instruments.(:ma50_up_tests)    ],
       [ get_instruments.(:ma200_down_breaks), get_instruments.(:ma50_down_breaks) ],
       [ get_instruments.(:ma200_down_tests),  get_instruments.(:ma50_down_tests)  ],
+      [ InstrumentSet.new(:volume_gainers, :static, items: @volume_gainers), InstrumentSet.new(:volume_losers,  :static, items: @volume_losers) ],
     ]    
     
     preload_associations
