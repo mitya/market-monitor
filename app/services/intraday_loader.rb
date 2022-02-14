@@ -1,4 +1,4 @@
-class IntradayCandleLoader
+class IntradayLoader
   def tickers
     return R.tickers_from_env if R.tickers_from_env.present?
 
@@ -37,7 +37,7 @@ class IntradayCandleLoader
       current_tickers = tickers
       current_interval = interval
       current_interval_index = (Time.current.hour * 60 + Time.current.min) / interval_in_minutes
-      puts "tick #{Time.current} - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
+      # puts "tick #{Time.current} - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
 
       change_last_params = -> do
         last_tickers = current_tickers
@@ -67,6 +67,8 @@ class IntradayCandleLoader
         RefreshPricesFromTinkoff.refresh Instrument.rub.abc
         puts "refresh Tinkoff prices".green
       end
+      
+      # analyze
 
       sleep 5
     end
@@ -96,11 +98,17 @@ class IntradayCandleLoader
     end
   end
 
-  def sync_latest(analyze: should_analyze)
+  def sync_latest
     puts 'sync latest'
-    instruments.abc.each do |inst|
-      Tinkoff.import_intraday_candles_for_today inst, interval
-      PriceSignal.analyze_intraday_for inst, interval if analyze
+    instruments.abc.each { |inst| Tinkoff.import_intraday_candles_for_today inst, interval }
+  end
+  
+  def analyze
+    tickers_to_analyze = tickers
+    tickers_to_analyze = %[CLF MOMO]
+    interval = '3min'
+    Instrument.for_tickers(tickers_to_analyze).abc.each do |inst|
+      IntradayAnalyzer.analyze inst, date: date, interval: interval
     end
   end
 

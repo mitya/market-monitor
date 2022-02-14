@@ -109,7 +109,7 @@ class Tinkoff
 
       return if since + Candle.interval_duration_for(interval) > Time.current
 
-      puts "load tinkoff #{instrument} #{since} #{till}".magenta
+      # puts "load tinkoff #{instrument} #{since} #{till}".magenta
       data = load_intervals instrument, interval, since, till, delay: 0.05
       candles = import_candles_from_hash data
 

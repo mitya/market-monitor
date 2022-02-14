@@ -1,9 +1,9 @@
 namespace :intraday do
-  envtask(:sync) { IntradayCandleLoader.new.sync }
-  envtask(:load) { IntradayCandleLoader.new.load }
-  envtask(:history) { IntradayCandleLoader.new.load_history }
+  envtask(:sync) { IntradayLoader.new.sync }
+  envtask(:load) { IntradayLoader.new.load }
+  envtask(:history) { IntradayLoader.new.load_history }
   
-  envtask(:check_moex_closings) { IntradayCandleLoader.new.check_moex_closings }
+  envtask(:check_moex_closings) { IntradayLoader.new.check_moex_closings }
 end
 
 

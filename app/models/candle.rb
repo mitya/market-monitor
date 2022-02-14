@@ -155,9 +155,6 @@ class Candle < ApplicationRecord
     yesterday = previous
     yesterday_aggregate = instrument.aggregates.find_by_date(yesterday.date)
     return if !yesterday_aggregate || !yesterday
-
-    # printf "%8s %10.2f %i %i\n", ticker, shadow_to_body_ratio, yesterday_aggregate.days_up, yesterday_aggregate.days_down
-
     return 'down' if yesterday_aggregate.days_up   >= 2 && close < yesterday.close && high > yesterday.body_high && ((high - yesterday.close) / yesterday.close) > min_pin_height
     return 'up'   if yesterday_aggregate.days_down >= 2 && close > yesterday.close && low  < yesterday.body_low && ((yesterday.close - low ) / yesterday.close) > min_pin_height
   end
@@ -176,5 +173,3 @@ class Candle < ApplicationRecord
 
   def volume_to_average = volume.to_f / instrument.info&.avg_volume rescue nil
 end
-
-__END__

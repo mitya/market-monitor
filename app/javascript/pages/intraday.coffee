@@ -48,11 +48,15 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     rightPriceScale: {
       entireTextOnly: true,
       visible: priceScaleVisible,
-      mode: PriceScaleMode.Percentage,
+      mode: PriceScaleMode.Normal, # PriceScaleMode.Percentage
+      borderVisible: false,
     },
     localization: {
       priceFormatter: priceFormatter
     },
+    grid: { horzLines: { visible: priceScaleVisible } },
+    handleScale: { axisPressedMouseMove: true, mouseWheel: false }
+    handleScroll: true,    
   }
 
   candlesSeries = chart.addCandlestickSeries()
