@@ -1,4 +1,3 @@
-- extract static level / level hit logic into services
 - KSPI & SPBE changes ??
 
 - rebuild all MA hits
@@ -25,7 +24,9 @@
 - show scan ticker in the next available intraday chart
 
 # Next
-- check 'change' on spikes dashboard
+- move chart prefs to a modal
+- add ability to view any ticker chart in a modal (on dashboard)
+- page with 1 chart and a list of tickers to quickly check it out
 - dash for changes in last N mins
 - expected MA hits analysis
 - save MA data for some recent date
@@ -405,3 +406,4 @@
 + volume gainers/losers dash
 + spikes dash
 + level hits dash
++ extract static level / level hit logic into services

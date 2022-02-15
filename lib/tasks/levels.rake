@@ -1,9 +1,9 @@
 namespace :levels do
-  envtask(:import) { PriceLevel.load_manual }
-  envtask(:hits) { PriceLevelHit.analyze_manual }
-  envtask(:hits_week) { PriceLevelHit.analyze_dates MarketCalendar.open_days(1.week.ago, Current.yesterday) }
-  envtask(:hits_all) { PriceLevelHit.analyze_all }
-  envtask(:search) { PriceLevel.search_all }
+  envtask(:search)      { PriceLevelDetector.search_all }
+  envtask(:import)      { PriceLevelDetector.load_manual }
+  envtask(:hits_all)    { PriceLevelHitDetector.analyze_all }
+  envtask(:hits_manual) { PriceLevelHitDetector.analyze_manual }
+  envtask(:hits_week)   { PriceLevelHitDetector.analyze_dates MarketCalendar.open_days(1.week.ago, Current.yesterday) }
 end
 
 envtask(:gf) { InsiderTransaction.parse_guru_focus }
