@@ -32,9 +32,10 @@ class SetComparisionsController < ApplicationController
   end
 
   def summary
-    d1_volume_expr = "data->'volumes'->'d1'"
-    @volume_gainers = Aggregate.current.order(Arel.sql "#{d1_volume_expr} desc nulls last").limit(50).pluck(:ticker)
-    @volume_losers  = Aggregate.current.order(Arel.sql "#{d1_volume_expr}  asc nulls last").where("(#{d1_volume_expr})::float > 0").limit(50).pluck(:ticker)
+    selector = 'd1'
+    volume_expr = "data->'volumes'->'#{selector}'"
+    @volume_gainers = Aggregate.current.order(Arel.sql "#{volume_expr} desc nulls last").limit(50).pluck(:ticker)
+    @volume_losers  = Aggregate.current.order(Arel.sql "#{volume_expr}  asc nulls last").where("(#{volume_expr})::float > 0").limit(50).pluck(:ticker)
 
     @hits = PriceLevelHit.where(date: Current.yesterday, source: 'ma').where('days_since_last > ?', 20).all
     @hits_sets = {

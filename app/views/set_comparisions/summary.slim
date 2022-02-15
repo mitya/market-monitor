@@ -35,24 +35,26 @@ main.container-fluid.ma-dashboard
                   - instruments = instruments.sort_by { _1.stored_gain_since(selector) || -1 }                
                 - instruments = instruments.reverse
                 - instruments.each do |inst|
-                  - value = inst.stored_gain_since(selector)
+                  - change = inst.stored_gain_since('d2')
                   - hit = @hits_sets[set.key]&.detect { inst.ticker == _1.ticker }
-                  - spike_value = @spikes_index[inst.ticker]&.spike if @spikes_index                  
+                  - spike_value = @spikes_index[inst.ticker]&.spike if set.key =~ /spike/                  
                   tr
                     td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
                     td.money-cell.price-cell= format_price inst.last, unit: inst.currency
                     td.money-cell.change-cell
-                      - if value
-                        - if value.abs >= 0.08
-                          = colorized_ratio value, precision: precision, format: '%n'
+                      - if change
+                        - if change.abs >= 0.08
+                          = colorized_ratio change, precision: precision, format: '%n'
                         - else
-                          = percentage_bar value, classes: class_names(red_green_class(value > 0), 'solid-narrow'), rtl: true
+                          = percentage_bar change, classes: class_names(red_green_class(change > 0), 'solid-narrow'), rtl: true
+                    
                     - if hit
                       td.money-cell= count_bar hit.days_since_last.to_f / 20.0, classes: 'is-light solid', title: "#{hit.days_since_last} days"
                       td.money-cell= percentage_bar hit.rel_vol / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_to_percentage hit.rel_vol * 100, precision: 0}"
+                    
                     - if spike_value
-                      td.money-cell.change-cell                    
-                        = colorized_ratio spike_value, precision: precision, format: '%n'                    
+                      td.money-cell.spike-cell                    
+                        = colorized_ratio spike_value, precision: precision, format: '%n'
                     - if set.key =~ /volume_gainers|spike/
                       td.money-cell
                         - relvol = inst.aggregate.volumes['d1']

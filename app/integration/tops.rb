@@ -6,7 +6,7 @@ class Tops
     def losers_ru(**options)  = gainers(currency: 'RUB', position: :first, **options)
       
     def gainers(limit: 33, currency: 'USD', position: :first, period: :today)
-      if period.blank? || period == :today
+      if period.blank? || period.to_s == 'today' || period.to_s == 'last'
         Price.where(ticker: Instrument.where(currency: currency)).order(:change).pluck(:ticker).send(position, limit).reverse
       else
         order_expr = Arel.sql("data->'gains'->'#{period}'")
