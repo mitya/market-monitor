@@ -46,15 +46,27 @@ class SetComparisionsController < ApplicationController
       ma50_up_breaks:    @hits.select { _1.ma_length ==  50 && _1.kind.in?(%w[up-break up-gap]) },
       ma50_down_tests:   @hits.select { _1.ma_length ==  50 && _1.kind.in?(%w[down-test]) },
       ma50_down_breaks:  @hits.select { _1.ma_length ==  50 && _1.kind.in?(%w[down-break down-gap]) },
-    }    
+    }
+    get_instruments = -> key { InstrumentSet.new(key, :static, items: @hits_sets[key].pluck(:ticker)) }    
+
+    @spikes = Spike.where(date: Current.yesterday) #.order(ticker: :asc).includes(:instrument => [:aggregate])
+    @spikes_index = @spikes.index_by &:ticker
+    ups, downs = @spikes.partition &:up?
     
-    get_instruments = -> key { InstrumentSet.new(key, :static, items: @hits_sets[key].pluck(:ticker)) }
     @set_groups = [
       [ get_instruments.(:ma200_up_breaks),   get_instruments.(:ma50_up_breaks)   ],
       [ get_instruments.(:ma200_up_tests),    get_instruments.(:ma50_up_tests)    ],
       [ get_instruments.(:ma200_down_breaks), get_instruments.(:ma50_down_breaks) ],
       [ get_instruments.(:ma200_down_tests),  get_instruments.(:ma50_down_tests)  ],
-      [ InstrumentSet.new(:volume_gainers, :static, items: @volume_gainers), InstrumentSet.new(:volume_losers,  :static, items: @volume_losers) ],
+      [ 
+        InstrumentSet.new(:volume_gainers, :static, items: @volume_gainers), 
+        InstrumentSet.new(:volume_losers,  :static, items: @volume_losers) 
+      ],
+      [ 
+        InstrumentSet.new(:spikes_up,   :static, items:   ups.pluck(:ticker)),
+        InstrumentSet.new(:spikes_down, :static, items: downs.pluck(:ticker))
+      ],
+
     ]    
     
     preload_associations

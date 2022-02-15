@@ -1,3 +1,7 @@
+- buttons to go page down/up
+- level dash (when stock hits level it hasn't tested in 20+ sessions // needs level extraction)
+- turn-around dash (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
+
 - run empty analysis & mark candles
 - hits for today open in 15+ mins since start, then only after 4% change
 - hits yesterday close
@@ -14,16 +18,8 @@
 - show intraday scans on the chart
 - show scan ticker in the next available intraday chart
 
-- switch to disable scaling
-- switch to show line labels
-- buttons to go page down/up
-
-- spikes dash
-- turn-around dash (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
-- level dash (when stock hits level it hasn't tested in 20+ sessions // needs level extraction)
-
 # Next
-- alarms dash
+- check 'change' on spikes dashboard
 - dash for changes in last N mins
 - expected MA hits analysis
 - save MA data for some recent date
@@ -401,3 +397,4 @@
 + quick currency / source selectors for dashboards (in summary)
 + show rel vol & days since last for MA dash
 + volume gainers/losers dash
++ spikes dash

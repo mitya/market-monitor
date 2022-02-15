@@ -29,12 +29,15 @@ main.container-fluid.ma-dashboard
                 - instruments = instruments.reject { _1.premium? } if availability == 'tinkoff'
                 - if set.key =~ /volume/
                   - instruments = instruments.sort_by { _1.aggregate.volumes['d1'] }
+                - elsif set.key =~ /spikes/
+                  - instruments = instruments.sort_by { @spikes_index[_1.ticker].spike || -1 }
                 - else
                   - instruments = instruments.sort_by { _1.stored_gain_since(selector) || -1 }                
                 - instruments = instruments.reverse
                 - instruments.each do |inst|
                   - value = inst.stored_gain_since(selector)
                   - hit = @hits_sets[set.key]&.detect { inst.ticker == _1.ticker }
+                  - spike_value = @spikes_index[inst.ticker]&.spike if @spikes_index                  
                   tr
                     td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
                     td.money-cell.price-cell= format_price inst.last, unit: inst.currency
@@ -47,7 +50,10 @@ main.container-fluid.ma-dashboard
                     - if hit
                       td.money-cell= count_bar hit.days_since_last.to_f / 20.0, classes: 'is-light solid', title: "#{hit.days_since_last} days"
                       td.money-cell= percentage_bar hit.rel_vol / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_to_percentage hit.rel_vol * 100, precision: 0}"
-                    - if set.key =~ /volume_gainers/
+                    - if spike_value
+                      td.money-cell.change-cell                    
+                        = colorized_ratio spike_value, precision: precision, format: '%n'                    
+                    - if set.key =~ /volume_gainers|spike/
                       td.money-cell
                         - relvol = inst.aggregate.volumes['d1']
                         - if relvol > 10
