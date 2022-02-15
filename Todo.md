@@ -1,10 +1,8 @@
-- KSPI & SPBE changes ??
-
 - rebuild all MA hits
-- measure level hit days to recent calculation via previous hits
-
+- measure level hit days-to-recent calculation via previous hits
 - buttons to go page down/up
 - button to toggle scroll scaling
+
 - turn-around dash (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
 
 - run empty analysis & mark candles
@@ -407,3 +405,5 @@
 + spikes dash
 + level hits dash
 + extract static level / level hit logic into services
++ manual levels dash
++ KSPI & SPBE changes ??

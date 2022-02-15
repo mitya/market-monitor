@@ -36,7 +36,7 @@ namespace :tinkoff do
     end
 
     envtask :previous do
-      Instrument.non_usd.in_set(ENV['set']).abc.each do |inst|
+      Instrument.non_iex.in_set(ENV['set']).abc.each do |inst|
         Tinkoff.import_latest_day_candles(inst, today: false)
       end
     end

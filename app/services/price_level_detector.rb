@@ -1,5 +1,7 @@
 class PriceLevelDetector
   include StaticService
+
+  def repo = PriceLevel
   
   def search_all
     Instrument.all.abc.each { |inst| search inst }
@@ -60,14 +62,15 @@ class PriceLevelDetector
       next if line.blank?
       ticker, *values = line.split
       manual_tickers << ticker
-      instrument = Instrument.get(ticker)
-      instrument.levels.manual.where.not(value: values).each &:destroy
-      values.each do |value|
-        find_or_create_by! instrument: instrument, value: value, manual: true, important: true
+      if instrument = Instrument.get(ticker)
+        instrument.levels.manual.where.not(value: values).each &:destroy
+        values.each do |value|
+          repo.find_or_create_by! instrument: instrument, value: value, manual: true, important: true
+        end
       end
     end
 
-    manual.where.not(ticker: manual_tickers.map(&:upcase)).destroy_all
+    repo.manual.where.not(ticker: manual_tickers.map(&:upcase)).destroy_all
 
     nil
   end

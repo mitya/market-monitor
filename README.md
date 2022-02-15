@@ -38,7 +38,7 @@ rake set_average_volume
 rake candles:set_average_change
 rake candles:set_d5_volume
 
-rake iex:days:missing
+rake iex:days:missing since=2022-02-01
 rake tinkoff:days:missing ok=1 tickers='SPBE' since=2021-09-01
 rake tinkoff:days:year tickers=''
 
@@ -56,11 +56,11 @@ rake options:day
 # Run if haven't used for a whilte
 rake     iex:days:missing since=2021-01-01
 rake     iex:days:missing since=2022-01-01 ok=1
-rake tinkoff:days:missing since=2022-01-01 ok=1 tickers=''
+rake tinkoff:days:missing since=2021-09-01 ok=1 tickers='KAP@GS KSPI@GS SPBE'
 
 # Destroying tickers
 
-rake t:destroy ticker='SHEL CEG' ok=1
+rake t:destroy ticker='TRIT XLNX' ok=1
 rake tinkoff:instruments:sync ok=1
 
 

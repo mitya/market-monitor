@@ -61,7 +61,7 @@ main.container-fluid.ma-dashboard
                         - close_to_level = (inst.last - hit.level_value) / inst.last
                         / = format_price close_to_level, unit: inst.currency
                         - text = colorized_ratio close_to_level, precision: precision, format: '%n'
-                        = tag.span text, title: "Level — #{format_price(hit.level_value)}"
+                        = tag.span text, title: "Level — #{format_price(hit.level_value)}", class: class_names('badge bg-light': hit.manual?)
                         / = tag.span format_price(hit.level_value), class: 'badge bg-secondary'
                     - if set.key =~ /volume_gainers|spike/
                       td.money-cell
