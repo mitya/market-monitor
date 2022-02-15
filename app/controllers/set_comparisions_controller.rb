@@ -59,10 +59,10 @@ class SetComparisionsController < ApplicationController
     ups, downs = @spikes.partition &:up?
     
     @set_groups = [
-      [ get_instruments.(:ma200_up_breaks),   get_instruments.(:ma50_up_breaks), get_instruments.(:level_up_breaks)     ],
       [ get_instruments.(:ma200_up_tests),    get_instruments.(:ma50_up_tests), get_instruments.(:level_up_tests)       ],
-      [ get_instruments.(:ma200_down_breaks), get_instruments.(:ma50_down_breaks), get_instruments.(:level_down_breaks) ],
+      [ get_instruments.(:ma200_up_breaks),   get_instruments.(:ma50_up_breaks), get_instruments.(:level_up_breaks)     ],
       [ get_instruments.(:ma200_down_tests),  get_instruments.(:ma50_down_tests), get_instruments.(:level_down_tests)   ],
+      [ get_instruments.(:ma200_down_breaks), get_instruments.(:ma50_down_breaks), get_instruments.(:level_down_breaks) ],
       [ 
         InstrumentSet.new(:volume_gainers, :static, items: @volume_gainers), 
         InstrumentSet.new(:volume_losers,  :static, items: @volume_losers) 

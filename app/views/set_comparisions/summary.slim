@@ -28,12 +28,13 @@ main.container-fluid.ma-dashboard
                 - instruments = instruments.select { _1.premium? } if availability == 'premium'
                 - instruments = instruments.reject { _1.premium? } if availability == 'tinkoff'
                 - if set.key =~ /volume/
-                  - instruments = instruments.sort_by { _1.aggregate.volumes['d1'] }
+                  - instruments = instruments.sort_by { _1.aggregate.volumes['d1'] }.reverse
                 - elsif set.key =~ /spikes/
-                  - instruments = instruments.sort_by { @spikes_index[_1.ticker].spike || -1 }
+                  - instruments = instruments.sort_by { @spikes_index[_1.ticker].spike || -1 }.reverse
+                - elsif set.key =~ /level/
+                  - instruments = instruments.sort_by &:ticker
                 - else
-                  - instruments = instruments.sort_by { _1.stored_gain_since(selector) || -1 }                
-                - instruments = instruments.reverse
+                  - instruments = instruments.sort_by { _1.stored_gain_since(selector) || -1 }.reverse
                 - instruments.each do |inst|
                   - change = inst.stored_gain_since('d2')
                   - hit = @hits_sets[set.key]&.detect { inst.ticker == _1.ticker }
@@ -49,15 +50,19 @@ main.container-fluid.ma-dashboard
                           = percentage_bar change, classes: class_names(red_green_class(change > 0), 'solid-narrow'), rtl: true
                     
                     - if hit
-                      td.money-cell= count_bar hit.days_since_last.to_f / 20.0, classes: 'is-light solid', title: "#{hit.days_since_last} days"
+                      td.money-cell= count_bar hit.days_since_last.to_f / 20.0, classes: 'is-light solid m-wide', title: "#{hit.days_since_last} days"
                       td.money-cell= percentage_bar hit.rel_vol / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_to_percentage hit.rel_vol * 100, precision: 0}"
                     
                     - if spike_value
                       td.money-cell.spike-cell                    
                         = colorized_ratio spike_value, precision: precision, format: '%n'
-                    - if set.key =~ /level/
-                      / td.money-cell.level-cell
-                      /   = tag.span format_price(hit.level_value), class: 'badge bg-secondary'
+                    - if set.key =~ /ma|level/
+                      td.money-cell
+                        - close_to_level = (inst.last - hit.level_value) / inst.last
+                        / = format_price close_to_level, unit: inst.currency
+                        - text = colorized_ratio close_to_level, precision: precision, format: '%n'
+                        = tag.span text, title: "Level — #{format_price(hit.level_value)}"
+                        / = tag.span format_price(hit.level_value), class: 'badge bg-secondary'
                     - if set.key =~ /volume_gainers|spike/
                       td.money-cell
                         - relvol = inst.aggregate.volumes['d1']
