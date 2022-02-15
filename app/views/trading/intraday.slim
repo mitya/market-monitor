@@ -3,11 +3,11 @@
     input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_settings['tickers'].join(' '))
 
     .btn-group.btn-group-sm.w-auto.interval-selector.js-btn-group(data-initial=@chart_settings['period'])
-      button type="button" data-value="1min" class="btn btn-outline-secondary" 1m
-      button type="button" data-value="3min" class="btn btn-outline-secondary" 3m
-      button type="button" data-value="5min" class="btn btn-outline-secondary" 5m
-      button type="button" data-value="hour" class="btn btn-outline-secondary" 1h
-      button type="button" data-value="day"  class="btn btn-outline-secondary" 1d
+      button type="button" data-value="1min" class="btn btn-outline-secondary" 1
+      button type="button" data-value="3min" class="btn btn-outline-secondary" 3
+      button type="button" data-value="5min" class="btn btn-outline-secondary" 5
+      button type="button" data-value="hour" class="btn btn-outline-secondary" H
+      button type="button" data-value="day"  class="btn btn-outline-secondary" D
 
     .btn-group.btn-group-sm.w-auto.columns-selector.js-btn-group(data-initial=@chart_settings['columns'])
       button type="button" data-value="1" class="btn btn-outline-secondary" 1
@@ -22,11 +22,21 @@
 
     .btn-group.btn-group-sm.w-auto.align-items-center
       input type="checkbox" class="btn-check" id="toggle-time" autocomplete="off" checked=@chart_settings['time_shown']
-      label class="btn btn-outline-secondary" for="toggle-time" T
+      label class="btn btn-outline-secondary" for="toggle-time" = fa_icon :clock, solid: false
       input type="checkbox" class="btn-check" id="toggle-price" autocomplete="off" checked=@chart_settings['price_shown']
-      label class="btn btn-outline-secondary" for="toggle-price" $
-      button type="button" class="btn btn-outline-secondary go-to-end" = "≥"
-      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = "FS"
+      label class="btn btn-outline-secondary" for="toggle-price" $      
+      input type="checkbox" class="btn-check" id="toggle-wheel-scaling" autocomplete="off" checked=@chart_settings['wheel_scaling']
+      label class="btn btn-outline-secondary" for="toggle-wheel-scaling" = fa_icon 'mouse'
+      input type="checkbox" class="btn-check" id="toggle-level-labels" autocomplete="off" checked=@chart_settings['level_labels']
+      label class="btn btn-outline-secondary" for="toggle-level-labels" = fa_icon 'tag'
+      input type="checkbox" class="btn-check" id="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown']
+      label class="btn btn-outline-secondary" for="toggle-levels" = fa_icon 'grip-lines'
+      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = fa_icon 'expand-alt'      
+      
+    .btn-group.btn-group-sm.w-auto.align-items-center
+      button type="button" class="btn btn-outline-secondary go-down"   = fa_icon 'angle-double-down'      
+      button type="button" class="btn btn-outline-secondary go-up"     = fa_icon 'angle-double-up'      
+      button type="button" class="btn btn-outline-secondary go-to-end" = fa_icon 'angle-double-right'      
 
     select class="ticker-set-selector form-select w-auto"
       option

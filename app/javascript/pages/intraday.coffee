@@ -2,6 +2,7 @@ import { createChart, CrosshairMode, LineStyle, PriceScaleMode } from 'lightweig
 
 charts = {}
 currentBarSpacing = 7
+chartHeight = 0
 
 window.getCharts = -> charts
 
@@ -13,7 +14,7 @@ clearCharts = ->
 dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
 dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
-makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisible }) ->
+makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisible, wheelScaling, levelLabelsVisible, levelsVisible }) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
     <div class='intraday-chart col ps-4 pe-4 pb-4 pt-2'>
       <div class='intraday-chart-content'>
@@ -53,7 +54,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     },
     localization: { priceFormatter: priceFormatter },
     grid: { horzLines: { visible: priceScaleVisible } },
-    handleScale: { axisPressedMouseMove: true, mouseWheel: true }
+    handleScale: { axisPressedMouseMove: true, mouseWheel: wheelScaling }
     handleScroll: true,    
   }
 
@@ -108,22 +109,23 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     candlesSeries.setMarkers opens.map (openingTime) ->
       { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'O' }
   
-  levelColors =     { MA20: 'cyan',   MA50: 'magenta', MA100: 'magenta', MA200: 'magenta', open: 'orange', close: 'black',  intraday: 'gray'  , swing: 'black' }
-  levelLineStyles = { MA20: 'Solid',  MA50: 'Solid',   MA100: 'Solid',   MA200: 'Solid',   open: 'Solid',  close: 'Solid',  intraday: 'Dotted', swing: 'Solid'}
-  levelLineWidths = { MA20: 2,        MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,        intraday: 2       , swing: 1      }
+  levelColors =     { MA20: 'blue',   MA50: 'red',     MA100: 'magenta', MA200: 'red',     open: 'orange',  close: 'orange',   intraday: 'gray'  , swing: 'black' }
+  levelLineStyles = { MA20: 'Dashed',  MA50: 'Dashed',   MA100: 'Solid',   MA200: 'Dashed',   open: 'Dotted', close: 'Solid',  intraday: 'Dotted', swing: 'Solid'}
+  levelLineWidths = { MA20: 2,        MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,         intraday: 2       , swing: 1      }
   
-  for title, values of levels
-    continue if values == null
-    values = [values] unless values instanceof Array
-    for level in values
-      candlesSeries.createPriceLine
-        price: Number(level)
-        color: levelColors[title]
-        opacity: 0.5
-        lineWidth: levelLineWidths[title]
-        lineStyle: LineStyle[levelLineStyles[title]]
-        axisLabelVisible: false
-        title: title
+  if levelsVisible
+    for title, values of levels
+      continue if values == null
+      values = [values] unless values instanceof Array
+      for level in values
+        candlesSeries.createPriceLine
+          price: Number(level)
+          color: levelColors[title]
+          opacity: 0.5
+          lineWidth: levelLineWidths[title]
+          lineStyle: LineStyle[levelLineStyles[title]]
+          axisLabelVisible: levelLabelsVisible
+          title: title
 
   # chart.timeScale().fitContent()
   # # circle arrowDown arrowUp
@@ -150,6 +152,7 @@ toggleUrlParam = (name) ->
     url.searchParams.set name, '1'
   location.assign url
 
+
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
     intervalSelector    = $qs(".trading-page .interval-selector")
@@ -159,7 +162,12 @@ document.addEventListener "turbolinks:load", ->
     intradayLevelsField = $qs(".trading-page .intraday-levels textarea")
     timeScaleToggle     = $qs('.trading-page #toggle-time')
     priceScaleToggle    = $qs('.trading-page #toggle-price')
+    wheelScalingToggle  = $qs('.trading-page #toggle-wheel-scaling')
+    levelLabelsToggle   = $qs('.trading-page #toggle-level-labels')
+    levelsToggle        = $qs('.trading-page #toggle-levels')
     gotoEndButton       = $qs('.trading-page .go-to-end')
+    gotoDownButton      = $qs('.trading-page .go-down')
+    gotoUpButton        = $qs('.trading-page .go-up')
     syncTickerSetsToggle= $qs('.trading-page #sync-ticker-sets-toggle')
 
     reload = ->
@@ -170,7 +178,14 @@ document.addEventListener "turbolinks:load", ->
       console.log data
       clearCharts()
       for ticker, payload of data
-        makeChart { ...payload, timeScaleVisible: timeScaleToggle.checked, priceScaleVisible: priceScaleToggle.checked }
+        makeChart {
+          timeScaleVisible:   timeScaleToggle.checked, 
+          priceScaleVisible:  priceScaleToggle.checked,
+          levelLabelsVisible: levelLabelsToggle.checked,
+          wheelScaling:       wheelScalingToggle.checked,
+          levelsVisible:      levelsToggle.checked,
+          ...payload,
+        }
 
     refreshCharts = ->
       return
@@ -187,11 +202,14 @@ document.addEventListener "turbolinks:load", ->
       columns = columnsSelector.querySelector('.btn.active').dataset.value
       time_shown = timeScaleToggle.checked
       price_shown = priceScaleToggle.checked
+      wheel_scaling = wheelScalingToggle.checked
       sync_ticker_sets = syncTickerSetsToggle.checked
+      level_labels = levelLabelsToggle.checked
+      levels_shown = levelsToggle.checked
       bar_spacing = currentBarSpacing
 
       await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: {
-        chart_tickers, synced_tickers, period, columns, time_shown, price_shown, sync_ticker_sets, bar_spacing
+        chart_tickers, synced_tickers, period, columns, time_shown, price_shown, sync_ticker_sets, bar_spacing, wheel_scaling, level_labels, levels_shown
       }
       reload() unless options?.reload == false
 
@@ -232,8 +250,22 @@ document.addEventListener "turbolinks:load", ->
           chart.applyOptions priceScale: { visible: priceScaleToggle.checked }
         updateChartSettings reload: false
 
+      $bind wheelScalingToggle, 'change', ->
+        for ticker, { chart } of charts
+          chart.applyOptions handleScale: { mouseWheel: wheelScalingToggle.checked }
+        updateChartSettings reload: false   
+
+      $bind levelLabelsToggle, 'change', ->
+        updateChartSettings reload: true   
+
+      $bind levelsToggle, 'change', ->
+        updateChartSettings reload: true   
+
       $bind gotoEndButton, 'click', ->
         chart.timeScale().scrollToRealTime() for ticker, { chart } of charts
+        
+      $bind gotoDownButton, 'click', -> window.scrollBy 0, chartHeight * 2
+      $bind gotoUpButton, 'click', -> window.scrollBy 0, -(chartHeight * 2)
 
       $bind chartedTickersField, 'change', updateChartSettings
       $bind syncedTickersField, 'change', updateChartSettings
@@ -242,8 +274,7 @@ document.addEventListener "turbolinks:load", ->
       $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
 
       $bind $qs('.toggle-full-screen'), 'click', -> toggleUrlParam "full-screen"
-
-
+      
       $bind $qs('.ticker-set-selector'), 'change', (e) ->
         tickersLine = e.target.value
         chartedTickersField.value = tickersLine

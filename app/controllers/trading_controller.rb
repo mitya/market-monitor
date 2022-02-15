@@ -88,7 +88,7 @@ class TradingController < ApplicationController
             open:  openings[instrument.ticker]&.open&.to_f,
             close:  instrument.yesterday&.close&.to_f,
             intraday: instrument.annotation&.intraday_levels,
-            swing: instrument.levels.pluck(:value),
+            # swing: instrument.levels.pluck(:value),
           )
         else
           map[ticker][:levels].merge!(
@@ -110,7 +110,10 @@ class TradingController < ApplicationController
       period: Candle.normalize_interval(params[:period]),
       time_shown: params[:time_shown],
       price_shown: params[:price_shown],
+      wheel_scaling: params[:wheel_scaling],
       bar_spacing: params[:bar_spacing],
+      level_labels: params[:level_labels],
+      levels_shown: params[:levels_shown],
     }
 
     render json: { }

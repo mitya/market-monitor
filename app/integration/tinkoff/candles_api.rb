@@ -18,7 +18,8 @@ class Tinkoff
 
     def import_candles_from_hash(data, candle_class: nil)
       interval = data['interval']
-      instrument = Instrument.find_by!(figi: data['figi'])
+      pp data
+      instrument = Instrument.get!(figi: data['figi'])
       candles = data['candles'].to_a
 
       # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?

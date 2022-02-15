@@ -1,6 +1,6 @@
 module BootstrapHelper
-  def fa_icon(name, small: false, xsmall: false, **options)
-    tag.i class: "fas fa-#{name} #{'fa-sm' if small} #{'fa-xs' if xsmall}".strip, **options
+  def fa_icon(name, small: false, xsmall: false, solid: true, **options)
+    tag.i class: "#{solid ? 'fas' : 'far'} fa-#{name} #{'fa-sm' if small} #{'fa-xs' if xsmall}".strip, **options
   end
 
   def bs_radio_button(name, value, label, **attrs)
