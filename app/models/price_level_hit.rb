@@ -6,6 +6,8 @@ class PriceLevelHit < ApplicationRecord
 
   scope :exact, -> { where exact: true }
   scope :important, -> { where important: true }
+  scope :levels, -> { where source: 'level' }
+  scope :ma, -> { where source: 'ma' }
 
   def loose? = !exact?
   def source_name = "#{source}#{ma_length}"
@@ -102,8 +104,16 @@ class PriceLevelHit < ApplicationRecord
       y_close = prev.close
       attrs[:close_distance] = ((close - value).abs / value.to_d).round(3)
 
-      last_day_crossed = curr.instrument.candles.before(curr).order(:date).last(60).reverse.detect{ |candle| candle.include?(value) }&.date
-      attrs[:days_since_last] = last_day_crossed ? curr.date - last_day_crossed : 99
+      last_day_crossed = if attrs[:source] == 'level'
+        curr.instrument.candles.before(curr).order(:date).last(80).reverse.detect{ _1.include?(value) }&.date
+      else
+        curr.instrument.level_hits.ma.where(ma_length: attrs[:ma_length]).order(:date).last&.date
+      end
+      days_since_last = last_day_crossed ? curr.date - last_day_crossed : 99        
+      
+      return if days_since_last < 10 && attrs[:level]
+      
+      attrs[:days_since_last] = days_since_last
       attrs[:rel_vol] = curr.volume_to_average.to_f.round(3)
 
       case
@@ -125,7 +135,7 @@ class PriceLevelHit < ApplicationRecord
 
     def record!(kind, **attrs)
       hit = find_or_create_by! kind: kind, **attrs
-      puts "#{hit.date} hit #{hit.ticker.ljust 8} #{hit.source_name.ljust(5)} #{hit.kind.ljust(10)} #{hit.level_value}".
+      puts "#{hit.date} hit #{hit.ticker.ljust 8} #{hit.source_name.ljust(5)} #{hit.days_since_last.to_s.ljust(3)} #{hit.kind.ljust(10)} #{hit.level_value}".
         colorize(hit.positive?? :green : :red)
     end
   end
@@ -134,6 +144,5 @@ end
 __END__
 PriceLevelHit.delete_all
 PriceLevelHit.analyze_manual date: Current.yesterday
-
-DateIndicators.recreate_for_all %w[PEN]
 PriceLevelHit.analyze 'PEN'
+MarketCalendar.open_days('2021-09-01').each { PriceLevelHit.analyze instr('PLZL'), date: _1 }

@@ -20,14 +20,14 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" TA
           ul class="dropdown-menu"
             li= link_to 'Signals', signals_path, class: 'dropdown-item'
-            li= link_to 'Intraday Signals', intraday_signals_path, class: 'dropdown-item'
-            li= link_to 'Signal Results', signal_results_path, class: 'dropdown-item'
-            li= link_to 'Strategies', signal_strategies_path, class: 'dropdown-item'
-            li= link_to 'Recommendations', recommendations_path, class: 'dropdown-item'
-            li= link_to 'Opinions', public_signals_path, class: 'dropdown-item'
-            li= link_to 'Compare', comparision_path, class: 'dropdown-item'
+            li= link_to 'Signals – Intraday', intraday_signals_path, class: 'dropdown-item'
+            li= link_to 'Signals – Results', signal_results_path, class: 'dropdown-item'
+            li= link_to 'Signals – Strategies', signal_strategies_path, class: 'dropdown-item'
+            li= link_to 'Analysts', recommendations_path, class: 'dropdown-item'
+            li= link_to 'Talking Heads', public_signals_path, class: 'dropdown-item'
             li= link_to 'Hits', level_hits_path(days_since_last: 10, rvol: 100, availability: 'tinkoff'), class: 'dropdown-item'
             li= link_to 'Spikes', spikes_path, class: 'dropdown-item'
+            li= link_to 'Compare', comparision_path, class: 'dropdown-item'
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Insiders
           ul class="dropdown-menu"
@@ -39,11 +39,12 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
           ul class="dropdown-menu"
             li= link_to 'Changes', set_comparision_path, class: 'dropdown-item'
             li= link_to 'Summary', summary_set_comparision_path, class: 'dropdown-item'          
+            li= link_to 'Charts', intraday_trading_path, class: 'dropdown-item'
+            li: hr.dropdown-divider
             li= link_to 'Arbitrage', arbitrages_path, class: 'dropdown-item'
             li= link_to 'Activity', activities_trading_path, class: 'dropdown-item'
             li= link_to 'Trading', dashboard_trading_path, class: 'dropdown-item'
             li= link_to 'News', news_index_path, class: 'dropdown-item'
-            li= link_to 'Charts', intraday_trading_path, class: 'dropdown-item'
 
       ul class="navbar-nav mb-2 mb-lg-0 ms-auto"
         li class="nav-item dropdown"

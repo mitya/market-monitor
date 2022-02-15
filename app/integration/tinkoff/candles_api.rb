@@ -35,7 +35,9 @@ class Tinkoff
           ongoing = interval == 'day' && date == Current.date && !Current.weekend? ||
                     candle_class.intraday? && timestamp + candle_class.interval_duration >= Time.current
 
-          candle = candle_class.find_or_initialize_by instrument: instrument, interval: interval, time: hhmm, date: date
+          params = { instrument: instrument, interval: interval, date: date }
+          params.merge! time: hhmm if candle_class.intraday?
+          candle = candle_class.find_or_initialize_by(params)
           # puts "Import Tinkoff #{date} #{hhmm} #{interval} candle for #{instrument}".green if candle.new_record?
           puts "Import Tinkoff #{date} #{hhmm} #{interval} #{instrument} #{ongoing ? '...' : ''}".colorize(candle.new_record?? :green : :yellow)
 

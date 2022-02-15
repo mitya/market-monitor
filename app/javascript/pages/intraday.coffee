@@ -29,7 +29,6 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   container = chartsContainer().lastChild
   legend = container.querySelector('.intraday-chart-legend')
   currentBarSpacing = parseInt(chartsContainer().dataset.barSpacing)
-  console.log currentBarSpacing
 
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
@@ -40,7 +39,8 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   navbarHeight = document.querySelector('.main-navbar').offsetHeight
   toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight
   chartContainerHeight = windowHeight - navbarHeight - toolbarHeight
-  chartHeight = chartContainerHeight / 2 - 20 * 2
+  chartRows = 2
+  chartHeight = chartContainerHeight / chartRows - 20 * chartRows
 
   chart = createChart container.querySelector('.intraday-chart-content'), {
     width: 0, height: chartHeight,
@@ -51,11 +51,9 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
       mode: PriceScaleMode.Normal, # PriceScaleMode.Percentage
       borderVisible: false,
     },
-    localization: {
-      priceFormatter: priceFormatter
-    },
+    localization: { priceFormatter: priceFormatter },
     grid: { horzLines: { visible: priceScaleVisible } },
-    handleScale: { axisPressedMouseMove: true, mouseWheel: false }
+    handleScale: { axisPressedMouseMove: true, mouseWheel: true }
     handleScroll: true,    
   }
 
@@ -80,7 +78,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
       formattedTime = formatTime(candle.time - 3 * 60 * 60)
       legend.querySelector('.candle-time').innerText = formattedTime
       legend.querySelector('.candle-price').innerText = formattedPrice
-
+  
       if openPrice = levels.open
         changeSinceOpen = candle.close - openPrice
         percentage = changeSinceOpen / openPrice
@@ -96,24 +94,24 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
       legend.querySelector('.candle-time').innerText = ''
       legend.querySelector('.candle-price').innerText = ''
       changeBox.innerText = ''
-
+  
   setLegendFromCandle charts[ticker].lastCandle
-
+  
   chart.subscribeCrosshairMove (param) ->
     if (param.time)
       candle = Array.from( param.seriesPrices.values() )[0]
       setLegendFromCandle { ...candle, time: param.time }
     else
       setLegendFromCandle charts[ticker].lastCandle
-
+  
   if opens
     candlesSeries.setMarkers opens.map (openingTime) ->
       { time: openingTime, position: 'aboveBar', color: 'orange', shape: 'circle', text: 'O' }
-
-  levelColors =     { MA20: 'cyan',   MA50: 'magenta', MA100: 'magenta', MA200: 'magenta', open: 'orange', close: 'black',  intraday: 'gray' }
-  levelLineStyles = { MA20: 'Solid',  MA50: 'Solid',   MA100: 'Solid',   MA200: 'Solid',   open: 'Solid',  close: 'Solid',  intraday: 'Dotted' }
-  levelLineWidths = { MA20: 2,        MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,        intraday: 2 }
-
+  
+  levelColors =     { MA20: 'cyan',   MA50: 'magenta', MA100: 'magenta', MA200: 'magenta', open: 'orange', close: 'black',  intraday: 'gray'  , swing: 'black' }
+  levelLineStyles = { MA20: 'Solid',  MA50: 'Solid',   MA100: 'Solid',   MA200: 'Solid',   open: 'Solid',  close: 'Solid',  intraday: 'Dotted', swing: 'Solid'}
+  levelLineWidths = { MA20: 2,        MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,        intraday: 2       , swing: 1      }
+  
   for title, values of levels
     continue if values == null
     values = [values] unless values instanceof Array
@@ -128,7 +126,6 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
         title: title
 
   # chart.timeScale().fitContent()
-
   # # circle arrowDown arrowUp
   # lineSeries.setMarkers [
   #   { time: candlesData[candlesData.length - 10].time, position: 'aboveBar', color: 'red', shape: 'arrowDown', text: '2Top' },
@@ -176,6 +173,7 @@ document.addEventListener "turbolinks:load", ->
         makeChart { ...payload, timeScaleVisible: timeScaleToggle.checked, priceScaleVisible: priceScaleToggle.checked }
 
     refreshCharts = ->
+      return
       data = await $fetchJSON "/trading/candles?limit=1"
       for ticker, payload of data
         newCandle = dataRowToCandle payload.candles[0]

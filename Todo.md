@@ -1,5 +1,8 @@
+- extract static level / level hit logic into services
+- KSPI & SPBE changes ??
+
 - buttons to go page down/up
-- level dash (when stock hits level it hasn't tested in 20+ sessions // needs level extraction)
+- button to toggle scroll scaling
 - turn-around dash (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
 
 - run empty analysis & mark candles
@@ -398,3 +401,4 @@
 + show rel vol & days since last for MA dash
 + volume gainers/losers dash
 + spikes dash
++ level hits dash

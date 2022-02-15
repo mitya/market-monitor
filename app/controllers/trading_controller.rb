@@ -88,7 +88,12 @@ class TradingController < ApplicationController
             open:  openings[instrument.ticker]&.open&.to_f,
             close:  instrument.yesterday&.close&.to_f,
             intraday: instrument.annotation&.intraday_levels,
+            swing: instrument.levels.pluck(:value),
           )
+        else
+          map[ticker][:levels].merge!(
+            # swing: instrument.levels.pluck(:value),
+          )          
         end
       end
       map 

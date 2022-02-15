@@ -8,7 +8,7 @@ class PriceLevel < ApplicationRecord
 
   HISTORY_START = Date.parse('2020-01-01')
   ACCURACY = 0.02
-  PERIOD = 10
+  PERIOD = 15
 
   def candles = instrument.candles.day.where(date: dates)
   def calc_total_volume = candles.map(&:volume).sum
@@ -21,9 +21,9 @@ class PriceLevel < ApplicationRecord
 
     def initialize(candle, selector) = (@candle, @selector = candle, selector)
     def high? = @selector == 'high'
-    def low? = @selector == 'low'
+    def low?  = @selector == 'low'
     def value = @candle.send(@selector)
-    def date = @candle.date
+    def date  = @candle.date
   end
 
   class << self
@@ -102,9 +102,10 @@ end
 
 __END__
 
-PriceLevel.search instr('DOCU')
+PriceLevelHit.levels.delete_all
+PriceLevel.delete_all
 PriceLevel.search_all
+
+PriceLevel.search instr('DOCU')
 PriceLevel.load_manual
 PriceLevel.cache_volume
-
-instr('DOCU').candles.day.where(date: Date.parse('2021-06-05')..Date.current).count

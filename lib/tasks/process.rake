@@ -3,7 +3,7 @@ task :process do
   rake 'indicators'
   rake 'analyze'
   rake 'spikes'
-  rake 'levels:hits'
+  rake 'levels:hits_all'
   rake 'tinkoff:portfolio:sync'
   rake 'tinkoff:instruments:sync'
 end

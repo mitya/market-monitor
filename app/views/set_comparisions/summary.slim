@@ -55,13 +55,16 @@ main.container-fluid.ma-dashboard
                     - if spike_value
                       td.money-cell.spike-cell                    
                         = colorized_ratio spike_value, precision: precision, format: '%n'
+                    - if set.key =~ /level/
+                      / td.money-cell.level-cell
+                      /   = tag.span format_price(hit.level_value), class: 'badge bg-secondary'
                     - if set.key =~ /volume_gainers|spike/
                       td.money-cell
                         - relvol = inst.aggregate.volumes['d1']
                         - if relvol > 10
                           = tag.span "#{relvol.to_i}x", class: 'is-light-blue'
                         - else
-                          = percentage_bar relvol / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_to_percentage relvol / 100.0, precision: 0}"
+                          = percentage_bar relvol / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_to_percentage relvol * 100, precision: 0}"
                     - if set.key =~ /volume_losers/
                       td.money-cell
                         = tag.span "#{number_with_precision inst.aggregate.volumes['d1'], precision: 3}x", class: 'is-light-blue'
