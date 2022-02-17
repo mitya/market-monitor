@@ -18,7 +18,7 @@ dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
 makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisible, wheelScaling, levelLabelsVisible, levelsVisible, rows }) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
-    <div class='intraday-chart col ps-4 pe-4 pb-4 pt-2'>
+    <div class='intraday-chart col ps-4 pe-4 pb-4 pt-2' data-ticker='#{ticker}'>
       <div class='intraday-chart-content'>
         <div class='intraday-chart-legend'>
           <span class='chart-ticker'></span>
@@ -208,6 +208,8 @@ document.addEventListener "turbolinks:load", ->
           levelsVisible:      levelsToggle.checked,
           ...payload,
         }
+        
+      markCurrentListTicker()
 
     refreshCharts = ->
       return
@@ -249,6 +251,13 @@ document.addEventListener "turbolinks:load", ->
       btn.classList.add('active')
       updateChartSettings()
       reload()
+
+    markCurrentListTicker = ->
+      if listIsOn()
+        currentTicker = $qs('.intraday-chart').dataset.ticker
+        if currentTickerItem = $qs(".chart-tickers-list .ticker-item[data-ticker=#{currentTicker}]")
+          currentTickerItem.classList.add('active')
+        
 
     bindToolbar = ->
       $delegate '.trading-page', '.js-btn-group .btn', 'click', (button) ->

@@ -76,7 +76,7 @@ class TradingController < ApplicationController
     is_single = params[:single] == '1'
     period = Setting.chart_period
     repo = Candle.interval_class_for(period)
-    tickers = Setting.chart_tickers
+    tickers = Setting.chart_tickers.first(10)
     tickers = tickers.first(1) if is_single
     
     instruments = Instrument.for_tickers(tickers).includes(:indicators, :annotation)

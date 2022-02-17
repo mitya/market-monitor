@@ -47,5 +47,9 @@
 
 .chart-tickers-list {
   flex-basis: 150px;
-  .dash-table tr { cursor: pointer; }
+  .ticker-item { 
+    cursor: pointer; 
+    
+    &.active { background-color: rgba(blue, 0.05); }
+  }
 }
