@@ -80,5 +80,13 @@ class Tinkoff
         end
       end
     end
+    
+    def check_dead_instruments
+      file = Pathname("db/data/tinkoff-stocks.json")
+      data = JSON.parse file.read
+      index = data['instruments'].map { _1['ticker'] }.to_set
+      removed_tickers_which_are_still_in_tinkoff = Tinkoff::OutdatedTickers.select { index.include? _1 }
+      puts removed_tickers_which_are_still_in_tinkoff.sort.join(' ')
+    end
   end
 end
