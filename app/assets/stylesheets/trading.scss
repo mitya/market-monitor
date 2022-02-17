@@ -44,3 +44,8 @@
 }
 
 .small-caps { font-variant: small-caps; }
+
+.chart-tickers-list {
+  flex-basis: 150px;
+  .dash-table tr { cursor: pointer; }
+}

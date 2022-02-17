@@ -58,6 +58,8 @@ class TradingController < ApplicationController
 
     @synced_tickers = Setting.sync_tickers.join(' ')
 
+    @chart_tickers = Setting.chart_tickers
+
     @list_shown = params[:list] == '1'
 
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
@@ -65,19 +67,25 @@ class TradingController < ApplicationController
 
     @ticker_sets = TickerSet.order(:key)
     @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
+        
+    @list_ticker_set = InstrumentSet.new('Current', :static, items: @chart_tickers)
   end
   
   def candles
     is_update = params[:limit] == '1'
+    is_single = params[:single] == '1'
     period = Setting.chart_period
     repo = Candle.interval_class_for(period)
-    instruments = Instrument.for_tickers(Setting.chart_tickers).includes(:indicators, :annotation)
-    instruments = Setting.chart_tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
+    tickers = Setting.chart_tickers
+    tickers = tickers.first(1) if is_single
+    
+    instruments = Instrument.for_tickers(tickers).includes(:indicators, :annotation)
+    instruments = tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
     openings = Candle::M3.today.openings.for(instruments).index_by(&:ticker)
     
     candles = instruments.inject({}) do |map, instrument|      
       ticker = instrument.ticker
-      candles = repo.for(instrument).includes(:instrument).order(:date, :time).last(params[:limit] || 500)
+      candles = repo.for(instrument).includes(:instrument).order(:date, :time).last(params[:limit] || is_single ? 777 : 500)
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.datetime_as_msk.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
       unless is_update

@@ -1,8 +1,8 @@
 import { createChart, CrosshairMode, LineStyle, PriceScaleMode } from 'lightweight-charts'
 import { Modal } from 'bootstrap'
+import _ from 'lodash'
 
 charts = {}
-currentBarSpacing = 7
 currentBarSpacing = 2
 chartHeight = 0
 
@@ -37,7 +37,12 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
 
-  priceFormatter = (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
+  singleMode = listIsOn()
+  
+  priceFormatter = if singleMode 
+    (price) -> if price < 10_000 then price.toFixed(2) else price
+  else
+    (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
 
   windowHeight = window.innerHeight
   navbarHeight = document.querySelector('.main-navbar').offsetHeight
@@ -49,15 +54,20 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
 
   chart = createChart container.querySelector('.intraday-chart-content'), {
     width: 0, height: chartHeight,
-    timeScale: { timeVisible: true, secondsVisible: false, visible: timeScaleVisible, barSpacing: currentBarSpacing },
+    timeScale: { 
+      timeVisible: true, secondsVisible: false, 
+      visible: timeScaleVisible, barSpacing: currentBarSpacing,
+      rightOffset: if singleMode then 20 else 0
+    },
     rightPriceScale: {
       entireTextOnly: true,
       visible: priceScaleVisible,
       mode: PriceScaleMode.Normal, # PriceScaleMode.Percentage
       borderVisible: false,
+      scaleMargins: { top: 0.02, bottom: 0.05 }
     },
     localization: { priceFormatter: priceFormatter },
-    grid: { horzLines: { visible: priceScaleVisible } },
+    grid: { horzLines: { visible: priceScaleVisible }, vertLines: { visible: true } },
     handleScale: { axisPressedMouseMove: true, mouseWheel: wheelScaling }
     handleScroll: true,    
   }
@@ -68,7 +78,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   volumeSeries = chart.addHistogramSeries
     priceFormat: { type: 'volume' }
     priceLineVisible: false
-    color: 'rgba(76, 76, 76, 0.5)'
+    color: 'rgba(76, 76, 76, 0.3)'
     priceScaleId: '', scaleMargins: { top: 0.85, bottom: 0 }
   volumeSeries.setData volumeData
 
@@ -156,6 +166,8 @@ toggleUrlParam = (name) ->
     url.searchParams.set name, '1'
   location.assign url
 
+listIsOn = -> $qs('.chart-tickers-list')
+
 
 document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
@@ -183,9 +195,10 @@ document.addEventListener "turbolinks:load", ->
       location.reload()
 
     loadCharts = ->
-      data = await $fetchJSON "/trading/candles"
+      data = await $fetchJSON "/trading/candles#{if listIsOn() then "?single=1" else ''}"
       console.log data
       clearCharts()
+      
       for ticker, payload of data
         makeChart {
           timeScaleVisible:   timeScaleToggle.checked, 
@@ -198,7 +211,7 @@ document.addEventListener "turbolinks:load", ->
 
     refreshCharts = ->
       return
-      data = await $fetchJSON "/trading/candles?limit=1"
+      data = await $fetchJSON "/trading/candles?limit=1#{if listIsOn() then "&single=1" else ''}"
       for ticker, payload of data
         newCandle = dataRowToCandle payload.candles[0]
         charts[ticker].lastCandle = newCandle
@@ -289,8 +302,14 @@ document.addEventListener "turbolinks:load", ->
       $bind $qs('.toggle-tickers-list'), 'click', -> toggleUrlParam "list"
       
       $bind $qs('.ticker-set-selector'), 'change', (e) ->
-        tickersLine = e.target.value
-        chartedTickersField.value = tickersLine
+        chartedTickersField.value = e.target.value
+        updateChartSettings()
+      
+      $delegate '.chart-tickers-list', '.ticker-item', 'click', (target) ->  
+        tickers = chartedTickersField.value.split(/\s/)
+        tickers = _.without tickers, target.dataset.ticker
+        tickers = [ target.dataset.ticker, ...tickers ].join(' ')
+        chartedTickersField.value = tickers
         updateChartSettings()
 
       $delegate '.trading-page', '.zoom-chart', 'click', (target) ->

@@ -8,12 +8,14 @@ main.container-fluid.ma-dashboard
   .container-fluid
     .row
       - @set_groups.each do |sets|
-        = render 'ticker_set_group', sets: sets, 
-          availability: params[:availability].presence, 
-          currency: params[:currency].presence, 
-          tickers: params[:tickers].to_s.split.map(&:upcase).compact.uniq.to_set, 
-          precision: 1, 
-          selector: 'd2'
+        .col.flex-grow-0.dashboard-col
+          - sets.each do |set|
+            = render 'ticker_set', set: set, 
+              availability: params[:availability].presence, 
+              currency: params[:currency].presence, 
+              tickers: params[:tickers].to_s.split.map(&:upcase).compact.uniq.to_set, 
+              precision: 1, 
+              selector: 'd2'
 
 javascript:
   window.DashboardPeriod = "#{ params[:selector] }"

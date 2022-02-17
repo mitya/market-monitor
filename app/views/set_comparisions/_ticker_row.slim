@@ -5,7 +5,7 @@
 - render_volume_text = -> (relvol, precision: 0) { tag.span "#{number_with_precision relvol, precision: precision}x", class: 'is-light-blue' }
 - render_volume = -> (relvol) { relvol > 10 ? render_volume_text.call(relvol) : render_volume_bar.call(relvol) }
 
-tr
+tr.ticker-item(data-ticker=inst.ticker)
   td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
   
   td.money-cell.price-cell= format_price inst.last, unit: inst.currency

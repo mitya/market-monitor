@@ -15,6 +15,7 @@
     "coffee-loader": "^1.0.0",
     "coffeescript": "^2.5.1",
     "lightweight-charts": "^3.7.0",
+    "lodash": "^4.17.21",
     "turbolinks": "^5.2.0",
     "vue": "^2.6.12",
     "vue-loader": "^15.9.6",

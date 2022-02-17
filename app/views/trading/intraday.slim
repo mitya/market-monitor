@@ -1,5 +1,5 @@
 .container-fluid.trading-page
-  .toolbar.row.m-2.justify-content-center.align-items-center.trading-toolbar
+  .toolbar.row.m-2.align-items-center.trading-toolbar
     input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_settings['tickers'].join(' '))
 
     .btn-group.btn-group-sm.w-auto.interval-selector.js-btn-group(data-initial=@chart_settings['period'])
@@ -36,10 +36,7 @@
       label class="btn btn-outline-secondary" for="toggle-level-labels" = fa_icon 'tag'
       input type="checkbox" class="btn-check" id ="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown']
       label class="btn btn-outline-secondary" for="toggle-levels" = fa_icon 'grip-lines'
-      input type="checkbox" class="btn-check" id ="toggle-tickers-list" autocomplete="off" checked=@chart_settings['list_shown']
-      label class="btn btn-outline-secondary" for="toggle-tickers-list" = fa_icon 'dice-one'      
       button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = fa_icon 'expand-alt'
-      button type="button" class="btn btn-outline-secondary open-settings" = fa_icon 'cog'
       
     .btn-group.btn-group-sm.w-auto.align-items-center
       button type="button" class="btn btn-outline-secondary go-down"   = fa_icon 'angle-double-down'      
@@ -52,15 +49,20 @@
         - tickers_line = set.tickers_line
         option(data-id=set.id value=tickers_line selected=@chart_tickers==tickers_line)
           = set.key.downcase
+          
+    .btn-group.btn-group-sm.w-auto.align-items-center.ms-auto.pe-0
+      button type="button" class="btn btn-outline-secondary open-settings" = fa_icon 'cog'
+      button type="button" class=class_names("btn toggle-tickers-list btn-#{@list_shown ? '' : 'outline-'}secondary") = fa_icon 'bars'
 
   .row
-    .col-12.py-4
-      .intraday-charts.row(
+    .d-flex.flex-row
+      .intraday-charts.flex-grow-1.row(
         class="row-cols-#{@chart_settings['columns']}" 
         data-bar-spacing=@chart_settings['bar_spacing']
         data-rows=@chart_settings['rows']
       )
-
-
+      - if @list_shown
+        .chart-tickers-list
+          = render 'set_comparisions/ticker_set', set: @list_ticker_set, precision: 1, selector: 'last' 
 
 = render "chart_settings_modal"
