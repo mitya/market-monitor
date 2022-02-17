@@ -18,7 +18,6 @@ class Tinkoff
 
     def import_candles_from_hash(data, candle_class: nil)
       interval = data['interval']
-      pp data
       instrument = Instrument.get!(figi: data['figi'])
       candles = data['candles'].to_a
 

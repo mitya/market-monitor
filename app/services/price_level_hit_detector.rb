@@ -3,9 +3,10 @@ class PriceLevelHitDetector
 
   DELTA = 0.01
 
-  def analyze(instrument, date: Current.yesterday, levels: nil)
+  def analyze(instrument, date: nil, levels: nil)
     instrument = Instrument[instrument]
     levels ||= instrument.levels
+    date ||= Current.yesterday
     curr = instrument.day_candles!.find_date(date)
     prev = curr&.previous
     return unless curr && prev
@@ -58,13 +59,9 @@ class PriceLevelHitDetector
     end
   end
 
-  def analyze_all = Instrument.all.abc.each { analyze _1 }
 
-  def analyze_manual(instruments: Instrument.all.abc, date: Current.yesterday)
-    instruments.each { analyze _1, levels: _1.levels.manual, date: date }; nil
-  end
-
-  def analyze_manual_on_dates(dates) = dates.each { analyze_manual date: _1 }
+  def analyze_all(   instruments: Instrument.all.abc, date: Current.yesterday) = instruments.each { analyze _1,                           date: date }
+  def analyze_manual(instruments: Instrument.all.abc, date: Current.yesterday) = instruments.each { analyze _1, levels: _1.levels.manual, date: date }
 
 
   private
@@ -78,7 +75,7 @@ class PriceLevelHitDetector
     attrs[:close_distance] = ((close - value).abs / value.to_d).round(3)
 
     last_day_crossed = if attrs[:source] == 'level'
-      curr.instrument.candles.before(curr).order(:date).last(80).reverse.detect{ _1.include?(value) }&.date
+      curr.instrument.level_hits.levels.where(level: attrs[:level]).order(:date).last&.date
     else
       curr.instrument.level_hits.ma.where(ma_length: attrs[:ma_length]).order(:date).last&.date
     end
@@ -116,5 +113,5 @@ end
 __END__
 PriceLevelHit.delete_all
 PriceLevelHitDetector.analyze_manual date: Current.yesterday
-PriceLevelHitDetector.analyze 'PEN'
-MarketCalendar.open_days('2021-09-01').each { PriceLevelHitDetector.analyze instr('PLZL'), date: _1 }
+PriceLevelHitDetector.analyze 'AAPL'
+MarketCalendar.open_days('2021-07-01').each { PriceLevelHitDetector.analyze_all date: _1 }

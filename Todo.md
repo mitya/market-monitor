@@ -1,7 +1,6 @@
-- rebuild all MA hits
-- measure level hit days-to-recent calculation via previous hits
+- chart modal to preview a ticker
 
-- add ability to view any ticker chart in a modal (on dashboard)
+- dashboard with distances to highs / lows + dashboard with new highs / new lows
 - turn-around scanner (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
 
 - run empty analysis & mark candles
@@ -22,7 +21,6 @@
 
 # Next
 - page with 1 chart and a list of tickers to quickly check it out
-- move chart prefs to a modal
 - dash for changes in last N mins
 - expected MA hits analysis
 - save MA data for some recent date
@@ -407,3 +405,5 @@
 + KSPI & SPBE changes ??
 + buttons to go page down/up
 + toggles for scroll scaling, levels, level labels
++ rebuild all MA hits
++ move chart prefs to a modal

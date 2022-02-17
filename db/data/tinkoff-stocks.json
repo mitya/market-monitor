@@ -9767,16 +9767,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000C0F570",
-      "ticker": "XLNX",
-      "isin": "US9839191015",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Xilinx",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000F5VVB6",
       "ticker": "NDAQ",
       "isin": "US6311031081",
@@ -10871,7 +10861,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "ViacomCBS Inc.",
+      "name": "ViacomCBS",
       "type": "Stock"
     },
     {
@@ -19006,5 +18996,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1902
+  "total": 1901
 }

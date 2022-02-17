@@ -12,10 +12,9 @@ class PriceLevelHit < ApplicationRecord
   before_validation do
     self.instrument ||= level&.instrument
     self.level_value ||= level&.value
-    self.important = level.important if level
-    self.manual = level.manual? if level
+    self.important = level.important?.presence if level
+    self.manual = level.manual?.presence if level
     self.positive = PositiveKinds.include?(kind)
-    self.exact = true if exact == nil
   end
 
   before_save do

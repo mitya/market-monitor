@@ -21,17 +21,18 @@
       button type="button" data-value="+4" class="btn btn-outline-secondary zoom-chart" +
 
     .btn-group.btn-group-sm.w-auto.align-items-center
-      input type="checkbox" class="btn-check" id="toggle-time" autocomplete="off" checked=@chart_settings['time_shown']
+      input type="checkbox" class="btn-check" id ="toggle-time" autocomplete="off" checked=@chart_settings['time_shown']
       label class="btn btn-outline-secondary" for="toggle-time" = fa_icon :clock, solid: false
-      input type="checkbox" class="btn-check" id="toggle-price" autocomplete="off" checked=@chart_settings['price_shown']
+      input type="checkbox" class="btn-check" id ="toggle-price" autocomplete="off" checked=@chart_settings['price_shown']
       label class="btn btn-outline-secondary" for="toggle-price" $      
-      input type="checkbox" class="btn-check" id="toggle-wheel-scaling" autocomplete="off" checked=@chart_settings['wheel_scaling']
+      input type="checkbox" class="btn-check" id ="toggle-wheel-scaling" autocomplete="off" checked=@chart_settings['wheel_scaling']
       label class="btn btn-outline-secondary" for="toggle-wheel-scaling" = fa_icon 'mouse'
-      input type="checkbox" class="btn-check" id="toggle-level-labels" autocomplete="off" checked=@chart_settings['level_labels']
+      input type="checkbox" class="btn-check" id ="toggle-level-labels" autocomplete="off" checked=@chart_settings['level_labels']
       label class="btn btn-outline-secondary" for="toggle-level-labels" = fa_icon 'tag'
-      input type="checkbox" class="btn-check" id="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown']
+      input type="checkbox" class="btn-check" id ="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown']
       label class="btn btn-outline-secondary" for="toggle-levels" = fa_icon 'grip-lines'
-      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = fa_icon 'expand-alt'      
+      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = fa_icon 'expand-alt'
+      button type="button" class="btn btn-outline-secondary open-settings" = fa_icon 'cog'
       
     .btn-group.btn-group-sm.w-auto.align-items-center
       button type="button" class="btn btn-outline-secondary go-down"   = fa_icon 'angle-double-down'      
@@ -49,21 +50,6 @@
     .col-12.py-4
       .intraday-charts.row(class="row-cols-#{@chart_settings['columns']}" data-bar-spacing=@chart_settings['bar_spacing'])
 
-  .toolbar.row.my-4
-    .col-11
-      input.synced-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-100" value=@synced_tickers)
-  .toolbar.row.my-4.intraday-levels
-    .col-6
-      textarea(type="text" class="form-control form-control-sm text-uppercase w-100")= @intraday_levels_text
-    .col-6.d-flex.align-items-center
-      button(class="btn btn-outline-primary btn-sm") Save
 
-  .toolbar.row.my-4.ticker-sets
-    .col-12
-      .form-check
-        input class="form-check-input" type="checkbox" id="sync-ticker-sets-toggle" checked = @chart_settings['sync_ticker_sets']
-        label class="form-check-label" for="sync-ticker-sets-toggle" Sync ticker sets
-    .col-6
-      textarea(type="text" class="form-control form-control-sm text-uppercase w-100")= @ticker_sets_text
-    .col-6.d-flex.align-items-center
-      button(class="btn btn-outline-primary btn-sm") Save
+
+= render "chart_settings_modal"

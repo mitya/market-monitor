@@ -1,4 +1,5 @@
 import { createChart, CrosshairMode, LineStyle, PriceScaleMode } from 'lightweight-charts'
+import { Modal } from 'bootstrap'
 
 charts = {}
 currentBarSpacing = 7
@@ -41,7 +42,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight
   chartContainerHeight = windowHeight - navbarHeight - toolbarHeight
   chartRows = 2
-  chartHeight = chartContainerHeight / chartRows - 20 * chartRows
+  chartHeight = chartContainerHeight / chartRows - 25 * chartRows
 
   chart = createChart container.querySelector('.intraday-chart-content'), {
     width: 0, height: chartHeight,
@@ -158,8 +159,12 @@ document.addEventListener "turbolinks:load", ->
     intervalSelector    = $qs(".trading-page .interval-selector")
     columnsSelector     = $qs(".trading-page .columns-selector")
     chartedTickersField = $qs(".trading-page .charted-tickers-field")
-    syncedTickersField  = $qs(".trading-page .synced-tickers-field")
-    intradayLevelsField = $qs(".trading-page .intraday-levels textarea")
+    
+    chartSettingsModal  = $qs('#chart-settings-modal')
+    syncedTickersField  = $qs("#chart-settings-modal .synced-tickers-field")
+    syncTickerSetsToggle= $qs('#chart-settings-modal #sync-ticker-sets-toggle')
+    intradayLevelsField = $qs("#chart-settings-modal .intraday-levels textarea")
+    
     timeScaleToggle     = $qs('.trading-page #toggle-time')
     priceScaleToggle    = $qs('.trading-page #toggle-price')
     wheelScalingToggle  = $qs('.trading-page #toggle-wheel-scaling')
@@ -168,7 +173,7 @@ document.addEventListener "turbolinks:load", ->
     gotoEndButton       = $qs('.trading-page .go-to-end')
     gotoDownButton      = $qs('.trading-page .go-down')
     gotoUpButton        = $qs('.trading-page .go-up')
-    syncTickerSetsToggle= $qs('.trading-page #sync-ticker-sets-toggle')
+    openSettingsButton  = $qs('.trading-page .open-settings')    
 
     reload = ->
       location.reload()
@@ -213,14 +218,11 @@ document.addEventListener "turbolinks:load", ->
       }
       reload() unless options?.reload == false
 
-    updateIntradayLevels = ->
-      text = intradayLevelsField.value
-      await $fetchJSON "/trading/update_intraday_levels", method: 'POST', data: { text }
-      reload()
-
-    updateTickerSets = ->
-      text = $qs('.ticker-sets textarea').value
-      await $fetchJSON "/trading/update_ticker_sets", method: 'POST', data: { text }
+    updateOtherSettings = ->
+      tickerSetsText = $qs('.ticker-sets textarea').value
+      intradayLevelsText = intradayLevelsField.value
+      await $fetchJSON "/trading/update_ticker_sets", method: 'POST', data: { text: tickerSetsText }
+      await $fetchJSON "/trading/update_intraday_levels", method: 'POST', data: { text: intradayLevelsText }
       reload()
 
     selectTickerSet = (btn) ->
@@ -266,12 +268,16 @@ document.addEventListener "turbolinks:load", ->
         
       $bind gotoDownButton, 'click', -> window.scrollBy 0, chartHeight * 2
       $bind gotoUpButton, 'click', -> window.scrollBy 0, -(chartHeight * 2)
+      
+      $bind openSettingsButton, 'click', -> 
+        modal = new Modal document.getElementById 'chart-settings-modal'
+        modal.show()        
 
       $bind chartedTickersField, 'change', updateChartSettings
       $bind syncedTickersField, 'change', updateChartSettings
       $bind syncTickerSetsToggle, 'change', -> updateChartSettings reload: false
-      $bind $qs('.intraday-levels .btn'), 'click', updateIntradayLevels
-      $bind $qs('.ticker-sets .btn'), 'click', updateTickerSets
+      
+      $bind $qs('#chart-settings-modal .x-save'), 'click', updateOtherSettings
 
       $bind $qs('.toggle-full-screen'), 'click', -> toggleUrlParam "full-screen"
       
