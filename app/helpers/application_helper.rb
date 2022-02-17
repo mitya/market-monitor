@@ -71,6 +71,14 @@ module ApplicationHelper
     percentage_bar value / 100.0, **attrs
   end
 
+  def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false)
+    if value.abs >= 0.08
+      colorized_ratio value, precision: precision, format: '%n'
+    else
+      percentage_bar value, classes: classes, rtl: rtl
+    end
+  end
+
   def label_width(locals = nil)
     locals&.dig(:lw) || @label_width || 1
   end

@@ -1,50 +1,26 @@
 - selector = params[:selector].presence || 'last'
-- precision = selector.in?(%w[last d1 d2 d3 d4 w1 w2]) ? 1 : 0
-- tickers = params[:tickers].split.map(&:upcase).compact.uniq.to_set if params[:tickers].present?
-- currency = params[:currency].presence
-- availability = params[:availability].presence
 
 main.container-fluid.gainers-dashboard
   form#list-config(action=set_comparision_path class='my-2')
     details.my-2.mx-3
       summary
         .d-inline-flex.flex-row.align-items-center.w-75.ps-3
-          = tag.span params[:selector].presence || 'Today', class: "badge bg-secondary me-3"
           = render 'instruments/filter_by_currency'
           = render 'instruments/filter_by_availability'
-          = select_tag :selector, options_for_select(%w[last] + Aggregate::Selectors + MarketCalendar.special_dates - %w[d1], params[:selector]), 
+          = select_tag :selector, options_for_select(%w[last] + Aggregate::Selectors + MarketCalendar.special_dates - %w[d1], selector), 
             class: "form-select form-select-sm w-auto", prompt: 'Period'
           = search_field_tag :tickers, params[:tickers].to_s.squish, class: "form-control form-control-sm text-uppercase ms-3", 
             placeholder: 'Tickers'
-      div
-        | Nothing here
 
   .container-fluid
     .row
       - @set_groups.each do |sets|
-        .col.flex-grow-0.gainers-col
-          - sets.each do |set|
-            h6.ps-1= category_title set.key
-            table.table.table-sm.table-hover.table-font-sm.tickers-table.table-no-border.table-sm-v.dash-table
-              tbody
-                - instruments = set.instruments.includes(:aggregate)
-                - instruments = instruments.select { tickers.include? _1.ticker } if tickers
-                - instruments = instruments.select { _1.currency == currency } if currency
-                - instruments = instruments.select { _1.premium? } if availability == 'premium'
-                - instruments = instruments.reject { _1.premium? } if availability == 'tinkoff'
-                - instruments = instruments.sort_by { _1.stored_gain_since(selector) || -1 }
-                - instruments = instruments.reverse unless set.key.to_s.include?('losers')
-                - instruments.each do |inst|
-                  - value = inst.stored_gain_since(selector)
-                  tr
-                    td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
-                    td.money-cell.price-cell= format_price inst.last, unit: inst.currency
-                    td.money-cell.change-cell
-                      - if value
-                        - if value.abs >= 0.08
-                          = colorized_ratio value, precision: precision, format: '%n'
-                        - else
-                          = percentage_bar value, classes: class_names(red_green_class(value > 0), 'solid-narrow float-end'), rtl: true
+        = render 'ticker_set_group', sets: sets,
+          availability: params[:availability].presence, 
+          currency: params[:currency].presence, 
+          tickers: params[:tickers].to_s.split.map(&:upcase).compact.uniq.to_set, 
+          precision: selector.in?(%w[last d1 d2 d3 d4 w1 w2]) ? 1 : 0, 
+          selector: selector
 
 javascript:
   window.DashboardPeriod = "#{ params[:selector] }"

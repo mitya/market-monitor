@@ -286,6 +286,7 @@ document.addEventListener "turbolinks:load", ->
       $bind $qs('#chart-settings-modal .x-save'), 'click', updateOtherSettings
 
       $bind $qs('.toggle-full-screen'), 'click', -> toggleUrlParam "full-screen"
+      $bind $qs('.toggle-tickers-list'), 'click', -> toggleUrlParam "list"
       
       $bind $qs('.ticker-set-selector'), 'change', (e) ->
         tickersLine = e.target.value

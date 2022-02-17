@@ -58,6 +58,8 @@ class TradingController < ApplicationController
 
     @synced_tickers = Setting.sync_tickers.join(' ')
 
+    @list_shown = params[:list] == '1'
+
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
 

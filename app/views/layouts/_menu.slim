@@ -54,6 +54,3 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
               .dropdown-item(class="x-refresh-prices text-muted cursor-pointer" data-scope='us')= "US #{time_ago_in_words(Setting.iex_last_update)} ago"
             li
               .dropdown-item(class="x-refresh-prices text-muted cursor-pointer" data-scope='ru')= "RU #{time_ago_in_words(Setting.tinkoff_last_update)} ago"
-            li
-              hr.dropdown-divider
-            li= link_to 'Reload Prices', spb_instruments_path, class: 'dropdown-item'

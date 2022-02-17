@@ -135,7 +135,7 @@ class Instrument < ApplicationRecord
 
   def d1_change = @d1_change ||= d1_ago_close / d2_ago_close - 1.0 rescue 0
   def price_change = @price_change ||= price!.change rescue 0
-  def stored_gain_since(date_specifier) = date_specifier == 'last' ? price_change : aggregate.gains[date_specifier]
+  def stored_gain_since(date_specifier) = date_specifier.blank? || date_specifier == 'last' ? price_change : aggregate.gains[date_specifier]
 
   def logo_path = Pathname("public/logos/#{ticker}.png")
   def check_logo = update_column(:has_logo, logo_path.exist?)
