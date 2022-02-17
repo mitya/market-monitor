@@ -6,6 +6,7 @@ energy.oil: Oil
 energy.oil.refinery: Oil Refinery
 energy.oil.service: Oil Service
 energy.oil.rus: Oil Rus
+energy.uranium: Uranium
 finance.banks: Banks
 finance.other: Fintech
 hardware.chip: Semiconductors
@@ -18,6 +19,7 @@ mining.gold: Gold
 mining.misc: Metals
 mining.steel: Steel
 mining.steel.rus: Steel Rus
+mining.fertilizers: Fertilizers
 shipping.bulk: Bulk
 shipping.conainers: Containers
 shipping.lng: LNG

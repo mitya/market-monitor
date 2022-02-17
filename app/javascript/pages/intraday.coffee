@@ -3,6 +3,7 @@ import { Modal } from 'bootstrap'
 
 charts = {}
 currentBarSpacing = 7
+currentBarSpacing = 2
 chartHeight = 0
 
 window.getCharts = -> charts
@@ -15,7 +16,7 @@ clearCharts = ->
 dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[3], close: row[4] }
 dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
-makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisible, wheelScaling, levelLabelsVisible, levelsVisible }) ->
+makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisible, wheelScaling, levelLabelsVisible, levelsVisible, rows }) ->
   chartsContainer().insertAdjacentHTML('beforeend', "
     <div class='intraday-chart col ps-4 pe-4 pb-4 pt-2'>
       <div class='intraday-chart-content'>
@@ -31,6 +32,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   container = chartsContainer().lastChild
   legend = container.querySelector('.intraday-chart-legend')
   currentBarSpacing = parseInt(chartsContainer().dataset.barSpacing)
+  currentRowsPerPage = parseInt(chartsContainer().dataset.rows)
 
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
@@ -41,8 +43,9 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
   navbarHeight = document.querySelector('.main-navbar').offsetHeight
   toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight
   chartContainerHeight = windowHeight - navbarHeight - toolbarHeight
-  chartRows = 2
-  chartHeight = chartContainerHeight / chartRows - 25 * chartRows
+  chartHeight = chartContainerHeight / currentRowsPerPage - 25 * currentRowsPerPage
+  chartHeight = chartContainerHeight / currentRowsPerPage - 70 if currentRowsPerPage == 1
+  chartHeight = chartContainerHeight / currentRowsPerPage - 15 * currentRowsPerPage if currentRowsPerPage == 3
 
   chart = createChart container.querySelector('.intraday-chart-content'), {
     width: 0, height: chartHeight,
@@ -158,6 +161,7 @@ document.addEventListener "turbolinks:load", ->
   if document.querySelector('.intraday-charts')
     intervalSelector    = $qs(".trading-page .interval-selector")
     columnsSelector     = $qs(".trading-page .columns-selector")
+    rowsSelector        = $qs(".trading-page .rows-selector")
     chartedTickersField = $qs(".trading-page .charted-tickers-field")
     
     chartSettingsModal  = $qs('#chart-settings-modal')
@@ -205,6 +209,7 @@ document.addEventListener "turbolinks:load", ->
       synced_tickers = syncedTickersField.value
       period = intervalSelector.querySelector('.btn.active').dataset.value
       columns = columnsSelector.querySelector('.btn.active').dataset.value
+      rows = rowsSelector.querySelector('.btn.active').dataset.value
       time_shown = timeScaleToggle.checked
       price_shown = priceScaleToggle.checked
       wheel_scaling = wheelScalingToggle.checked
@@ -214,7 +219,7 @@ document.addEventListener "turbolinks:load", ->
       bar_spacing = currentBarSpacing
 
       await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: {
-        chart_tickers, synced_tickers, period, columns, time_shown, price_shown, sync_ticker_sets, bar_spacing, wheel_scaling, level_labels, levels_shown
+        chart_tickers, synced_tickers, period, columns, rows, time_shown, price_shown, sync_ticker_sets, bar_spacing, wheel_scaling, level_labels, levels_shown
       }
       reload() unless options?.reload == false
 
@@ -241,6 +246,7 @@ document.addEventListener "turbolinks:load", ->
 
       intervalSelector.querySelector(".btn[data-value='#{intervalSelector.dataset.initial}']").classList.add('active')
       columnsSelector.querySelector(".btn[data-value='#{columnsSelector.dataset.initial}']").classList.add('active')
+      rowsSelector.querySelector(".btn[data-value='#{rowsSelector.dataset.initial}']").classList.add('active')
 
       $bind timeScaleToggle, 'change', ->
         for ticker, { chart } of charts

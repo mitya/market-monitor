@@ -1,4 +1,4 @@
-- chart modal to preview a ticker
+- single ticker chart mode + list of tickers
 
 - dashboard with distances to highs / lows + dashboard with new highs / new lows
 - turn-around scanner (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
@@ -407,3 +407,4 @@
 + toggles for scroll scaling, levels, level labels
 + rebuild all MA hits
 + move chart prefs to a modal
++ row count selector in toolbar

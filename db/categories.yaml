@@ -18,6 +18,7 @@ energy.oil.other: gte
 energy.oil.refinery: dk pbf alto chx vlo mpc psx
 energy.oil.rus: rosn lkoh sibn sngsp tatn banep rnft
 energy.oil.service: rig slb fti snd ois oii
+energy.uranium: kap@gs ccj uec
 finance.banks: wfc sber vtbr qiwi tcsg
 finance.other: payo lc coin pypl ehth bx ivz gs ms
 food: agro unfi tsn
@@ -37,8 +38,9 @@ meme: spce zyne nok gme pltr bbby hood mstr amc rwlk
 mine.ru: agro etln five gazp mvid sber vtbr
 mine.us: btu clf momo sblk ship veon x
 mining.gold: poly pogr plzl kgc nugt
-mining.misc: vale gmkn fcx rual aa enpg kap@gs ccj mos uec vsmo cf
-mining.steel: x clf nue
+mining.misc: vale gmkn fcx rual aa enpg vsmo 
+mining.fertilizers: cf mos akrn phor
+mining.steel: x clf stld nue
 mining.steel.rus: magn chmf nlmk amez chmk
 reit: mac spg
 retail: m gps rl bbby coty uaa levi hog cnk

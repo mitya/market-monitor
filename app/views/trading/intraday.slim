@@ -16,6 +16,11 @@
       button type="button" data-value="4" class="btn btn-outline-secondary" 4
       button type="button" data-value="5" class="btn btn-outline-secondary" 5
 
+    .btn-group.btn-group-sm.w-auto.rows-selector.js-btn-group(data-initial=@chart_settings['rows'])
+      button type="button" data-value="1" class="btn btn-outline-secondary" 1
+      button type="button" data-value="2" class="btn btn-outline-secondary" 2
+      button type="button" data-value="3" class="btn btn-outline-secondary" 3
+
     .btn-group.btn-group-sm.w-auto
       button type="button" data-value="-4" class="btn btn-outline-secondary zoom-chart" –
       button type="button" data-value="+4" class="btn btn-outline-secondary zoom-chart" +
@@ -31,6 +36,8 @@
       label class="btn btn-outline-secondary" for="toggle-level-labels" = fa_icon 'tag'
       input type="checkbox" class="btn-check" id ="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown']
       label class="btn btn-outline-secondary" for="toggle-levels" = fa_icon 'grip-lines'
+      input type="checkbox" class="btn-check" id ="toggle-tickers-list" autocomplete="off" checked=@chart_settings['list_shown']
+      label class="btn btn-outline-secondary" for="toggle-tickers-list" = fa_icon 'dice-one'      
       button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = fa_icon 'expand-alt'
       button type="button" class="btn btn-outline-secondary open-settings" = fa_icon 'cog'
       
@@ -48,7 +55,11 @@
 
   .row
     .col-12.py-4
-      .intraday-charts.row(class="row-cols-#{@chart_settings['columns']}" data-bar-spacing=@chart_settings['bar_spacing'])
+      .intraday-charts.row(
+        class="row-cols-#{@chart_settings['columns']}" 
+        data-bar-spacing=@chart_settings['bar_spacing']
+        data-rows=@chart_settings['rows']
+      )
 
 
 

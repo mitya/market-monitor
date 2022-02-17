@@ -52,6 +52,7 @@ class TradingController < ApplicationController
   def intraday    
     @chart_settings = Setting.chart_settings
     @chart_settings['columns'] ||= 2
+    @chart_settings['rows'] ||= 2
     @chart_settings['period'] ||= '3min'
     @chart_settings['tickers'] ||= []
 
@@ -107,6 +108,7 @@ class TradingController < ApplicationController
     Setting.merge 'chart_settings', { 
       tickers: params[:chart_tickers].split.map(&:upcase), 
       columns: params[:columns].to_i.nonzero?,
+      rows: params[:rows].to_i.nonzero?,
       period: Candle.normalize_interval(params[:period]),
       time_shown: params[:time_shown],
       price_shown: params[:price_shown],

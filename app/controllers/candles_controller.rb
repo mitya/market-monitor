@@ -3,9 +3,11 @@ class CandlesController < ApplicationController
     2020-01-01
     2021-01-01
     2021-03-01
+    2021-09-01
+    2022-01-01
   ].map { |str| Date.parse str }.sort
 
-  DEFAULT_PERIOD = Date.parse('2021-03-01')
+  DEFAULT_PERIOD = Date.parse('2021-09-01')
 
   def index
     start_date = params[:since] ? Date.parse(params[:since]) : DEFAULT_PERIOD
