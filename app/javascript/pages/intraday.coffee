@@ -64,6 +64,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
       visible: priceScaleVisible,
       mode: PriceScaleMode.Normal, # PriceScaleMode.Percentage
       borderVisible: false,
+      # autoScale: false,
       scaleMargins: { top: 0.02, bottom: 0.05 }
     },
     localization: { priceFormatter: priceFormatter },
@@ -257,7 +258,15 @@ document.addEventListener "turbolinks:load", ->
         currentTicker = $qs('.intraday-chart').dataset.ticker
         if currentTickerItem = $qs(".chart-tickers-list .ticker-item[data-ticker=#{currentTicker}]")
           currentTickerItem.classList.add('active')
-        
+
+
+    selectListTicker = (ticker) ->
+      tickers = chartedTickersField.value.split(/\s/)
+      tickers = _.without tickers, ticker
+      tickers = [ ticker, ...tickers ].join(' ')
+      chartedTickersField.value = tickers
+      updateChartSettings()
+
 
     bindToolbar = ->
       $delegate '.trading-page', '.js-btn-group .btn', 'click', (button) ->
@@ -315,11 +324,7 @@ document.addEventListener "turbolinks:load", ->
         updateChartSettings()
       
       $delegate '.chart-tickers-list', '.ticker-item', 'click', (target) ->  
-        tickers = chartedTickersField.value.split(/\s/)
-        tickers = _.without tickers, target.dataset.ticker
-        tickers = [ target.dataset.ticker, ...tickers ].join(' ')
-        chartedTickersField.value = tickers
-        updateChartSettings()
+        selectListTicker target.dataset.ticker
 
       $delegate '.trading-page', '.zoom-chart', 'click', (target) ->
         target.blur()
@@ -330,6 +335,14 @@ document.addEventListener "turbolinks:load", ->
           chart.timeScale().applyOptions(barSpacing: currentBarSpacing)
           chart.timeScale().scrollToRealTime()
         updateChartSettings reload: false
+        
+      document.addEventListener 'keydown', (e) ->
+        if e.key in ['ArrowDown', 'ArrowUp']
+          e.preventDefault()
+          currentItem = $qs('.chart-tickers-list .ticker-item.active')
+          nextItem = if e.key == 'ArrowDown' then currentItem?.nextSibling else currentItem?.previousSibling
+          if nextItem && nextItem.dataset.ticker
+            selectListTicker nextItem.dataset.ticker
 
     bindToolbar()
     loadCharts()

@@ -72,7 +72,7 @@ module ApplicationHelper
   end
 
   def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false)
-    if value.abs >= 0.08
+    if value.to_f.abs >= 0.08
       colorized_ratio value, precision: precision, format: '%n'
     else
       percentage_bar value, classes: classes, rtl: rtl

@@ -5,13 +5,13 @@
 - render_volume_text = -> (relvol, precision: 0) { tag.span "#{number_with_precision relvol, precision: precision}x", class: 'is-light-blue' }
 - render_volume = -> (relvol) { relvol > 10 ? render_volume_text.call(relvol) : render_volume_bar.call(relvol) }
 
-tr.ticker-item(data-ticker=inst.ticker)
+tr.ticker-item(data-ticker=inst.ticker tabindex="0")
   td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
   
   td.money-cell.price-cell= format_price inst.last, unit: inst.currency
   
   td.money-cell.change-cell
-    = percentage_bar_or_number change, classes: "#{red_green_class change > 0} solid-narrow float-end", rtl: true
+    = percentage_bar_or_number change, classes: "#{red_green_class change.to_f > 0} solid-narrow float-end", rtl: true
   
   - if hit
     td.money-cell(data-col="days_since_last")

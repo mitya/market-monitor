@@ -1,4 +1,3 @@
-- add keyboard navigation to tickers list
 - add a way to set a list on the dash as current
 
 - dashboard with distances to highs / lows + dashboard with new highs / new lows
@@ -411,3 +410,4 @@
 + row count selector in toolbar
 + single ticker chart mode + list of tickers
 + mark current ticker in the list
++ add keyboard navigation to tickers list
