@@ -113,20 +113,21 @@ class TradingController < ApplicationController
   end
   
   def update_chart_settings
-    Setting.save 'sync_tickers', params[:synced_tickers].split.map(&:upcase).sort
-    Setting.save 'sync_ticker_sets', params[:sync_ticker_sets]
-    Setting.merge 'chart_settings', { 
-      tickers: params[:chart_tickers].split.map(&:upcase), 
-      columns: params[:columns].to_i.nonzero?,
-      rows: params[:rows].to_i.nonzero?,
-      period: Candle.normalize_interval(params[:period]),
-      time_shown: params[:time_shown],
-      price_shown: params[:price_shown],
-      wheel_scaling: params[:wheel_scaling],
-      bar_spacing: params[:bar_spacing],
-      level_labels: params[:level_labels],
-      levels_shown: params[:levels_shown],
-    }
+    Setting.save 'sync_tickers',     params[:synced_tickers].split.map(&:upcase).sort if params.include?(:synced_tickers)
+    Setting.save 'sync_ticker_sets', params[:sync_ticker_sets]                        if params.include?(:sync_ticker_sets)
+    
+    updates = { }
+    updates[:tickers]       = params[:chart_tickers].split.map(&:upcase) if params.include?(:chart_tickers)
+    updates[:columns]       = params[:columns].to_i.nonzero?             if params.include?(:columns)
+    updates[:rows]          = params[:rows].to_i.nonzero?                if params.include?(:rows)
+    updates[:period]        = Candle.normalize_interval(params[:period]) if params.include?(:period)
+    updates[:time_shown]    = params[:time_shown]                        if params.include?(:time_shown)
+    updates[:price_shown]   = params[:price_shown]                       if params.include?(:price_shown)
+    updates[:wheel_scaling] = params[:wheel_scaling]                     if params.include?(:wheel_scaling)
+    updates[:bar_spacing]   = params[:bar_spacing]                       if params.include?(:bar_spacing)
+    updates[:level_labels]  = params[:level_labels]                      if params.include?(:level_labels)
+    updates[:levels_shown]  = params[:levels_shown]                      if params.include?(:levels_shown)    
+    Setting.merge 'chart_settings', updates
 
     render json: { }
   end

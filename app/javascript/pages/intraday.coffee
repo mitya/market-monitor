@@ -39,7 +39,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
 
   singleMode = listIsOn()
   
-  priceFormatter = if singleMode 
+  priceFormatter = if false 
     (price) -> if price < 10_000 then price.toFixed(2) else price
   else
     (price) -> if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price

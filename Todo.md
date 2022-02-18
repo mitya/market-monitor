@@ -1,5 +1,3 @@
-- add a way to set a list on the dash as current
-
 - dashboard with distances to highs / lows + dashboard with new highs / new lows
 - turn-around scanner (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
 
@@ -411,3 +409,4 @@
 + single ticker chart mode + list of tickers
 + mark current ticker in the list
 + add keyboard navigation to tickers list
++ add a way to set a list on the dash as current
