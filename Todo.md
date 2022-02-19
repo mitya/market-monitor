@@ -1,9 +1,10 @@
 - add a start date selector for daily single mode charts
 - show MAs on day charts in single mode
+
 - panel with ticker info — name, marketcap, changes in period
-- changes since low/high in periods
 - load missing intraday candles in single mode automatically
 
+- changes since low/high in predefined periods
 - dashboard with distances to highs / lows + dashboard with new highs / new lows
 - turn-around scanner (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
 
@@ -417,3 +418,4 @@
 + add keyboard navigation to tickers list
 + add a way to set a list on the dash as current
 + fix single-mode chart paddings
++ try to start price scale from zero

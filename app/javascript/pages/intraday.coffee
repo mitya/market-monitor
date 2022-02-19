@@ -76,7 +76,17 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
     handleScroll: true,    
   }
 
-  candlesSeries = chart.addCandlestickSeries()
+  candlesSeries = chart.addCandlestickSeries(
+    # priceLineVisible: false,
+    # autoscaleInfoProvider: (original) ->  
+    #   res = original()
+    #   res.priceRange.minValue = 0 if res
+    #   res
+    # autoscaleInfoProvider: -> { 
+    #   priceRange: { minValue: 0, maxValue: 80 },
+    #   margins: { above: 50, below: 50 },      
+    # }
+  )
   candlesSeries.setData candlesData
 
   volumeSeries = chart.addHistogramSeries
