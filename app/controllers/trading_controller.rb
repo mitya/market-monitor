@@ -60,7 +60,6 @@ class TradingController < ApplicationController
 
     @chart_tickers = Setting.chart_tickers
 
-    @list_shown = params[:list] == '1'
 
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
@@ -69,6 +68,10 @@ class TradingController < ApplicationController
     @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
         
     @list_ticker_set = InstrumentSet.new('Current', :static, items: @chart_tickers)
+    
+    @list_shown = params[:list] == '1'
+    @chart_columns = @list_shown ? 1 : @chart_settings['columns']
+    @chart_rows = @list_shown ? 1 : @chart_settings['rows']
   end
   
   def candles

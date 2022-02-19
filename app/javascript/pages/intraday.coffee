@@ -17,8 +17,13 @@ dataRowToCandle = (row) -> { time: row[0], open: row[1], high: row[2], low: row[
 dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
 makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisible, wheelScaling, levelLabelsVisible, levelsVisible, rows }) ->
+  singleMode = listIsOn()
+  if singleMode
+    timeScaleVisible = true
+    priceScaleVisible = true
+
   chartsContainer().insertAdjacentHTML('beforeend', "
-    <div class='intraday-chart col ps-4 pe-4 pb-4 pt-2' data-ticker='#{ticker}'>
+    <div class='intraday-chart col #{if singleMode then '' else 'py-1'}' data-ticker='#{ticker}'>
       <div class='intraday-chart-content'>
         <div class='intraday-chart-legend'>
           <span class='chart-ticker'></span>
@@ -36,8 +41,6 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
 
   candlesData = candles.map dataRowToCandle
   volumeData = candles.map dataRowToVolume
-
-  singleMode = listIsOn()
   
   priceFormatter = if false 
     (price) -> if price < 10_000 then price.toFixed(2) else price
@@ -46,23 +49,23 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
 
   windowHeight = window.innerHeight
   navbarHeight = document.querySelector('.main-navbar').offsetHeight
-  toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight
+  toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight + 8
   chartContainerHeight = windowHeight - navbarHeight - toolbarHeight
-  chartHeight = chartContainerHeight / currentRowsPerPage - 25 * currentRowsPerPage
-  chartHeight = chartContainerHeight / currentRowsPerPage - 70 if currentRowsPerPage == 1
-  chartHeight = chartContainerHeight / currentRowsPerPage - 15 * currentRowsPerPage if currentRowsPerPage == 3
+  chartHeight = (chartContainerHeight - 4 * 2 * currentRowsPerPage) / currentRowsPerPage  
+  # chartHeight = chartContainerHeight if currentRowsPerPage == 1
 
   chart = createChart container.querySelector('.intraday-chart-content'), {
     width: 0, height: chartHeight,
     timeScale: { 
       timeVisible: true, secondsVisible: false, 
       visible: timeScaleVisible, barSpacing: currentBarSpacing,
-      rightOffset: if singleMode then 20 else 0
+      rightOffset: if singleMode then 5 else 0
     },
     rightPriceScale: {
       entireTextOnly: true,
       visible: priceScaleVisible,
-      mode: PriceScaleMode.Normal, # PriceScaleMode.Percentage
+      mode: PriceScaleMode.Normal,
+      # mode: PriceScaleMode.Percentage,
       borderVisible: false,
       # autoScale: false,
       scaleMargins: { top: 0.02, bottom: 0.05 }
@@ -159,6 +162,9 @@ formatTime = (ms) ->
   minutes = time.getMinutes()
   "#{padNumber hours}:#{padNumber minutes}"
 
+urlHasParam = (name) ->
+  new URL(location.href).searchParams.get(name) != null
+
 toggleUrlParam = (name) ->
   url = new URL(location.href)
   if url.searchParams.get(name) == '1'
@@ -166,6 +172,13 @@ toggleUrlParam = (name) ->
   else
     url.searchParams.set name, '1'
   location.assign url
+  
+setUrlParams = (pairs) ->
+  url = new URL(location.href)
+  for k, v of pairs
+    url.searchParams.set k, v
+  location.assign url
+
 
 listIsOn = -> $qs('.chart-tickers-list')
 
@@ -317,7 +330,12 @@ document.addEventListener "turbolinks:load", ->
       $bind $qs('#chart-settings-modal .x-save'), 'click', updateOtherSettings
 
       $bind $qs('.toggle-full-screen'), 'click', -> toggleUrlParam "full-screen"
-      $bind $qs('.toggle-tickers-list'), 'click', -> toggleUrlParam "list"
+      
+      $bind $qs('.toggle-tickers-list'), 'click', -> 
+        if urlHasParam('list')
+          toggleUrlParam "list"
+        else
+          setUrlParams list: 1, 'full-screen': 1
       
       $bind $qs('.ticker-set-selector'), 'change', (e) ->
         chartedTickersField.value = e.target.value
