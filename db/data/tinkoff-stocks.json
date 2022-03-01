@@ -1826,7 +1826,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Coterra Energy Inc.",
+      "name": "Coterra Energy",
       "type": "Stock"
     },
     {
@@ -3113,7 +3113,7 @@
       "ticker": "SELG",
       "isin": "RU000A0JPR50",
       "minPriceIncrement": 0.01,
-      "lot": 100,
+      "lot": 10,
       "currency": "RUB",
       "name": "Селигдар",
       "type": "Stock"
@@ -8921,7 +8921,7 @@
       "ticker": "GLTR",
       "isin": "US37949E2046",
       "minPriceIncrement": 0.05,
-      "lot": 10,
+      "lot": 1,
       "currency": "RUB",
       "name": "Globaltrans Investment PLC",
       "type": "Stock"
@@ -10856,12 +10856,12 @@
     },
     {
       "figi": "BBG000C496P7",
-      "ticker": "VIAC",
+      "ticker": "PARA",
       "isin": "US92556H2067",
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "ViacomCBS",
+      "name": "Paramount Global",
       "type": "Stock"
     },
     {
@@ -13088,7 +13088,7 @@
       "ticker": "AQUA",
       "isin": "RU000A0JQTS3",
       "minPriceIncrement": 0.5,
-      "lot": 10,
+      "lot": 1,
       "currency": "RUB",
       "name": "Русская аквакультура",
       "type": "Stock"
@@ -14348,7 +14348,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Westlake Chemical",
+      "name": "Westlake Corporation",
       "type": "Stock"
     },
     {
@@ -16823,7 +16823,7 @@
       "ticker": "SIBN",
       "isin": "RU0009062467",
       "minPriceIncrement": 0.05,
-      "lot": 10,
+      "lot": 1,
       "currency": "RUB",
       "name": "Газпром нефть",
       "type": "Stock"

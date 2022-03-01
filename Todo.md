@@ -1,5 +1,7 @@
 - add a start date selector for daily single mode charts
+- fit to scale toggle
 - show MAs on day charts in single mode
+- percentage scale relative to the last bar (inject the same bar as first and autoscale chart to fit)
 
 - panel with ticker info — name, marketcap, changes in period
 - load missing intraday candles in single mode automatically

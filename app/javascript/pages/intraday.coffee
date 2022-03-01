@@ -66,6 +66,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
       visible: priceScaleVisible,
       mode: PriceScaleMode.Normal,
       # mode: PriceScaleMode.Percentage,
+      # mode: PriceScaleMode.IndexedTo100,
       borderVisible: false,
       # autoScale: false,
       scaleMargins: { top: 0.02, bottom: 0.05 }

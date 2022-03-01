@@ -96,9 +96,9 @@ class TradingController < ApplicationController
         map[ticker][:levels] = { } 
         unless period == 'day'
           map[ticker][:levels].merge!(
-            MA20:  instrument.indicators.ema_20.to_f,
-            MA50:  instrument.indicators.ema_50.to_f,
-            MA200: instrument.indicators.ema_200.to_f,            
+            MA20:  instrument.indicators&.ema_20&.to_f,
+            MA50:  instrument.indicators&.ema_50&.to_f,
+            MA200: instrument.indicators&.ema_200&.to_f,            
             open:  openings[instrument.ticker]&.open&.to_f,
             close:  instrument.yesterday&.close&.to_f,
             intraday: instrument.annotation&.intraday_levels,
