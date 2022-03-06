@@ -7,3 +7,5 @@ import { application } from "./application"
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import ButtonGroupController from "./button_group_controller"
+application.register("button-group", ButtonGroupController)

@@ -2,21 +2,38 @@
   .toolbar.row.mx-0.my-1.align-items-center.trading-toolbar
     input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_settings['tickers'].join(' '))
 
-    .btn-group.btn-group-sm.w-auto.interval-selector.js-btn-group(data-initial=@chart_settings['period'])
+    .btn-group.btn-group-sm.w-auto(
+      name="interval"
+      data-controller="button-group" 
+      data-action="click->button-group#select" 
+      data-button-group-current-value=@chart_settings['period']
+    )
       button type="button" data-value="1min" class="btn btn-outline-secondary" 1
       button type="button" data-value="3min" class="btn btn-outline-secondary" 3
       button type="button" data-value="5min" class="btn btn-outline-secondary" 5
       button type="button" data-value="hour" class="btn btn-outline-secondary" H
       button type="button" data-value="day"  class="btn btn-outline-secondary" D
 
-    .btn-group.btn-group-sm.w-auto.columns-selector.js-btn-group data-initial=@chart_settings['columns'] class=class_names('invisible': @list_shown)
+    .btn-group.btn-group-sm.w-auto(
+      name="columns"
+      class=class_names('invisible': @list_shown)
+      data-controller="button-group"
+      data-action="click->button-group#select"
+      data-button-group-current-value=@chart_settings['columns']
+    )
       button type="button" data-value="1" class="btn btn-outline-secondary" 1
       button type="button" data-value="2" class="btn btn-outline-secondary" 2
       button type="button" data-value="3" class="btn btn-outline-secondary" 3
       button type="button" data-value="4" class="btn btn-outline-secondary" 4
       button type="button" data-value="5" class="btn btn-outline-secondary" 5
 
-    .btn-group.btn-group-sm.w-auto.rows-selector.js-btn-group data-initial=@chart_settings['rows'] class=class_names('invisible': @list_shown)
+    .btn-group.btn-group-sm.w-auto(
+      name="rows"
+      class=class_names('invisible': @list_shown) 
+      data-controller="button-group" 
+      data-action="click->button-group#select" 
+      data-button-group-current-value=@chart_settings['rows'] 
+    )
       button type="button" data-value="1" class="btn btn-outline-secondary" 1
       button type="button" data-value="2" class="btn btn-outline-secondary" 2
       button type="button" data-value="3" class="btn btn-outline-secondary" 3
