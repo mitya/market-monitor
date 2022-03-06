@@ -11,6 +11,7 @@ import 'pages/charts'
 import 'pages/dashboard'
 import 'pages/intraday'
 import "channels"
+import "controllers"
 
 document.addEventListener("turbolinks:load", () => {
   document.querySelector('#list-config')?.addEventListener("change", e => {

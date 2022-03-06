@@ -49,7 +49,7 @@ class TradingController < ApplicationController
     end
   end
   
-  def intraday    
+  def charts
     @chart_settings = Setting.chart_settings
     @chart_settings['columns'] ||= 2
     @chart_settings['rows'] ||= 2
@@ -88,7 +88,7 @@ class TradingController < ApplicationController
     
     candles = instruments.inject({}) do |map, instrument|      
       ticker = instrument.ticker
-      candles = repo.for(instrument).includes(:instrument).order(:date, :time).last(params[:limit] || is_single ? 777 : 500)
+      candles = repo.for(instrument).includes(:instrument).order(:date, :time).last(params[:limit] || (is_single ? 777 : 500))
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.datetime_as_msk.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
       unless is_update

@@ -126,6 +126,7 @@ makeChart = ({ ticker, candles, opens, levels, timeScaleVisible, priceScaleVisib
       changeBox.innerText = ''
   
   setLegendFromCandle charts[ticker].lastCandle
+  charts[ticker].setLegendFromCandle = setLegendFromCandle
   
   chart.subscribeCrosshairMove (param) ->
     if (param.time)
@@ -237,12 +238,15 @@ document.addEventListener "turbolinks:load", ->
       markCurrentListTicker()
 
     refreshCharts = ->
-      return
       data = await $fetchJSON "/trading/candles?limit=1#{if listIsOn() then "&single=1" else ''}"
       for ticker, payload of data
         newCandle = dataRowToCandle payload.candles[0]
         charts[ticker].lastCandle = newCandle
         charts[ticker].candles.update newCandle
+        
+      for ticker, { chart, lastCandle, setLegendFromCandle } of charts
+        chart.timeScale().scrollToRealTime()        
+        setLegendFromCandle newCandle
 
     updateChartSettings = (options = {}) ->
       chart_tickers = chartedTickersField.value
