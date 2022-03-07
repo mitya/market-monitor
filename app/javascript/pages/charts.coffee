@@ -2,6 +2,7 @@ import { createChart, CrosshairMode, LineStyle, PriceScaleMode } from 'lightweig
 import { Modal } from 'bootstrap'
 import _ from 'lodash'
 import Chart from './chart'
+import ChartsPage from './charts_page'
 
 charts = {}
 currentBarSpacing = 2
@@ -29,8 +30,6 @@ setUrlParams = (pairs) ->
   for k, v of pairs
     url.searchParams.set k, v
   location.assign url
-
-listIsOn = -> $qs('.chart-tickers-list')
 
 
 document.addEventListener "turbolinks:load", ->
@@ -61,7 +60,7 @@ document.addEventListener "turbolinks:load", ->
 
     loadCharts = ->
       clearCharts()
-      data = await $fetchJSON "/trading/candles#{if listIsOn() then "?single=1" else ''}"
+      data = await $fetchJSON "/trading/candles#{if ChartsPage.listIsOn then "?single=1" else ''}"
       for ticker, payload of data
         charts[ticker] = new Chart {
           timeScaleVisible:   timeScaleToggle.checked, 
@@ -71,10 +70,10 @@ document.addEventListener "turbolinks:load", ->
           levelsVisible:      levelsToggle.checked,
           ...payload,
         }
-      markCurrentListTicker()
+      document.dispatchEvent(new Event 'chart-loaded')
 
     refreshCharts = ->
-      data = await $fetchJSON "/trading/candles?limit=1#{if listIsOn() then "&single=1" else ''}"
+      data = await $fetchJSON "/trading/candles?limit=1#{if ChartsPage.listIsOn then "&single=1" else ''}"
       for ticker, payload of data
         charts[ticker].addCandle payload.candles[0]
         charts[ticker].gotoLastCandle()
@@ -112,19 +111,6 @@ document.addEventListener "turbolinks:load", ->
       updateChartSettings()
       reload()
 
-    markCurrentListTicker = ->
-      if listIsOn()
-        currentTicker = $qs('.intraday-chart').dataset.ticker
-        if currentTickerItem = $qs(".chart-tickers-list .ticker-item[data-ticker=#{currentTicker}]")
-          currentTickerItem.classList.add('active')
-
-    selectListTicker = (ticker) ->
-      tickers = chartedTickersField.value.split(/\s/)
-      tickers = _.without tickers, ticker
-      tickers = [ ticker, ...tickers ].join(' ')
-      chartedTickersField.value = tickers
-      updateChartSettings()
-
 
     bindToolbar = ->
       document.addEventListener 'chart-must-update', (e) -> 
@@ -157,6 +143,7 @@ document.addEventListener "turbolinks:load", ->
       $bind gotoDownButton, 'click', -> window.scrollBy 0, chartHeight * 2
       $bind gotoUpButton, 'click', -> window.scrollBy 0, -(chartHeight * 2)
       
+      
       $bind openSettingsButton, 'click', -> 
         modal = new Modal document.getElementById 'chart-settings-modal'
         modal.show()        
@@ -179,9 +166,6 @@ document.addEventListener "turbolinks:load", ->
         chartedTickersField.value = e.target.value
         updateChartSettings()
       
-      $delegate '.chart-tickers-list', '.ticker-item', 'click', (target) ->  
-        selectListTicker target.dataset.ticker
-
       $delegate '.trading-page', '.zoom-chart', 'click', (target) ->
         target.blur()
         step = Number(target.dataset.value)
@@ -189,14 +173,6 @@ document.addEventListener "turbolinks:load", ->
         for ticker, chart of charts
           chart.setBarSpacing currentBarSpacing # current = chart.timeScale().options().barSpacing
         updateChartSettings reload: false
-        
-      document.addEventListener 'keydown', (e) ->
-        if e.key in ['ArrowDown', 'ArrowUp']
-          e.preventDefault()
-          currentItem = $qs('.chart-tickers-list .ticker-item.active')
-          nextItem = if e.key == 'ArrowDown' then currentItem?.nextSibling else currentItem?.previousSibling
-          if nextItem && nextItem.dataset.ticker
-            selectListTicker nextItem.dataset.ticker
 
     bindToolbar()
     loadCharts()

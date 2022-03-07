@@ -9,3 +9,9 @@ application.register("hello", HelloController)
 
 import ButtonGroupController from "./button_group_controller"
 application.register("button-group", ButtonGroupController)
+
+import ChartToolbarController from "./chart_toolbar_controller"
+application.register("chart-toolbar", ChartToolbarController)
+
+import ChartTickerListController from "./chart_ticker_list_controller"
+application.register("chart-ticker-list", ChartTickerListController)

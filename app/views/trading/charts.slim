@@ -1,5 +1,5 @@
 .container-fluid.trading-page
-  .toolbar.row.mx-0.my-1.align-items-center.trading-toolbar
+  .toolbar.row.mx-0.my-1.align-items-center.trading-toolbar data-controller="chart-toolbar"
     input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_settings['tickers'].join(' '))
 
     .btn-group.btn-group-sm.w-auto(
@@ -83,7 +83,9 @@
         data-rows=@chart_rows
       )
       - if @list_shown
-        .chart-tickers-list
-          = render 'set_comparisions/ticker_set', set: @list_ticker_set, precision: 1, selector: 'last' 
+        .chart-tickers-list(
+          data-controller="chart-ticker-list" 
+          data-action="click->chart-ticker-list#select  keydown@document->chart-ticker-list#keydown  chart-loaded@document->chart-ticker-list#markChartTickerActive"
+        )= render 'set_comparisions/ticker_set', set: @list_ticker_set, precision: 1, selector: 'last' 
 
 = render "chart_settings_modal"
