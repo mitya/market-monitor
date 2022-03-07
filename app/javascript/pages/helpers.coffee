@@ -29,3 +29,6 @@ window.$delegate = (container, selector, event, handler) ->
     closest = e.target.closest(selector)
     if e.target.matches(selector) || closest
       handler.bind(closest || e.target, closest || e.target, e)()
+
+Function::prop = (name, getter, setter) -> Object.defineProperty this::, name, get: getter, set: setter
+Function::cprop = (name, getter) -> Object.defineProperty this, name, get: getter
