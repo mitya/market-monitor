@@ -17,7 +17,7 @@
         .my-4 class="ticker-sets"
           label class="form-label" Ticker Sets
           .form-check.form-switch
-            input class="form-check-input" type="checkbox" id="sync-ticker-sets-toggle" checked = @chart_settings['sync_ticker_sets']
+            input class="form-check-input" type="checkbox" id="sync-ticker-sets-toggle" checked = @sync_ticker_sets
             label class="form-check-label" for="sync-ticker-sets-toggle" Sync ticker sets
           textarea(type="text" class="form-control form-control-sm text-uppercase w-100" rows=10)= @ticker_sets_text
 

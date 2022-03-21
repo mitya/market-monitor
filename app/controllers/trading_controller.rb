@@ -57,9 +57,9 @@ class TradingController < ApplicationController
     @chart_settings['tickers'] ||= []
 
     @synced_tickers = Setting.sync_tickers.join(' ')
+    @sync_ticker_sets = Setting.sync_ticker_sets
 
     @chart_tickers = Setting.chart_tickers
-
 
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")

@@ -1,6 +1,16 @@
 .container-fluid.trading-page
-  .toolbar.row.mx-0.my-1.align-items-center.trading-toolbar data-controller="chart-toolbar"
-    input.charted-tickers-field(type="text" class="form-control form-control-sm text-uppercase w-25" value=@chart_settings['tickers'].join(' '))
+  .row.toolbar.trading-toolbar(
+    data-controller="chart-toolbar" 
+    data-action="chart-must-update@document->chart-toolbar#updateChartSettings"
+    class="mx-0 my-1 align-items-center"
+  )
+    input(
+      name="charted-tickers"
+      type="text" 
+      class="form-control form-control-sm text-uppercase w-25" 
+      value=@chart_settings['tickers'].join(' ') 
+      data-action="change->chart-toolbar#updateChartSettings"
+    )
 
     .btn-group.btn-group-sm.w-auto(
       name="interval"
@@ -43,24 +53,30 @@
       button type="button" data-action="chart-toolbar#zoom" data-value="+4" class="btn btn-outline-secondary zoom-chart" +
 
     .btn-group.btn-group-sm.w-auto.align-items-center
-      input type="checkbox" class="btn-check" id ="toggle-time" autocomplete="off" checked=@chart_settings['time_shown']
-      label class="btn btn-outline-secondary" for="toggle-time" = fa_icon :clock, solid: false
-      input type="checkbox" class="btn-check" id ="toggle-price" autocomplete="off" checked=@chart_settings['price_shown']
+      input type="checkbox" class="btn-check" id="toggle-time" autocomplete="off" checked=@chart_settings['time_shown'] data-action="chart-toolbar#toggleTimeScale"
+      label class="btn btn-outline-secondary" for="toggle-time"= fa_icon :clock, solid: false
+      
+      input type="checkbox" class="btn-check" id="toggle-price" autocomplete="off" checked=@chart_settings['price_shown'] data-action="chart-toolbar#togglePriceScale"
       label class="btn btn-outline-secondary" for="toggle-price" $      
-      input type="checkbox" class="btn-check" id ="toggle-wheel-scaling" autocomplete="off" checked=@chart_settings['wheel_scaling']
-      label class="btn btn-outline-secondary" for="toggle-wheel-scaling" = fa_icon 'mouse'
-      input type="checkbox" class="btn-check" id ="toggle-level-labels" autocomplete="off" checked=@chart_settings['level_labels']
-      label class="btn btn-outline-secondary" for="toggle-level-labels" = fa_icon 'tag'
-      input type="checkbox" class="btn-check" id ="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown']
-      label class="btn btn-outline-secondary" for="toggle-levels" = fa_icon 'grip-lines'
-      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") = fa_icon 'expand-alt'
+      
+      input type="checkbox" class="btn-check" id="toggle-wheel-scaling" autocomplete="off" checked=@chart_settings['wheel_scaling'] data-action="chart-toolbar#toggleWheelScaling"
+      label class="btn btn-outline-secondary" for="toggle-wheel-scaling"= fa_icon 'mouse'
+      
+      input type="checkbox" class="btn-check" id="toggle-level-labels" autocomplete="off" checked=@chart_settings['level_labels'] data-action="chart-toolbar#toggleLevelLabels"
+      label class="btn btn-outline-secondary" for="toggle-level-labels"= fa_icon 'tag'
+      
+      input type="checkbox" class="btn-check" id="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown'] data-action="chart-toolbar#toggleLevels"
+      label class="btn btn-outline-secondary" for="toggle-levels"= fa_icon 'grip-lines'
+      
+      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") data-action="chart-toolbar#toggleFullScreen" 
+        = fa_icon 'expand-alt' 
       
     .btn-group.btn-group-sm.w-auto.align-items-center
-      button type="button" class="btn btn-outline-secondary go-down"   = fa_icon 'angle-double-down'      
-      button type="button" class="btn btn-outline-secondary go-up"     = fa_icon 'angle-double-up'      
-      button type="button" class="btn btn-outline-secondary go-to-end" = fa_icon 'angle-double-right'      
+      button type="button" class="btn btn-outline-secondary go-down"   data-action="chart-toolbar#gotoDown" = fa_icon 'angle-double-down'      
+      button type="button" class="btn btn-outline-secondary go-up"     data-action="chart-toolbar#gotoUp"   = fa_icon 'angle-double-up'      
+      button type="button" class="btn btn-outline-secondary go-to-end" data-action="chart-toolbar#gotoEnd"  = fa_icon 'angle-double-right'      
 
-    select class="ticker-set-selector form-select form-select-sm w-auto me-2"
+    select class="ticker-set-selector form-select form-select-sm w-auto me-2" data-action="chart-toolbar#changeTickerSet"
       option
       - @ticker_sets.each do |set|
         - tickers_line = set.tickers_line
@@ -72,8 +88,8 @@
       = options_for_select CandlesController::CHART_PERIODS.map(&:to_s), CandlesController::DEFAULT_PERIOD
           
     .btn-group.btn-group-sm.w-auto.align-items-center.ms-auto.pe-0
-      button type="button" class="btn btn-outline-secondary open-settings" = fa_icon 'cog'
-      button type="button" class=class_names("btn toggle-tickers-list btn-#{@list_shown ? '' : 'outline-'}secondary") = fa_icon 'bars'
+      button type="button" class="btn btn-outline-secondary open-settings" data-action="chart-toolbar#openSettings" = fa_icon 'cog'
+      button type="button" class=class_names("btn toggle-tickers-list btn-#{@list_shown ? '' : 'outline-'}secondary") data-action="chart-toolbar#toggleTickersList" = fa_icon 'bars'
 
   .row
     .d-flex.flex-row

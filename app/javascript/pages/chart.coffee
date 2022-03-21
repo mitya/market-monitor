@@ -163,7 +163,7 @@ export default class Chart
       continue if values == null
       values = [values] unless values instanceof Array
       for level in values
-        candlesSeries.createPriceLine
+        @candlesSeries.createPriceLine
           price: Number(level)
           color: levelColors[title]
           opacity: 0.5

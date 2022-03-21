@@ -8,7 +8,6 @@ import ApexCharts from 'apexcharts'
 import 'pages/helpers'
 import 'pages/init'
 import 'pages/charts_old'
-import 'pages/charts'
 import 'pages/dashboard'
 import "channels"
 import "controllers"

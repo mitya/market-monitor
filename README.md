@@ -54,9 +54,8 @@ rake options:day
 
 
 # Run if haven't used for a whilte
-rake     iex:days:missing since=2021-01-01
-rake     iex:days:missing since=2022-01-01 ok=1
-rake tinkoff:days:missing since=2021-09-01 ok=1 tickers='KAP@GS KSPI@GS SPBE'
+rake     iex:days:missing since=2022-02-01 ok=1
+rake tinkoff:days:missing since=2022-02-01 ok=1 tickers='KAP@GS KSPI@GS SPBE'
 
 # Destroying tickers
 

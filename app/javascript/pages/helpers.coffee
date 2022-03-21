@@ -32,3 +32,21 @@ window.$delegate = (container, selector, event, handler) ->
 
 Function::prop = (name, getter, setter) -> Object.defineProperty this::, name, get: getter, set: setter
 Function::cprop = (name, getter) -> Object.defineProperty this, name, get: getter
+
+export UrlHelper = 
+  hasParam: (name) ->
+    new URL(location.href).searchParams.get(name) != null
+
+  toggleParam: (name) ->
+    url = new URL(location.href)
+    if url.searchParams.get(name) == '1'
+      url.searchParams.delete name
+    else
+      url.searchParams.set name, '1'
+    location.assign url
+    
+  setParams: (pairs) ->
+    url = new URL(location.href)
+    for k, v of pairs
+      url.searchParams.set k, v
+    location.assign url
