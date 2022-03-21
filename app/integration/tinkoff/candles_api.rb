@@ -128,7 +128,7 @@ class Tinkoff
     end
 
     def import_intraday_candles_for_today(instrument, interval)
-      last_loaded = instrument.candles_for(interval).today.by_time.last
+      last_loaded = instrument.candles_for(interval).today.by_time.final.last
       return if last_loaded&.is_closing?
 
       since = last_loaded ?

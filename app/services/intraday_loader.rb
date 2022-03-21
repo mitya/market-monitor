@@ -36,6 +36,7 @@ class IntradayLoader
     loop do
       current_tickers = tickers
       current_interval = interval
+      interval_in_minutes = 1
       current_interval_index = (Time.current.hour * 60 + Time.current.min) / interval_in_minutes
       # puts "tick #{Time.current} - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
 
@@ -51,23 +52,22 @@ class IntradayLoader
         change_last_params.call
         load_history
       elsif last_interval_index != current_interval_index
-        unless current_interval_index - last_interval_index == 1 && Time.current.sec < 50
-          sync_latest
-          change_last_params.call
-        end
+        # unless current_interval_index - last_interval_index == 1 && Time.current.sec < 50
+        sync_latest
+        change_last_params.call
       end
 
-      if Current.us_market_open? && (Setting.iex_update_pending? || last_iex_update_time < 5.minutes.ago)
-        RefreshPricesFromIex.refresh
-        puts "refresh IEX prices".green
-        last_iex_update_time = Time.current
-      end
+      # if Current.us_market_open? && (Setting.iex_update_pending? || last_iex_update_time < 5.minutes.ago)
+      #   RefreshPricesFromIex.refresh
+      #   puts "refresh IEX prices".green
+      #   last_iex_update_time = Time.current
+      # end
 
       if Setting.tinkoff_update_pending?
         RefreshPricesFromTinkoff.refresh Instrument.rub.abc
         puts "refresh Tinkoff prices".green
       end
-      
+
       # analyze
 
       sleep 5
@@ -102,7 +102,7 @@ class IntradayLoader
     puts 'sync latest'
     instruments.abc.each { |inst| Tinkoff.import_intraday_candles_for_today inst, interval }
   end
-  
+
   def analyze
     tickers_to_analyze = tickers
     tickers_to_analyze = %[CLF MOMO]
