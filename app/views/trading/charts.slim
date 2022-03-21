@@ -1,21 +1,24 @@
 .container-fluid.trading-page
   .row.toolbar.trading-toolbar(
-    data-controller="chart-toolbar" 
-    data-action="chart-must-update@document->chart-toolbar#updateChartSettings"
+    data-controller="chart-toolbar"
+    data-action="
+      chart-must-update@document->chart-toolbar#updateChartSettings
+      chart-reload-data@document->chart-toolbar#refreshCharts
+    "
     class="mx-0 my-1 align-items-center"
   )
     input(
       name="charted-tickers"
-      type="text" 
-      class="form-control form-control-sm text-uppercase w-25" 
-      value=@chart_settings['tickers'].join(' ') 
+      type="text"
+      class="form-control form-control-sm text-uppercase w-25"
+      value=@chart_settings['tickers'].join(' ')
       data-action="change->chart-toolbar#updateChartSettings"
     )
 
     .btn-group.btn-group-sm.w-auto(
       name="interval"
-      data-controller="button-group" 
-      data-action="click->button-group#select" 
+      data-controller="button-group"
+      data-action="click->button-group#select"
       data-button-group-current-value=@chart_settings['period']
     )
       button type="button" data-value="1min" class="btn btn-outline-secondary" 1
@@ -39,10 +42,10 @@
 
     .btn-group.btn-group-sm.w-auto(
       name="rows"
-      class=class_names('invisible': @list_shown) 
-      data-controller="button-group" 
-      data-action="click->button-group#select" 
-      data-button-group-current-value=@chart_settings['rows'] 
+      class=class_names('invisible': @list_shown)
+      data-controller="button-group"
+      data-action="click->button-group#select"
+      data-button-group-current-value=@chart_settings['rows']
     )
       button type="button" data-value="1" class="btn btn-outline-secondary" 1
       button type="button" data-value="2" class="btn btn-outline-secondary" 2
@@ -55,26 +58,26 @@
     .btn-group.btn-group-sm.w-auto.align-items-center
       input type="checkbox" class="btn-check" id="toggle-time" autocomplete="off" checked=@chart_settings['time_shown'] data-action="chart-toolbar#toggleTimeScale"
       label class="btn btn-outline-secondary" for="toggle-time"= fa_icon :clock, solid: false
-      
+
       input type="checkbox" class="btn-check" id="toggle-price" autocomplete="off" checked=@chart_settings['price_shown'] data-action="chart-toolbar#togglePriceScale"
-      label class="btn btn-outline-secondary" for="toggle-price" $      
-      
+      label class="btn btn-outline-secondary" for="toggle-price" $
+
       input type="checkbox" class="btn-check" id="toggle-wheel-scaling" autocomplete="off" checked=@chart_settings['wheel_scaling'] data-action="chart-toolbar#toggleWheelScaling"
       label class="btn btn-outline-secondary" for="toggle-wheel-scaling"= fa_icon 'mouse'
-      
+
       input type="checkbox" class="btn-check" id="toggle-level-labels" autocomplete="off" checked=@chart_settings['level_labels'] data-action="chart-toolbar#toggleLevelLabels"
       label class="btn btn-outline-secondary" for="toggle-level-labels"= fa_icon 'tag'
-      
+
       input type="checkbox" class="btn-check" id="toggle-levels" autocomplete="off" checked=@chart_settings['levels_shown'] data-action="chart-toolbar#toggleLevels"
       label class="btn btn-outline-secondary" for="toggle-levels"= fa_icon 'grip-lines'
-      
-      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") data-action="chart-toolbar#toggleFullScreen" 
-        = fa_icon 'expand-alt' 
-      
+
+      button type="button" class=class_names("btn toggle-full-screen btn-#{params['full-screen'] == '1' ? '' : 'outline-'}secondary") data-action="chart-toolbar#toggleFullScreen"
+        = fa_icon 'expand-alt'
+
     .btn-group.btn-group-sm.w-auto.align-items-center
-      button type="button" class="btn btn-outline-secondary go-down"   data-action="chart-toolbar#gotoDown" = fa_icon 'angle-double-down'      
-      button type="button" class="btn btn-outline-secondary go-up"     data-action="chart-toolbar#gotoUp"   = fa_icon 'angle-double-up'      
-      button type="button" class="btn btn-outline-secondary go-to-end" data-action="chart-toolbar#gotoEnd"  = fa_icon 'angle-double-right'      
+      button type="button" class="btn btn-outline-secondary go-down"   data-action="chart-toolbar#gotoDown" = fa_icon 'angle-double-down'
+      button type="button" class="btn btn-outline-secondary go-up"     data-action="chart-toolbar#gotoUp"   = fa_icon 'angle-double-up'
+      button type="button" class="btn btn-outline-secondary go-to-end" data-action="chart-toolbar#gotoEnd"  = fa_icon 'angle-double-right'
 
     select class="ticker-set-selector form-select form-select-sm w-auto me-2" data-action="chart-toolbar#changeTickerSet"
       option
@@ -82,11 +85,11 @@
         - tickers_line = set.tickers_line
         option(data-id=set.id value=tickers_line selected=@chart_tickers==tickers_line)
           = set.key.downcase
-          
+
     select class="chart-period-selector form-select form-select-sm w-auto"
       option
       = options_for_select CandlesController::CHART_PERIODS.map(&:to_s), CandlesController::DEFAULT_PERIOD
-          
+
     .btn-group.btn-group-sm.w-auto.align-items-center.ms-auto.pe-0
       button type="button" class="btn btn-outline-secondary open-settings" data-action="chart-toolbar#openSettings" = fa_icon 'cog'
       button type="button" class=class_names("btn toggle-tickers-list btn-#{@list_shown ? '' : 'outline-'}secondary") data-action="chart-toolbar#toggleTickersList" = fa_icon 'bars'
@@ -94,14 +97,14 @@
   .row
     .d-flex.flex-row
       .intraday-charts.flex-grow-1.row(
-        class="row-cols-#{@chart_columns}" 
+        class="row-cols-#{@chart_columns}"
         data-bar-spacing=@chart_settings['bar_spacing']
         data-rows=@chart_rows
       )
       - if @list_shown
         .chart-tickers-list(
-          data-controller="chart-ticker-list" 
+          data-controller="chart-ticker-list"
           data-action="click->chart-ticker-list#select  keydown@document->chart-ticker-list#keydown  chart-loaded@document->chart-ticker-list#markChartTickerActive"
-        )= render 'set_comparisions/ticker_set', set: @list_ticker_set, precision: 1, selector: 'last' 
+        )= render 'set_comparisions/ticker_set', set: @list_ticker_set, precision: 1, selector: 'last'
 
 = render "chart_settings_modal"

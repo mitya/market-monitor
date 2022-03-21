@@ -101,6 +101,7 @@ class IntradayLoader
   def sync_latest
     puts 'sync latest'
     instruments.abc.each { |inst| Tinkoff.import_intraday_candles_for_today inst, interval }
+    SyncChannel.push 'candles'
   end
 
   def analyze

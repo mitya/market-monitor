@@ -11,6 +11,8 @@ consumer.subscriptions.create("SyncChannel", {
     console.log('SyncChannel received data', data)
     if (data.reason == 'prices' && window.DashboardPeriod == '') {
       location.reload()
+    } else if (data.reason == 'candles') {
+      document.dispatchEvent(new Event('chart-reload-data'))
     }
   }
 });

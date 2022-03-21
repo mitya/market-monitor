@@ -25,7 +25,7 @@ export default class extends Controller
     $qs('#chart-settings-modal .x-save').addEventListener 'click', @updateOtherSettings
 
     @loadCharts()
-    setInterval @refreshCharts, 15_000
+    # setInterval @refreshCharts, 15_000
 
   reload: ->
     location.reload()
