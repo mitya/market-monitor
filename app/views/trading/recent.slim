@@ -1,6 +1,4 @@
 main.container-fluid
-  h1.display-3 Current Changes
-
   table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
     thead.table-dark
       tr
@@ -8,32 +6,32 @@ main.container-fluid
         th(data-sort="ticker") Ticker
         th Name
         th.money-cell Last
-        th.money-cell Yopen
-        th Yclose
-        th.money-cell Topen
+        th.money-cell Yo ﹪
+        th.money-cell Yc ﹪
+        th.money-cell To ﹪
         th 1h
         th 15m
         th 5m
         th 1m
         th.money-cell Yvol
         th.money-cell Tvol
-    tbody
-      - instruments = @instruments.sort_by &:ticker
-      - instruments.each do |instrument|
-        - inst = instrument
-        - info = instrument.info
-        tr
-          td= instrument_logo_button inst
-          td= instrument.ticker
-          td.instrument-name= instrument.name
-          td.money-cell= relative_price inst.last, inst.today_open, unit: inst.currency, format: 'absolute'
-          - with_options unit: inst.currency, format: 'relative', percentage_precision: 1, title: :base do |p|
-            td.money-cell= p.relative_price inst.last, inst.yesterday_open
-            td= ratio_bar inst.yesterday_close, inst.last, classes: 'solid m-wide'
-            td.money-cell= p.relative_price inst.last, inst.today_open
-            td= ratio_bar @candles[60][instrument.ticker]&.close, inst.last, classes: 'solid m-wide'
-            td= ratio_bar @candles[15][instrument.ticker]&.close, inst.last, classes: 'solid m-wide'
-            td= ratio_bar @candles[ 5][instrument.ticker]&.close, inst.last, classes: 'solid m-wide'
-            td= ratio_bar @candles[ 1][instrument.ticker]&.close, inst.last, classes: 'solid m-wide'
-            td.money-cell= format_price inst.d1_ago&.volume_in_money, unit: inst.currency
-            td.money-cell= format_price inst.today&.volume_in_money, unit: inst.currency
+    - @groups.each do |rows|
+      tbody
+        - rows.each do |row|
+          - inst = row.instrument
+          tr
+            td= instrument_logo_button inst
+            td= inst.ticker
+            td.instrument-name= inst.name
+            td.money-cell= relative_price inst.last, inst.today_open, unit: inst.currency, format: 'absolute'
+            td.money-cell= colorized_ratio row.last_to_yesterday_open,  precision: 1
+            td.money-cell= colorized_ratio row.last_to_yesterday_close, precision: 1
+            td.money-cell= colorized_ratio row.last_to_today_open,      precision: 1
+            td           = ratio_bar       row.last_to_60m_ago,         classes: 'solid m-wide'
+            td           = ratio_bar       row.last_to_15m_ago,         classes: 'solid m-wide'
+            td           = ratio_bar       row.last_to_05m_ago,         classes: 'solid m-wide'
+            td           = ratio_bar       row.last_to_01m_ago,         classes: 'solid m-wide'
+            td.money-cell= format_price_in_millions row.yesterday_volume, unit: inst.currency
+            td.money-cell= format_price_in_millions row.today_volume,     unit: inst.currency
+
+    / = tickers_copy_list @rows.map(&:instrument)

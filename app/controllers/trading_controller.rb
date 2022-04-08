@@ -170,5 +170,33 @@ class TradingController < ApplicationController
 
     Current.preload_prices_for @instruments.to_a
     Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
+
+    @rows = @instruments.map do |inst|
+      OpenStruct.new(
+        instrument:              inst,
+        last:                    inst.last,
+        last_to_yesterday_open:  price_ratio(inst.last, inst.yesterday_open),
+        last_to_yesterday_close: price_ratio(inst.last, inst.yesterday_close),
+        last_to_today_open:      price_ratio(inst.last, inst.today_open),
+        last_to_60m_ago:         price_ratio(inst.last, @candles[60][inst.ticker]&.close),
+        last_to_15m_ago:         price_ratio(inst.last, @candles[15][inst.ticker]&.close),
+        last_to_05m_ago:         price_ratio(inst.last, @candles[ 5][inst.ticker]&.close),
+        last_to_01m_ago:         price_ratio(inst.last, @candles[ 1][inst.ticker]&.close),
+        yesterday_volume:        inst.d1_ago&.volume_in_money,
+        today_volume:            inst.today&.volume_in_money,
+      )
+    end
+
+    sort_field = :yesterday_volume
+    sort_field = :last_to_yesterday_close
+
+    @rows = @rows.sort_by { _1.send(sort_field) || 0 }.reverse
+    @groups = @rows.partition { !_1.instrument.illiquid? }
+  end
+
+  private
+
+  def price_ratio(current, base)
+    current / base - 1 rescue 0
   end
 end

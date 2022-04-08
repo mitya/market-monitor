@@ -71,8 +71,11 @@ module ApplicationHelper
     percentage_bar value / 100.0, **attrs
   end
 
-  def ratio_bar(base, current, **attrs)
+  def relative_bar(base, current, **attrs)
     ratio = current / base - 1 rescue 0
+  end
+
+  def ratio_bar(ratio, **attrs)
     if ratio.to_f.abs >= 0.08
       colorized_ratio ratio, precision: 1, format: '%n'
     else

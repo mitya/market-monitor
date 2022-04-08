@@ -1,4 +1,4 @@
-- group those tickers in a few segments - main / other / illiquid
+
 - sort the table by selected period change
 
 - add a start date selector for daily single mode charts
@@ -427,3 +427,4 @@
 + page with last 1/5/15/60 min changes for all RU tickers
 + task to load all 1-mins for today
 + task to sync selected 1-mins constantly & all other once in a while
++ group those tickers in a few segments - main / other / illiquid
