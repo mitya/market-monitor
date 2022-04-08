@@ -1,16 +1,16 @@
 envtask :main do
-  rake 'iex:days:previous'
+  # rake 'iex:days:previous'
   rake 'tinkoff:days:previous'
   if Current.weekend?
-    rake 'iex:prices'          unless R.false?(:price)
+    # rake 'iex:prices'          unless R.false?(:price)
   elsif Current.us_market_open?
-    rake 'iex:prices'          unless R.false?(:price)
+    # rake 'iex:prices'          unless R.false?(:price)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
   elsif Current.uk_market_open?
-    rake 'iex:prices:uniq'     unless R.false?(:price)
+    # rake 'iex:prices:uniq'     unless R.false?(:price)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
   else
-    rake 'iex:prices:uniq'     unless R.false?(:price)
+    # rake 'iex:prices:uniq'     unless R.false?(:price)
     rake 'tinkoff:prices:uniq' unless R.false?(:price)
   end
   rake 'process'
@@ -27,6 +27,8 @@ task 'import'     => %w[levels:import signals:import]
 task 'close'      => %w[tinkoff:candles:import:5min:last]
 task 'pre'        => %w[tinkoff:prices:pre]
 task 'sync'       => %w[intraday:sync]
+task 'sync+'      => %w[intraday:sync]
+task 'today'      => %w[tinkoff:candles:today]
 
 
 envtask(:SetIexTickers) { SetIexTickers.call }

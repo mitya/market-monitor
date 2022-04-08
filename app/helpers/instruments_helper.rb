@@ -40,9 +40,9 @@ module InstrumentsHelper
     end
   end
 
-  def colorized_percentage(price, base_price, unit: '$', inverse: false, precision: percentage_precision, blank_threshold: nil, format: nil)
+  def colorized_percentage(price, base_price, unit: '$', inverse: false, precision: percentage_precision, blank_threshold: nil, format: nil, title: nil)
     ratio = inverse ? price_ratio(base_price, price) : price_ratio(price, base_price)
-    colorized_ratio ratio, title: format_price(price, unit: currency_sign(unit)), precision: precision, blank_threshold: blank_threshold, format: format
+    colorized_ratio ratio, title: format_price(title == :base ? base_price : price, unit: currency_sign(unit)), precision: precision, blank_threshold: blank_threshold, format: format
   end
 
   def colorized_ratio(ratio, title: nil, precision: percentage_precision, blank_threshold: nil, inverse: false, format: nil)
@@ -63,13 +63,13 @@ module InstrumentsHelper
     number_to_percentage ratio * 100, precision: precision, delimiter: ',', format: format if ratio
   end
 
-  def relative_price(price, base_price, unit:, format: "absolute", inverse: false, precision: 1, percentage_precision: self.percentage_precision, blank_threshold: nil)
+  def relative_price(price, base_price, unit:, format: "absolute", inverse: false, precision: 1, percentage_precision: self.percentage_precision, blank_threshold: nil, title: nil)
     # method = format == 'absolute' ? :colorized_price : :colorized_percentage
     # send method, price, base_price, unit: unit, inverse: inverse, precision: method == :colorized_price ? precision : percentage_precision, hide_zero: hide_zero
     if format == 'absolute'
       colorized_price price, base_price, unit: unit, inverse: inverse, precision: precision
     else
-      colorized_percentage price, base_price, unit: unit, inverse: inverse, precision: percentage_precision, blank_threshold: blank_threshold
+      colorized_percentage price, base_price, unit: unit, inverse: inverse, precision: percentage_precision, blank_threshold: blank_threshold, title: title
     end
   end
 
@@ -243,11 +243,11 @@ module InstrumentsHelper
       count_bar aggregate.days_up.abs
     end
   end
-  
+
   def change_map(aggregate)
     tag.div class: class_names('percentage-bars wide-bars') do
       aggregate.change_map.to_s.each_char.map do |code|
-        classes = case code 
+        classes = case code
           when 'U' then 'is-green'
           when 'D' then 'is-red'
           when 't' then 'is-green turn'

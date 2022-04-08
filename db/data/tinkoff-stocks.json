@@ -57,7 +57,7 @@
       "minPriceIncrement": 0.1,
       "lot": 1,
       "currency": "RUB",
-      "name": "ГК Мать и дитя",
+      "name": "Мать и дитя",
       "type": "Stock"
     },
     {
@@ -4919,16 +4919,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG0038V5TX1",
-      "ticker": "CONE",
-      "isin": "US23283R1005",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "CyrusOne REIT",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BP46T2",
       "ticker": "MLKN",
       "isin": "US6005441000",
@@ -8494,6 +8484,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "TopBuild Corp",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG013QNJHP8",
+      "ticker": "BRBR",
+      "isin": "US07831C1036",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "BellRing Brands",
       "type": "Stock"
     },
     {
@@ -13031,6 +13031,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "GCP Applied Technologies Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG014630587",
+      "ticker": "ZIMV",
+      "isin": "US98888T1079",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "ZimVie",
       "type": "Stock"
     },
     {
@@ -17659,6 +17669,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG000BSHJ96",
+      "ticker": "SAFM",
+      "isin": "US8000131040",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Sanderson Farms Inc",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000GM6Y84",
       "ticker": "DWNI@DE",
       "isin": "DE000A0HN5C6",
@@ -18996,5 +19016,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1901
+  "total": 1903
 }

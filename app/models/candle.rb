@@ -172,4 +172,8 @@ class Candle < ApplicationRecord
   def volume_change(days: 10) = volume.to_f / average_prior_volume(days: days)
 
   def volume_to_average = volume.to_f / instrument.info&.avg_volume rescue nil
+
+  def volume_in_money = volume * close * cached_instrument.lot
+
+  def cached_instrument = InstrumentCache.get(ticker)
 end

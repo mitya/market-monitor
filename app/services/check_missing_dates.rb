@@ -21,7 +21,7 @@ class CheckMissingDates
     dates.uniq.sort.each do |date|
       date = Date.parse(date) if String === date
 
-      instruments = (R.instruments_from_env || Instrument.all).abc
+      instruments = (R.instruments_from_env || Instrument.active).abc
       instruments = instruments.reject { |inst| inst.first_date && inst.first_date > date } unless force
       with_missing_date = instruments.select { |inst| inst.candles.day.final.where(date: date).none? }
       missing_tinkoff_instruments = with_missing_date.reject(&:iex_ticker)

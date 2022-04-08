@@ -38,8 +38,14 @@ rake set_average_volume
 rake candles:set_average_change
 rake candles:set_d5_volume
 
-rake iex:days:missing since=2022-02-01
-rake tinkoff:days:missing ok=1 tickers='SPBE' since=2021-09-01
+rake iex:days:missing since=2022-03-01
+rake tinkoff:days:missing since=2022-04-07 ok=1 tickers='ABRD AFKS AFLT AGRO'
+rake tinkoff:days:missing since=2022-04-07 ok=1
+
+rake tinkoff:days:missing ok=1
+rake today
+rake intraday:sync_all
+
 rake tinkoff:days:year tickers=''
 
 rake levels:hits:week
@@ -74,7 +80,7 @@ rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty:iex
 export tickers='MC SHEL CP CEG'
-rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download 
+rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download
 rake iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1
 rake candles:set_prev_closes candles:set_average_change candles:set_d5_volume

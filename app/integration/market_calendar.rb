@@ -19,8 +19,8 @@ class MarketCalendar
       date.on_weekday? && !nyse_holidays.include?(date)
     end
 
-    def prev(date) = prev_closest_weekday(date.to_date.yesterday)
-    def next(date) = next_closest_weekday(date.to_date.tomorrow)
+    def prev(date = Date.current) = prev_closest_weekday(date.to_date.yesterday)
+    def next(date = Date.current) = next_closest_weekday(date.to_date.tomorrow)
     def prev2(date) = [prev(date), prev(prev date)]
 
     def open_days(since, till = Date.current)
@@ -49,7 +49,7 @@ class MarketCalendar
         2021-09-06
         2021-11-25
         2021-12-24
-        
+
         2022-01-17
         2022-02-21
         2022-04-15
@@ -63,15 +63,15 @@ class MarketCalendar
 
     def moex_holidays
       @moex_holidays ||= %w[
-        2022-01-07  
-        
+        2022-01-07
+
         2021-12-31
         2021-11-04
         2021-05-03
         2021-03-08
         2021-02-23
         2021-01-07
-        
+
         2020-12-31
       ].map { |str| Date.parse str }.to_set
     end

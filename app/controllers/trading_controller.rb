@@ -1,6 +1,6 @@
 class TradingController < ApplicationController
   skip_before_action :verify_authenticity_token
-  
+
   def dashboard
     @is_morning = !Current.us_market_open?
     @market_open_time_in_mins = @is_morning ? 0 * 60 : 9 * 60 + 30
@@ -48,7 +48,7 @@ class TradingController < ApplicationController
       }
     end
   end
-  
+
   def charts
     @chart_settings = Setting.chart_settings
     @chart_settings['columns'] ||= 2
@@ -66,14 +66,14 @@ class TradingController < ApplicationController
 
     @ticker_sets = TickerSet.order(:key)
     @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
-        
+
     @list_ticker_set = InstrumentSet.new('Current', :static, items: @chart_tickers)
-    
+
     @list_shown = params[:list] == '1'
     @chart_columns = @list_shown ? 1 : @chart_settings['columns']
     @chart_rows = @list_shown ? 1 : @chart_settings['rows']
   end
-  
+
   def candles
     is_update = params[:limit] == '1'
     is_single = params[:single] == '1'
@@ -81,24 +81,24 @@ class TradingController < ApplicationController
     repo = Candle.interval_class_for(period)
     tickers = Setting.chart_tickers.first(12)
     tickers = tickers.first(1) if is_single
-    
+
     instruments = Instrument.for_tickers(tickers).includes(:indicators, :annotation)
     instruments = tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
     openings = Candle::M3.today.openings.for(instruments).index_by(&:ticker)
-    
-    candles = instruments.inject({}) do |map, instrument|      
+
+    candles = instruments.inject({}) do |map, instrument|
       ticker = instrument.ticker
       candles = repo.for(instrument).includes(:instrument).order(:date, :time).last(params[:limit] || (is_single ? 777 : 500))
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.datetime_as_msk.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
       unless is_update
         map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime_as_msk.to_i } unless period == 'day'
-        map[ticker][:levels] = { } 
+        map[ticker][:levels] = { }
         unless period == 'day'
           map[ticker][:levels].merge!(
             MA20:  instrument.indicators&.ema_20&.to_f,
             MA50:  instrument.indicators&.ema_50&.to_f,
-            MA200: instrument.indicators&.ema_200&.to_f,            
+            MA200: instrument.indicators&.ema_200&.to_f,
             open:  openings[instrument.ticker]&.open&.to_f,
             close:  instrument.yesterday&.close&.to_f,
             intraday: instrument.annotation&.intraday_levels,
@@ -107,18 +107,18 @@ class TradingController < ApplicationController
         else
           map[ticker][:levels].merge!(
             # swing: instrument.levels.pluck(:value),
-          )          
+          )
         end
       end
-      map 
+      map
     end
     render json: candles
   end
-  
+
   def update_chart_settings
     Setting.save 'sync_tickers',     params[:synced_tickers].split.map(&:upcase).sort if params.include?(:synced_tickers)
     Setting.save 'sync_ticker_sets', params[:sync_ticker_sets]                        if params.include?(:sync_ticker_sets)
-    
+
     updates = { }
     updates[:tickers]       = params[:chart_tickers].split.map(&:upcase) if params.include?(:chart_tickers)
     updates[:columns]       = params[:columns].to_i.nonzero?             if params.include?(:columns)
@@ -129,26 +129,46 @@ class TradingController < ApplicationController
     updates[:wheel_scaling] = params[:wheel_scaling]                     if params.include?(:wheel_scaling)
     updates[:bar_spacing]   = params[:bar_spacing]                       if params.include?(:bar_spacing)
     updates[:level_labels]  = params[:level_labels]                      if params.include?(:level_labels)
-    updates[:levels_shown]  = params[:levels_shown]                      if params.include?(:levels_shown)    
+    updates[:levels_shown]  = params[:levels_shown]                      if params.include?(:levels_shown)
     Setting.merge 'chart_settings', updates
 
     render json: { }
   end
-  
+
   def update_intraday_levels
     lines = params[:text].split("\n").map(&:squish).reject(&:blank?)
     InstrumentAnnotation.update_intraday_levels_from_lines lines
     render json: { }
   end
-  
+
   def update_ticker_sets
     TickerSet.update_from_lines params[:text].split("\n")
-    render json: { }    
-  end  
-  
+    render json: { }
+  end
+
   def refresh
     key = { ru: :tinkoff_update_pending, us: :iex_update_pending }[params[:scope].to_s.to_sym]
     Setting.set key, true
     render json: nil
+  end
+
+  def recent
+    now = Current.ru_time
+
+    @instruments = Instrument.rub.includes(:info)
+    @all_candles = Candle::M1.for(@instruments).today
+
+    InstrumentCache.set @instruments
+    Price.sync_with_last_candles @instruments
+
+    @candles = {}
+
+    [1, 5, 15, 60].each do |duration|
+      last_candle_ids = @all_candles.where('time < ?', (now - duration.minutes).strftime('%H:%M')).group(:ticker).pluck('max(id)')
+      @candles[duration] = @all_candles.where(id: last_candle_ids).index_by(&:ticker)
+    end
+
+    Current.preload_prices_for @instruments.to_a
+    Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
   end
 end

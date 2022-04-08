@@ -71,6 +71,16 @@ module ApplicationHelper
     percentage_bar value / 100.0, **attrs
   end
 
+  def ratio_bar(base, current, **attrs)
+    ratio = current / base - 1 rescue 0
+    if ratio.to_f.abs >= 0.08
+      colorized_ratio ratio, precision: 1, format: '%n'
+    else
+      attrs[:classes] = "#{attrs[:classes]} #{red_green_class(ratio > 0)}".strip
+      percentage_bar ratio, **attrs
+    end
+  end
+
   def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false)
     if value.to_f.abs >= 0.08
       colorized_ratio value, precision: precision, format: '%n'

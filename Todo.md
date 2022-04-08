@@ -1,3 +1,6 @@
+- group those tickers in a few segments - main / other / illiquid
+- sort the table by selected period change
+
 - add a start date selector for daily single mode charts
 - fit to scale toggle
 - show MAs on day charts in single mode
@@ -421,3 +424,6 @@
 + add a way to set a list on the dash as current
 + fix single-mode chart paddings
 + try to start price scale from zero
++ page with last 1/5/15/60 min changes for all RU tickers
++ task to load all 1-mins for today
++ task to sync selected 1-mins constantly & all other once in a while

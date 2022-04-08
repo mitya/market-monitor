@@ -15,8 +15,9 @@ namespace :tinkoff do
       # puts "Instruments without yesterday candles: #{instruments.map(&:ticker).join(' ')}"
 
       next unless R.confirmed?
-      R.instruments_from_env.non_iex.abc.each do |inst|
-        Tinkoff.import_day_candles inst, since: (ENV['since'].to_date || 2.months.ago)
+      instruments = R.instruments_from_env || Instrument.rub
+      instruments.non_iex.abc.each do |inst|
+        Tinkoff.import_day_candles inst, since: (ENV['since'].to_s.to_date || MarketCalendar.prev)
       end
     end
 
@@ -55,6 +56,10 @@ namespace :tinkoff do
   end
 
   namespace :candles do
+    envtask 'today' do
+      Instrument.rub.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '1min', dates: MarketCalendar.open_days(ENV['since'] || Date.current)) }
+    end
+
     envtask 'import:hour' do
       Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, 'hour') }
     end

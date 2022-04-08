@@ -68,6 +68,7 @@ class Instrument < ApplicationRecord
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
 
+  scope :active, -> { where currency: 'RUB' }
 
   validates_presence_of :ticker, :name
 
@@ -96,6 +97,7 @@ class Instrument < ApplicationRecord
   def last          = @last  ||= price!.last_at && yesterday_candle&.close_time ? (price!.last_at < yesterday_candle.close_time ? yesterday_candle.close : price!.value) : price!.value
   def last_low      = @last_low ||= price!.low
   def last_or_open  = last || today_open
+  def last_using(interval = '1min') = @last_alt ||= candles_for(interval).last&.close
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
@@ -143,7 +145,7 @@ class Instrument < ApplicationRecord
   def price! = Current.prices_cache&.for_instrument(self) || price || create_price!
   def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
   def candles_for(interval) = Candle.interval_class_for(interval).where(ticker: ticker)
-    
+
   def info! = info || create_info
   def annotation! = annotation || create_annotation
 

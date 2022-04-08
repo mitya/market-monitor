@@ -1,4 +1,10 @@
 class IntradayLoader
+  def initialize(instruments: nil, interval: nil, include_history: true)
+    @instruments = instruments
+    @interval = interval
+    @include_history = include_history
+  end
+
   def tickers
     return R.tickers_from_env if R.tickers_from_env.present?
 
@@ -8,9 +14,10 @@ class IntradayLoader
     tickers.sort
   end
 
-  def instruments = Instrument.for_tickers(tickers).abc
+  def instruments = @instruments || Instrument.for_tickers(tickers).abc
 
   def interval
+    return @interval if @interval
     value = ENV['period'] || Setting.chart_period
     value = '3min' unless value.in?(Candle::Intraday::ValidIntervals)
     value
@@ -84,6 +91,7 @@ class IntradayLoader
   end
 
   def load_history(days: interval == 'hour' ? 30 : 10, include_today: false)
+    return if !@include_history
     puts 'check history...'
     dates = recent_dates(days) - [Current.date]
     instruments.abc.each do |inst|
@@ -140,4 +148,14 @@ class IntradayLoader
     '23:50' => { 1 => '23:49', 3 => '23:48', 5 => '23:45', 60 => '23:00' },
     '18:45' => { 1 => '18:45', 3 => '18:45', 5 => '18:45', 60 => '18:00' },
   }
+
+  class << self
+    def sync_charts
+      new.sync
+    end
+
+    def sync_all
+      new(instruments: Instrument.rub, interval: '1min', include_history: false).sync
+    end
+  end
 end
