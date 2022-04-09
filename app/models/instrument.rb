@@ -68,7 +68,7 @@ class Instrument < ApplicationRecord
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
 
-  scope :active, -> { where currency: 'RUB' }
+  scope :active, -> { where active: true, currency: 'RUB' }
 
   validates_presence_of :ticker, :name
 
@@ -163,7 +163,9 @@ class Instrument < ApplicationRecord
   def moex_2nd? = MarketInfo::Moex2.include?(ticker)
   def marginal? = info&.tinkoff_long_risk != nil
   def shortable? = info&.tinkoff_can_short?
+  def liquid? = !illiquid?
   def illiquid? = rub? && MarketInfo::MoexIlliquid.include?(ticker)
+  def very_illiquid? = rub? && MarketInfo::MoexVeryIlliquid.include?(ticker)
 
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)
@@ -198,6 +200,8 @@ class Instrument < ApplicationRecord
   def recent_low(days: 5)  = candles.day.order(:date).last(days).map(&:low).min
   def recent_high(days: 5) = candles.day.order(:date).last(days).map(&:high).max
 
+  def deactivate = update(active: false)
+  def activate   = update(active: true)
 
   class << self
     def get(ticker = nil, figi: nil)

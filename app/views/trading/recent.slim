@@ -1,37 +1,41 @@
-main.container-fluid
-  table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
-    thead.table-dark
-      tr
-        th
-        th(data-sort="ticker") Ticker
-        th Name
-        th.money-cell Last
-        th.money-cell Yo ﹪
-        th.money-cell Yc ﹪
-        th.money-cell To ﹪
-        th 1h
-        th 15m
-        th 5m
-        th 1m
-        th.money-cell Yvol
-        th.money-cell Tvol
-    - @groups.each do |rows|
-      tbody
-        - rows.each do |row|
-          - inst = row.instrument
-          tr
-            td= instrument_logo_button inst
-            td= inst.ticker
-            td.instrument-name= inst.name
-            td.money-cell= relative_price inst.last, inst.today_open, unit: inst.currency, format: 'absolute'
-            td.money-cell= colorized_ratio row.last_to_yesterday_open,  precision: 1
-            td.money-cell= colorized_ratio row.last_to_yesterday_close, precision: 1
-            td.money-cell= colorized_ratio row.last_to_today_open,      precision: 1
-            td           = ratio_bar       row.last_to_60m_ago,         classes: 'solid m-wide'
-            td           = ratio_bar       row.last_to_15m_ago,         classes: 'solid m-wide'
-            td           = ratio_bar       row.last_to_05m_ago,         classes: 'solid m-wide'
-            td           = ratio_bar       row.last_to_01m_ago,         classes: 'solid m-wide'
-            td.money-cell= format_price_in_millions row.yesterday_volume, unit: inst.currency
-            td.money-cell= format_price_in_millions row.today_volume,     unit: inst.currency
+- @menu_hidden = true
 
-    / = tickers_copy_list @rows.map(&:instrument)
+main.container-fluid
+  .row
+    - @groups.each do |rows|
+      .col-3
+        table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
+          thead.table-dark
+            tr
+              th
+              th(data-sort="ticker") Ticker
+              th.money-cell.muted-cell Last
+              / th.money-cell.muted-cell Yo ﹪
+              th.money-cell Yc ﹪
+              / th.money-cell.muted-cell To ﹪
+              th 1h
+              th 15m
+              th 5m
+              / th 1m
+              / th.money-cell Yvol
+              th.money-cell Tvol
+              / th.money-cell D5vol
+          tbody
+            - rows.each do |row|
+              - inst = row.instrument
+              tr
+                td= instrument_logo_button inst
+                td(title=inst.name)= inst.ticker
+                td.money-cell.muted-cell= relative_price inst.last, inst.today_open, unit: inst.currency, format: 'absolute'
+                / td.money-cell.muted-cell= colorized_ratio row.last_to_yesterday_open,  precision: 1
+                td.money-cell= colorized_ratio row.last_to_yesterday_close, precision: 1
+                / td.money-cell.muted-cell= colorized_ratio row.last_to_today_open,      precision: 1
+                td           = ratio_bar       row.last_to_60m_ago,         classes: 'solid m-wide'
+                td           = ratio_bar       row.last_to_15m_ago,         classes: 'solid m-wide'
+                td           = ratio_bar       row.last_to_05m_ago,         classes: 'solid m-wide'
+                / td           = ratio_bar       row.last_to_01m_ago,         classes: 'solid m-wide'
+                / td.money-cell= format_price_in_millions row.yesterday_volume, unit: inst.currency
+                td.money-cell= format_price_in_millions row.today_volume,     unit: inst.currency
+                / td.money-cell= format_price_in_millions row.d5_volume,        unit: inst.currency
+
+        / = tickers_copy_list rows.map(&:instrument)

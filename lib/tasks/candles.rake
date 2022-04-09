@@ -14,9 +14,9 @@ namespace :candles do
       end
   end
 
-  envtask(:set_average_volume)  { Stats.find_each &:set_average_volume  }
-  envtask(:set_average_change)  { Stats.find_each &:set_average_change  }
-  envtask(:set_d5_volume) { Stats.find_each &:set_d5_volume }
+  envtask(:set_average_volume)  { Instrument.active.find_each { _1.info.set_average_volume }}
+  envtask(:set_average_change)  { Instrument.active.find_each { _1.info.set_average_change }}
+  envtask(:set_d5_volume)       { Instrument.active.find_each { _1.info.set_d5_volume }}
 end
 
 

@@ -10,7 +10,7 @@ class Spike < ApplicationRecord
 
   class << self
     def scan_all(since: Current.yesterday)
-      Instrument.all.abc.each { |inst| scan_for inst, since: since }
+      Instrument.active.abc.each { |inst| scan_for inst, since: since }
     end
 
     def scan_for(instrument, since: Current.y2020, threshold: THRESHOLD)

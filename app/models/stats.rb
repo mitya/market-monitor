@@ -52,6 +52,7 @@ class Stats < ApplicationRecord
   def avg_10d_volume = stats['avg10Volume']
   def avg_30d_volume = stats['avg30Volume']
   def avg_m1_volume = extra['avg_m1_volume']
+  def avg_d5_money_volume = d5_money_volume.to_d / 5
   def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
   def accessible_peers_and_self = accessible_peers + [ticker]
   def iex_ticker = instrument.global_iex_ticker
@@ -69,12 +70,12 @@ class Stats < ApplicationRecord
   def tinkoff_can_short? = extra&.dig('tinkoff_can_short')
 
 
-  def set_average_volume
-    update! avg_volume: instrument.day_candles.where('date > ?', 6.months.ago).average(:volume).to_i
+  def set_average_volume(n_candles = 10)
+    update! avg_volume: instrument.day_candles.asc.limit(n_candles).average(:volume).to_i
   end
 
-  def set_average_change(n_candles = 20)
-    update! avg_change: instrument.candles.last(n_candles).map(&:rel_true_range).compact.average.round(3)
+  def set_average_change(n_candles = 10)
+    update! avg_change: instrument.day_candles.asc.limit(n_candles).map(&:rel_true_range).compact.average.round(3)
   end
 
   def set_d5_volume

@@ -122,8 +122,8 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst.lot * inst.   d3_ago_volume.to_d, unit: inst.currency
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst.lot * inst. week_ago_volume.to_d, unit: inst.currency
     td.money-cell= format_price_in_millions inst.base_price.to_d * inst.lot * inst.month_ago_volume.to_d, unit: inst.currency
-    td.money-cell= format_price_in_millions info&.d5_money_volume, unit: inst.currency, precision: 1
-    td.money-cell= colorized_ratio info&.d5_marketcap_volume, precision: 1
+    td.money-cell= format_price_in_millions info&.avg_d5_money_volume, unit: inst.currency, precision: 1
+    td.money-cell= colorized_ratio info&.d5_marketcap_volume.to_f / 5, precision: 1
 
   - if @show_special_dates
     - MarketCalendar.current_special_dates.each do |date|

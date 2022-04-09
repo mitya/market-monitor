@@ -60,8 +60,8 @@ class PriceLevelHitDetector
   end
 
 
-  def analyze_all(   instruments: Instrument.all.abc, date: Current.yesterday) = instruments.each { analyze _1,                           date: date }
-  def analyze_manual(instruments: Instrument.all.abc, date: Current.yesterday) = instruments.each { analyze _1, levels: _1.levels.manual, date: date }
+  def analyze_all(   instruments: Instrument.active.abc, date: Current.yesterday) = instruments.each { analyze _1,                           date: date }
+  def analyze_manual(instruments: Instrument.active.abc, date: Current.yesterday) = instruments.each { analyze _1, levels: _1.levels.manual, date: date }
 
 
   private
@@ -79,10 +79,10 @@ class PriceLevelHitDetector
     else
       curr.instrument.level_hits.ma.where(ma_length: attrs[:ma_length]).order(:date).last&.date
     end
-    days_since_last = last_day_crossed ? curr.date - last_day_crossed : 99        
-    
+    days_since_last = last_day_crossed ? curr.date - last_day_crossed : 99
+
     return if days_since_last < 10 && attrs[:level]
-    
+
     attrs[:days_since_last] = days_since_last
     attrs[:rel_vol] = curr.volume_to_average.to_f.round(3)
 

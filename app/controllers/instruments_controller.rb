@@ -5,7 +5,7 @@ class InstrumentsController < ApplicationController
 
   def index
     params[:per_page] ||= '200'
-    load_instruments Instrument.all
+    load_instruments Instrument.active
   end
 
   def export
@@ -20,7 +20,7 @@ class InstrumentsController < ApplicationController
     params[:availability] ||= 'tinkoff'
     params[:per_page] ||= 5000
 
-    @instruments = Instrument.all
+    @instruments = Instrument.active
     @instruments = @instruments.left_joins(:aggregate, :info)
     @instruments = @instruments.preload(:aggregate, :info)
     @instruments = @instruments.where(currency: params[:currency])                 if params[:currency].present?
@@ -66,7 +66,7 @@ class InstrumentsController < ApplicationController
     end
 
     # @instruments = @instruments.where('aggregates.d1_money_volume <= ?', 10_000_000)
-    
+
     @instruments = @instruments.order(InstrumentsSorter.determine_sort_order params[:order])
     @instruments = @instruments.page(params[:page]).per(params[:per_page])
 

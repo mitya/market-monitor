@@ -20,7 +20,7 @@ class Aggregate < ApplicationRecord
   def gains        = data['gains'] ||= {}
   def volumes      = data['volumes'] ||= {}
   def volatilities = data['volatilities'] ||= {}
-    
+
   def candle = @candle ||= instrument.candles.day.find_date(date)
 
   class << self
@@ -98,7 +98,7 @@ class Aggregate < ApplicationRecord
       aggregate.save!
     end
 
-    def create_for_all(date: Current.date, instruments: Instrument.all, **options)
+    def create_for_all(date: Current.date, instruments: Instrument.active, **options)
       instruments = instruments.sort_by &:ticker
       Current.preload_prices_for instruments
       Current.parallelize_instruments(instruments, 6) { |inst| create_for inst, date: date, **options }

@@ -21,7 +21,7 @@ class DateIndicators < ApplicationRecord
 
       {20 => 20, 50 => 50, 100 => 100, 200 => 200}.each do |length, real_length|
         next if length_min_dates && length_min_dates[length] && date < length_min_dates[length]
-        
+
         accessor = "ema_#{length}"
 
         if close < 0.02
@@ -41,7 +41,7 @@ class DateIndicators < ApplicationRecord
       record.save!
     end
 
-    def create_for_all(date: Current.yesterday, instruments: Instrument.all)
+    def create_for_all(date: Current.yesterday, instruments: Instrument.active)
       instruments = instruments.sort_by &:ticker
       transaction do
         Current.preload_day_candles_for_dates instruments, [date.to_date]
@@ -54,7 +54,7 @@ class DateIndicators < ApplicationRecord
       where('date = ?', date).update_all current: true
     end
 
-    def recreate_for_all(instruments = Instrument.all)
+    def recreate_for_all(instruments = Instrument.active)
       # try without the threads at all
       # delete_all
       Current.parallelize_instruments(Instrument.normalize(instruments), 6) { |inst| recreate_for inst }

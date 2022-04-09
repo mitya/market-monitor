@@ -4,7 +4,7 @@ class PriceExtremumDetector
   HISTORY_START = Date.parse('2020-01-01')
   PERIOD = 10
 
-  def create_all(period: PERIOD, instruments: Instrument.all.abc)
+  def create_all(period: PERIOD, instruments: Instrument.active.abc)
     instruments.each { |instrument| create_for instrument, period: period }
   end
 

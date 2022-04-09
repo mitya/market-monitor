@@ -29,13 +29,13 @@ task 'pre'        => %w[tinkoff:prices:pre]
 task 'sync'       => %w[intraday:sync]
 task 'sync+'      => %w[intraday:sync]
 task 'today'      => %w[tinkoff:candles:today]
-
+task 'averages'   => %w[candles:set_average_volume candles:set_average_change candles:set_d5_volume]
 
 envtask(:SetIexTickers) { SetIexTickers.call }
 envtask(:LoadMissingIexCandles) { LoadMissingIexCandles.call }
 envtask(:ReplaceTinkoffCandlesWithIex) { ReplaceTinkoffCandlesWithIex.call }
 envtask(:set_first_date) { Instrument.get(ENV['ticker']).update! first_date: ENV['date'] }
-envtask(:set_first_date_auto) { (R.instruments_from_env || Instrument.all).to_a.each { |inst| inst.set_first_date! } }
+envtask(:set_first_date_auto) { (R.instruments_from_env || Instrument.active).to_a.each { |inst| inst.set_first_date! } }
 envtask(:service){ Module.const_get(ENV['s']).call }
 envtask(:book)   { Orderbook.sync ENV['ticker'] }
 envtask(:arb)    { Synchronizer.call }

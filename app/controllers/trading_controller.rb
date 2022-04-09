@@ -155,7 +155,7 @@ class TradingController < ApplicationController
   def recent
     now = Current.ru_time
 
-    @instruments = Instrument.rub.includes(:info)
+    @instruments = Instrument.rub.active.includes(:info)
     @all_candles = Candle::M1.for(@instruments).today
 
     InstrumentCache.set @instruments
@@ -184,14 +184,22 @@ class TradingController < ApplicationController
         last_to_01m_ago:         price_ratio(inst.last, @candles[ 1][inst.ticker]&.close),
         yesterday_volume:        inst.d1_ago&.volume_in_money,
         today_volume:            inst.today&.volume_in_money,
+        d5_volume:               inst.info.avg_d5_money_volume,
       )
     end
 
-    sort_field = :yesterday_volume
     sort_field = :last_to_yesterday_close
+    sort_field = :last_to_05m_ago
 
     @rows = @rows.sort_by { _1.send(sort_field) || 0 }.reverse
-    @groups = @rows.partition { !_1.instrument.illiquid? }
+
+    ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
+    watched_tickers = %w[AFKS AGRO AMEZ CHMK ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LENT LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROLO ROSN RUAL SGZH SMLT TCSG UNKL UWGN VKCO].to_set
+    @ignored, @rows           = @rows.partition { ignored_tickers.include? _1.instrument.ticker }
+    @watched, @rows           = @rows.partition { watched_tickers.include? _1.instrument.ticker }
+    @liquid, @rows            = @rows.partition { _1.instrument.liquid? }
+    @very_illiquid, @illiquid = @rows.partition { _1.instrument.very_illiquid? }
+    @groups = [@watched, @liquid, @illiquid, @very_illiquid]
   end
 
   private

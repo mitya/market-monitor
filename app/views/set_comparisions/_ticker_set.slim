@@ -20,11 +20,12 @@ h6.ps-1(
 table class="dash-table table table-sm table-hover table-font-sm tickers-table table-no-border table-sm-v"
   tbody
     - instruments.each do |inst|
+      / - p inst.ticker
       = render 'set_comparisions/ticker_row', inst: inst,
         change: inst.stored_gain_since(selector),
-        hit: @hits_sets && @hits_sets[set.key]&.detect { inst.ticker == _1.ticker }, 
-        spike_value: set.key =~ /spike/ && @spikes_index && @spikes_index[inst.ticker]&.spike, 
+        hit: @hits_sets && @hits_sets[set.key]&.detect { inst.ticker == _1.ticker },
+        spike_value: set.key =~ /spike/ && @spikes_index && @spikes_index[inst.ticker]&.spike,
         precision: precision,
-        volume_cell: set.key =~ /volume_gainers|spike/, 
-        volume_decrease_cell: set.key =~ /volume_losers/, 
+        volume_cell: set.key =~ /volume_gainers|spike/,
+        volume_decrease_cell: set.key =~ /volume_losers/,
         level_cell: set.key =~ /ma|level/

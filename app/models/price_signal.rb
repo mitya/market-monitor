@@ -71,7 +71,7 @@ class PriceSignal < ApplicationRecord
     concerning :Daily do
       def analyze_all(date: Current.yesterday, interval: 'day', force: true)
         where(date: date).destroy_all if force
-        instruments = Instrument.all.abc
+        instruments = Instrument.active.abc
         Current.preload_prices_for instruments
         Current.parallelize_instruments(instruments, 6) { |inst| analyze inst, date, force: force }
       end
