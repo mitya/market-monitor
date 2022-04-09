@@ -4,21 +4,21 @@ main.container-fluid
   .row
     - @groups.each do |rows|
       .col-3
-        table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable
+        table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.momentum-table
           thead.table-dark
             tr
               th
               th(data-sort="ticker") Ticker
-              th.money-cell.muted-cell Last
+              th.money-cell.muted-cell(data-sort="last") Last
               / th.money-cell.muted-cell Yo ﹪
-              th.money-cell Yc ﹪
+              th.money-cell(data-sort="last_to_yesterday_open") Yc ﹪
               / th.money-cell.muted-cell To ﹪
-              th 1h
-              th 15m
-              th 5m
+              th(data-sort="last_to_60m_ago") 1h
+              th(data-sort="last_to_15m_ago") 15m
+              th(data-sort="last_to_05m_ago") 5m
               / th 1m
               / th.money-cell Yvol
-              th.money-cell Tvol
+              th.money-cell(data-sort="today_volume") Tvol
               / th.money-cell D5vol
           tbody
             - rows.each do |row|

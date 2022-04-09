@@ -1,8 +1,9 @@
 class IntradayLoader
-  def initialize(instruments: nil, interval: nil, include_history: true)
+  def initialize(instruments: nil, interval: nil, include_history: true, sync_today_candle: false)
     @instruments = instruments
     @interval = interval
     @include_history = include_history
+    @sync_today_candle = sync_today_candle
   end
 
   def tickers
@@ -39,8 +40,10 @@ class IntradayLoader
     last_interval = nil
     last_interval_index = nil
     last_iex_update_time = Setting.iex_last_update
+    today_candle_updated_at = 1.hour.ago
 
     loop do
+      now = Time.current
       current_tickers = tickers
       current_interval = interval
       interval_in_minutes = 1
@@ -59,7 +62,7 @@ class IntradayLoader
         change_last_params.call
         load_history
       elsif last_interval_index != current_interval_index
-        # unless current_interval_index - last_interval_index == 1 && Time.current.sec < 50
+        # unless current_interval_index - last_interval_index == 1 && now.sec < 50
         sync_latest
         change_last_params.call
       end
@@ -76,6 +79,11 @@ class IntradayLoader
       end
 
       # analyze
+
+      if @sync_today_candle && today_candle_updated_at < 3.minutes.ago
+        update_today_candles
+        today_candle_updated_at = Time.current
+      end
 
       sleep 5
     end
@@ -121,6 +129,12 @@ class IntradayLoader
     end
   end
 
+  def update_today_candles
+    instruments.each do |inst|
+      # inst.update_today_candle_from('1min')
+    end
+  end
+
   def check_moex_closings
     moex_1 = []
     moex_2 = []
@@ -155,7 +169,7 @@ class IntradayLoader
     end
 
     def sync_all
-      new(instruments: Instrument.rub, interval: '1min', include_history: false).sync
+      new(instruments: Instrument.active.rub, interval: '1min', include_history: false, sync_today_candle: true).sync
     end
   end
 end

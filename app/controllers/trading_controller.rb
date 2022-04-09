@@ -188,8 +188,7 @@ class TradingController < ApplicationController
       )
     end
 
-    sort_field = :last_to_yesterday_close
-    sort_field = :last_to_05m_ago
+    sort_field = params[:sort] || :last_to_yesterday_close
 
     @rows = @rows.sort_by { _1.send(sort_field) || 0 }.reverse
 

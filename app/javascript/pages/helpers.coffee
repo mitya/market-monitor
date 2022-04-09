@@ -16,7 +16,7 @@ window.$fetchJSON = (url, options) ->
   response = await $fetch(url, options)
   await response.json()
 
-window.$qs = (selector) -> 
+window.$qs = (selector) ->
   if selector instanceof Node
     selector
   else
@@ -33,7 +33,7 @@ window.$delegate = (container, selector, event, handler) ->
 Function::prop = (name, getter, setter) -> Object.defineProperty this::, name, get: getter, set: setter
 Function::cprop = (name, getter) -> Object.defineProperty this, name, get: getter
 
-export UrlHelper = 
+export UrlHelper =
   hasParam: (name) ->
     new URL(location.href).searchParams.get(name) != null
 
@@ -44,9 +44,14 @@ export UrlHelper =
     else
       url.searchParams.set name, '1'
     location.assign url
-    
+
   setParams: (pairs) ->
     url = new URL(location.href)
     for k, v of pairs
       url.searchParams.set k, v
     location.assign url
+
+  replaceLocationParams: (params) ->
+    url = new URL(location.href)
+    url.searchParams.set k, v for k, v of params
+    location.replace url

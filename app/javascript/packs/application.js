@@ -9,6 +9,7 @@ import 'pages/helpers'
 import 'pages/init'
 import 'pages/charts_old'
 import 'pages/dashboard'
+import 'pages/momentum_page'
 import "channels"
 import "controllers"
 
