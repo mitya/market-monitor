@@ -1,4 +1,3 @@
-- refresh current dashboard every 10 seconds
 - list of most volatile tickers
 - calculate today volume / volatility every few mins & show % of avg on the dashboard
 - column selection in metadata (without commenting out the template)
@@ -433,3 +432,4 @@
 + group those tickers in a few segments - main / other / illiquid
 + sort the table by selected period change
 + sort current dashboard using table header
++ refresh current dashboard every 10 seconds
