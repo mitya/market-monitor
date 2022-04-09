@@ -56,6 +56,7 @@ class Stats < ApplicationRecord
   def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
   def accessible_peers_and_self = accessible_peers + [ticker]
   def iex_ticker = instrument.global_iex_ticker
+  def relative_volume = instrument.today&.volume.to_f / avg_volume
 
 
   def country_code

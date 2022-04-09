@@ -4,38 +4,52 @@ main.container-fluid
   .row
     - @groups.each do |rows|
       .col-3
-        table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.momentum-table
+        = data_table fields: @fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
           thead.table-dark
             tr
-              th
-              th(data-sort="ticker") Ticker
-              th.money-cell.muted-cell(data-sort="last") Last
-              / th.money-cell.muted-cell Yo ﹪
-              th.money-cell(data-sort="last_to_yesterday_open") Yc ﹪
-              / th.money-cell.muted-cell To ﹪
-              th(data-sort="last_to_60m_ago") 1h
-              th(data-sort="last_to_15m_ago") 15m
-              th(data-sort="last_to_05m_ago") 5m
-              / th 1m
-              / th.money-cell Yvol
-              th.money-cell(data-sort="today_volume") Tvol
-              / th.money-cell D5vol
+              = th :icon
+              = th :ticker, 'Ticker'
+              = th :last, 'Last', class: 'money-cell muted-cell'
+              = th :last_to_yesterday_open, 'Yo ﹪', class: 'money-cell muted-cell'
+              = th :last_to_yesterday_close, 'Yc ﹪', class: 'money-cell'
+              = th :last_to_today_open, 'To ﹪', class: 'money-cell muted-cell'
+              = th :last_to_60m_ago, '1h'
+              = th :last_to_15m_ago, '15m'
+              = th :last_to_05m_ago, '5m'
+              = th :last_to_01m_ago, '1m'
+              = th :yesterday_volume, 'Yvol', class: 'money-cell'
+              = th :today_volume, 'Tvol', class: 'money-cell'
+              = th :today_rel_volume, 'Trvol', class: 'money-cell'
+              = th :d5_volume, 'D5vol', class: 'money-cell'
           tbody
             - rows.each do |row|
               - inst = row.instrument
               tr
-                td= instrument_logo_button inst
-                td(title=inst.name)= inst.ticker
-                td.money-cell.muted-cell= relative_price inst.last, inst.today_open, unit: inst.currency, format: 'absolute'
-                / td.money-cell.muted-cell= colorized_ratio row.last_to_yesterday_open,  precision: 1
-                td.money-cell= colorized_ratio row.last_to_yesterday_close, precision: 1
-                / td.money-cell.muted-cell= colorized_ratio row.last_to_today_open,      precision: 1
-                td           = ratio_bar       row.last_to_60m_ago,         classes: 'solid m-wide'
-                td           = ratio_bar       row.last_to_15m_ago,         classes: 'solid m-wide'
-                td           = ratio_bar       row.last_to_05m_ago,         classes: 'solid m-wide'
-                / td           = ratio_bar       row.last_to_01m_ago,         classes: 'solid m-wide'
-                / td.money-cell= format_price_in_millions row.yesterday_volume, unit: inst.currency
-                td.money-cell= format_price_in_millions row.today_volume,     unit: inst.currency
-                / td.money-cell= format_price_in_millions row.d5_volume,        unit: inst.currency
+                = td :icon, instrument_logo_button(inst)
+                = td :ticker, inst.ticker, title: inst.name
+                = td :last, class: "money-cell muted-cell" do
+                  = relative_price inst.last, inst.today_open, unit: inst.currency, format: 'absolute'
+                = td :last_to_yesterday_open, class: "money-cell muted-cell" do
+                  = colorized_ratio row.last_to_yesterday_close, precision: 1
+                = td :last_to_yesterday_close, class: "money-cell" do
+                  = colorized_ratio row.last_to_yesterday_close, precision: 1
+                = td :last_to_today_open, class: "money-cell muted-cell" do
+                  = colorized_ratio row.last_to_today_open, precision: 1
+                = td :last_to_60m_ago do
+                  = ratio_bar row.last_to_60m_ago, classes: 'solid m-wide'
+                = td :last_to_15m_ago do
+                  = ratio_bar row.last_to_15m_ago, classes: 'solid m-wide'
+                = td :last_to_15m_ago do
+                  = ratio_bar row.last_to_15m_ago, classes: 'solid m-wide'
+                = td :last_to_01m_ago do
+                  = ratio_bar row.last_to_01m_ago, classes: 'solid m-wide'
+                = td :yesterday_volume, class: 'money-cell' do
+                  = format_price_in_millions row.yesterday_volume, unit: inst.currency
+                = td :today_volume, class: 'money-cell' do
+                  = format_price_in_millions row.today_volume, unit: inst.currency
+                = td :today_rel_volume, class: 'money-cell' do
+                  = number_to_percentage row.today_rel_volume, precision: 0
+                = td :d5_volume, class: 'money-cell' do
+                  = format_price_in_millions row.d5_volume, unit: inst.currency
 
         / = tickers_copy_list rows.map(&:instrument)
