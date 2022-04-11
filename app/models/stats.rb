@@ -71,12 +71,14 @@ class Stats < ApplicationRecord
   def tinkoff_can_short? = extra&.dig('tinkoff_can_short')
 
 
+  def candles_for_averaging = instrument.day_candles.where('date >= ?', '2022-03-24').order(date: :desc).limit(20)
+
   def set_average_volume(n_candles = 10)
-    update! avg_volume: instrument.day_candles.asc.limit(n_candles).average(:volume).to_i
+    update! avg_volume: candles_for_averaging.average(:volume).to_i
   end
 
   def set_average_change(n_candles = 10)
-    update! avg_change: instrument.day_candles.asc.limit(n_candles).map(&:rel_true_range).compact.average.round(3)
+    update! avg_change: candles_for_averaging.map(&:rel_true_range).compact.average.round(3)
   end
 
   def set_d5_volume

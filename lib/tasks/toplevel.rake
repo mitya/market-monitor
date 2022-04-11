@@ -27,7 +27,7 @@ task 'import'     => %w[levels:import signals:import]
 task 'close'      => %w[tinkoff:candles:import:5min:last]
 task 'pre'        => %w[tinkoff:prices:pre]
 task 'sync'       => %w[intraday:sync]
-task 'sync+'      => %w[intraday:sync]
+task 'sync+'      => %w[intraday:sync_all]
 task 'today'      => %w[tinkoff:candles:today]
 task 'averages'   => %w[candles:set_average_volume candles:set_average_change candles:set_d5_volume]
 

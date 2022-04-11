@@ -203,6 +203,20 @@ class Instrument < ApplicationRecord
   def deactivate = update(active: false)
   def activate   = update(active: true)
 
+  def today! = today || day_candles.build(date: Current.date, time: '07:00', ongoing: true, source: 'tinkoff')
+
+  def update_today_candle_intraday(period = '1min')
+    intraday_candles = candles_for(period).today.by_time.to_a
+    today = today!
+    today.update!(
+      open:   intraday_candles.first.open,
+      close:  intraday_candles.last.close,
+      high:   intraday_candles.max_by(&:high),
+      low:    intraday_candles.min_by(&:low),
+      volume: intraday_candles.sum(&:volume),
+    )
+  end
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker

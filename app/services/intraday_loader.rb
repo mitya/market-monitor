@@ -80,7 +80,7 @@ class IntradayLoader
 
       # analyze
 
-      if @sync_today_candle && today_candle_updated_at < 3.minutes.ago
+      if @sync_today_candle && today_candle_updated_at < 2.minutes.ago
         update_today_candles
         today_candle_updated_at = Time.current
       end
@@ -130,9 +130,7 @@ class IntradayLoader
   end
 
   def update_today_candles
-    instruments.each do |inst|
-      # inst.update_today_candle_from('1min')
-    end
+    instruments.each &:update_today_candle_intraday
   end
 
   def check_moex_closings

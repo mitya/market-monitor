@@ -1,5 +1,4 @@
 - add today volatility to momentum dash
-- calculate today volume / volatility every few mins &
 - list of most volatile tickers EOD
 
 - add a start date selector for daily single mode charts
@@ -434,3 +433,4 @@
 + refresh current dashboard every 10 seconds
 + column selection in metadata (without commenting out the template)
 + show % of avg volume on the dashboard
++ calculate today volume / volatility every few mins

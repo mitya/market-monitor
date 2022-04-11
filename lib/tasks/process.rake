@@ -6,6 +6,7 @@ task :process do
   rake 'levels:hits_all'
   rake 'tinkoff:portfolio:sync'
   rake 'tinkoff:instruments:sync'
+  rake 'averages'
 end
 
 envtask :aggregate do
