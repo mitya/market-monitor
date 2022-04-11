@@ -41,6 +41,7 @@ class IntradayLoader
     last_interval_index = nil
     last_iex_update_time = Setting.iex_last_update
     today_candle_updated_at = 1.hour.ago
+    larger_candles_updated_at = 1.hour.ago
 
     loop do
       now = Time.current
@@ -80,9 +81,15 @@ class IntradayLoader
 
       # analyze
 
-      if @sync_today_candle && today_candle_updated_at < 2.minutes.ago
-        update_today_candles
-        today_candle_updated_at = Time.current
+      if @sync_today_candle
+        if today_candle_updated_at < 2.minutes.ago
+          update_today_candles
+          today_candle_updated_at = Time.current
+        end
+        if larger_candles_updated_at < 1.minutes.ago
+          update_larger_candles
+          larger_candles_updated_at = Time.current
+        end
       end
 
       sleep 5
@@ -115,7 +122,7 @@ class IntradayLoader
   end
 
   def sync_latest
-    puts 'sync latest'
+    puts "sync latest: #{Time.now}"
     instruments.abc.each { |inst| Tinkoff.import_intraday_candles_for_today inst, interval }
     SyncChannel.push 'candles'
   end
@@ -131,6 +138,10 @@ class IntradayLoader
 
   def update_today_candles
     instruments.each &:update_today_candle_intraday
+  end
+
+  def update_larger_candles
+    instruments.each &:update_larger_candles
   end
 
   def check_moex_closings
@@ -157,8 +168,9 @@ class IntradayLoader
 
   CLOSE_TIMES = {
     '16:00' => { 1 => '15:59', 3 => '15:57', 5 => '15:55', 60 => '15:00' },
-    '23:50' => { 1 => '23:49', 3 => '23:48', 5 => '23:45', 60 => '23:00' },
-    '18:45' => { 1 => '18:45', 3 => '18:45', 5 => '18:45', 60 => '18:00' },
+    # '23:50' => { 1 => '23:49', 3 => '23:48', 5 => '23:45', 60 => '23:00' },
+    # '18:45' => { 1 => '18:45', 3 => '18:45', 5 => '18:45', 60 => '18:00' },
+    '18:50' => { 1 => '18:49', 3 => '18:48', 5 => '18:45', 60 => '18:00' },
   }
 
   class << self

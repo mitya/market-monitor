@@ -217,6 +217,10 @@ class Instrument < ApplicationRecord
     )
   end
 
+  def update_larger_candles
+    # m1_candles = candles_for('1min').today.by_time.to_a
+  end
+
   class << self
     def get(ticker = nil, figi: nil)
       return ticker if self === ticker

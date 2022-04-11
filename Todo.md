@@ -1,6 +1,3 @@
-- add today volatility to momentum dash
-- build 3/5m candles from 1-mins on each update
-- set market open/close times to 10-18:50 for all tickers
 - list of most volatile tickers EOD
 
 - add a start date selector for daily single mode charts
@@ -99,6 +96,7 @@
 - refactor JS
 - Ruby 3.1
 - Rails 7
+- build 3/5m candles from 1-mins on each update
 
 
 # Bugs
@@ -436,3 +434,5 @@
 + column selection in metadata (without commenting out the template)
 + show % of avg volume on the dashboard
 + calculate today volume / volatility every few mins
++ add today volatility to momentum dash
++ set market open/close times to 10-18:50 for all tickers

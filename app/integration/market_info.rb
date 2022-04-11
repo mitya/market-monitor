@@ -15,8 +15,11 @@ class MarketInfo
     RSTIP IRGZ RENI CNTLP PRFN UNAC KAZTP LSNG APTK NKNC LIFE LNZL MSNG].to_set
 
 
-  OpeningTimes = { US: '09:30', Moex1: '07:00', Moex2: '10:00' }
-  ClosingTimes = { US: '16:00', Moex1: '23:50', Moex2: '18:45' }
+  # OpeningTimes = { US: '09:30', Moex1: '07:00', Moex2: '10:00' }
+  # ClosingTimes = { US: '16:00', Moex1: '23:50', Moex2: '18:45' }
+  OpeningTimes = { US: '09:30', Moex1: '10:00', Moex2: '10:00' }
+  ClosingTimes = { US: '16:00', Moex1: '18:50', Moex2: '18:50' }
+
   OpeningHourMins = OpeningTimes.transform_values { |hhmm| h, m = hhmm.split(':').map(&:to_i); { hour: h, min: m } }
   ClosingHourMins = ClosingTimes.transform_values { |hhmm| h, m = hhmm.split(':').map(&:to_i); { hour: h, min: m } }
 
