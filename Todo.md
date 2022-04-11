@@ -1,5 +1,3 @@
-- use 2 lists for all tickers: main & some illiquid, also highlight watched
-
 - add a start date selector for daily single mode charts
 - fit to scale toggle
 - show MAs on day charts in single mode
@@ -437,3 +435,4 @@
 + add today volatility to momentum dash
 + set market open/close times to 10-18:50 for all tickers
 + list of most volatile tickers EOD
++ use 2 lists for all tickers: main & illiquid

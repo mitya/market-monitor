@@ -191,12 +191,13 @@ class TradingController < ApplicationController
     end
 
     ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
-    watched_tickers = %w[AFKS AGRO AMEZ CHMK ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LENT LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROLO ROSN RUAL SGZH SMLT TCSG UNKL UWGN VKCO].to_set
+    watched_tickers = %w[AFKS AGRO AMEZ ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROSN RUAL SGZH SMLT TCSG VKCO].to_set
     @ignored, @rows           = @rows.partition { ignored_tickers.include? _1.instrument.ticker }
-    @watched, @rows           = @rows.partition { watched_tickers.include? _1.instrument.ticker }
-    @liquid, @rows            = @rows.partition { _1.instrument.liquid? }
-    @very_illiquid, @illiquid = @rows.partition { _1.instrument.very_illiquid? }
+    # @watched, @rows           = @rows.partition { watched_tickers.include? _1.instrument.ticker }
+    # @liquid, @rows            = @rows.partition { _1.instrument.liquid? }
+    @very_illiquid, @rows = @rows.partition { _1.instrument.very_illiquid? }
     @groups = [@watched, @liquid, @illiquid, @very_illiquid]
+    @groups = [@rows, @very_illiquid]
 
     sort_field = params[:sort] || :last_to_yesterday_close
     @groups = @groups.map { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
@@ -207,12 +208,12 @@ class TradingController < ApplicationController
       :last,
       :last_to_yesterday_close,
       # :last_to_today_open,
-      :last_to_60m_ago,
-      :last_to_15m_ago,
-      :last_to_05m_ago,
+      # :last_to_60m_ago,
+      # :last_to_15m_ago,
+      # :last_to_05m_ago,
       # :yesterday_volume,
-      # :volume,
-      # :rel_volume,
+      :volume,
+      :rel_volume,
       # :d5_volume,
       :volatility,
     ]
