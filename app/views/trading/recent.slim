@@ -21,6 +21,7 @@ main.container-fluid
               = th :today_volume, 'Tvol', class: 'money-cell'
               = th :today_rel_volume, 'Trvol', class: 'money-cell'
               = th :d5_volume, 'D5vol', class: 'money-cell'
+              = th :volatility, '∆', class: 'money-cell'
           tbody
             - rows.each do |row|
               - inst = row.instrument
@@ -45,11 +46,14 @@ main.container-fluid
                   = ratio_bar row.last_to_01m_ago, classes: 'solid m-wide'
                 = td :yesterday_volume, class: 'money-cell' do
                   = format_price_in_millions row.yesterday_volume, unit: inst.currency
-                = td :today_volume, class: 'money-cell' do
+                = td :volume, class: 'money-cell' do
                   = format_price_in_millions row.today_volume, unit: inst.currency
-                = td :today_rel_volume, class: 'money-cell' do
+                = td :rel_volume, class: 'money-cell' do
                   = number_to_percentage row.today_rel_volume, precision: 0
                 = td :d5_volume, class: 'money-cell' do
                   = format_price_in_millions row.d5_volume, unit: inst.currency
+                = td :volatility, class: 'money-cell' do
+                  = number_to_percentage row.volatility, precision: 0
+
 
         / = tickers_copy_list rows.map(&:instrument)

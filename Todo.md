@@ -1,4 +1,6 @@
 - add today volatility to momentum dash
+- build 3/5m candles from 1-mins on each update
+- set market open/close times to 10-18:50 for all tickers
 - list of most volatile tickers EOD
 
 - add a start date selector for daily single mode charts

@@ -183,8 +183,9 @@ class TradingController < ApplicationController
         last_to_05m_ago:         price_ratio(inst.last, @candles[ 5][inst.ticker]&.close),
         last_to_01m_ago:         price_ratio(inst.last, @candles[ 1][inst.ticker]&.close),
         yesterday_volume:        inst.d1_ago&.volume_in_money,
-        today_volume:            inst.today&.volume_in_money,
-        today_rel_volume:        inst.info.relative_volume * 100,
+        volume:                  inst.today&.volume_in_money,
+        rel_volume:              inst.info.relative_volume * 100,
+        volatility:              inst.today&.volatility * 100,
         d5_volume:               inst.info.avg_d5_money_volume,
       )
     end
@@ -210,9 +211,10 @@ class TradingController < ApplicationController
       :last_to_15m_ago,
       :last_to_05m_ago,
       # :yesterday_volume,
-      :today_volume,
-      :today_rel_volume,
+      # :volume,
+      # :rel_volume,
       # :d5_volume,
+      :volatility,
     ]
   end
 

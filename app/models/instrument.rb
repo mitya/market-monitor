@@ -211,8 +211,8 @@ class Instrument < ApplicationRecord
     today.update!(
       open:   intraday_candles.first.open,
       close:  intraday_candles.last.close,
-      high:   intraday_candles.max_by(&:high),
-      low:    intraday_candles.min_by(&:low),
+      high:   intraday_candles.map(&:high).max,
+      low:    intraday_candles.map(&:low).min,
       volume: intraday_candles.sum(&:volume),
     )
   end
