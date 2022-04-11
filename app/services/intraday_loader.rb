@@ -107,7 +107,7 @@ class IntradayLoader
 
   def load_history(days: interval == 'hour' ? 30 : 10, include_today: false)
     return if !@include_history
-    puts 'check history...'
+    puts "check history: #{days} days, today=#{include_today}"
     dates = recent_dates(days) - [Current.date]
     instruments.abc.each do |inst|
       close_time = CLOSE_TIMES[inst.closing_hhmm][interval_in_minutes.to_i]

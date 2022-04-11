@@ -5,6 +5,7 @@ class Candle < ApplicationRecord
   scope :final, -> { where ongoing: false }
   scope :day, -> { where interval: 'day' }
   scope :today, -> { where date: Current.date }
+  scope :yesterday, -> { where date: Current.yesterday }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
   scope :on, -> date { for_date date }
   scope :for, -> tickers { where ticker: tickers }

@@ -6,10 +6,11 @@
 - instruments = instruments.reject { _1.premium? }                if local_assigns[:availability] == 'tinkoff'
 
 - instruments = case set.key
--   when /volume/ then instruments.sort_by { _1.aggregate.volumes['d1'] }.reverse
--   when /spikes/ then instruments.sort_by { @spikes_index[_1.ticker].spike.to_f }.reverse
--   when /level/  then instruments.sort_by &:ticker
--   when /losers/ then instruments.sort_by { _1.stored_gain_since(selector).to_f }
+-   when /volume/   then instruments.sort_by { _1.aggregate.volumes['d1'] }.reverse
+-   when /spikes/   then instruments.sort_by { @spikes_index[_1.ticker].spike.to_f }.reverse
+-   when /level/    then instruments.sort_by &:ticker
+-   when /losers/   then instruments.sort_by { _1.stored_gain_since(selector).to_f }
+-   when /volatile/ then instruments.sort_by { _1.yesterday.volatility.abs }.reverse
 -   else               instruments.sort_by { _1.stored_gain_since(selector).to_f }.reverse
 
 h6.ps-1(
@@ -28,4 +29,5 @@ table class="dash-table table table-sm table-hover table-font-sm tickers-table t
         precision: precision,
         volume_cell: set.key =~ /volume_gainers|spike/,
         volume_decrease_cell: set.key =~ /volume_losers/,
+        volatility_cell: set.key =~ /volatile/,
         level_cell: set.key =~ /ma|level/

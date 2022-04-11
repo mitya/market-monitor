@@ -7,34 +7,38 @@
 
 tr.ticker-item(data-ticker=inst.ticker tabindex="0")
   td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
-  
+
   td.money-cell.price-cell= format_price inst.last, unit: inst.currency
-  
+
   td.money-cell.change-cell
     = percentage_bar_or_number change, classes: "#{red_green_class change.to_f > 0} solid-narrow float-end", rtl: true
-  
+
   - if hit
     td.money-cell(data-col="days_since_last")
       = count_bar hit.days_since_last.to_f / 20.0, classes: 'is-light solid m-wide', title: "#{hit.days_since_last} days"
-      
+
     td.money-cell(data-col="rel_vol")
       = render_volume.call hit.rel_vol
-  
+
   - if spike_value
     td.money-cell(data-col="spike_value")
       = colorized_ratio spike_value, precision: precision, format: '%n'
-      
+
   - if local_assigns[:level_cell] && hit
     td.money-cell(data-col="last_to_level_change")
       - last_to_level = (inst.last - hit.level_value) / inst.last
-      = tag.span colorized_ratio(last_to_level, precision: precision, format: '%n'), 
-        title: "Level — #{format_price(hit.level_value)}", 
+      = tag.span colorized_ratio(last_to_level, precision: precision, format: '%n'),
+        title: "Level — #{format_price(hit.level_value)}",
         class: class_names('badge bg-light': hit.manual?)
-      
+
   - if local_assigns[:volume_cell]
     td.money-cell(data-col="relvol_2")
       = render_volume.call inst.aggregate.volumes['d1']
-        
+
   - if local_assigns[:volume_decrease_cell]
     td.money-cell(data-col="relvol_down")
       = render_volume_text.call inst.aggregate.volumes['d1'], precision: 3
+
+  - if local_assigns[:volatility_cell]
+    td.money-cell(data-col="volatility")
+      = number_to_percentage inst.yesterday.volatility * 100, precision: 0

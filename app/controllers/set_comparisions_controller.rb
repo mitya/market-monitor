@@ -38,7 +38,6 @@ class SetComparisionsController < ApplicationController
     @volume_losers  = Aggregate.current.order(Arel.sql "#{volume_expr}  asc nulls last").where("(#{volume_expr})::float > 0").limit(50).pluck(:ticker)
 
     @hits = PriceLevelHit.where(date: Current.yesterday).where('days_since_last > ?', 20).all
-    p @hits.map(&:ticker)
     @hits_sets = {
       level_up_tests:    @hits.levels.select {                        _1.kind.in?(%w[up-test]) },
       level_up_breaks:   @hits.levels.select {                        _1.kind.in?(%w[up-break up-gap]) },
@@ -56,9 +55,10 @@ class SetComparisionsController < ApplicationController
     get_instruments = -> key { InstrumentSet.new(key, :static, items: @hits_sets[key].pluck(:ticker)) }
 
     @spikes = Spike.where(date: Current.yesterday) #.order(ticker: :asc).includes(:instrument => [:aggregate])
-    p @spikes.map(&:ticker)
     @spikes_index = @spikes.index_by &:ticker
     ups, downs = @spikes.partition &:up?
+
+    @most_volatile = Candle.day.yesterday.for(Instrument.active).sort_by { _1.volatility.abs }.last(30).pluck(:ticker)
 
     @set_groups = [
       [ get_instruments.(:ma200_up_tests),    get_instruments.(:ma50_up_tests), get_instruments.(:level_up_tests)       ],
@@ -73,7 +73,9 @@ class SetComparisionsController < ApplicationController
         InstrumentSet.new(:spikes_up,   :static, items:   ups.pluck(:ticker)),
         InstrumentSet.new(:spikes_down, :static, items: downs.pluck(:ticker))
       ],
-
+      [
+        InstrumentSet.new(:most_volatile, :static, items:   @most_volatile),
+      ],
     ]
 
     preload_associations
