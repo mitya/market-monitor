@@ -37,6 +37,7 @@ class Instrument < ApplicationRecord
   has_one :insider_aggregate,              foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :orderbook,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :annotation,                     foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete, class_name: 'InstrumentAnnotation'
+  has_one :future,                         foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
 
 
   scope :with_flag, -> flag { where "? = any(flags)", flag }
@@ -50,6 +51,7 @@ class Instrument < ApplicationRecord
   scope :eur, -> { where currency: 'EUR' }
   scope :rub, -> { where currency: 'RUB' }
   scope :stocks, -> { where type: 'Stock' }
+  scope :futures, -> { where type: 'Future' }
   scope :funds, -> { where type: 'Fund' }
   scope :non_usd, -> { where.not currency: 'USD' }
   scope :abc, -> { order :ticker }
@@ -68,7 +70,7 @@ class Instrument < ApplicationRecord
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
 
-  scope :active, -> { where active: true, currency: 'RUB' }
+  scope :active, -> { where active: true, currency: 'RUB', type: 'Stock' }
 
   validates_presence_of :ticker, :name
 
@@ -95,6 +97,7 @@ class Instrument < ApplicationRecord
   def y2021         = @y2021 ||= day_candles!.find_date(Current.y2021)
   def y2022         = @y2022 ||= day_candles!.find_date(Current.y2022)
   def last          = @last  ||= price!.last_at && yesterday_candle&.close_time ? (price!.last_at < yesterday_candle.close_time ? yesterday_candle.close : price!.value) : price!.value
+  def last!         = @last  ||= price!.value
   def last_low      = @last_low ||= price!.low
   def last_or_open  = last || today_open
   def last_using(interval = '1min') = @last_alt ||= candles_for(interval).last&.close
@@ -207,6 +210,7 @@ class Instrument < ApplicationRecord
 
   def update_today_candle_intraday(period = '1min')
     intraday_candles = candles_for(period).today.by_time.to_a
+    return if intraday_candles.empty?
     today = today!
     today.update!(
       open:   intraday_candles.first.open,

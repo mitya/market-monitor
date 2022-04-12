@@ -7,11 +7,12 @@ class Tinkoff
   ].uniq
 
   BadTickers = OutdatedTickers
-  
+
   InstrumentsApi
   OrdersApi
   CandlesApi
   PortfolioApi
+  FuturesApi
 
   private
 

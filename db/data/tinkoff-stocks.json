@@ -1910,6 +1910,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG0135B2214",
+      "ticker": "DINO",
+      "isin": "US4039491000",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "HF Sinclair Corporation",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BBPFB9",
       "ticker": "AMAT",
       "isin": "US0382221051",
@@ -11316,12 +11326,12 @@
     },
     {
       "figi": "BBG000BFNR17",
-      "ticker": "ADS",
+      "ticker": "BFH",
       "isin": "US0185811082",
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Alliance Data Systems",
+      "name": "Bread Financial",
       "type": "Stock"
     },
     {
@@ -19016,5 +19026,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1903
+  "total": 1904
 }

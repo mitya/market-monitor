@@ -83,15 +83,21 @@ namespace :tinkoff do
         end
       end
     end
+
+    envtask 'futures' do
+      futures = Instrument.futures.rub
+      Instrument.futures.rub.each { |inst| Tinkoff.import_intraday_candles_v2 inst, '1min' }
+      Price.sync_with_last_candles Instrument.futures.rub
+    end
   end
 
 
   namespace :prices do
-    envtask(:pre)     { RefreshPricesFromTinkoff.call Instrument.tinkoff.abc }
-    envtask(:all)     { RefreshPricesFromTinkoff.call Instrument.tinkoff.in_set(ENV['set']).abc   }
-    envtask(:uniq)    { RefreshPricesFromTinkoff.call Instrument.non_iex.abc }
-    envtask(:liquid)  { RefreshPricesFromTinkoff.call Instrument.rus.liquid }
-    envtask(:signals) { RefreshPricesFromTinkoff.call Instrument.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
+    envtask(:pre)     { RefreshPricesFromTinkoff.call Instrument.active.tinkoff.abc }
+    envtask(:all)     { RefreshPricesFromTinkoff.call Instrument.active.tinkoff.in_set(ENV['set']).abc   }
+    envtask(:uniq)    { RefreshPricesFromTinkoff.call Instrument.active.non_iex.abc }
+    envtask(:liquid)  { RefreshPricesFromTinkoff.call Instrument.active.rus.liquid }
+    envtask(:signals) { RefreshPricesFromTinkoff.call Instrument.active.usd.for_tickers PriceSignal.yesterday.outside_bars.up.pluck(:ticker) }
   end
   task :prices => 'prices:all'
 
@@ -188,3 +194,5 @@ rake tinkoff:update
 rake tinkoff:days:year
 rake tinkoff:candles:import:5min:last
 rake tinkoff:parse_margins
+
+rake tinkoff:candles:futures

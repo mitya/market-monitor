@@ -39,6 +39,9 @@ Rails.application.routes.draw do
     get :summary
   end
   resources :news
+  resources :futures do
+    get :imported, on: :collection
+  end
 
   mount ActionCable.server => '/cable'
 

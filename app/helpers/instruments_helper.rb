@@ -55,7 +55,7 @@ module InstrumentsHelper
 
   def colorized_diff(current, base, unit: 'USD', precision: nil)
     return unless current && base
-    colorize_change base - current, green: current <= base, unit: 'USD', precision: precision
+    colorize_change base - current, green: current <= base, unit: unit, precision: precision
   end
 
   def ratio_percentage(ratio, precision: 0, format: nil)
@@ -68,6 +68,8 @@ module InstrumentsHelper
     # send method, price, base_price, unit: unit, inverse: inverse, precision: method == :colorized_price ? precision : percentage_precision, hide_zero: hide_zero
     if format == 'absolute'
       colorized_price price, base_price, unit: unit, inverse: inverse, precision: precision
+    elsif format == 'diff'
+      colorized_diff base_price, price, unit: unit, precision: precision
     else
       colorized_percentage price, base_price, unit: unit, inverse: inverse, precision: percentage_precision, blank_threshold: blank_threshold, title: title
     end

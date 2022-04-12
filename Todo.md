@@ -436,3 +436,4 @@
 + set market open/close times to 10-18:50 for all tickers
 + list of most volatile tickers EOD
 + use 2 lists for all tickers: main & illiquid
++ moex futures

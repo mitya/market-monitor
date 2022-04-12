@@ -37,6 +37,7 @@ class Price < ApplicationRecord
           price.update! value: candle.close, last_at: candle.datetime, source: 'tinkoff' if candle.datetime > price.updated_at
         end
       end
+      nil
     end
   end
 end

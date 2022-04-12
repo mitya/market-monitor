@@ -1,0 +1,14 @@
+table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.w-auto
+  tbody
+    - @futures.each do |future|
+      tr
+        td= future.figi
+        td= future.ticker
+        td= future.expirationDate
+        td= future.currency
+        td= future.name
+        td= future.basicAsset
+        td= future.basicAssetSize.units
+        td= future.sector
+        td= future.assetType
+        td= future.futuresType

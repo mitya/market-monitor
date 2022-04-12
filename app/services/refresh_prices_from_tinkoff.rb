@@ -1,7 +1,7 @@
 class RefreshPricesFromTinkoff
   include StaticService
 
-  def refresh(instruments = Instrument.non_iex.abc)
+  def refresh(instruments = Instrument.active.non_iex.abc)
     instruments = Instrument.get_all(instruments).sort_by(&:ticker).reject(&:premium?)
     Current.parallelize_instruments(instruments, 1) { | inst| update_tinkoff_price inst }
     Setting.save 'tinkoff_last_update', Time.current
