@@ -58,7 +58,7 @@ class SetComparisionsController < ApplicationController
     @spikes_index = @spikes.index_by &:ticker
     ups, downs = @spikes.partition &:up?
 
-    @most_volatile = Candle.day.yesterday.for(Instrument.active.stock).sort_by { _1.volatility.abs }.last(30).pluck(:ticker)
+    @most_volatile = Candle.day.yesterday.for(Instrument.active.stocks).sort_by { _1.volatility.abs }.last(30).pluck(:ticker)
 
     @set_groups = [
       [ get_instruments.(:ma200_up_tests),    get_instruments.(:ma50_up_tests), get_instruments.(:level_up_tests)       ],

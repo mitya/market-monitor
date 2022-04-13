@@ -38,4 +38,12 @@ module SignalsHelper
   def signal_source_options
     PublicSignal.distinct.pluck(:source).sort + ['Non-SA']
   end
+
+  def signal_short_name(kind)
+    SIGNAL_SHORT_NAME[kind] || kind
+  end
+
+  SIGNAL_SHORT_NAME = {
+    volume_spike: 'volume'
+  }.transform_keys { _1.to_s.dasherize }
 end

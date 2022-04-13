@@ -175,8 +175,8 @@ class TradingController < ApplicationController
       OpenStruct.new(
         instrument:              inst,
         last:                    inst.last,
+        change:                  price_ratio(inst.last, inst.yesterday_close),
         last_to_yesterday_open:  price_ratio(inst.last, inst.yesterday_open),
-        last_to_yesterday_close: price_ratio(inst.last, inst.yesterday_close),
         last_to_today_open:      price_ratio(inst.last, inst.today_open),
         last_to_60m_ago:         price_ratio(inst.last, @candles[60][inst.ticker]&.close),
         last_to_15m_ago:         price_ratio(inst.last, @candles[15][inst.ticker]&.close),
@@ -199,33 +199,35 @@ class TradingController < ApplicationController
     @groups = [@watched, @liquid, @illiquid, @very_illiquid]
     @groups = [@rows, @very_illiquid]
 
-    sort_field = params[:sort] || :last_to_yesterday_close
+    sort_field = params[:sort] || :change
     @groups = @groups.map { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
-
-    @fields = [
-      :icon,
-      :ticker,
-      :last,
-      :last_to_yesterday_close,
-      # :last_to_today_open,
-      :last_to_60m_ago,
-      :last_to_15m_ago,
-      :last_to_05m_ago,
-      # :yesterday_volume,
-      :volume,
-      :rel_volume,
-      # :d5_volume,
-      :volatility,
-    ]
   end
 
   def momentum
     @signals = PriceSignal.intraday.today.order(time: :desc).includes(:instrument, :m1_candle).first(100)
     @instruments = @signals.map(&:instrument).to_a
 
+    @instruments = Instrument.active.rub.includes(:info)
+
     InstrumentCache.set @instruments
     Current.preload_prices_for @instruments.to_a
     Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
+
+    @instrument_rows = @instruments.map do |inst|
+      OpenStruct.new(
+        instrument: inst,
+        last:       inst.last,
+        volume:     inst.today&.volume_in_money,
+        rel_volume: inst.info.relative_volume * 100,
+        volatility: inst.today&.volatility.to_f * 100,
+        d5_volume:  inst.info.avg_d5_money_volume,
+        change:     price_ratio(inst.last, inst.yesterday_close),
+      )
+    end
+
+    @top_gainers = @instrument_rows.sort_by { _1.change }.last(20).reverse
+    @top_losers  = @instrument_rows.sort_by { _1.change }.first(20)
+    @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(30).reverse
   end
 
   private

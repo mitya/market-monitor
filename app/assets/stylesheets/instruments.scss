@@ -38,6 +38,10 @@ th[data-sort] { cursor: pointer; }
 
 .table-font-sm { font-size: .8rem; }
 
+.table-sm.table-wider-x > :not(caption) > * > * {
+  padding-left: .5rem; padding-right: .5rem;
+}
+
 .tickers-table th {
   position: sticky;
   top: 0;
@@ -97,26 +101,26 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .percentage-bars { height: 20px; white-space: nowrap; display: flex; align-items: end; }
 
 .percentage-bar {
-  background-color: gray; 
-  display: inline-block; 
+  background-color: gray;
+  display: inline-block;
   width: 4px; height: 100%; margin-right: 2px;
-  
+
   &.turn { height: 50% !important; }
   &.turn-down { align-self: start; }
   &.spike { width: 2px; }
-  
+
   &.is-green, .is-green & { background-color: green; }
   &.is-red, .is-red & { background-color: red; }
 
-  .wide-bars & { width: 8px; margin-right: 1px; }  
+  .wide-bars & { width: 8px; margin-right: 1px; }
   .wide-bars &.spike { width: 2px; margin-right: 4px; margin-left: 3px; }
-  
+
   .is-light & { background-color: rgba(black, 0.25); }
   .is-light-blue & { background-color: rgba(blue, 0.25); }
-  
+
   .solid-narrow & { margin-right: 0; width: 3px; }
   .solid & { margin-right: 0; }
-  
+
   .m-wide & { width: 6px; }
 }
 

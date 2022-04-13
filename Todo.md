@@ -1,7 +1,6 @@
 - analyze M1 candles for significant changes
 - analyze M1 candles for daggers
 - exclude very illiquid stocks from there
-- add top gainers/losers/vol gainers
 - reformat price/vol changes in bars
 
 
@@ -445,3 +444,4 @@
 + use 2 lists for all tickers: main & illiquid
 + moex futures
 + analyze M1 candles for volume spikes
++ add top gainers/losers/vol gainers

@@ -1,0 +1,52 @@
+- fields = %i[icon ticker] + fields
+= data_table fields: fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
+  thead.table-dark
+    tr
+      = th :icon
+      = th :ticker
+      = th :last, 'Last', class: 'money-cell muted-cell'
+      = th :last_to_yesterday_open, 'Yo ﹪', class: 'money-cell muted-cell'
+      = th :change, 'Yc ﹪', class: 'money-cell'
+      = th :last_to_today_open, 'To ﹪', class: 'money-cell muted-cell'
+      = th :last_to_60m_ago, '1h'
+      = th :last_to_15m_ago, '15m'
+      = th :last_to_05m_ago, '5m'
+      = th :last_to_01m_ago, '1m'
+      = th :yesterday_volume, 'Yvol', class: 'money-cell'
+      = th :volume, 'Tvol', class: 'money-cell'
+      = th :rel_volume, 'Trvol', class: 'money-cell'
+      = th :d5_volume, 'D5vol', class: 'money-cell'
+      = th :volatility, '∆', class: 'money-cell'
+  tbody
+    - rows.each do |row|
+      - inst = row.instrument
+      - classes = class_names('opacity-40' => local_assigns[:muted] ? inst.send(muted) :false)
+      tr(class=classes)
+        = td :icon, instrument_logo_button(inst)
+        = td :ticker, inst.ticker, title: inst.name
+        = td :last, class: "money-cell muted-cell" do
+          = relative_price inst.last, inst.yesterday_close, unit: inst.currency, format: 'absolute'
+        = td :last_to_yesterday_open, class: "money-cell muted-cell" do
+          = colorized_ratio row.last_to_yesterday_open, precision: 1
+        = td :change, class: "money-cell" do
+          = colorized_ratio row.change, precision: 1
+        = td :last_to_today_open, class: "money-cell muted-cell" do
+          = colorized_ratio row.last_to_today_open, precision: 1
+        = td :last_to_60m_ago do
+          = ratio_bar row.last_to_60m_ago, classes: 'solid m-wide'
+        = td :last_to_15m_ago do
+          = ratio_bar row.last_to_15m_ago, classes: 'solid m-wide'
+        = td :last_to_15m_ago do
+          = ratio_bar row.last_to_15m_ago, classes: 'solid m-wide'
+        = td :last_to_01m_ago do
+          = ratio_bar row.last_to_01m_ago, classes: 'solid m-wide'
+        = td :yesterday_volume, class: 'money-cell' do
+          = format_price_in_millions row.yesterday_volume, unit: inst.currency
+        = td :volume, class: 'money-cell' do
+          = format_price_in_millions row.volume, unit: inst.currency
+        = td :rel_volume, class: 'money-cell' do
+          = number_to_percentage row.rel_volume, precision: 0
+        = td :d5_volume, class: 'money-cell' do
+          = format_price_in_millions row.d5_volume, unit: inst.currency
+        = td :volatility, class: 'money-cell' do
+          = number_to_percentage row.volatility, precision: 0
