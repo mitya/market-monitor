@@ -12,7 +12,7 @@
     - @signals.each do |signal|
       - inst = signal.instrument
       - candle = signal.m1_candle
-      tr(class=class_names("some-opacity-40" => inst.illiquid?))
+      tr(class=class_names("some-opacity-40" => inst.ignored?))
         = td :time, l(signal.time, format: '%H:%M')
         = td :icon, instrument_logo_button(inst)
         = td :ticker, inst.ticker, title: inst.name, class: 'opacity-child'

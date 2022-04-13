@@ -196,8 +196,9 @@ class TradingController < ApplicationController
     # @watched, @rows           = @rows.partition { watched_tickers.include? _1.instrument.ticker }
     # @liquid, @rows            = @rows.partition { _1.instrument.liquid? }
     @very_illiquid, @rows = @rows.partition { _1.instrument.very_illiquid? }
-    @groups = [@watched, @liquid, @illiquid, @very_illiquid]
+    # @groups = [@watched, @liquid, @illiquid, @very_illiquid]
     @groups = [@rows, @very_illiquid]
+    # @groups = [@rows]
 
     sort_field = params[:sort] || :change
     @groups = @groups.map { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }

@@ -1,7 +1,7 @@
 class PriceSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker', inverse_of: :signals
   has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id', dependent: :delete #, inverse_of: :signal
-  belongs_to :m1_candle, foreign_key: :candle_id, class_name: 'Candle::M1'
+  belongs_to :m1_candle, foreign_key: :candle_id, class_name: 'Candle::M1', optional: true
 
   scope :yesterday, -> { where interval: 'day', date: Current.yesterday }
   scope :days, -> { where interval: 'day' }

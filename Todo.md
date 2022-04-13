@@ -1,4 +1,3 @@
-- exclude very illiquid stocks from there
 - analyze M1 candles for significant changes
 - analyze M1 candles for daggers
 - analyze last 5 M1 candles for 3%+ changes
@@ -445,3 +444,4 @@
 + analyze M1 candles for volume spikes
 + add top gainers/losers/vol gainers
 + reformat price/vol changes in bars
++ exclude very illiquid stocks from there

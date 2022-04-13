@@ -12,11 +12,11 @@
       = th :last_to_15m_ago, '15m'
       = th :last_to_05m_ago, '5m'
       = th :last_to_01m_ago, '1m'
+      = th :rel_volume, '𝑉 ﹪', class: 'money-cell'
       = th :yesterday_volume, 'Yvol', class: 'money-cell'
-      = th :volume, 'Tvol', class: 'money-cell'
-      = th :rel_volume, 'Trvol', class: 'money-cell'
-      = th :d5_volume, 'D5vol', class: 'money-cell'
-      = th :volatility, '∆', class: 'money-cell'
+      = th :volume, '𝑉 t', class: 'money-cell'
+      = th :d5_volume, '𝑉 5', class: 'money-cell'
+      = th :volatility, 'σ', class: 'money-cell'
   tbody
     - rows.each do |row|
       - inst = row.instrument
@@ -36,16 +36,16 @@
           = ratio_bar row.last_to_60m_ago, classes: 'solid m-wide'
         = td :last_to_15m_ago do
           = ratio_bar row.last_to_15m_ago, classes: 'solid m-wide'
-        = td :last_to_15m_ago do
+        = td :last_to_05m_ago do
           = ratio_bar row.last_to_15m_ago, classes: 'solid m-wide'
         = td :last_to_01m_ago do
           = ratio_bar row.last_to_01m_ago, classes: 'solid m-wide'
+        = td :rel_volume, class: 'money-cell' do
+          = number_to_percentage row.rel_volume, precision: 0, format: '%n ﹪'
         = td :yesterday_volume, class: 'money-cell' do
           = format_price_in_millions row.yesterday_volume, unit: inst.currency
         = td :volume, class: 'money-cell' do
           = format_price_in_millions row.volume, unit: inst.currency
-        = td :rel_volume, class: 'money-cell' do
-          = number_to_percentage row.rel_volume, precision: 0
         = td :d5_volume, class: 'money-cell' do
           = format_price_in_millions row.d5_volume, unit: inst.currency
         = td :volatility, class: 'money-cell' do

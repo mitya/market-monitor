@@ -191,16 +191,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000VMWHH5",
-      "ticker": "DISCK",
-      "isin": "US25470F3029",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Discovery Communications (C)",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BXK6C5",
       "ticker": "MGPI",
       "isin": "US55303J1060",
@@ -2307,6 +2297,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Meritage Homes Corp",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG014L7D4G1",
+      "ticker": "EMBC",
+      "isin": "US29082K1051",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Embecta",
       "type": "Stock"
     },
     {
@@ -7134,16 +7134,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Community Bank System",
-      "type": "Stock"
-    },
-    {
-      "figi": "BBG000F7L5N7",
-      "ticker": "DISCB",
-      "isin": "US25470F2039",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Discovery Communications (B)",
       "type": "Stock"
     },
     {
@@ -18078,16 +18068,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000CHWP52",
-      "ticker": "DISCA",
-      "isin": "US25470F1049",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Discovery Communications (A)",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BNX3R4",
       "ticker": "MDU",
       "isin": "US5526901096",
@@ -19016,5 +18996,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1903
+  "total": 1901
 }

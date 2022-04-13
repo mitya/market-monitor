@@ -5,6 +5,7 @@ main.container-fluid
     - @groups.each do |group|
       - group.in_groups_of(33, false) do |rows|
         .col-3
-          = render 'today_instruments', rows: rows, fields: %i[last change volume rel_volume volatility last_to_60m_ago last_to_15m_ago last_to_05m_ago]
-          / d5_volume yesterday_volume last_to_today_open
+          = render 'today_instruments', rows: rows,
+            fields: %i[last change volume rel_volume volatility last_to_60m_ago last_to_15m_ago d5_volume]
+          / d5_volume yesterday_volume last_to_today_open last_to_05m_ago
           / = tickers_copy_list rows.map(&:instrument)

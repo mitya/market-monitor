@@ -3,7 +3,7 @@ main.container-fluid
     .col-3
       = render 'today_signals'
     .col-3
-      = render 'today_instruments', rows: @top_gainers,    fields: %i[change rel_volume volatility volume], muted: :illiquid?
-      = render 'today_instruments', rows: @top_losers,     fields: %i[change rel_volume volatility volume], muted: :illiquid?
+      = render 'today_instruments', rows: @top_gainers,    fields: %i[change rel_volume volatility volume], muted: :ignored?
+      = render 'today_instruments', rows: @top_losers,     fields: %i[change rel_volume volatility volume], muted: :ignored?
     .col-3
-      = render 'today_instruments', rows: @volume_gainers, fields: %i[change rel_volume volatility volume], muted: :illiquid?
+      = render 'today_instruments', rows: @volume_gainers, fields: %i[change rel_volume volatility volume], muted: :ignored?
