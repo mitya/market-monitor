@@ -52,7 +52,7 @@ class Tinkoff
     end
 
     def import_intraday_candles_v2(instrument, interval, since: nil, till: nil)
-      since ||= 1.hour.ago
+      since ||= instrument.candles_for(interval).today.last&.datetime || Date.current
       till  ||= since.end_of_day
 
       data = request_v2_api 'MarketDataService/GetCandles', figi: instrument.figi, from: since.xmlschema, to: till.xmlschema, interval: API_V2_INTERVALS[interval]
@@ -100,3 +100,5 @@ __END__
 Tinkoff.import_futures
 Instrument.futures.rub.each { |inst| Tinkoff.import_intraday_candles_v2 inst, '1min' }
 Price.sync_with_last_candles Instrument.futures.rub
+
+instr('YNM2').candles_for('1min').today.last&.datetime

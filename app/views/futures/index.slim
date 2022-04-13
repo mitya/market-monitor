@@ -1,23 +1,19 @@
-table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.w-auto
+table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.w-auto.table-wider-x
   thead
     tr
-      th Ticker
-      th Name
+      th
+      th
       td.money-cell Stock
       td.money-cell Future
-      td.money-cell ∆
+      td.money-cell ∆ ﹪
       td.money-cell
   tbody
-    - @stocks.each do |stock|
-      - future_spec = @future_specs.detect { _1.base_ticker == stock.ticker}
-      - future = @futures_by_ticker[stock.ticker]
-      - future_price = future.last!.to_d / future_spec.base_lot
-      - next if future_price == 0
-      - stock_is_more_expensive = stock.last! > future_price
+    - @rows.each do |row|
+      - row.to_h => { stock:, future:, future_price:, stock_is_more_expensive: }
       tr
         td= stock.ticker
-        td= stock.name
+        td= future.ticker
         td.money-cell(class=red_green_class(stock_is_more_expensive))= format_price stock.last!, unit: stock.currency
         td.money-cell= format_price future_price, unit: stock.currency
-        td.money-cell= relative_price stock.last!, future_price.to_d, unit: stock.currency, format: 'relative'
-        td.money-cell= relative_price stock.last!, future_price.to_d, unit: stock.currency, format: 'diff'
+        td.money-cell= relative_price stock.last!, future_price, unit: stock.currency, format: 'relative'
+        td.money-cell= relative_price stock.last!, future_price, unit: stock.currency, format: 'diff'
