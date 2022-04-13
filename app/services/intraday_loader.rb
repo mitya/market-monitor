@@ -42,6 +42,7 @@ class IntradayLoader
     last_iex_update_time = Setting.iex_last_update
     today_candle_updated_at = 1.hour.ago
     larger_candles_updated_at = 1.hour.ago
+    futures_synced_at = 1.hour.ago
 
     loop do
       now = Time.current
@@ -92,6 +93,10 @@ class IntradayLoader
           update_larger_candles
           larger_candles_updated_at = Time.current
         end
+      end
+
+      if @sync_futures && futures_synced_at < 2.minutes.ago
+        Future.import_intraday
       end
 
       sleep 5

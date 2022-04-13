@@ -85,9 +85,7 @@ namespace :tinkoff do
     end
 
     envtask 'futures' do
-      futures = Instrument.futures.rub
-      Instrument.futures.rub.each { |inst| Tinkoff.import_intraday_candles_v2 inst, '1min' }
-      Price.sync_with_last_candles Instrument.futures.rub
+      Future.import_intraday
     end
   end
 

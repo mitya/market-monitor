@@ -15,5 +15,5 @@ table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.w-
         td= future.ticker
         td.money-cell(class=red_green_class(stock_is_more_expensive))= format_price stock.last!, unit: stock.currency
         td.money-cell= format_price future_price, unit: stock.currency
-        td.money-cell= relative_price stock.last!, future_price, unit: stock.currency, format: 'relative'
+        td.money-cell= relative_price stock.last!, future_price, unit: stock.currency, format: 'relative', percentage_precision: 1
         td.money-cell= relative_price stock.last!, future_price, unit: stock.currency, format: 'diff'
