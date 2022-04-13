@@ -1,8 +1,7 @@
+- exclude very illiquid stocks from there
 - analyze M1 candles for significant changes
 - analyze M1 candles for daggers
-- exclude very illiquid stocks from there
-- reformat price/vol changes in bars
-
+- analyze last 5 M1 candles for 3%+ changes
 
 - add a start date selector for daily single mode charts
 - fit to scale toggle
@@ -445,3 +444,4 @@
 + moex futures
 + analyze M1 candles for volume spikes
 + add top gainers/losers/vol gainers
++ reformat price/vol changes in bars

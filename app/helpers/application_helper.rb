@@ -45,16 +45,18 @@ module ApplicationHelper
     tag.span IntervalTitles[interval], class: 'badge bg-secondary'
   end
 
-  def percentage_bar(value, classes: nil, rtl: false, title: nil)
+  def percentage_bar(value, classes: nil, rtl: false, title: nil, threshold: 15, precision: 0)
     value = (value.to_f.abs * 100).round(3)
     full_percents = value.to_i
     last_percent = (value % 1 * 100).to_i
 
-    if full_percents > 15
+    if full_percents > threshold
       full_percents = 15
       last_percent = 0
       too_much = true
     end
+
+    return tag.span title, class: classes if too_much
 
     title ||= number_to_percentage(value, precision: 1)
     last_bar = last_percent.nonzero?? tag.span(class: "percentage-bar", style: "height: #{last_percent}%") : ''
@@ -67,6 +69,14 @@ module ApplicationHelper
     end
   end
 
+  def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false)
+    if value.to_f.abs >= 0.08
+      colorized_ratio value, precision: precision, format: '%n'
+    else
+      percentage_bar value, classes: classes, rtl: rtl
+    end
+  end
+
   def count_bar(value, **attrs)
     percentage_bar value / 100.0, **attrs
   end
@@ -75,20 +85,12 @@ module ApplicationHelper
     ratio = current / base - 1 rescue 0
   end
 
-  def ratio_bar(ratio, **attrs)
-    if ratio.to_f.abs >= 0.08
+  def ratio_bar(ratio, threshold: 0.08, **attrs)
+    if ratio.to_f.abs >= threshold
       colorized_ratio ratio, precision: 1, format: '%n'
     else
       attrs[:classes] = "#{attrs[:classes]} #{red_green_class(ratio > 0)}".strip
       percentage_bar ratio, **attrs
-    end
-  end
-
-  def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false)
-    if value.to_f.abs >= 0.08
-      colorized_ratio value, precision: precision, format: '%n'
-    else
-      percentage_bar value, classes: classes, rtl: rtl
     end
   end
 

@@ -4,7 +4,6 @@
       = th :time
       = th :icon
       = th :ticker
-      = th :signal, 'Signal'
       = th :last, 'Last', class: 'money-cell'
       = th :change, '∆', class: 'money-cell'
       = th :rel_volume, 'Rvol', class: 'money-cell'
@@ -13,16 +12,17 @@
     - @signals.each do |signal|
       - inst = signal.instrument
       - candle = signal.m1_candle
-      tr(class=class_names("opacity-40" => inst.illiquid?))
+      tr(class=class_names("some-opacity-40" => inst.illiquid?))
         = td :time, l(signal.time, format: '%H:%M')
         = td :icon, instrument_logo_button(inst)
-        = td :ticker, inst.ticker, title: inst.name
-        = td :signal, signal_short_name(signal.kind), class: red_green_class(signal.up?)
-        = td :last, class: "money-cell" do
+        = td :ticker, inst.ticker, title: inst.name, class: 'opacity-child'
+        / = td :signal, signal_short_name(signal.kind), class: red_green_class(signal.up?)
+        = td :last, class: "money-cell opacity-child" do
           = format_price inst.last, unit: inst.currency
-        = td :change, class: "money-cell" do
-          = colorized_ratio signal.change, precision: 1
-        = td :rel_volume, class: 'money-cell' do
-          = "#{signal.rel_volume.to_i}x"
-        = td :money_volume, class: 'money-cell' do
+        = td :change, class: "" do
+          = percentage_bar_or_number signal.change, classes: "#{red_green_class signal.change.to_f > 0}"
+        = td :rel_volume, class: 'money-cell text-start' do
+          / = "#{signal.rel_volume.to_i}x"
+          = percentage_bar signal.rel_volume / 200, classes: 'is-light-blue', threshold: 5, title: "#{signal.rel_volume.to_i}x"
+        = td :money_volume, class: 'money-cell opacity-child' do
           = format_price candle.volume_in_money.round(-3), unit: inst.currency

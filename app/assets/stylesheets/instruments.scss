@@ -28,6 +28,12 @@ th[data-sort] { cursor: pointer; }
 .opacity-70 { opacity: 0.7; }
 
 
+.some-opacity-30 .opacity-child { opacity: 0.3; }
+.some-opacity-40 .opacity-child { opacity: 0.4; }
+.some-opacity-50 .opacity-child { opacity: 0.5; }
+.some-opacity-70 .opacity-child { opacity: 0.7; }
+
+
 
 .money-cell, .money-amount, .changebox, .badge-fixed {
   font-family: helvetica, var(--bs-font-sans-serif);
