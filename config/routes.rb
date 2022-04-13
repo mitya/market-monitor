@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   resource :trading, only: %i[], controller: :trading do
     get :dashboard
     get :activities
-    get :candles, :charts, :recent
+    get :candles, :charts, :recent, :momentum
     post :update_chart_settings, :update_intraday_levels, :update_ticker_sets, :refresh
   end
   resource :comparision

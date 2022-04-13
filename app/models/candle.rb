@@ -9,7 +9,7 @@ class Candle < ApplicationRecord
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
   scope :on, -> date { for_date date }
   scope :for, -> tickers { where ticker: tickers }
-  scope :non_analyzed, -> { where analyzed: nil }
+  scope :non_analyzed, -> { where analyzed: false }
   scope :since, -> date { where 'date >= ?', date }
   scope :asc, -> { order :date }
   scope :by_time, -> { order :date, :time }
@@ -39,10 +39,14 @@ class Candle < ApplicationRecord
   alias body_low range_low
   alias body_high range_high
 
+  def top_shadow_rel_size = top_shadow_spread / spread
+  def bottom_shadow_rel_size = bottom_shadow_spread / spread
+
   def to_date = date
   def datetime = date.end_of_day
   def datetime_as_msk = datetime + 3.hours
   def opening? = is_opening?
+  def time_str = time.strftime('%H:%M')
 
   def change = close - open
   def rel_change = (change / open).round(4)
@@ -75,9 +79,9 @@ class Candle < ApplicationRecord
   def volatility_above = top_shadow_spread / range_high
   def volatility_below = bottom_shadow_spread / range_low
   def volatility_body  = (range_high - range_low) / range_low
+  def larger_tail_range = volatility_above > volatility_below ? volatility_above : -volatility_below
   alias bottom_tail_range volatility_below
   alias top_tail_range volatility_above
-  def larger_tail_range = volatility_above > volatility_below ? volatility_above : -volatility_below
 
   def analyzed! = update!(analyzed: true)
 

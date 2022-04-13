@@ -1,3 +1,10 @@
+- analyze M1 candles for significant changes
+- analyze M1 candles for daggers
+- exclude very illiquid stocks from there
+- add top gainers/losers/vol gainers
+- reformat price/vol changes in bars
+
+
 - add a start date selector for daily single mode charts
 - fit to scale toggle
 - show MAs on day charts in single mode
@@ -437,3 +444,4 @@
 + list of most volatile tickers EOD
 + use 2 lists for all tickers: main & illiquid
 + moex futures
++ analyze M1 candles for volume spikes

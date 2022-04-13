@@ -5,7 +5,6 @@ class FuturesController < ApplicationController
     @futures = Instrument.where(ticker: @future_specs)
     @stocks  = Instrument.where(ticker: @future_specs.map(&:base_ticker))
     @futures_by_ticker = @futures.index_by { _1.future.base_ticker }
-    p @futures_by_ticker
     Current.preload_prices_for Instrument.rub.to_a
   end
 

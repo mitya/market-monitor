@@ -1,10 +1,9 @@
-- @menu_hidden = true
+/ - @menu_hidden = true
 
 main.container-fluid
   .row
     - @groups.each do |group|
       - group.in_groups_of(33, false) do |rows|
-        - p rows
         .col-3
           = data_table fields: @fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
             thead.table-dark

@@ -1,12 +1,14 @@
 class PriceSignal < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker', inverse_of: :signals
   has_one :result, class_name: 'PriceSignalResult', foreign_key: 'signal_id', dependent: :delete #, inverse_of: :signal
+  belongs_to :m1_candle, foreign_key: :candle_id, class_name: 'Candle::M1'
 
   scope :yesterday, -> { where interval: 'day', date: Current.yesterday }
   scope :days, -> { where interval: 'day' }
   scope :h1, -> { where interval: 'hour' }
   scope :m5, -> { where interval: '5min' }
-  scope :intraday, -> { where interval: %w[5min 3min hour] }
+  scope :intraday, -> { where.not time: nil }
+  scope :today, -> { where date: Current.date }
   scope :for_interval, -> interval { interval == 'intraday' ? intraday : where(interval: interval) }
   scope :outside_bars, -> { where kind: 'outside-bar' }
   scope :breakouts, -> { where kind: 'breakout' }
@@ -23,7 +25,7 @@ class PriceSignal < ApplicationRecord
   def can_enter?(price = instrument.last) = price && enter && (up?? price >= enter : price <= enter)
   alias in_money? can_enter?
 
-  BreakoutFields = %w[change next_1d_change next_1d_open next_1d_close prev_2w_high prev_1w_high prev_2w_low prev_1w_low]
+  BreakoutFields = %w[next_1d_change next_1d_open next_1d_close prev_2w_high prev_1w_high prev_2w_low prev_1w_low] # change
   BreakoutFields.each do |field|
     define_method(field) { data&.dig(field) }
   end
@@ -38,9 +40,9 @@ class PriceSignal < ApplicationRecord
   end
 
   def candle
-    interval == 'day' ?
-      instrument.day_candles!.find_date(date) :
-      Candle.interval_class_for(interval).find_by(ticker: ticker, date: date, time: time)
+    scope = intraday?? instrument.candles_for(interval) : instrument.day_candles!
+    return scope.find(candle_id) if candle_id
+    scope.find_by({ date: date, time: time }.compact)
   end
 
   def current = instrument.last
@@ -52,12 +54,6 @@ class PriceSignal < ApplicationRecord
   def outside_bar? = kind == 'outside-bar'
   def volume_change_percent = volume_change && volume_change.to_f * 100
   def intraday? = interval != 'day'
-
-  def candle
-    intraday? ?
-      Candle.interval_class_for(interval).find_by(instrument: instrument, date: date, time: time) :
-      instrument.day_candles.find_date(date)
-   end
 
   before_save do
     unless intraday?

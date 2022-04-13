@@ -1,36 +1,61 @@
 class IntradayAnalyzer
   include StaticService
 
-  def anaylyze(instrument, date: Current.date, interval: '3min')
-    instrument.candles_for(interval).on(date).non_analyzed.order(:time).each do |candle|
-      analyze_one instrument, candle
-    end    
+  def analyze(instrument, date: Current.date, interval: '1min')
+    instrument.transaction do
+      instrument.candles_for(interval).on(date).non_analyzed.order(:time).each do |candle|
+        analyze_one instrument, candle
+      end
+    end
+    nil
   end
-  
-  def analyze_one(instrument, candle)
-    minutes_since_opening = 0
-    summary = instrument.day_summary
-    
-    if minutes_since_opening < 15
-      candle.analyzed!
-      return
-    end
-    
-    if candle.include?(summary.today_opening)
-      emit! :hit, :today_open, candle, value: summary.today_opening
-    end
-    
-    if candle.include?(summary.yesterday_closing)
-      emit! :hit, :yesterday_close, candle, value: summary.yesterday_closing
-    end    
 
-    intraday_levels.each do |level|
-      if candle.include? level
-        emit! :hit, :level, candle, value: level
-      end          
+  def analyze_one(instrument, candle)
+    volume_threshold = 5
+    average_volume = instrument.info.average_volume_for(candle.interval)
+
+    if candle.volume > volume_threshold * average_volume
+      emit! :volume_spike, candle
     end
-    
+
+    # minutes_since_opening = 0
+    # summary = instrument.day_summary
+    #
+    # if minutes_since_opening < 15
+    #   candle.analyzed!
+    #   return
+    # end
+    #
+    # if candle.include?(summary.today_opening)
+    #   emit! :hit, :today_open, candle, value: summary.today_opening
+    # end
+    #
+    # if candle.include?(summary.yesterday_closing)
+    #   emit! :hit, :yesterday_close, candle, value: summary.yesterday_closing
+    # end
+    #
+    # intraday_levels.each do |level|
+    #   if candle.include? level
+    #     emit! :hit, :level, candle, value: level
+    #   end
+    # end
+
     candle.analyzed!
+  end
+
+  def emit!(signal, candle, **data)
+    average_volume = candle.instrument.info.average_volume_for(candle.interval)
+    up = candle.up? && candle.top_shadow_rel_size < 0.5 || candle.bottom_shadow_rel_size > 0.5
+    puts "Detected at #{candle.time_str} #{signal} #{candle.ticker}".magenta
+    PriceSignal.create! kind: signal.to_s.dasherize, data: data.compact,
+      ticker:     candle.ticker,
+      candle_id:  candle.id,
+      date:       candle.date,
+      time:       candle.time,
+      interval:   candle.interval,
+      direction:  up ? 'up' : 'down',
+      rel_volume: candle.volume / average_volume,
+      change:     candle.rel_change
   end
 
   def analyze_candle(candle)
@@ -114,3 +139,6 @@ __END__
 
 hit kind, value, time
 hit_kind = level, t_open, y_close, dma, hod_retest, lod_retest
+
+
+IntradayAnalyzer.analyze instr('gazp')

@@ -87,6 +87,16 @@ class Stats < ApplicationRecord
     update! d5_money_volume: money_vol, d5_marketcap_volume: marketcap_vol
   end
 
+  def set_average_1min_volume
+    averages['volume_1min'] = instrument.candles_for('1min').since(10.days.ago).average('volume').to_i
+    save!
+  end
+
+  def averages = self[:averages] ||= {}
+  def average_1min_volume = averages['volume_1min']
+  def average_volume_for(interval) = averages["volume_#{interval}"]
+
+
   def sync_earning_dates
     update! earning_dates: (earning_dates.to_a + [next_earnings_date]).uniq.compact.sort
   end

@@ -212,11 +212,20 @@ class TradingController < ApplicationController
       :last_to_15m_ago,
       :last_to_05m_ago,
       # :yesterday_volume,
-      # :volume,
+      :volume,
       :rel_volume,
       # :d5_volume,
       :volatility,
     ]
+  end
+
+  def momentum
+    @signals = PriceSignal.intraday.today.order(time: :desc).includes(:instrument, :m1_candle).first(100)
+    @instruments = @signals.map(&:instrument).to_a
+
+    InstrumentCache.set @instruments
+    Current.preload_prices_for @instruments.to_a
+    Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
   end
 
   private

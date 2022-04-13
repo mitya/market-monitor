@@ -17529,16 +17529,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000QQPXZ5",
-      "ticker": "LNTA",
-      "isin": "US52634T2006",
-      "minPriceIncrement": 0.1,
-      "lot": 1,
-      "currency": "RUB",
-      "name": "ГДР Лента",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BFL116",
       "ticker": "FSLR",
       "isin": "US3364331070",
@@ -19026,5 +19016,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1904
+  "total": 1903
 }

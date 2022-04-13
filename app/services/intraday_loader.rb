@@ -60,11 +60,13 @@ class IntradayLoader
       if last_tickers != current_tickers || last_interval != current_interval
         load_history days: 2
         sync_latest
+        analyze_latest
         change_last_params.call
         load_history
       elsif last_interval_index != current_interval_index
         # unless current_interval_index - last_interval_index == 1 && now.sec < 50
         sync_latest
+        analyze_latest
         change_last_params.call
       end
 
@@ -127,12 +129,11 @@ class IntradayLoader
     SyncChannel.push 'candles'
   end
 
-  def analyze
-    tickers_to_analyze = tickers
-    tickers_to_analyze = %[CLF MOMO]
-    interval = '3min'
-    Instrument.for_tickers(tickers_to_analyze).abc.each do |inst|
-      IntradayAnalyzer.analyze inst, date: date, interval: interval
+  def analyze_latest
+    return if should_analyze == false || interval != '1min'
+    puts "analyze latest"
+    instruments.includes(:info).abc.each do |inst|
+      IntradayAnalyzer.analyze inst, date: Current.date, interval: interval
     end
   end
 
@@ -179,7 +180,7 @@ class IntradayLoader
     end
 
     def sync_all
-      new(instruments: Instrument.active.rub, interval: '1min', include_history: false, sync_today_candle: true).sync
+      new(instruments: Instrument.active.stocks.rub, interval: '1min', include_history: false, sync_today_candle: true).sync
     end
   end
 end
