@@ -4,6 +4,7 @@
     tr
       = th :icon
       = th :ticker
+      = th :icons
       = th :last, 'Last', class: 'money-cell muted-cell'
       = th :last_to_yesterday_open, 'Yo ﹪', class: 'money-cell muted-cell'
       = th :change, 'Yc ﹪', class: 'money-cell'
@@ -22,8 +23,12 @@
       - inst = row.instrument
       - classes = class_names('opacity-40' => local_assigns[:muted] ? inst.send(muted) :false)
       tr(class=classes)
-        = td :icon, instrument_logo_button(inst)
-        = td :ticker, inst.ticker, title: inst.name
+        = td :icon do
+          = instrument_logo_button inst
+        = td :ticker
+          = format_ticker(inst)
+        = td :icons, class: 'px-0'
+          = watched_icon inst
         = td :last, class: "money-cell muted-cell" do
           = relative_price inst.last, inst.yesterday_close, unit: inst.currency, format: 'absolute'
         = td :last_to_yesterday_open, class: "money-cell muted-cell" do

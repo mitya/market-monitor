@@ -95,6 +95,7 @@ class InstrumentSet
     def known?(symbol) = known_symbols.include?(symbol)
     def n1 = @n1 ||= new(:'1')
     def n1?(symbol) = n1.include?(symbol)
+    def watched?(symbol) = n1?(symbol)
   end
 end
 

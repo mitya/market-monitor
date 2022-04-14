@@ -285,6 +285,10 @@ module InstrumentsHelper
     return fa_icon 'crown', xsmall: true, title: 'Tinkoff Premium' if instrument.premium?
   end
 
+  def watched_icon(instrument)
+    return fa_icon 'star', xsmall: true if instrument.watched?
+  end
+
   def known_icon(instrument)
     # icons = [
     #   (:briefcase if InstrumentSet.portfolio.symbols.include?(instrument.ticker) && instrument.portfolio_item&.active?),
@@ -353,5 +357,9 @@ module InstrumentsHelper
   def category_title(key)
     clean_key = key.to_s.gsub('*', '')
     InstrumentSet.category_titles[clean_key] || clean_key.humanize
+  end
+
+  def format_ticker(instrument)
+    tag.span instrument.ticker, title: instrument.name, class: class_names('fw-bold text-decoration-underline': instrument.watched?)
   end
 end

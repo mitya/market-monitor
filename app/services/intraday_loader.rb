@@ -4,6 +4,7 @@ class IntradayLoader
     @interval = interval
     @include_history = include_history
     @sync_today_candle = sync_today_candle
+    @should_analyze = sync_today_candle
   end
 
   def tickers
@@ -26,7 +27,7 @@ class IntradayLoader
 
   def interval_in_minutes = (Candle.interval_duration_for(interval) / 60)
 
-  def should_analyze = ENV['analyze'] == '1'
+  def should_analyze = @should_analyze
 
   # def schedule
   #   loop do
@@ -43,6 +44,8 @@ class IntradayLoader
     today_candle_updated_at = 1.hour.ago
     larger_candles_updated_at = 1.hour.ago
     futures_synced_at = 1.hour.ago
+
+    InstrumentCache.set instruments
 
     loop do
       now = Time.current
@@ -93,6 +96,8 @@ class IntradayLoader
           update_larger_candles
           larger_candles_updated_at = Time.current
         end
+
+        Price.sync_with_last_candles instruments        
       end
 
       if @sync_futures && futures_synced_at < 2.minutes.ago
