@@ -5,8 +5,8 @@
       = th :icon
       = th :ticker
       = th :last, 'Last', class: 'money-cell'
-      = th :change, '∆', class: 'money-cell'
-      = th :rel_volume, 'Rvol', class: 'money-cell'
+      = th :change, '∆'
+      = th :rel_volume, 'Rvol'
       = th :money_volume, 'Mvol', class: 'money-cell'
   tbody
     - @signals.each do |signal|

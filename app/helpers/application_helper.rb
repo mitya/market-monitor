@@ -3,6 +3,10 @@ module ApplicationHelper
     @page_title = title
   end
 
+  def menu_hidden?
+    @menu_hidden || params.include?('mh')
+  end
+
   def page_entries_block(records)
     tag.div page_entries_info(records), class: 'text-center mb-3'
   end

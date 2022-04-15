@@ -88,16 +88,16 @@ class IntradayLoader
       # analyze
 
       if @sync_today_candle
-        if today_candle_updated_at < 2.minutes.ago
+        if today_candle_updated_at < 1.minutes.ago
           update_today_candles
           today_candle_updated_at = Time.current
         end
-        if larger_candles_updated_at < 1.minutes.ago
-          update_larger_candles
-          larger_candles_updated_at = Time.current
-        end
+        # if larger_candles_updated_at < 1.minutes.ago
+        #   update_larger_candles
+        #   larger_candles_updated_at = Time.current
+        # end
 
-        Price.sync_with_last_candles instruments        
+        Price.sync_with_last_candles instruments
       end
 
       if @sync_futures && futures_synced_at < 2.minutes.ago

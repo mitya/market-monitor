@@ -16,7 +16,7 @@ class Current < ActiveSupport::CurrentAttributes
   def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '09:30'
   def uk_market_open? = date.on_weekday? && Time.current.to_s(:time) >= '11:00'
   def ru_market_open_time = ru_time.change(hour: 7).utc
-  def weekend? = us_date.on_weekend? || MarketCalendar.nyse_holidays.include?(us_date)
+  def weekend? = us_date.on_weekend? # || MarketCalendar.nyse_holidays.include?(us_date)
   def workday? = MarketCalendar.market_open?(Date.current)
 
   def us_market_open_time      = Current.us_time.change(hour:  9, min: 30)

@@ -14,8 +14,12 @@ class IntradayAnalyzer
     volume_threshold = 5
     average_volume = instrument.info.average_volume_for(candle.interval)
 
+    if candle.rel_change.abs > 0.015
+      return emit! :big_change, candle
+    end
+
     if candle.volume > volume_threshold * average_volume
-      emit! :volume_spike, candle
+      return emit! :volume_spike, candle
     end
 
     # minutes_since_opening = 0
@@ -39,8 +43,6 @@ class IntradayAnalyzer
     #     emit! :hit, :level, candle, value: level
     #   end
     # end
-
-    candle.analyzed!
   end
 
   def emit!(signal, candle, **data)
@@ -56,6 +58,7 @@ class IntradayAnalyzer
       direction:  up ? 'up' : 'down',
       rel_volume: candle.volume / average_volume,
       change:     candle.rel_change
+    candle.analyzed!
   end
 
   def analyze_candle(candle)

@@ -13,7 +13,7 @@
   </head>
 
   <body class="">
-    <%= render "layouts/menu" unless @menu_hidden %>
+    <%= render "layouts/menu" unless menu_hidden? %>
     <%= yield %>
     <%= render "common/chart_modal" %>
   </body>

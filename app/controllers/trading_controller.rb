@@ -205,7 +205,7 @@ class TradingController < ApplicationController
   end
 
   def momentum
-    @signals = PriceSignal.intraday.today.order(time: :desc).includes(:instrument, :m1_candle).first(100)
+    @signals = PriceSignal.intraday.today.order(time: :desc).includes(:instrument, :m1_candle).where('time > ?', (Current.msk.now - 2.hours).strftime('%H:%M')).first(300)
     @instruments = @signals.map(&:instrument).to_a
 
     @instruments = Instrument.active.rub.includes(:info)
