@@ -60,7 +60,7 @@ module ApplicationHelper
       too_much = true
     end
 
-    return tag.span title, class: classes if too_much
+    return tag.span title, class: class_names(classes, 'percentage-bar-text-replacement') if too_much
 
     title ||= number_to_percentage(value, precision: 1)
     last_bar = last_percent.nonzero?? tag.span(class: "percentage-bar", style: "height: #{last_percent}%") : ''
@@ -73,8 +73,8 @@ module ApplicationHelper
     end
   end
 
-  def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false)
-    if value.to_f.abs >= 0.08
+  def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false, threshold: 0.08)
+    if value.to_f.abs >= threshold
       colorized_ratio value, precision: precision, format: '%n'
     else
       percentage_bar value, classes: classes, rtl: rtl
@@ -120,5 +120,9 @@ module ApplicationHelper
     end
   end
 
-
+  def round_percentage(value)
+    return value if value < 100
+    return value.round(-1) if value < 300
+    return value.round(-2)
+  end
 end

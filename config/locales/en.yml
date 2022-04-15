@@ -40,6 +40,7 @@ en:
       wday: '%a, %d'
       week_day_short: '%a, %b %e'
       week_day: '%A, %d %B %Y'
+      rus_with_week_day: '%a, %d.%m.%y'
       month_year: "%b %Y"
       month: "%B"
       text: '%d %B %Y'

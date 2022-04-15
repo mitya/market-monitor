@@ -1,9 +1,9 @@
 - hit = local_assigns[:hit]
 - spike_value = local_assigns[:spike_value]
 
-- render_volume_bar = -> relvol { percentage_bar relvol / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_with_precision relvol, precision: 1}x" }
+- render_volume_bar = -> relvol { percentage_bar relvol.to_f / 100.0, classes: 'is-light-blue solid', title: "Volume: #{number_with_precision relvol, precision: 1}x" }
 - render_volume_text = -> (relvol, precision: 0) { tag.span "#{number_with_precision relvol, precision: precision}x", class: 'is-light-blue' }
-- render_volume = -> (relvol) { relvol > 10 ? render_volume_text.call(relvol) : render_volume_bar.call(relvol) }
+- render_volume = -> (relvol) { relvol.to_f > 10 ? render_volume_text.call(relvol) : render_volume_bar.call(relvol) }
 
 tr.ticker-item(data-ticker=inst.ticker tabindex="0")
   td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker

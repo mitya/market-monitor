@@ -1,0 +1,10 @@
+- fields = %i[icon ticker change rel_volume]
+main.container-fluid
+  .row
+    - @results.each do |date, result|
+      .col-2
+        h6.text-end= l date, format: :rus_with_week_day
+        = data_table fields: fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do
+          = render 'changes_table', candles: result.gainers
+          = render 'changes_table', candles: result.losers, header: false
+          = render 'changes_table', candles: result.volume_gainers, header: false

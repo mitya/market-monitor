@@ -1,5 +1,4 @@
 - list of level hits on M1 candles
-- dash with top gainers/losers/vol for last 5 days
 
 - analyze M1 candles for daggers
 - analyze last 5 M1 candles for 3%+ changes
@@ -449,3 +448,4 @@
 + exclude very illiquid stocks from there
 + analyze M1 candles for significant changes
 + group M1 signals by minute
++ dash with top gainers/losers/vol for last 5 days

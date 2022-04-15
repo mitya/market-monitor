@@ -104,7 +104,7 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 .opacity-05 { opacity: 0.5; }
 
-.percentage-bars { height: 20px; white-space: nowrap; display: flex; align-items: end; }
+.percentage-bars { height: 20px; white-space: nowrap; display: inline-flex; align-items: end; }
 
 .percentage-bar {
   background-color: gray;
@@ -129,6 +129,8 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
   .m-wide & { width: 6px; }
 }
+
+.percentage-bar-text-replacement { height: 25.195px; display: inline-flex; align-items: end; }
 
 
 .open-chart, .open-row-chart { cursor: pointer; }

@@ -231,6 +231,29 @@ class TradingController < ApplicationController
     @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(30).reverse
   end
 
+  def last_week
+    @instruments = Instrument.active.includes(:info)
+    @dates = MarketCalendar.open_days(10.days.ago).last(5)
+    Current.preload_day_candles_with @instruments.to_a, @dates
+    InstrumentCache.set @instruments
+
+    @results = @dates.each_with_object({}) do |date, hash|
+      candles = @instruments.map { _1.day_candles!.find_date(date) }
+      gainers = candles.sort_by(&:rel_change).last(15).reverse
+      losers  = candles.sort_by(&:rel_change).first(15)
+      volume_gainers = candles.sort_by(&:volume_to_average).last(15).reverse.select { _1.volume_to_average > 2 }
+      user_tickers = (gainers + losers).map(&:ticker).to_set
+
+      volume_gainers.reject! { _1.ticker.in? user_tickers }
+
+      result = OpenStruct.new(
+        gainers: gainers, losers: losers, volume_gainers: volume_gainers
+      )
+
+      hash[date] = result
+    end
+  end
+
   private
 
   def price_ratio(current, base)
