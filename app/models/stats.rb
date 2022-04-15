@@ -94,7 +94,11 @@ class Stats < ApplicationRecord
 
   def averages = self[:averages] ||= {}
   def average_1min_volume = averages['volume_1min']
-  def average_volume_for(interval) = averages["volume_#{interval}"]
+
+  def average_volume_for(interval)
+    return avg_volume if interval == 'day'
+    averages["volume_#{interval}"]
+  end
 
 
   def sync_earning_dates

@@ -53,7 +53,7 @@ class IntradayLoader
       current_interval = interval
       interval_in_minutes = 1
       current_interval_index = (Time.current.hour * 60 + Time.current.min) / interval_in_minutes
-      # puts "tick #{Time.current} - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
+      # puts "#{Time.now} tick - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
 
       change_last_params = -> do
         last_tickers = current_tickers
@@ -72,6 +72,8 @@ class IntradayLoader
         sync_latest
         analyze_latest
         change_last_params.call
+
+        Price.sync_with_last_candles instruments
       end
 
       # if Current.us_market_open? && (Setting.iex_update_pending? || last_iex_update_time < 5.minutes.ago)
@@ -96,8 +98,6 @@ class IntradayLoader
         #   update_larger_candles
         #   larger_candles_updated_at = Time.current
         # end
-
-        Price.sync_with_last_candles instruments
       end
 
       if @sync_futures && futures_synced_at < 2.minutes.ago
@@ -134,16 +134,21 @@ class IntradayLoader
   end
 
   def sync_latest
-    puts "sync latest: #{Time.now}"
+    puts "#{Time.now} sync latest"
     instruments.abc.each { |inst| Tinkoff.import_intraday_candles_for_today inst, interval }
     SyncChannel.push 'candles'
   end
 
   def analyze_latest
     return if should_analyze == false || interval != '1min'
-    puts "analyze latest"
+    puts "#{Time.now} analyze latest"
     instruments.includes(:info).abc.each do |inst|
-      IntradayAnalyzer.analyze inst, date: Current.date, interval: interval
+      new_candles = inst.candles_for(interval).on(Current.date).non_analyzed.order(:time).includes(:instrument)
+      IntradayAnalyzer.analyze inst, new_candles
+
+      if levels = PriceLevel.textual[inst.ticker]
+        IntradayLevelHitDetector.analyze inst, candles: new_candles, levels: levels
+      end
     end
   end
 

@@ -23,7 +23,7 @@ class MarketCalendar
     def next(date = Date.current) = next_closest_weekday(date.to_date.tomorrow)
     def prev2(date) = [prev(date), prev(prev date)]
 
-    def open_days(since, till = Date.current)
+    def open_days(since, till = Current.date)
       since, till = since.begin, since.end if since.is_a?(Range)
       (since.to_date .. till.to_date).map { |date| market_open?(date) ? date : nil }.compact
     end

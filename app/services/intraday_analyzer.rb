@@ -1,11 +1,9 @@
 class IntradayAnalyzer
   include StaticService
 
-  def analyze(instrument, date: Current.date, interval: '1min')
+  def analyze(instrument, candles)
     instrument.transaction do
-      instrument.candles_for(interval).on(date).non_analyzed.order(:time).each do |candle|
-        analyze_one instrument, candle
-      end
+      candles.each { analyze_one instrument, _1 }
     end
     nil
   end
@@ -15,12 +13,12 @@ class IntradayAnalyzer
     average_volume = instrument.info.average_volume_for(candle.interval)
 
     if candle.rel_change.abs > 0.015
-      return emit! :big_change, candle
+      emit! :big_change, candle
+    elsif candle.volume > volume_threshold * average_volume
+      emit! :volume_spike, candle
     end
 
-    if candle.volume > volume_threshold * average_volume
-      return emit! :volume_spike, candle
-    end
+    candle.analyzed!
 
     # minutes_since_opening = 0
     # summary = instrument.day_summary
@@ -58,7 +56,6 @@ class IntradayAnalyzer
       direction:  up ? 'up' : 'down',
       rel_volume: candle.volume / average_volume,
       change:     candle.rel_change
-    candle.analyzed!
   end
 
   def analyze_candle(candle)

@@ -1,32 +1,3 @@
-achv 7.4
-asan 40
-atex 47 53
-atnx 3.9
-ayx  83.4
-baba 175 190 200
-chmk 4000 5000
-clf  21 23 27
-cog  18
-dk   20 21 25
-docu 200 211
-dvn  26 29 32 40
-ehth 50
-eqt  19.5
-estc 123.5
-etln 105
-etsy 152
-fang 80
-fcx  40
-fesh 17
-fsly 41
-ftch 40
-gazp 255
-gltr 455
-hcc  18
-mfgp 5
-rosn 600
-snd  2.2
-tsla 550
-twtr 50
-veon 1.87
-zim  48
+nmtp 4.83
+mtlr 107 102
+agro 875 880 900 950 1000
