@@ -1,3 +1,5 @@
+- page_title! 'Today'
+
 main.container-fluid
   .row
     .col-3
@@ -5,7 +7,7 @@ main.container-fluid
     .col-3
       = render 'level_hits'
     .col-3
-      = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume volatility volume], muted: :ignored?
-      = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume volatility volume], muted: :ignored?
+      = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume volatility volume], muted: :ignored?, title: 'Gainers'
+      = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume volatility volume], muted: :ignored?, title: 'Losers'
     .col-3
-      = render 'instruments_top', rows: @volume_gainers, fields: %i[change last rel_volume volatility volume], muted: :ignored?
+      = render 'instruments_top', rows: @volume_gainers, fields: %i[change last rel_volume volatility volume], muted: :ignored?, title: 'Vol. Gainers'

@@ -1,9 +1,9 @@
 = data_table fields: [], class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
   thead.table-dark
     tr
-      = th :time, 'Time', class: 'fixed-font'
+      = th :time, nil, class: 'fixed-font'
       = th :icon
-      = th :ticker
+      = th :ticker, 'Hits'
       = th :level, 'Level', class: 'money-cell'
       = th :rel_vol, '𝑉 ﹪', class: 'money-cell'
   tbody

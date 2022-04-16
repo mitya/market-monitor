@@ -1,4 +1,8 @@
-= data_table fields: [], class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table w-auto" do |t|
+= data_table fields: [], class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
+  thead.table-dark
+    tr
+      = th :time
+      = th :tickers, 'Signals'
   tbody
     - @signals.group_by { _1.time }.each do |time, signals|
       tr

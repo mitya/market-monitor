@@ -31,7 +31,8 @@ class Current < ActiveSupport::CurrentAttributes
   def ru_2nd_market_work_period = ru_2nd_market_open_time..ru_2nd_market_close_time
 
 
-  def yesterday = weekend?? today : MarketCalendar.closest_weekday(date.prev_weekday)
+  # def yesterday = weekend?? today : MarketCalendar.closest_weekday(date.prev_weekday)
+  def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)
   def d2_ago    = MarketCalendar.closest_weekday(yesterday.prev_weekday)
   def d3_ago    = MarketCalendar.closest_weekday(d2_ago.prev_weekday)
   def d4_ago    = MarketCalendar.closest_weekday(d3_ago.prev_weekday)

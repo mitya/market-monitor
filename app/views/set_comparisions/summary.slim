@@ -1,3 +1,5 @@
+- page_title! 'EOD MA / Levels / Volume / Vol'
+
 main.container-fluid.ma-dashboard
   details.my-2.mx-3
     summary
@@ -10,11 +12,11 @@ main.container-fluid.ma-dashboard
       - @set_groups.each do |sets|
         .col.flex-grow-0.dashboard-col
           - sets.each do |set|
-            = render 'ticker_set', set: set, 
-              availability: params[:availability].presence, 
-              currency: params[:currency].presence, 
-              tickers: params[:tickers].to_s.split.map(&:upcase).compact.uniq.to_set, 
-              precision: 1, 
+            = render 'ticker_set', set: set,
+              availability: params[:availability].presence,
+              currency: params[:currency].presence,
+              tickers: params[:tickers].to_s.split.map(&:upcase).compact.uniq.to_set,
+              precision: 1,
               selector: 'd2'
 
 javascript:

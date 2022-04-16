@@ -1,3 +1,4 @@
+- page_title! 'EOD Gainers / Losers'
 - selector = params[:selector].presence || 'last'
 
 main.container-fluid.gainers-dashboard
@@ -7,9 +8,9 @@ main.container-fluid.gainers-dashboard
         .d-inline-flex.flex-row.align-items-center.w-75.ps-3
           = render 'instruments/filter_by_currency'
           = render 'instruments/filter_by_availability'
-          = select_tag :selector, options_for_select(%w[last] + Aggregate::Selectors + MarketCalendar.special_dates - %w[d1], selector), 
+          = select_tag :selector, options_for_select(%w[last] + Aggregate::Selectors + MarketCalendar.special_dates - %w[d1], selector),
             class: "form-select form-select-sm w-auto", prompt: 'Period'
-          = search_field_tag :tickers, params[:tickers].to_s.squish, class: "form-control form-control-sm text-uppercase ms-3", 
+          = search_field_tag :tickers, params[:tickers].to_s.squish, class: "form-control form-control-sm text-uppercase ms-3",
             placeholder: 'Tickers'
 
   .container-fluid
@@ -18,10 +19,10 @@ main.container-fluid.gainers-dashboard
         .col.flex-grow-0.dashboard-col
           - sets.each do |set|
             = render 'ticker_set', set: set,
-              availability: params[:availability].presence, 
-              currency: params[:currency].presence, 
-              tickers: params[:tickers].to_s.split.map(&:upcase).compact.uniq.to_set, 
-              precision: selector.in?(%w[last d1 d2 d3 d4 w1 w2]) ? 1 : 0, 
+              availability: params[:availability].presence,
+              currency: params[:currency].presence,
+              tickers: params[:tickers].to_s.split.map(&:upcase).compact.uniq.to_set,
+              precision: selector.in?(%w[last d1 d2 d3 d4 w1 w2]) ? 1 : 0,
               selector: selector
 
 javascript:

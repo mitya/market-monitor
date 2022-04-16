@@ -3,7 +3,7 @@
   thead.table-dark
     tr
       = th :icon
-      = th :ticker
+      = th :ticker, local_assigns[:title]
       = th :icons
       = th :last, 'Last', class: 'money-cell muted-cell'
       = th :last_to_yesterday_open, 'Yo ﹪', class: 'money-cell muted-cell'
