@@ -229,6 +229,8 @@ class TradingController < ApplicationController
     @top_gainers = @instrument_rows.sort_by { _1.change }.last(20).reverse
     @top_losers  = @instrument_rows.sort_by { _1.change }.first(20)
     @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(30).reverse
+
+    @level_hits = PriceLevelHit.intraday.today.order(time: :desc)
   end
 
   def last_week

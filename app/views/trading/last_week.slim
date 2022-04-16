@@ -5,6 +5,6 @@ main.container-fluid
       .col-2
         h6.text-end= l date, format: :rus_with_week_day
         = data_table fields: fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do
-          = render 'changes_table', candles: result.gainers
-          = render 'changes_table', candles: result.losers, header: false
-          = render 'changes_table', candles: result.volume_gainers, header: false
+          = render 'instruments_eod', candles: result.gainers
+          = render 'instruments_eod', candles: result.losers, header: false
+          = render 'instruments_eod', candles: result.volume_gainers, header: false

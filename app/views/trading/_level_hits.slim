@@ -1,0 +1,18 @@
+= data_table fields: [], class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
+  thead.table-dark
+    tr
+      = th :time, 'Time', class: 'fixed-font'
+      = th :icon
+      = th :ticker
+      = th :level, 'Level', class: 'money-cell'
+      = th :rel_vol, '𝑉 ﹪', class: 'money-cell'
+  tbody
+    - @level_hits.each do |hit|
+      - inst = hit.instrument
+      tr
+        = td :time, l(hit.time, format: '%H:%M'), class: 'fixed-font'
+        = td :icon, instrument_logo_button(inst)
+        = td :ticker, format_ticker(inst)
+        = td :level, format_price(hit.level_value, unit: inst), class: ['money-cell', red_green_class(hit.positive?)]
+        = td :rel_vol, class: 'money-cell'
+          = number_to_percentage(round_percentage(hit.rel_vol * 100), precision: 0, format: '%n ﹪')

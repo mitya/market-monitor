@@ -1,5 +1,3 @@
-- list level hits on M1 candles
-
 - analyze M1 candles for daggers
 - analyze last 5 M1 candles for 3%+ changes
 
@@ -450,3 +448,4 @@
 + group M1 signals by minute
 + dash with top gainers/losers/vol for last 5 days
 + extract M1 level hits each minute
++ list level hits on M1 candles

@@ -1,9 +1,11 @@
 main.container-fluid
   .row
     .col-3
-      = render 'today_signals_grouped'
+      = render 'signals_grouped'
     .col-3
-      = render 'today_instruments', rows: @top_gainers,    fields: %i[change last rel_volume volatility volume], muted: :ignored?
-      = render 'today_instruments', rows: @top_losers,     fields: %i[change last rel_volume volatility volume], muted: :ignored?
+      = render 'level_hits'
     .col-3
-      = render 'today_instruments', rows: @volume_gainers, fields: %i[change last rel_volume volatility volume], muted: :ignored?
+      = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume volatility volume], muted: :ignored?
+      = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume volatility volume], muted: :ignored?
+    .col-3
+      = render 'instruments_top', rows: @volume_gainers, fields: %i[change last rel_volume volatility volume], muted: :ignored?

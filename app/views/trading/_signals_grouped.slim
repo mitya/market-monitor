@@ -1,0 +1,9 @@
+= data_table fields: [], class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table w-auto" do |t|
+  tbody
+    - @signals.group_by { _1.time }.each do |time, signals|
+      tr
+        = td :time, l(time, format: '%H:%M')
+        = td :tickers do
+          - signals.sort_by(&:ticker).each do |signal|
+            - inst = signal.instrument
+            => tag.span format_ticker(inst), class: class_names("px-1", red_green_class(signal.up?), "some-opacity-40" => inst.ignored?)

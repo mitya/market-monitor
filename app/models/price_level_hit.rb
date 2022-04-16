@@ -7,6 +7,7 @@ class PriceLevelHit < ApplicationRecord
   scope :levels, -> { where source: 'level' }
   scope :ma, -> { where source: 'ma' }
   scope :intraday, -> { where.not time: nil }
+  scope :today, -> { where date: Current.date }
 
   PositiveKinds = %w[up-break up-gap down-test].to_set
 

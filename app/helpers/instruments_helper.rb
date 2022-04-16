@@ -147,6 +147,7 @@ module InstrumentsHelper
 
 
   def currency_sign(currency_code)
+    currency_code = currency_code.currency if currency_code.is_a?(Instrument)
     Const::CurrencySigns[currency_code.to_s.to_sym] || currency_code
   end
 
