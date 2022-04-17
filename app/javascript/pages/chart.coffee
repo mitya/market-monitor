@@ -6,7 +6,7 @@ import _ from 'lodash'
 currentBarSpacing = 2
 chartHeight = 0
 isOneChartPerPage = false
-isZeroScale = isOneChartPerPage
+isZeroScale = false
 
 
 export default class Chart
@@ -53,7 +53,9 @@ export default class Chart
     chartContainerHeight = window.innerHeight - navbarHeight - toolbarHeight
     chartHeight = (chartContainerHeight - 4 * 2 * currentRowsPerPage) / currentRowsPerPage
 
+    interval = $qs(".trading-page [name=interval]").dataset.buttonGroupCurrentValue
     isOneChartPerPage = currentRowsPerPage == 1 && currentColsPerPage == 1
+    isZeroScale = isOneChartPerPage && interval == 'day'
 
     @chart = createChart @container.querySelector('.intraday-chart-content'), {
       width: 0
@@ -194,6 +196,7 @@ export default class Chart
 
   gotoLastCandle: () ->
     @chart.timeScale().scrollToRealTime()
+    # @chart.timeScale().fitContent()
     @setLegendFromCandle @lastCandle
 
 

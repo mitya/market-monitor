@@ -16,6 +16,7 @@ export default class extends Controller
     @columnsSelector      = $qs(".trading-page [name=columns]")
     @rowsSelector         = $qs(".trading-page [name=rows]")
     @chartedTickersField  = $qs(".trading-page [name=charted-tickers]")
+    @startDateSelector    = $qs('.trading-page [name=since-date]')
     @timeScaleToggle      = $qs('.trading-page #toggle-time')
     @priceScaleToggle     = $qs('.trading-page #toggle-price')
     @wheelScalingToggle   = $qs('.trading-page #toggle-wheel-scaling')
@@ -58,6 +59,7 @@ export default class extends Controller
     period           =     @intervalSelector.dataset.buttonGroupCurrentValue
     columns          =      @columnsSelector.dataset.buttonGroupCurrentValue
     rows             =         @rowsSelector.dataset.buttonGroupCurrentValue
+    since            =    @startDateSelector.value
     time_shown       =      @timeScaleToggle.checked
     price_shown      =     @priceScaleToggle.checked
     wheel_scaling    =   @wheelScalingToggle.checked
@@ -66,7 +68,7 @@ export default class extends Controller
     bar_spacing      =    @currentBarSpacing
 
     await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: {
-      chart_tickers, period, columns, rows, time_shown, price_shown, bar_spacing, wheel_scaling, level_labels, levels_shown
+      chart_tickers, period, columns, rows, time_shown, price_shown, bar_spacing, wheel_scaling, level_labels, levels_shown, since
     }
     @reload() unless options?.reload == false
 

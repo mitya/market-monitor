@@ -5,7 +5,11 @@ class CandlesController < ApplicationController
     2021-03-01
     2021-09-01
     2022-01-01
-  ].map { |str| Date.parse str }.sort
+  ].map { |str| Date.parse str }.sort + [
+    MarketCalendar.prev(Current.yesterday),
+    Current.yesterday,
+    Current.date,
+  ]
 
   DEFAULT_PERIOD = Date.parse('2021-09-01')
 

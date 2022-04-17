@@ -73,6 +73,8 @@ class TradingController < ApplicationController
     @list_shown = params[:list] == '1'
     @chart_columns = @list_shown ? 1 : @chart_settings['columns']
     @chart_rows = @list_shown ? 1 : @chart_settings['rows']
+
+    @since_date_str = @chart_settings['since']
   end
 
   def candles
@@ -82,14 +84,15 @@ class TradingController < ApplicationController
     repo = Candle.interval_class_for(period)
     tickers = Setting.chart_tickers.first(12)
     tickers = tickers.first(1) if is_single
+    since_date = Setting.chart_settings['since'].to_date
 
     instruments = Instrument.for_tickers(tickers).includes(:indicators, :annotation)
     instruments = tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
-    openings = Candle::M3.today.openings.for(instruments).index_by(&:ticker)
+    openings = Candle::M1.today.openings.for(instruments).index_by(&:ticker)
 
     candles = instruments.inject({}) do |map, instrument|
       ticker = instrument.ticker
-      candles = repo.for(instrument).includes(:instrument).order(:date, :time).last(params[:limit] || (is_single ? 777 : 500))
+      candles = repo.for(instrument).includes(:instrument).order(:date, :time).since(since_date).last(params[:limit] || (is_single ? 777 : 500))
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.datetime_as_msk.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
       unless is_update
@@ -131,6 +134,7 @@ class TradingController < ApplicationController
     updates[:bar_spacing]   = params[:bar_spacing]                       if params.include?(:bar_spacing)
     updates[:level_labels]  = params[:level_labels]                      if params.include?(:level_labels)
     updates[:levels_shown]  = params[:levels_shown]                      if params.include?(:levels_shown)
+    updates[:since]         = params[:since].presence                    if params.include?(:since)
     Setting.merge 'chart_settings', updates
 
     render json: { }
