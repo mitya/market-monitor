@@ -9,7 +9,7 @@ import ChartsPage from '../pages/charts_page'
 export default class extends Controller
   connect: ->
     @charts = {}
-    @currentBarSpacing = 2
+    @currentBarSpacing = parseInt(document.querySelector('.intraday-charts').dataset.barSpacing)
     @chartHeight = 0
 
     @intervalSelector     = $qs(".trading-page [name=interval]")
@@ -97,7 +97,6 @@ export default class extends Controller
 
   zoom: (e) ->
     e.preventDefault()
-    e.target.blur()
     e.target.blur()
     step = Number(e.target.dataset.value)
     @currentBarSpacing = @currentBarSpacing + step

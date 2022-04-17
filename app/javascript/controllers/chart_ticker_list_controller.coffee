@@ -2,13 +2,14 @@ import { Controller } from "@hotwired/stimulus"
 import ChartsPage from '../pages/charts_page'
 
 export default class extends Controller
-  @prop 'chartedTickersField', -> $qs(".trading-page .charted-tickers-field")
-  
+  @prop 'chartedTickersField', -> $qs(".trading-page [name=charted-tickers]")
+
+
   select: (e) ->
     e.preventDefault()
     item = e.target.closest('.ticker-item')
     @selectListTicker item.dataset.ticker if item
-    
+
   keydown: (e) ->
     if e.key in ['ArrowDown', 'ArrowUp']
       e.preventDefault()

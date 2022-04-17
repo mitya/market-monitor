@@ -1,7 +1,7 @@
 - page_title! 'Charts'
 - @menu_hidden = true
 
-.container-fluid.trading-page
+.container-fluid.trading-page.charts-page
   .row.toolbar.trading-toolbar(
     data-controller="chart-toolbar"
     data-action="
@@ -103,6 +103,7 @@
         class="row-cols-#{@chart_columns}"
         data-bar-spacing=@chart_settings['bar_spacing']
         data-rows=@chart_rows
+        data-cols=@chart_columns
       )
       - if @list_shown
         .chart-tickers-list(

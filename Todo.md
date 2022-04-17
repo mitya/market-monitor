@@ -449,3 +449,4 @@
 + dash with top gainers/losers/vol for last 5 days
 + extract M1 level hits each minute
 + list level hits on M1 candles
+- sync chart with current ticker on dashboard

@@ -361,6 +361,6 @@ module InstrumentsHelper
   end
 
   def format_ticker(instrument)
-    tag.span instrument.ticker, title: instrument.name, class: class_names('fw-bold text-decoration-underline': instrument.watched?)
+    tag.span instrument.ticker, title: instrument.name, class: class_names('ticker-item', 'fw-bold text-decoration-underline': instrument.watched?)
   end
 end

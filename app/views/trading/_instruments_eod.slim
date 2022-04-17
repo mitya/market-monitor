@@ -20,7 +20,7 @@ tbody
         / = number_to_percentage candle.volume_to_average, precision: 0, format: '%n ﹪'
         = percentage_bar candle.volume_to_average / 100, classes: 'is-light-blue', threshold: 4, rtl: true,
           title: number_to_percentage(round_percentage(candle.volume_to_average * 100), precision: 0, format: '%n ﹪')
-      / = td :volume, class: 'money-cell' do
-      /   = format_price_in_millions row.volume, unit: inst.currency
+      = td :volume, class: 'money-cell' do
+        = format_price_in_millions candle.volume_in_money, unit: inst
       / = td :volatility, class: 'money-cell' do
       /   = number_to_percentage row.volatility, precision: 0

@@ -103,3 +103,9 @@ rake list:import list=portfolio
 ## Intraday
 
 rake intraday:sync
+
+fesh gltr posi phor etln gche nmtp
+aptk selg rolo lnzl lnzlp blng chmk gtrk belu rugr pmsb
+mrks mrku
+
+@buy level: kzos nvtk five yndx tcsg lkoh poly

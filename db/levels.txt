@@ -1,3 +1,35 @@
-nmtp 4.83
-mtlr 107 102
-agro 875 880 900 950 1000
+agro 864
+akrn 14100
+amez 20050
+belu 2250
+chmk 3370
+cian 345
+dsky 69
+enpg 575 640 720 770
+etln 53 63
+fesh 28
+five 1180 1600
+gazp 270
+gche 3005
+gltr 330
+gmkn 19050
+lnzl 11000
+lsngp 111
+mtlr 100 105 162
+mtlrp 170
+mvid 203
+nkncp 69
+nmtp 4.85 4.2
+ozon 935 1005
+phor 5900
+pogr 7
+posi 620 785
+rasp 360
+rnft 86
+rosn 370 310
+rual 60 73
+sgzh 7.75
+smlt 2000
+uwgn 42
+vk 300 400
+yndx 1930

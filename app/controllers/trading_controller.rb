@@ -64,7 +64,7 @@ class TradingController < ApplicationController
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
 
-    @ticker_sets = TickerSet.order(:key)
+    @ticker_sets = TickerSet.list
     @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
 
     @list_ticker_set = InstrumentSet.new('Current', :static, items: @chart_tickers)

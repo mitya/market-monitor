@@ -1,6 +1,6 @@
 import consumer from "./consumer"
 
-consumer.subscriptions.create("SyncChannel", {
+const syncChannel = consumer.subscriptions.create("SyncChannel", {
   connected() {
   },
 
@@ -13,6 +13,16 @@ consumer.subscriptions.create("SyncChannel", {
       location.reload()
     } else if (data.reason == 'candles') {
       document.dispatchEvent(new Event('chart-reload-data'))
+    } else if (data.reason == 'reload_chart') {
+      if ($qs('.charts-page')) {
+        location.reload()
+      }
     }
-  }
+  },
+
+  setChartTicker(ticker) {
+    this.perform("set_chart_ticker", { ticker: ticker })
+  },
 });
+
+window.syncChannel = syncChannel

@@ -7,3 +7,6 @@ document.addEventListener "turbolinks:load", ->
 
   $delegate '.momentum-table', 'th[data-sort]', 'click', (th, e) ->
     UrlHelper.replaceLocationParams sort: th.dataset.sort
+
+  $delegate '.momentum-table', '.ticker-item', 'click', (element, e) ->
+    syncChannel.setChartTicker(element.innerText)

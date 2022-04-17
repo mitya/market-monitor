@@ -5,6 +5,7 @@ import _ from 'lodash'
 
 currentBarSpacing = 2
 chartHeight = 0
+isOneChartPerPage = false
 
 
 export default class Chart
@@ -15,6 +16,12 @@ export default class Chart
   constructor: (data) ->
     @data = data
     @ticker = data.ticker
+
+    # timestamps = data.candles.map((c) -> c[0])
+    # console.log timestamps.length
+    # console.log _.uniq(timestamps).length
+    # data.candles = data.candles[0..200]
+
     @root = document.querySelector('.intraday-charts')
 
     singleMode = $qs('.chart-tickers-list') != null
@@ -39,10 +46,13 @@ export default class Chart
 
     currentBarSpacing = parseInt(@root.dataset.barSpacing)
     currentRowsPerPage = parseInt(@root.dataset.rows)
+    currentColsPerPage = parseInt(@root.dataset.cols)
     navbarHeight = 0 # document.querySelector('.main-navbar').offsetHeight
     toolbarHeight = document.querySelector('.trading-toolbar').offsetHeight + 8
     chartContainerHeight = window.innerHeight - navbarHeight - toolbarHeight
     chartHeight = (chartContainerHeight - 4 * 2 * currentRowsPerPage) / currentRowsPerPage
+
+    isOneChartPerPage = currentRowsPerPage == 1 && currentColsPerPage == 1
 
     @chart = createChart @container.querySelector('.intraday-chart-content'), {
       width: 0
@@ -193,7 +203,7 @@ dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 padNumber = (number, length = 2, filler = '0') -> number.toString().padStart(length, filler)
 
 formatPrice = (price) ->
-  if false
+  if isOneChartPerPage
     if price < 10_000 then price.toFixed(2) else price
   else
     if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price
