@@ -86,7 +86,7 @@
       option
       - @ticker_sets.each do |set|
         - tickers_line = set.tickers_line
-        option(data-id=set.id value=tickers_line selected=@chart_tickers==tickers_line)
+        option(data-id=set.id value=tickers_line selected=(@current_ticker_set == set))
           = set.key.downcase
 
     select class="chart-period-selector form-select form-select-sm w-auto"

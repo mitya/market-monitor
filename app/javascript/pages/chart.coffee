@@ -6,6 +6,7 @@ import _ from 'lodash'
 currentBarSpacing = 2
 chartHeight = 0
 isOneChartPerPage = false
+isZeroScale = isOneChartPerPage
 
 
 export default class Chart
@@ -71,7 +72,7 @@ export default class Chart
         borderVisible: false
         scaleMargins:
           top: 0.02
-          bottom: 0.05
+          bottom: if isZeroScale then 0.0 else 0.05
       localization:
         priceFormatter: formatPrice
       grid:
@@ -90,10 +91,10 @@ export default class Chart
     @lastCandle = candlesData[candlesData.length - 1]
     @candlesSeries = @chart.addCandlestickSeries(
       # priceLineVisible: false,
-      # autoscaleInfoProvider: (original) ->
-      #   res = original()
-      #   res.priceRange.minValue = 0 if res
-      #   res
+      autoscaleInfoProvider: (original) ->
+        res = original()
+        res.priceRange.minValue = 0 if isZeroScale && res
+        res
       # autoscaleInfoProvider: -> {
       #   priceRange: { minValue: 0, maxValue: 80 },
       #   margins: { above: 50, below: 50 },

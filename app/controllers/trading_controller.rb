@@ -67,7 +67,8 @@ class TradingController < ApplicationController
     @ticker_sets = TickerSet.list
     @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
 
-    @list_ticker_set = InstrumentSet.new('Current', :static, items: @chart_tickers)
+    @current_ticker_set = @ticker_sets.detect { _1.tickers == @chart_tickers }
+    @list_ticker_set = InstrumentSet.new(@current_ticker_set&.key || 'Custom', :static, items: @chart_tickers)
 
     @list_shown = params[:list] == '1'
     @chart_columns = @list_shown ? 1 : @chart_settings['columns']

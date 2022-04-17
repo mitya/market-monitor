@@ -1,3 +1,5 @@
+- start date selector in chart-list mode
+
 - analyze M1 candles for daggers
 - analyze last 5 M1 candles for 3%+ changes
 
@@ -449,4 +451,5 @@
 + dash with top gainers/losers/vol for last 5 days
 + extract M1 level hits each minute
 + list level hits on M1 candles
-- sync chart with current ticker on dashboard
++ sync chart with current ticker on dashboard
++ 0-bottom range in chart-list mode
