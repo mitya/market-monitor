@@ -1,6 +1,3 @@
-- build M3/M5 from M1
-- rake task to load missing US day candles from Tinkoff
-
 - analyze M1 candles for daggers
 - analyze last 5 M1 candles for 3%+ changes
 - fit to scale toggle
@@ -453,3 +450,5 @@
 + sync chart with current ticker on dashboard
 + 0-bottom range in chart-list mode
 + start date selector in chart-list mode
++ build M3/M5 from M1
++ rake task to load missing US day candles from Tinkoff

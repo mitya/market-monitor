@@ -1,10 +1,10 @@
 namespace :tinkoff do
   desc "Adds new & updates old instruments"
-  envtask 'instruments:sync' do
+  envtask :instruments do
     Tinkoff.sync_instruments(preview: ENV['ok'] != '1')
   end
 
-  envtask 'portfolio:sync' do
+  envtask :portfolio do
     Tinkoff.sync_portfolios
   end
 
@@ -37,56 +37,48 @@ namespace :tinkoff do
     end
 
     envtask :previous do
-      Instrument.non_iex.in_set(ENV['set']).abc.each do |inst|
-        Tinkoff.import_latest_day_candles(inst, today: false)
-      end
+      Instrument.tinkoff.abc.each { Tinkoff.import_latest_day_candles _1, today: false }
     end
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"
-    envtask :year do
+    envtask :years do
       instruments = R.instruments_from_env
-      instruments.tinkoff.abc.each do |inst|
-        Tinkoff.import_all_day_candles(inst, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2020, 2021])
-      end
-
-      # Instrument.tinkoff.usd.abc.each do |inst|
-      #   Tinkoff.import_all_day_candles(inst, candle_class: Candle::DayTinkoff, years: ENV['years'].to_s.split(',').map(&:to_i).presence || [2021])
-      # end
+      instruments = Instrument.tinkoff.abc
+      years = ENV['years'].to_s.split(',').map(&:to_i).presence || [2020, 2021, 2022]
+      instruments.tinkoff.abc.each { Tinkoff.import_all_day_candles _1, years: years }
     end
   end
 
-  namespace :candles do
-    envtask 'today' do
-      Instrument.rub.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '1min', dates: MarketCalendar.open_days(ENV['since'] || Date.current)) }
-    end
+  envtask :today do
+    Instrument.rub.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '1min', dates: MarketCalendar.open_days(ENV['since'] || Date.current)) }
+  end
 
-    envtask 'import:hour' do
-      Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, 'hour') }
-    end
+  envtask :hours do
+    Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, 'hour') }
+  end
 
-    envtask 'import:5min' do
-      Instrument.active.rub.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '5min',  dates: MarketCalendar.open_days(10.days.ago)) }
-    end
+  envtask :m5 do
+    Instrument.active.rub.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '5min',  dates: MarketCalendar.open_days(10.days.ago)) }
+  end
 
-    envtask 'import:3min' do
-      Instrument.active.rub.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago)) }
-    end
+  envtask :m3 do
+    Instrument.active.rub.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago)) }
+  end
 
-    envtask 'import:5min:close' do
-      dates = [ENV['date'] ? ENV['date'].to_date : Current.today]
-      dates = Current.last_n_weeks(2) #  - ['2021-07-02'.to_date]
-      dates = [Current.today, Current.yesterday]
-      instruments = Instrument.tinkoff.usd.abc
-      dates.each do |date|
-        Current.parallelize_instruments(instruments, 3) do |inst|
-          Tinkoff.import_closing_5m_candles(inst, date)
-        end
+  envtask :closes do
+    dates = [ENV['date'] ? ENV['date'].to_date : Current.today]
+    dates = Current.last_n_weeks(2) #  - ['2021-07-02'.to_date]
+    dates = [Current.today, Current.yesterday]
+    instruments = Instrument.tinkoff.usd.abc
+    dates.each do |date|
+      Current.parallelize_instruments(instruments, 3) do |inst|
+        Tinkoff.import_closing_5m_candles(inst, date)
       end
     end
+  end
 
-    envtask 'futures' do
-      Future.import_intraday
-    end
+  envtask :futures do
+    Future.import_intraday
   end
 
 
@@ -193,5 +185,5 @@ rake tinkoff:days:year
 rake tinkoff:candles:import:5min:last
 rake tinkoff:parse_margins
 
-rake tinkoff:candles:futures
-rake tinkoff:candles:import:5min
+rake tinkoff:futures
+rake tinkoff:m5

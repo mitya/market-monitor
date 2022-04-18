@@ -35,15 +35,14 @@ class Tinkoff
         candles.map do |hash|
           timestamp = Time.parse(hash['time']).in_time_zone(instrument.time_zone)
           date = timestamp.to_date
-          hhmm = timestamp.to_s(:time)
+          hhmm = timestamp.to_s(:time) if interval != 'day'
           ongoing = interval == 'day' && date == Current.date && !Current.weekend? ||
                     candle_class.intraday? && timestamp + candle_class.interval_duration >= Time.current
 
-          params = { instrument: instrument, interval: interval, date: date }
-          params.merge! time: hhmm if candle_class.intraday?
-          candle = candle_class.find_or_initialize_by(params)
-          # puts "Import Tinkoff #{date} #{hhmm} #{interval} candle for #{instrument}".green if candle.new_record?
-          puts "Import Tinkoff #{date} #{hhmm} #{interval} #{instrument} #{ongoing ? '...' : ''}".colorize(candle.new_record?? :green : :yellow)
+          candle = candle_class.find_or_initialize_by({ instrument: instrument, interval: interval, date: date, time: hhmm }.compact)
+
+          next puts "Skip   Tinkoff #{date} #{hhmm} #{interval} #{instrument} because of IEX".white if candle.iex?
+          puts      "Import Tinkoff #{date} #{hhmm} #{interval} #{instrument} #{ongoing ? '...' : ''}".colorize(candle.new_record?? :green : :yellow)
 
           candle.ticker  = instrument.ticker
           candle.source  = 'tinkoff'
@@ -86,19 +85,20 @@ class Tinkoff
 
     # import_day_candles_since
     def import_latest_day_candles(instrument, today: true, since: nil)
-      return if instrument.candles.day.where('date > ?', 2.weeks.ago).none?
+      # return if instrument.candles.day.where('date > ?', 2.weeks.ago).none?
       # return if instrument.candles.day.today.where('updated_at > ?', 3.hours.ago).exists?
-      since ||= instrument.candles.day.final.last_loaded_date.tomorrow rescue 1.week.ago
+      since ||= instrument.candles.day.final.last_loaded_date.tomorrow rescue 1.month.ago
       till = today ? Current.date.end_of_day : Current.yesterday.end_of_day
       return if till < since
       import_day_candles instrument, since: since, till: till
     end
 
     # import_day_candles_for_years
-    def import_all_day_candles(instrument, years: [2019, 2020, 2021], candle_class: nil)
+    def import_all_day_candles(instrument, years: [2019, 2020, 2021, 2022], candle_class: nil)
       import_day_candles instrument, since: Date.parse('2019-01-01'), till: Date.parse('2019-12-31').end_of_day, candle_class: candle_class if years.include?(2019)
       import_day_candles instrument, since: Date.parse('2020-01-01'), till: Date.parse('2020-12-31').end_of_day, candle_class: candle_class if years.include?(2020)
-      import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.current.end_of_day,             candle_class: candle_class if years.include?(2021)
+      import_day_candles instrument, since: Date.parse('2021-01-01'), till: Date.parse('2021-12-31').end_of_day, candle_class: candle_class if years.include?(2021)
+      import_day_candles instrument, since: Date.parse('2022-01-01'), till: Date.current.end_of_day,             candle_class: candle_class if years.include?(2022)
     end
 
 

@@ -4,8 +4,8 @@ task :process do
   rake 'analyze'
   rake 'spikes'
   rake 'levels:hits_all'
-  rake 'tinkoff:portfolio:sync'
-  rake 'tinkoff:instruments:sync'
+  rake 'tinkoff:portfolio'
+  rake 'tinkoff:instruments'
   rake 'averages'
 end
 

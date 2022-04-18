@@ -40,6 +40,8 @@ class Candle < ApplicationRecord
   alias body_low range_low
   alias body_high range_high
 
+  def iex? = source == 'iex'
+
   def top_shadow_rel_size = top_shadow_spread / spread
   def bottom_shadow_rel_size = bottom_shadow_spread / spread
 

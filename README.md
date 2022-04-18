@@ -46,7 +46,7 @@ rake tinkoff:days:missing ok=1
 rake today
 rake intraday:sync_all
 
-rake tinkoff:days:year tickers=''
+rake tinkoff:days:years tickers='BRBR DINO SHEL EMBC PARA BFH ZIMV CEG SAFM'
 
 rake levels:hits:week
 
@@ -59,9 +59,10 @@ rake tinkoff:prices:pre
 rake options:day
 
 
-# Run if haven't used for a whilte
+# Run if haven't used for a while
 rake     iex:days:missing since=2022-02-01 ok=1
 rake tinkoff:days:missing since=2022-02-01 ok=1 tickers='KAP@GS KSPI@GS SPBE'
+rake tinkoff:days:missing since=2020-01-01 ok=1 tickers='BRBR DINO SHEL EMBC PARA BFH ZIMV CEG SAFM'
 
 # Destroying tickers
 
@@ -79,9 +80,9 @@ rake tinkoff:premium:import
 rake tinkoff:instruments:sync ok=1
 rake SetIexTickers
 rake empty:iex
-export tickers='MC SHEL CP CEG'
-rake tinkoff:logos:download iex:stats company=1 iex:tops:set_sectors iex:logos:download
-rake iex:symbols:peers iex:price_targets
+export tickers='BRBR DINO SHEL EMBC PARA BFH ZIMV CEG SAFM'
+rake tinkoff:logos:download
+rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1
 rake candles:set_prev_closes candles:set_average_change candles:set_d5_volume
 
