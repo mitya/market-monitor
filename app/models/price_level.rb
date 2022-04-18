@@ -16,6 +16,7 @@ class PriceLevel < ApplicationRecord
   def cache_volume = update!(total_volume: calc_total_volume, average_volume: calc_average_volume)
   def value_plus(delta) = value + value * delta
   def inspect = "<Level #{ticker} #{value}>"
+  def source_type = kind == 'MA' ? 'ma' : 'level'
 
 
   class << self
@@ -27,7 +28,7 @@ class PriceLevel < ApplicationRecord
       end.to_h
     end
   end
-  
+
 
   class Extremum
     attr :candle, :selector

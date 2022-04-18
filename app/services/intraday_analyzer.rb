@@ -2,19 +2,30 @@ class IntradayAnalyzer
   include StaticService
 
   def analyze(instrument, candles)
+    return if candles.blank?
     instrument.transaction do
+      @candles_history = candles.first.same_day_siblings.where('time >= ? AND time < ?', candles.first.time - 7.minutes, candles.first.time).order(:time) + candles
       candles.each { analyze_one instrument, _1 }
     end
     nil
   end
 
   def analyze_one(instrument, candle)
-    volume_threshold = 5
     average_volume = instrument.info.average_volume_for(candle.interval)
+    m1_big_change = candle.instrument.rub?? 0.015 : 0.01
+    m1_big_volume = 5 * average_volume
+    m5_big_change = candle.instrument.rub?? 0.03 : 0.02
 
-    if candle.rel_change.abs > 0.015
+    # candle_index_in_history = @candles_history.index_of(candle)
+    # previous_n = @candles_history[[candle_index_in_history - 5, 0].max .. candle_index_in_history]
+    # previous_n_change = candle.close - previous_n.first.open
+    # previous_n_rel_change = previous_n_change / previous_n.first.open
+
+    if candle.rel_change.abs > m1_big_change
       emit! :big_change, candle
-    elsif candle.instrument.rub? && candle.volume > volume_threshold * average_volume
+    # elsif previous_n_rel_change > m5_big_change
+    #   emit! :big_change, candle
+    elsif candle.instrument.rub? && candle.volume > m1_big_volume
       emit! :volume_spike, candle
     end
 

@@ -31,13 +31,6 @@ class IntradayLoader
 
   def should_analyze = @should_analyze
 
-  # def schedule
-  #   loop do
-  #     once_in 10,     :load_intraday
-  #     once_in 5 * 60, :load_prices
-  #   end
-  # end
-
   def sync
     last_tickers = nil
     last_interval = nil
@@ -148,10 +141,7 @@ class IntradayLoader
     instruments.includes(:info).abc.each do |inst|
       new_candles = inst.candles_for(interval).on(Current.date).non_analyzed.order(:time).includes(:instrument)
       IntradayAnalyzer.analyze inst, new_candles
-
-      if levels = PriceLevel.textual[inst.ticker]
-        IntradayLevelHitDetector.analyze inst, candles: new_candles, levels: levels
-      end
+      IntradayLevelHitDetector.analyze inst, candles: new_candles, levels: PriceLevel.textual[inst.ticker]
     end
   end
 
