@@ -4,6 +4,7 @@ class IntradayLoader
     @interval = interval
     @include_history = include_history
     @sync_today_candle = sync_today_candle
+    @sync_futures = sync_today_candle
     @should_analyze = sync_today_candle
   end
 
@@ -100,8 +101,9 @@ class IntradayLoader
         # end
       end
 
-      if @sync_futures && futures_synced_at < 2.minutes.ago
+      if @sync_futures && futures_synced_at < 10.minutes.ago
         Future.import_intraday
+        futures_synced_at = Time.current
       end
 
       sleep 5

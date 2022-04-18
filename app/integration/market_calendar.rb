@@ -3,7 +3,7 @@ class MarketCalendar
     def closest_weekday(date)
       date.wday == 0          ? closest_weekday(date - 2) :
       date.wday == 6          ? closest_weekday(date - 1) :
-      date.in?(nyse_holidays) ? closest_weekday(date - 1) :
+      # date.in?(nyse_holidays) ? closest_weekday(date - 1) :
       date
     end
     alias prev_closest_weekday closest_weekday
@@ -11,7 +11,7 @@ class MarketCalendar
     def next_closest_weekday(date)
       date.wday == 0          ? next_closest_weekday(date + 1) :
       date.wday == 6          ? next_closest_weekday(date + 2) :
-      date.in?(nyse_holidays) ? next_closest_weekday(date + 1) :
+      # date.in?(nyse_holidays) ? next_closest_weekday(date + 1) :
       date
     end
 

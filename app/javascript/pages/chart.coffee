@@ -65,7 +65,7 @@ export default class Chart
         secondsVisible: false
         visible: @data.timeScaleVisible
         barSpacing: currentBarSpacing
-        rightOffset: if singleMode then 5 else 0
+        rightOffset: if singleMode || isOneChartPerPage then 10 else 0
       rightPriceScale:
         entireTextOnly: true
         visible: @data.priceScaleVisible
@@ -95,6 +95,7 @@ export default class Chart
       # priceLineVisible: false,
       autoscaleInfoProvider: (original) ->
         res = original()
+        res.priceRange.minValue = Math.min(res.priceRange.maxValue * 0.9, res.priceRange.minValue)
         res.priceRange.minValue = 0 if isZeroScale && res
         res
       # autoscaleInfoProvider: -> {
@@ -207,6 +208,7 @@ dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 padNumber = (number, length = 2, filler = '0') -> number.toString().padStart(length, filler)
 
 formatPrice = (price) ->
+  return price if price < 0.1
   if isOneChartPerPage
     if price < 10_000 then price.toFixed(2) else price
   else

@@ -56,6 +56,7 @@ class Tinkoff
       till  ||= since.end_of_day
 
       data = request_v2_api 'MarketDataService/GetCandles', figi: instrument.figi, from: since.xmlschema, to: till.xmlschema, interval: API_V2_INTERVALS[interval]
+      sleep 0.1
       import_v2_candles data, instrument, interval
     end
 

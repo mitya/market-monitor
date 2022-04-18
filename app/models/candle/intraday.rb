@@ -12,7 +12,8 @@ class Candle
     def to_full_s = "#{to_s} #{ohlc_str} P#{prev_close} #{close_change} #{rel_close_change}"
 
     def datetime = instrument.time_zone.parse("#{date} #{hhmm}")
-    def hhmm = time_before_type_cast.first(5)
+    # def hhmm = time_before_type_cast.first(5)
+    def hhmm = time.strftime('%H:%M')
 
     def interval_duration_in_mins = interval_duration / 60
     def interval_index = (time.hour * 60 + time.min) / interval_duration_in_mins
