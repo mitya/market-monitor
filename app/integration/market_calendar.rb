@@ -16,7 +16,7 @@ class MarketCalendar
     end
 
     def market_open?(date)
-      date.on_weekday? && !nyse_holidays.include?(date)
+      date.on_weekday? # && !nyse_holidays.include?(date)
     end
 
     def prev(date = Date.current) = prev_closest_weekday(date.to_date.yesterday)
@@ -111,5 +111,24 @@ class MarketCalendar
     def current_recent_years
       Aggregate::Years
     end
+
+    def periods_between(start_time, end_time, step = 1.minute)
+      periods = []
+      current_time = start_time
+      while current_time <= end_time
+        periods << current_time
+        current_time += step
+      end
+      periods
+    end
+
   end
 end
+
+__END__
+
+
+
+Time.new(2000, 1, 1, 12)
+MarketCalendar.periods_between instr('gazp').candles_for('1min').today.find_by(time: '12:00'), instr('gazp').candles_for('1min').today.find_by(time: '13:00')
+MarketCalendar.periods_between Time.utc(2000, 1, 1, 12), Time.utc(2000, 1, 1, 15)

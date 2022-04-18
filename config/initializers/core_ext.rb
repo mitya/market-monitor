@@ -8,6 +8,14 @@ class Time
   def self.ms(milliseconds)
     Time.at milliseconds / 1000 if milliseconds.is_a?(Numeric)
   end
+
+  def to_hhmm
+    to_fs :time
+  end
+
+  def self.plain_time(hours, minutes = 0, seconds = 0)
+    Time.utc(2000, 1, 1, hours, minutes, seconds)
+  end
 end
 
 class Date

@@ -65,11 +65,11 @@ namespace :tinkoff do
     end
 
     envtask 'import:5min' do
-      Instrument.main.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles(inst, '5min' ) }
+      Instrument.active.rub.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '5min',  dates: MarketCalendar.open_days(10.days.ago)) }
     end
 
     envtask 'import:3min' do
-      R.instruments_from_env!.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago)) }
+      Instrument.active.rub.tinkoff.abc.each { |inst| Tinkoff.import_intraday_candles_for_dates(inst, '3min',  dates: MarketCalendar.open_days(10.days.ago)) }
     end
 
     envtask 'import:5min:close' do
@@ -194,3 +194,4 @@ rake tinkoff:candles:import:5min:last
 rake tinkoff:parse_margins
 
 rake tinkoff:candles:futures
+rake tinkoff:candles:import:5min

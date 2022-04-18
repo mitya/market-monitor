@@ -95,10 +95,10 @@ class IntradayLoader
           update_today_candles
           today_candle_updated_at = Time.current
         end
-        # if larger_candles_updated_at < 1.minutes.ago
-        #   update_larger_candles
-        #   larger_candles_updated_at = Time.current
-        # end
+        if larger_candles_updated_at < 1.minutes.ago
+          update_larger_candles
+          larger_candles_updated_at = Time.current
+        end
       end
 
       if @sync_futures && futures_synced_at < 10.minutes.ago

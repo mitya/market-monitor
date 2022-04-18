@@ -11,6 +11,7 @@ class Candle < ApplicationRecord
   scope :for, -> tickers { where ticker: tickers }
   scope :non_analyzed, -> { where analyzed: false }
   scope :since, -> date { where 'date >= ?', date }
+  scope :since_time, -> time { where 'time >= ?', time if time }
   scope :asc, -> { order :date }
   scope :by_time, -> { order :date, :time }
   scope :iex, -> { where source: 'iex' }

@@ -24,6 +24,7 @@ class Candle
     def interval_duration_for(interval) = IntervalDurations[interval]
     def interval_class_for(interval)    = IntervalClasses[normalize_interval interval]
     def interval_duration = interval_duration_for(interval)
+    def interval_duration_in_mins(interval) = interval_duration_for(interval).to_i / 60
 
     def remove_dups
       iex.find_each do |candle|

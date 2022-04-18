@@ -1,7 +1,8 @@
+- build M3/M5 from M1
+- rake task to load missing US day candles from Tinkoff
+
 - analyze M1 candles for daggers
 - analyze last 5 M1 candles for 3%+ changes
-
-- add a start date selector for daily single mode charts
 - fit to scale toggle
 - show MAs on day charts in single mode
 - percentage scale relative to the last bar (inject the same bar as first and autoscale chart to fit)

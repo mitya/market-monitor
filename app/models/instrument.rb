@@ -223,8 +223,58 @@ class Instrument < ApplicationRecord
     )
   end
 
-  def update_larger_candles
-    # m1_candles = candles_for('1min').today.by_time.to_a
+  def update_larger_candles(date: Current.date)
+    %w[5min].each do |interval|
+      minutes_in_interval = Candle.interval_duration_in_mins(interval)
+      day_open_time = Time.plain_time(10, 00)
+
+      last_mx_candle = candles_for(interval).on(date).order(:time).last
+      last_mx_candle ||= candles_for(interval).on(date).build(time: day_open_time, open: yesterday_close, close: yesterday_close, high: yesterday_close, low: yesterday_close)
+
+      m1_candles = candles_for('1min').on(date).since_time(last_mx_candle.time).order(:time).to_a
+      m1_candles_index = m1_candles.index_by &:time
+      time_intervals = MarketCalendar.periods_between(last_mx_candle.time, m1_candles.last&.time)
+
+      grouped_intervals = time_intervals.in_groups_of(minutes_in_interval)
+      grouped_intervals = grouped_intervals.map do |intervals|
+        {
+          start: intervals.first&.to_hhmm,
+          periods: intervals.map { _1&.to_hhmm },
+          candles: intervals.map { m1_candles_index[_1] },
+        }
+      end
+
+      transaction do
+        grouped_m1_candles = grouped_intervals.map do |interval_data|
+          interval_data => { start:, periods:, candles: }
+          candles = candles.compact
+          puts "-- build #{ticker} #{interval} on #{start} #{'NONE' if candles.none?}".white
+          mx_candle = candles_for(interval).on(date).find_or_initialize_by(time: start)
+          mx_candle.instrument = self
+          mx_candle.source     = 'virtual'
+          mx_candle.interval   = interval
+          mx_candle.prev_close = last_mx_candle.prev_close
+          if candles.any?
+            mx_candle.open       = candles.first.open
+            mx_candle.close      = candles.last.open
+            mx_candle.high       = candles.map(&:high).max
+            mx_candle.low        = candles.map(&:low).min
+            mx_candle.volume     = candles.sum(&:volume)
+            mx_candle.ongoing    = candles.last&.ongoing?
+            mx_candle.save!
+            last_mx_candle = mx_candle
+          else
+            mx_candle.open       = last_mx_candle.open
+            mx_candle.close      = last_mx_candle.close
+            mx_candle.high       = last_mx_candle.high
+            mx_candle.low        = last_mx_candle.low
+            mx_candle.ongoing    = last_mx_candle.ongoing?
+            mx_candle.volume     = 0
+            mx_candle.save!
+          end
+        end
+      end
+    end
   end
 
   class << self
@@ -291,3 +341,6 @@ Instrument.get('CCL').today_open
 Instrument.join(:info).count
 
 Instrument.get('AAN').update! first_date: '2020-11-25'
+
+instr('gazp').update_larger_candles
+instr('rkke').update_larger_candles
