@@ -14,7 +14,7 @@ class IntradayAnalyzer
 
     if candle.rel_change.abs > 0.015
       emit! :big_change, candle
-    elsif candle.volume > volume_threshold * average_volume
+    elsif candle.instrument.rub? && candle.volume > volume_threshold * average_volume
       emit! :volume_spike, candle
     end
 

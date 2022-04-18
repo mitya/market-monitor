@@ -1,22 +1,28 @@
 class MarketCalendar
   class << self
-    def closest_weekday(date)
-      date.wday == 0          ? closest_weekday(date - 2) :
-      date.wday == 6          ? closest_weekday(date - 1) :
-      # date.in?(nyse_holidays) ? closest_weekday(date - 1) :
+    def closest_weekday(date, currency = nil)
+      date.wday == 0           ? closest_weekday(date - 2) :
+      date.wday == 6           ? closest_weekday(date - 1) :
+      holiday?(date, currency) ? closest_weekday(date - 1) :
       date
     end
     alias prev_closest_weekday closest_weekday
 
-    def next_closest_weekday(date)
-      date.wday == 0          ? next_closest_weekday(date + 1) :
-      date.wday == 6          ? next_closest_weekday(date + 2) :
-      # date.in?(nyse_holidays) ? next_closest_weekday(date + 1) :
+    def next_closest_weekday(date, currency = nil)
+      date.wday == 0           ? next_closest_weekday(date + 1) :
+      date.wday == 6           ? next_closest_weekday(date + 2) :
+      holiday?(date, currency) ? next_closest_weekday(date + 1) :
       date
     end
 
-    def market_open?(date)
-      date.on_weekday? # && !nyse_holidays.include?(date)
+    def market_open?(date, currency = nil)
+      date.on_weekday? && !holiday?(date, currency)
+    end
+
+    def holiday?(date, currency = nil)
+      return nyse_holidays.include?(date) if currency == :usd
+      return moex_holidays.include?(date) if currency == :rub
+      false
     end
 
     def prev(date = Date.current) = prev_closest_weekday(date.to_date.yesterday)

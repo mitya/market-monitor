@@ -1,3 +1,8 @@
+ready: fti nvda zim
+pbf eqt dk
+
+
+
 - analyze M1 candles for daggers
 - analyze last 5 M1 candles for 3%+ changes
 - fit to scale toggle

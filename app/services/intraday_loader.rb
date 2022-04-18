@@ -1,11 +1,12 @@
 class IntradayLoader
-  def initialize(instruments: nil, interval: nil, include_history: true, sync_today_candle: false)
-    @instruments = instruments
-    @interval = interval
-    @include_history = include_history
-    @sync_today_candle = sync_today_candle
-    @sync_futures = sync_today_candle
-    @should_analyze = sync_today_candle
+  def initialize(instruments: nil, interval: nil, include_history: true, mode: nil)
+    @wide_market       = mode != nil
+    @instruments       = instruments
+    @interval          = interval
+    @include_history   = include_history
+    @sync_today_candle = @wide_market
+    @should_analyze    = @wide_market
+    @sync_futures      = @mode == :ru
   end
 
   def tickers
@@ -83,10 +84,10 @@ class IntradayLoader
       #   last_iex_update_time = Time.current
       # end
 
-      if Setting.tinkoff_update_pending?
-        RefreshPricesFromTinkoff.refresh Instrument.rub.abc
-        puts "refresh Tinkoff prices".green
-      end
+      # if Setting.tinkoff_update_pending?
+      #   RefreshPricesFromTinkoff.refresh Instrument.rub.abc
+      #   puts "refresh Tinkoff prices".green
+      # end
 
       # analyze
 
@@ -196,8 +197,12 @@ class IntradayLoader
       new.sync
     end
 
-    def sync_all
-      new(instruments: Instrument.active.stocks.rub, interval: '1min', include_history: false, sync_today_candle: true).sync
+    def sync_ru
+      new(instruments: Instrument.active.stocks.rub, interval: '1min', include_history: false, mode: :ru).sync
+    end
+
+    def sync_us
+      new(instruments: Instrument.active.stocks.usd.current, interval: '1min', include_history: false, mode: :us).sync
     end
   end
 end

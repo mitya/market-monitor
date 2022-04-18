@@ -54,9 +54,11 @@ class Instrument < ApplicationRecord
   scope :futures, -> { where type: 'Future' }
   scope :funds, -> { where type: 'Fund' }
   scope :non_usd, -> { where.not currency: 'USD' }
+  scope :non_eur, -> { where.not currency: 'EUR' }
   scope :abc, -> { order :ticker }
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.symbols if key && key.to_s != 'all' }
   scope :main, -> { in_set :main }
+  scope :current, -> { in_set :current }
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
   scope :with_alarm, -> { joins(:levels).where(levels: { manual: true }) }
@@ -70,7 +72,7 @@ class Instrument < ApplicationRecord
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
 
-  scope :active, -> { where active: true, currency: 'RUB', type: 'Stock' }
+  scope :active, -> { where active: true, type: 'Stock' }
 
   validates_presence_of :ticker, :name
 
@@ -179,6 +181,7 @@ class Instrument < ApplicationRecord
   def time       = time_zone.now
   def opening_hhmm  = MarketInfo.ticker_opening_time(ticker)
   def closing_hhmm  = MarketInfo.ticker_closing_time(ticker)
+  def opening_time_without_date = Current.zero_day.change(MarketInfo.ticker_opening_hour_min ticker)
   def today_opening = time.change(MarketInfo.ticker_opening_hour_min ticker)
   def today_closing = time.change(MarketInfo.ticker_closing_hour_min ticker)
   def opening_on(date) = date.in_time_zone(time_zone).to_time.change(MarketInfo.ticker_opening_hour_min ticker)
@@ -226,7 +229,7 @@ class Instrument < ApplicationRecord
   def update_larger_candles(date: Current.date)
     %w[5min].each do |interval|
       minutes_in_interval = Candle.interval_duration_in_mins(interval)
-      day_open_time = Time.plain_time(10, 00)
+      day_open_time = opening_time_without_date
 
       last_mx_candle = candles_for(interval).on(date).order(:time).last
       last_mx_candle ||= candles_for(interval).on(date).build(time: day_open_time, open: yesterday_close, close: yesterday_close, high: yesterday_close, low: yesterday_close)
@@ -341,6 +344,3 @@ Instrument.get('CCL').today_open
 Instrument.join(:info).count
 
 Instrument.get('AAN').update! first_date: '2020-11-25'
-
-instr('gazp').update_larger_candles
-instr('rkke').update_larger_candles

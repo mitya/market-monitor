@@ -1,6 +1,7 @@
 namespace :intraday do
   envtask(:sync)     { IntradayLoader.sync_charts }
-  envtask(:sync_all) { IntradayLoader.sync_all }
+  envtask('sync:ru') { IntradayLoader.sync_ru }
+  envtask('sync:us') { IntradayLoader.sync_us }
   envtask(:load)     { IntradayLoader.new.load }
   envtask(:history)  { IntradayLoader.new.load_history }
 

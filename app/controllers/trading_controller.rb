@@ -209,11 +209,18 @@ class TradingController < ApplicationController
     @groups = @groups.map { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
   end
 
-  def momentum
-    @signals = PriceSignal.intraday.today.order(time: :desc).includes(:instrument, :m1_candle).where('time > ?', (Current.msk.now - 2.hours).strftime('%H:%M')).first(300)
-    @instruments = @signals.map(&:instrument).to_a
-
+  def momentum_ru
     @instruments = Instrument.active.rub.includes(:info)
+    momentum
+  end
+
+  def momentum_us
+    @instruments = Instrument.active.usd.current.includes(:info)
+    momentum
+  end
+
+  def momentum
+    @signals = PriceSignal.intraday.today.where(ticker: @instruments).order(time: :desc).includes(:instrument, :m1_candle).where('time > ?', (Current.msk.now - 2.hours).strftime('%H:%M')).first(300)
 
     InstrumentCache.set @instruments
     Current.preload_prices_for @instruments.to_a
@@ -224,7 +231,7 @@ class TradingController < ApplicationController
         instrument: inst,
         last:       inst.last,
         volume:     inst.today&.volume_in_money,
-        rel_volume: inst.info.relative_volume * 100,
+        rel_volume: (inst.info.relative_volume * 100 rescue 0),
         volatility: inst.today&.volatility.to_f * 100,
         d5_volume:  inst.info.avg_d5_money_volume,
         change:     price_ratio(inst.last, inst.yesterday_close),
@@ -235,7 +242,9 @@ class TradingController < ApplicationController
     @top_losers  = @instrument_rows.sort_by { _1.change }.first(20)
     @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(30).reverse
 
-    @level_hits = PriceLevelHit.intraday.today.order(time: :desc)
+    @level_hits = PriceLevelHit.where(ticker: @instruments).intraday.today.order(time: :desc)
+
+    render :momentum
   end
 
   def last_week

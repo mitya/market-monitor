@@ -37,13 +37,12 @@ namespace :tinkoff do
     end
 
     envtask :previous do
-      Instrument.tinkoff.abc.each { Tinkoff.import_latest_day_candles _1, today: false }
+      Instrument.active.tinkoff.non_eur.abc.each { Tinkoff.import_latest_day_candles _1, today: false }
     end
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"
     envtask :years do
       instruments = R.instruments_from_env
-      instruments = Instrument.tinkoff.abc
       years = ENV['years'].to_s.split(',').map(&:to_i).presence || [2020, 2021, 2022]
       instruments.tinkoff.abc.each { Tinkoff.import_all_day_candles _1, years: years }
     end

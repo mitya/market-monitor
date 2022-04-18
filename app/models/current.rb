@@ -18,6 +18,7 @@ class Current < ActiveSupport::CurrentAttributes
   def ru_market_open_time = ru_time.change(hour: 7).utc
   def weekend? = us_date.on_weekend? # || MarketCalendar.nyse_holidays.include?(us_date)
   def workday? = MarketCalendar.market_open?(Date.current)
+  def zero_day = Time.utc(2000)
 
   def us_market_open_time      = Current.us_time.change(hour:  9, min: 30)
   def us_market_close_time     = Current.us_time.change(hour: 16, min: 00)

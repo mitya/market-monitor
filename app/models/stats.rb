@@ -56,7 +56,12 @@ class Stats < ApplicationRecord
   def accessible_peers = peers.to_a.select { |ticker| Instrument.defined? ticker }
   def accessible_peers_and_self = accessible_peers + [ticker]
   def iex_ticker = instrument.global_iex_ticker
-  def relative_volume = instrument.today&.volume.to_f / avg_volume
+
+  def relative_volume
+    return nil if avg_volume == nil || avg_volume == 0
+    return nil if instrument.today&.volume == nil
+    instrument.today&.volume.to_f / avg_volume
+  end
 
 
   def country_code
@@ -78,7 +83,7 @@ class Stats < ApplicationRecord
   end
 
   def set_average_change(n_candles = 10)
-    update! avg_change: candles_for_averaging.map(&:rel_true_range).compact.average.round(3)
+    update! avg_change: candles_for_averaging.map(&:rel_true_range).compact.average.round(3) rescue nil
   end
 
   def set_d5_volume

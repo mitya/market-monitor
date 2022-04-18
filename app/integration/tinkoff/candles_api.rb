@@ -75,7 +75,7 @@ class Tinkoff
     end
 
     # import_day_candles_between
-    def import_day_candles(instrument, since:, till: Date.tomorrow, delay: 0.1, candle_class: nil)
+    def import_day_candles(instrument, since:, till: Date.tomorrow, delay: 0.01, candle_class: nil)
       data = load_day instrument, since, till
       import_candles_from_hash data, candle_class: candle_class
       sleep delay
