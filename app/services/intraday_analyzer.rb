@@ -13,7 +13,7 @@ class IntradayAnalyzer
   def analyze_one(instrument, candle)
     average_volume = instrument.info.average_volume_for(candle.interval)
     m1_big_change = candle.instrument.rub?? 0.015 : 0.01
-    m1_big_volume = 5 * average_volume
+    m1_big_volume = 5 * average_volume if average_volume
     m5_big_change = candle.instrument.rub?? 0.03 : 0.02
 
     # candle_index_in_history = @candles_history.index_of(candle)
@@ -25,7 +25,7 @@ class IntradayAnalyzer
       emit! :big_change, candle
     # elsif previous_n_rel_change > m5_big_change
     #   emit! :big_change, candle
-    elsif candle.instrument.rub? && candle.volume > m1_big_volume
+    elsif m1_big_volume && candle.volume > m1_big_volume
       emit! :volume_spike, candle
     end
 
@@ -65,7 +65,7 @@ class IntradayAnalyzer
       time:       candle.time,
       interval:   candle.interval,
       direction:  up ? 'up' : 'down',
-      rel_volume: candle.volume / average_volume,
+      rel_volume: (candle.volume / average_volume rescue 0),
       change:     candle.rel_change
   end
 

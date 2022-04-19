@@ -210,11 +210,13 @@ class TradingController < ApplicationController
   end
 
   def momentum_ru
+    @now = Current.ru_time
     @instruments = Instrument.active.rub.includes(:info)
     momentum
   end
 
   def momentum_us
+    @now = Current.us_time
     @instruments = Instrument.active.usd.current.includes(:info)
     momentum
   end
@@ -226,7 +228,7 @@ class TradingController < ApplicationController
     Current.preload_prices_for @instruments.to_a
     Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
 
-    @recent_candles = Candle::M1.for(@instruments).today.where(time: 10.minutes.ago..Time.now).order(:time).group_by(&:cached_instrument)
+    @recent_candles = Candle::M1.for(@instruments).today.where(time: (@now - 10.minutes).to_hhmm .. @now.to_hhmm).order(:time).group_by(&:cached_instrument)
     @recent_changes = @recent_candles.map do |instrument, candles|
       ratio = price_ratio(instrument.last, candles.first.close) if candles.count > 5
       [instrument.ticker, ratio.to_f]

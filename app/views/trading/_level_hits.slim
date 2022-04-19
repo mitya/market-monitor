@@ -9,8 +9,9 @@
       = th :rel_vol, '𝑉 ﹪', class: 'money-cell'
   tbody
     - @level_hits.each do |hit|
-      - inst = hit.instrument
-      tr
+      - inst = hit.instrument!
+      - classes = class_names('opacity-40' => inst.ignored?)
+      tr(class=classes)
         = td :time, l(hit.time, format: '%H:%M'), class: 'fixed-font'
         = td :icon, instrument_logo_button(inst)
         = td :ticker, format_ticker(inst)
@@ -19,4 +20,4 @@
         = td :MA, class: ['money-cell']
           = mini_ma_badge hit.ma_length if hit.ma?
         = td :rel_vol, class: 'money-cell'
-          = number_to_percentage(round_percentage(hit.rel_vol * 100), precision: 0, format: '%n ﹪')
+          = number_to_percentage(round_percentage(hit.rel_vol.to_f * 100), precision: 0, format: '%n ﹪')

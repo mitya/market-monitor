@@ -1,4 +1,3 @@
-- select a 100 of US tickers to start
 - analyze last 5 M1 candles for 3%+ changes
 
 - load historic M1 for US tickers & calc average in main session time
