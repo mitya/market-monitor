@@ -9757,6 +9757,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG0028ZMP45",
+      "ticker": "ESAB",
+      "isin": "US29605J1060",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "ESAB Corporation",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BLZRJ2",
       "ticker": "MS",
       "isin": "US6174464486",
@@ -14711,6 +14721,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG011386VF4",
+      "ticker": "WBD",
+      "isin": "US9344231041",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Warner Bros. Discovery",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000PSKYX7",
       "ticker": "V",
       "isin": "US92826C8394",
@@ -16231,12 +16251,12 @@
     },
     {
       "figi": "BBG000C5Z443",
-      "ticker": "CFX",
-      "isin": "US1940141062",
+      "ticker": "ENOV",
+      "isin": "US1940145022",
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Colfax Corp",
+      "name": "Enovis",
       "type": "Stock"
     },
     {
@@ -18996,5 +19016,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1901
+  "total": 1903
 }

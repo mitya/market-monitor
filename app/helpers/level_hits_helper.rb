@@ -12,7 +12,17 @@ module LevelHitsHelper
   end
 
   def ma_badge(length)
-    badge_class = length == 50 ? 'bg-success' : 'bg-danger'
-    tag.span "MA #{length}", class: "badge #{badge_class}"    
+    tag.span "MA #{length}", class: "badge #{MA_BG_CLASSES[length]}"
   end
+
+  def mini_ma_badge(length)
+    tag.span length, class: ['badge', MA_BG_CLASSES[length]]
+  end
+
+  MA_BG_CLASSES = {
+    20  => 'bg-secondary',
+    50  => 'bg-success',
+    100 => 'bg-warning',
+    200 => 'bg-danger',
+  }
 end

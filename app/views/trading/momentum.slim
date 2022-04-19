@@ -1,13 +1,17 @@
 - page_title! 'Today'
+- fields = %i[change last rel_volume volume]
 
 main.container-fluid
   .row
-    .col-3
+    .col-2
       = render 'signals_grouped'
-    .col-3
+    .col-2
       = render 'level_hits'
     .col-3
-      = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume volatility volume], muted: :ignored?, title: 'Gainers'
-      = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume volatility volume], muted: :ignored?, title: 'Losers'
+      = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume volume], muted: :ignored?, title: 'Gainers'
+      = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume volume], muted: :ignored?, title: 'Losers'
+    .col-2
+      = render 'instruments_top', rows: @recent_gainers, fields: %i[recent_change last rel_volume], muted: :ignored?, title: 'Gainers'
+      = render 'instruments_top', rows: @recent_losers,  fields: %i[recent_change last rel_volume], muted: :ignored?, title: 'Losers'
     .col-3
-      = render 'instruments_top', rows: @volume_gainers, fields: %i[change last rel_volume volatility volume], muted: :ignored?, title: 'Vol. Gainers'
+      = render 'instruments_top', rows: @volume_gainers, fields: %i[change last rel_volume volume], muted: :ignored?, title: 'Vol. Gainers'

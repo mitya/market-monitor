@@ -226,6 +226,12 @@ class TradingController < ApplicationController
     Current.preload_prices_for @instruments.to_a
     Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
 
+    @recent_candles = Candle::M1.for(@instruments).today.where(time: 10.minutes.ago..Time.now).order(:time).group_by(&:cached_instrument)
+    @recent_changes = @recent_candles.map do |instrument, candles|
+      ratio = price_ratio(instrument.last, candles.first.close) if candles.count > 5
+      [instrument.ticker, ratio.to_f]
+    end.sort_by(&:second).to_h
+
     @instrument_rows = @instruments.map do |inst|
       OpenStruct.new(
         instrument: inst,
@@ -235,12 +241,15 @@ class TradingController < ApplicationController
         volatility: inst.today&.volatility.to_f * 100,
         d5_volume:  inst.info.avg_d5_money_volume,
         change:     price_ratio(inst.last, inst.yesterday_close),
+        recent_change: @recent_changes[inst.ticker].to_f,
       )
     end
 
     @top_gainers = @instrument_rows.sort_by { _1.change }.last(20).reverse
     @top_losers  = @instrument_rows.sort_by { _1.change }.first(20)
     @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(30).reverse
+    @recent_gainers = @instrument_rows.sort_by { _1.recent_change }.last(20).reverse
+    @recent_losers  = @instrument_rows.sort_by { _1.recent_change }.first(20)
 
     @level_hits = PriceLevelHit.where(ticker: @instruments).intraday.today.order(time: :desc)
 

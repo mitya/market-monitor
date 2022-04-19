@@ -119,6 +119,7 @@ class MarketCalendar
     end
 
     def periods_between(start_time, end_time, step = 1.minute)
+      return [] if !start_time || !end_time 
       periods = []
       current_time = start_time
       while current_time <= end_time

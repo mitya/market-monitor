@@ -4,7 +4,7 @@ class IntradayLevelHitDetector
   def analyze(instrument, levels: nil, candles: nil)
     @instrument = Instrument[instrument]
     @levels = levels || PriceLevel.textual[@instrument.ticker] || []
-    @candles ||= instrument.candles_for('1min').on(Current.date).non_analyzed.order(:time).includes(:instrument)
+    @candles = candles || instrument.candles_for('1min').on(Current.date).non_analyzed.order(:time).includes(:instrument)
 
     if indicators = instrument.indicators
       [20, 50, 100, 200].each do |period|

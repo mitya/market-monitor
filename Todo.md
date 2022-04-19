@@ -1,6 +1,5 @@
 - select a 100 of US tickers to start
 - analyze last 5 M1 candles for 3%+ changes
-- track DMA hits in intraday signals
 
 - load historic M1 for US tickers & calc average in main session time
 
@@ -457,3 +456,5 @@
 + start date selector in chart-list mode
 + build M3/M5 from M1
 + rake task to load missing US day candles from Tinkoff
++ track DMA hits in intraday signals
++ list last 10-min gainers/losers

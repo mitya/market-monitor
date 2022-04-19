@@ -5,6 +5,7 @@
       = th :icon
       = th :ticker, 'Hits'
       = th :level, 'Level', class: 'money-cell'
+      = th :MA, 'MA', class: 'money-cell'
       = th :rel_vol, '𝑉 ﹪', class: 'money-cell'
   tbody
     - @level_hits.each do |hit|
@@ -13,6 +14,9 @@
         = td :time, l(hit.time, format: '%H:%M'), class: 'fixed-font'
         = td :icon, instrument_logo_button(inst)
         = td :ticker, format_ticker(inst)
-        = td :level, format_price(hit.level_value, unit: inst), class: ['money-cell', red_green_class(hit.positive?)]
+        = td :level, class: ['money-cell', red_green_class(hit.positive?)] do
+          = format_price(hit.level_value, unit: inst)
+        = td :MA, class: ['money-cell']
+          = mini_ma_badge hit.ma_length if hit.ma?
         = td :rel_vol, class: 'money-cell'
           = number_to_percentage(round_percentage(hit.rel_vol * 100), precision: 0, format: '%n ﹪')

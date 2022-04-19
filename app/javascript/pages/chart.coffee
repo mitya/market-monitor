@@ -169,7 +169,7 @@ export default class Chart
 
 
   setupLevelLines: ->
-    levelColors =     { MA20: 'blue',   MA50: 'red',     MA100: 'magenta', MA200: 'red',     open: 'orange',  close: 'orange',   intraday: 'gray'  , swing: 'black' }
+    levelColors =     { MA20: 'gray',   MA50: 'green',     MA100: 'orange', MA200: 'red',     open: 'orange',  close: 'orange',   intraday: 'gray'  , swing: 'black' }
     levelLineStyles = { MA20: 'Dashed',  MA50: 'Dashed',   MA100: 'Solid',   MA200: 'Dashed',   open: 'Solid', close: 'Dotted',  intraday: 'Dotted', swing: 'Solid'}
     levelLineWidths = { MA20: 2,        MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,         intraday: 2       , swing: 1      }
 
