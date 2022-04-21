@@ -251,8 +251,10 @@ class Instrument < ApplicationRecord
         grouped_m1_candles = grouped_intervals.map do |interval_data|
           interval_data => { start:, periods:, candles: }
           candles = candles.compact
-          puts "-- build #{ticker} #{interval} on #{start} #{'NONE' if candles.none?}".white
+          # puts "-- build #{ticker} #{interval} on #{start} #{'NONE' if candles.none?}".white
           mx_candle = candles_for(interval).on(date).find_or_initialize_by(time: start)
+          # next if mx_candle.updated_at > candles.map(&:updated_at).max
+
           mx_candle.instrument = self
           mx_candle.source     = 'virtual'
           mx_candle.interval   = interval

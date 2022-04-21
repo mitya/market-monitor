@@ -457,3 +457,4 @@
 + rake task to load missing US day candles from Tinkoff
 + track DMA hits in intraday signals
 + list last 10-min gainers/losers
++ highlight selected MA hits

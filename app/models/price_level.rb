@@ -17,6 +17,7 @@ class PriceLevel < ApplicationRecord
   def value_plus(delta) = value + value * delta
   def inspect = "<Level #{ticker} #{value}>"
   def source_type = kind == 'MA' ? 'ma' : 'level'
+  def ma? = kind == 'MA'
 
 
   class << self

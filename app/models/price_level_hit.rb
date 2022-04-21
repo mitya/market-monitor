@@ -16,7 +16,7 @@ class PriceLevelHit < ApplicationRecord
     self.level_value ||= level&.value
     self.important = level.important?.presence if level
     self.manual = level.manual?.presence if level
-    self.positive = PositiveKinds.include?(kind)
+    self.positive = PositiveKinds.include?(kind) if positive == nil
   end
 
   before_save do
