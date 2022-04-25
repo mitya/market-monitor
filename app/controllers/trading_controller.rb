@@ -265,9 +265,9 @@ class TradingController < ApplicationController
     InstrumentCache.set @instruments
 
     @results = @dates.each_with_object({}) do |date, hash|
-      candles = @instruments.map { _1.day_candles!.find_date(date) }
-      gainers = candles.sort_by(&:rel_change).last(15).reverse
-      losers  = candles.sort_by(&:rel_change).first(15)
+      candles = @instruments.map { _1.day_candles!.find_date(date) }.compact
+      gainers = candles.compact.sort_by(&:rel_change).last(15).reverse
+      losers  = candles.compact.sort_by(&:rel_change).first(15)
       volume_gainers = candles.sort_by(&:volume_to_average).last(15).reverse.select { _1.volume_to_average > 2 }
       user_tickers = (gainers + losers).map(&:ticker).to_set
 
@@ -275,6 +275,27 @@ class TradingController < ApplicationController
 
       result = OpenStruct.new(
         gainers: gainers, losers: losers, volume_gainers: volume_gainers
+      )
+
+      hash[date] = result
+    end
+  end
+
+  def last_week_spikes
+    @instruments = Instrument.active.rub.includes(:info)
+    @dates = MarketCalendar.open_days(10.days.ago).last(6)
+    Current.preload_day_candles_with @instruments.to_a, @dates
+    InstrumentCache.set @instruments
+
+    @results = @dates.each_with_object({}) do |date, hash|
+      spikes = Spike.where(date: date, ticker: @instruments).order(:spike)
+      spikes = spikes.reject { _1.spike.abs < 0.05 }
+      spikes_index = spikes.index_by &:ticker
+      ups, downs = spikes.partition &:up?
+      ups = ups.sort_by(&:spike).reverse
+
+      result = OpenStruct.new(
+        spikes_up: ups, spikes_down: downs
       )
 
       hash[date] = result

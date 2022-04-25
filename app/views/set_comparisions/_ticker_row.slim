@@ -26,7 +26,7 @@ tr.ticker-item(data-ticker=inst.ticker tabindex="0")
 
   - if local_assigns[:level_cell] && hit
     td.money-cell(data-col="last_to_level_change")
-      - last_to_level = (inst.last - hit.level_value) / inst.last
+      - last_to_level = (inst.last - hit.level_value) / inst.last if inst.last
       = tag.span colorized_ratio(last_to_level, precision: precision, format: '%n'),
         title: "Level — #{format_price(hit.level_value)}",
         class: class_names('badge bg-light': hit.manual?)

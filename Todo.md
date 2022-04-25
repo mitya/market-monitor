@@ -458,3 +458,4 @@
 + track DMA hits in intraday signals
 + list last 10-min gainers/losers
 + highlight selected MA hits
++ add a dashboard with last week spikes

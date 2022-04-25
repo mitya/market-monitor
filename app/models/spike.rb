@@ -26,6 +26,9 @@ class Spike < ApplicationRecord
     end
   end
 
+  def cached_instrument = InstrumentCache.get(ticker)
+  def candle = cached_instrument.day_candles!.find_date(date)
+
 end
 
 __END__

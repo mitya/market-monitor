@@ -1,0 +1,23 @@
+- fields = %i[icon ticker change rel_volume volume]
+
+- unless local_assigns[:header] == false
+  thead.table-dark
+    tr
+      = th :icon
+      = th :ticker
+      = th :spike, 'Spike ﹪', class: 'money-cell'
+      = th :change, 'Close', class: 'money-cell'
+      = th :rel_volume, '𝑉', class: "money-cell"
+tbody
+  - spikes.each do |spike|
+    - inst = spike.cached_instrument
+    - candle = spike.candle
+    tr(class=class_names('opacity-40' => inst.ignored?))
+      = td :icon, instrument_logo_button(inst)
+      = td :ticker, format_ticker(inst)
+      = td :spike, class: "money-cell" do
+        = colorized_ratio spike.spike, precision: 1
+      = td :change, class: "money-cell" do
+        = colorized_ratio spike.change, precision: 1
+      = td :rel_volume, class: "money-cell" do
+        = number_to_percentage candle.volume_to_average * 100, precision: 0, format: '%n ﹪'
