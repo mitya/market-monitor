@@ -4,6 +4,9 @@ class DateIndicators < ApplicationRecord
   belongs_to :instrument, foreign_key: 'ticker'
   scope :current, -> { where current: true }
 
+  def datetime = date.end_of_day
+  def charting_timestamp = date.end_of_day.to_time.to_i
+
   class << self
     def create_recursive(instrument, date: Current.yesterday)
       puts "Update EMAs for #{instrument}"

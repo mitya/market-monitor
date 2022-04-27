@@ -1,4 +1,3 @@
-- show DMAs on day charts in single mode
 - show distance to DMAs for all tickers
 
 - analyze last 5 M1 candles for 3%+ changes
@@ -459,3 +458,4 @@
 + list last 10-min gainers/losers
 + highlight selected MA hits
 + add a dashboard with last week spikes
++ show DMAs on day charts in single mode

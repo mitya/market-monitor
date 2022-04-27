@@ -94,10 +94,21 @@ class TradingController < ApplicationController
       ticker = instrument.ticker
       candles = repo.for(instrument).includes(:instrument).order(:date, :time).since(since_date).last(params[:limit] || (is_single ? 777 : 500))
       map[ticker] = { ticker: ticker }
-      map[ticker][:candles] = candles.map { |c| [c.datetime_as_msk.to_i, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
+      map[ticker][:candles] = candles.map { |c| [c.charting_timestamp, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
+
       unless is_update
-        map[ticker][:opens] = candles.select(&:opening?).map { _1.datetime_as_msk.to_i } unless period == 'day'
+        map[ticker][:opens] = candles.select(&:opening?).map { _1.charting_timestamp } unless period == 'day'
         map[ticker][:levels] = { }
+        map[ticker][:period] = period
+
+        if instruments.one? && period == 'day'
+          indicators = instrument.indicators_history.where('date >= ?', candles.map(&:date).min).order(:date)
+          map[ticker][:averages] = { }
+          [20, 50, 200].each do |period|
+            map[ticker][:averages][period] = indicators.map { [_1.charting_timestamp, _1.send("ema_#{period}")] }.reject { _1.second == nil }
+          end
+        end
+
         unless period == 'day'
           map[ticker][:levels].merge!(
             MA20:  instrument.indicators&.ema_20&.to_f,

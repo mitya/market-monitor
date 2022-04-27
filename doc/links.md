@@ -19,7 +19,7 @@ https://www.marketwatch.com/optionscenter/calendar/2021
 https://www.tinkoff.ru/invest/margin/equities/
 https://broker.vtb.ru/trade/margins/#marginlist
 
-## Queiries
+## Queries
 
     Array.from(document.querySelectorAll('.table.table-hover.table-borderless.table-sm tbody td:nth-child(3)')).map(n => n.innerText).join(' ')
 

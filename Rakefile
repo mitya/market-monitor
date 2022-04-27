@@ -48,3 +48,4 @@ end
 Rails.application.load_tasks
 
 task :env => :environment
+task(:w) { sh "bin/webpack-dev-server" }

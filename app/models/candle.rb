@@ -48,7 +48,9 @@ class Candle < ApplicationRecord
   def to_date = date
   def datetime = date.end_of_day
   def datetime_as_msk = datetime + 3.hours
+  def charting_timestamp = intraday?? datetime_as_msk.to_i : date.end_of_day.to_i
   def opening? = is_opening?
+  def intraday? = interval != 'day'
   def time_str = time.strftime('%H:%M')
 
   def change = close - open

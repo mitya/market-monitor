@@ -2,7 +2,7 @@
   .tickers-field {
     width: 250px;
   }
-  
+
   .intraday-levels textarea, .ticker-sets textarea {
     height: 250px;
   }
@@ -15,22 +15,23 @@
   // gap: 15px;
 }
 
-.intraday-chart {  
+.intraday-chart {
   min-height: 100px;
   // flex-basis: 47%;
   // padding: 5px;
   // border: 1px solid #ccc;
   // border-right: 2px solid rgba(black, 0.2);
-  
+
   &-content {
     position: relative;
   }
-  
+
   &-legend {
     position: absolute; left: 0; top: 0; z-index: 100;
-    
+
     .chart-ticker { font-weight: bold; }
-    .candle-time { color: rgba(black, 0.2); }
+    .candle-time { color: rgba(black, 0.3); }
+    // .candle-average { width: 100px; }
   }
 }
 
@@ -47,13 +48,13 @@
 
 .chart-tickers-list {
   flex-basis: 150px;
-  .ticker-item { 
-    cursor: pointer; 
-    
+  .ticker-item {
+    cursor: pointer;
+
     &.active { background-color: rgba(blue, 0.05); }
   }
 }
 
 .ticker-set-title {
-  cursor: pointer; 
+  cursor: pointer;
 }
