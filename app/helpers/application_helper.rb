@@ -122,7 +122,6 @@ module ApplicationHelper
 
   def round_percentage(value)
     return value if value < 100
-    return value.round(-1) if value < 300
-    return value.round(-2)
+    return value.round(-1)
   end
 end

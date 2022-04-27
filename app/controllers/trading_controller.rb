@@ -271,14 +271,14 @@ class TradingController < ApplicationController
 
   def last_week
     @instruments = Instrument.active.includes(:info)
-    @dates = MarketCalendar.open_days(10.days.ago).last(6)
+    @dates = MarketCalendar.open_days(10.days.ago).last(6) - [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
 
     @results = @dates.each_with_object({}) do |date, hash|
       candles = @instruments.map { _1.day_candles!.find_date(date) }.compact
-      gainers = candles.compact.sort_by(&:rel_change).last(15).reverse
-      losers  = candles.compact.sort_by(&:rel_change).first(15)
+      gainers = candles.compact.sort_by(&:rel_close_change).last(15).reverse
+      losers  = candles.compact.sort_by(&:rel_close_change).first(15)
       volume_gainers = candles.sort_by(&:volume_to_average).last(15).reverse.select { _1.volume_to_average > 2 }
       user_tickers = (gainers + losers).map(&:ticker).to_set
 
@@ -294,7 +294,7 @@ class TradingController < ApplicationController
 
   def last_week_spikes
     @instruments = Instrument.active.rub.includes(:info)
-    @dates = MarketCalendar.open_days(10.days.ago).last(6)
+    @dates = MarketCalendar.open_days(10.days.ago).last(6) - [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
 

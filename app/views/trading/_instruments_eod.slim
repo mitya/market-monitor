@@ -14,7 +14,7 @@ tbody
       = td :icon, instrument_logo_button(inst)
       = td :ticker, format_ticker(inst)
       = td :change, class: "money-cell" do
-        = colorized_ratio candle.rel_change, precision: 1
+        = colorized_ratio candle.rel_close_change, precision: 1
         / = percentage_bar_or_number candle.rel_change, classes: "#{red_green_class candle.rel_change.to_f > 0}", threshold: 0.05, rtl: true
       = td :rel_volume, class: "money-cell" do
         / = number_to_percentage candle.volume_to_average, precision: 0, format: '%n ﹪'
