@@ -31,7 +31,7 @@ task 'sync:ru'    => %w[intraday:sync:ru]
 task 'sync:us'    => %w[intraday:sync:us]
 task 'today'      => %w[tinkoff:candles:today]
 task 'averages'   => %w[candles:set_average_volume candles:set_average_change candles:set_d5_volume]
-task 'futures'    => %w[tinkoff:candles:futures]
+task 'futures'    => %w[tinkoff:futures]
 
 envtask(:SetIexTickers) { SetIexTickers.call }
 envtask(:LoadMissingIexCandles) { LoadMissingIexCandles.call }

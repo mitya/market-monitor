@@ -3030,15 +3030,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BKQG80",
-      "ticker": "IAC__old",
-      "isin": "US44891N1090",
-      "lot": 1,
-      "currency": "USD",
-      "name": "IAC InterActiveCorp",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000K82ZT8",
       "ticker": "CHKP",
       "isin": "IL0010824113",
@@ -5219,16 +5210,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS002WMH2F2",
-      "ticker": "SERV",
-      "isin": "US81761R1095",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "ServiceMaster Global Holdings",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000LD9JQ8",
       "ticker": "WYNN",
       "isin": "US9831341071",
@@ -6645,15 +6626,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Allogene Therapeutics Inc",
-      "type": "Stock"
-    },
-    {
-      "figi": "TCS000BJX8C8",
-      "ticker": "NOV_old",
-      "isin": "US6370711011",
-      "lot": 1,
-      "currency": "USD",
-      "name": "National Oilwell Varco",
       "type": "Stock"
     },
     {
@@ -9947,15 +9919,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS000BVP5P2",
-      "ticker": "SLG_old",
-      "isin": "US78440X1019",
-      "lot": 1,
-      "currency": "USD",
-      "name": "SL Green Realty",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00DYPZ4T0",
       "ticker": "BHF",
       "isin": "US10922N1037",
@@ -13005,15 +12968,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS000C8NJ10",
-      "ticker": "POLold",
-      "isin": "US73179P1066",
-      "lot": 1,
-      "currency": "USD",
-      "name": "PolyOne Corp",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000RTHVK7",
       "ticker": "GCHE",
       "isin": "RU000A0JL4R1",
@@ -13894,15 +13848,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS000BGLRN3",
-      "ticker": "LUMNold",
-      "isin": "US1567001060",
-      "lot": 1,
-      "currency": "USD",
-      "name": "CenturyLink",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00DHTYPH8",
       "ticker": "GTLB",
       "isin": "US37637K1088",
@@ -14572,15 +14517,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS008F2T3T2",
-      "ticker": "RUAL_old",
-      "isin": "JE00B5BCW814",
-      "lot": 10,
-      "currency": "RUB",
-      "name": "РУСАЛ",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000CVKZY0",
       "ticker": "CRVL",
       "isin": "US2210061097",
@@ -15048,15 +14984,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Power Integrations Inc",
-      "type": "Stock"
-    },
-    {
-      "figi": "TCS2709P1030",
-      "ticker": "CCMP_old",
-      "isin": "US12709P1030",
-      "lot": 1,
-      "currency": "USD",
-      "name": "Cabot Microelectronics",
       "type": "Stock"
     },
     {
@@ -16407,15 +16334,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "USANA Health Sciences Inc",
-      "type": "Stock"
-    },
-    {
-      "figi": "TCS000BKQG80",
-      "ticker": "IAC_old",
-      "isin": "US44919P5089",
-      "lot": 1,
-      "currency": "USD",
-      "name": "IAC InterActiveCorp",
       "type": "Stock"
     },
     {
@@ -17799,15 +17717,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS00B6WH9G3",
-      "ticker": "MTCH_old",
-      "isin": "US57665R1068",
-      "lot": 1,
-      "currency": "USD",
-      "name": "Match Group Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BBK4B9",
       "ticker": "LFC",
       "isin": "US16939P1066",
@@ -18467,15 +18376,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS000BH0FR6",
-      "ticker": "SGEN_old",
-      "isin": "US8125781026",
-      "lot": 1,
-      "currency": "USD",
-      "name": "Seattle Genetics Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BCY878",
       "ticker": "BCPC",
       "isin": "US0576652004",
@@ -19016,5 +18916,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1903
+  "total": 1892
 }

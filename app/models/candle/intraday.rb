@@ -23,6 +23,10 @@ class Candle
     def is_closing! = update!(is_closing: true)
     def is_opening! = update!(is_opening: true)
 
+    def change_since_open     = cached_instrument.today_open && close - cached_instrument.today_open
+    def rel_change_since_open = cached_instrument.today_open && close - cached_instrument.today_open / cached_instrument.today_open
+    def up_since_open? = change_since_open >= 0
+
     class << self
       def intraday? = true
 
@@ -31,7 +35,6 @@ class Candle
         hours, mins = mins_since_midnight.divmod(60)
         "#{hours.to_s.rjust(2, '0')}:#{mins.to_s.rjust(2, '0')}"
       end
-
 
     end
   end

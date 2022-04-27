@@ -2,8 +2,8 @@ class IntradayLevelHitDetector
   include StaticService
 
   TRACKED_MA_HITS = %w[
-    etln  gazp tcsg vkco gltr ozon five rosn agro enpg
-  ].to_set
+    agro amet enpg etln five gazp gltr ozon rosn sber tcsg vkco
+  ].map(&:upcase).to_set
 
   def analyze(instrument, levels: nil, candles: nil)
     @instrument = Instrument[instrument]
@@ -12,7 +12,7 @@ class IntradayLevelHitDetector
 
     if indicators = instrument.indicators
       [20, 50, 100, 200].each do |period|
-        important = TRACKED_MA_HITS.include?(instrument.ticker) && period >= 50
+        important = TRACKED_MA_HITS.include?(instrument.ticker) # && period >= 50
         @levels << PriceLevel.new(ticker: instrument.ticker, value: indicators.send("ema_#{period}"),  kind: 'MA', period:  period, important: important)
       end
     end
@@ -38,10 +38,20 @@ class IntradayLevelHitDetector
       if candle.range.include?(level.value)
         next if @today_hits.detect { |hit| hit.level_value == level.value && hit.datetime >= candle.datetime - 3.hours }
         next if level.ma? && @older_hits.detect { |hit| hit.ma? && hit.ma_length == level.period }
-        puts "Level hit for #{candle.ticker}: #{level.value}".magenta
-        hit = PriceLevelHit.create! instrument: candle.instrument, date: candle.date, time: candle.time,
-          source: level.source_type, ma_length: level.period, positive: candle.up?,
-          level_value: level.value, manual: level.manual?, rel_vol: candle.volume_to_average, important: level.important
+        puts "Check level #{level.important} #{level.period}" if level.ma?
+        puts "Level hit for #{candle.ticker}: #{level.value} #{"IMP" if level.important}".magenta
+        hit = PriceLevelHit.create!(
+          instrument:  candle.instrument, 
+          date:        candle.date, 
+          time:        candle.time,
+          positive:    candle.up_since_open?,
+          rel_vol:     candle.volume_to_average, 
+          source:      level.source_type, 
+          ma_length:   level.period, 
+          level_value: level.value,
+          manual:      level.manual?,
+          important:   level.important
+        )
         @today_hits << hit
       end
     end

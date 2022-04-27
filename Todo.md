@@ -1,10 +1,10 @@
+- show DMAs on day charts in single mode
+- show distance to DMAs for all tickers
+
 - analyze last 5 M1 candles for 3%+ changes
-
 - load historic M1 for US tickers & calc average in main session time
-
 - analyze M1 candles for daggers
 - fit to scale toggle
-- show MAs on day charts in single mode
 - percentage scale relative to the last bar (inject the same bar as first and autoscale chart to fit)
 
 - panel with ticker info — name, marketcap, changes in period
