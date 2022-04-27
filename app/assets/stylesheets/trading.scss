@@ -47,7 +47,11 @@
 .small-caps { font-variant: small-caps; }
 
 .chart-tickers-list {
-  flex-basis: 150px;
+  flex-basis: 190px;
+  height: calc(100vh - 60px);
+  overflow-y: scroll;
+
+  h6 { text-align: center; }
   .ticker-item {
     cursor: pointer;
 

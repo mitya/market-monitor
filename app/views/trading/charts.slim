@@ -82,18 +82,18 @@
       button type="button" class="btn btn-outline-secondary go-up"     data-action="chart-toolbar#gotoUp"   = fa_icon 'angle-double-up'
       button type="button" class="btn btn-outline-secondary go-to-end" data-action="chart-toolbar#gotoEnd"  = fa_icon 'angle-double-right'
 
-    select class="ticker-set-selector form-select form-select-sm w-auto me-2" data-action="chart-toolbar#changeTickerSet"
+    select class="chart-period-selector form-select form-select-sm me-2 w-auto" name='since-date' data-action="change->chart-toolbar#updateChartSettings"
+      option
+      = options_for_select CandlesController::CHART_PERIODS.map(&:to_s), @since_date_str
+
+    select class="ticker-set-selector form-select form-select-sm w-auto me-2 ms-auto" data-action="chart-toolbar#changeTickerSet"
       option
       - @ticker_sets.each do |set|
         - tickers_line = set.tickers_line
         option(data-id=set.id value=tickers_line selected=(@current_ticker_set == set))
           = set.key.downcase
 
-    select class="chart-period-selector form-select form-select-sm w-auto" name='since-date' data-action="change->chart-toolbar#updateChartSettings"
-      option
-      = options_for_select CandlesController::CHART_PERIODS.map(&:to_s), @since_date_str
-
-    .btn-group.btn-group-sm.w-auto.align-items-center.ms-auto.pe-0
+    .btn-group class="btn-group-sm w-auto align-items-center pe-0"
       button type="button" class="btn btn-outline-secondary open-settings" data-action="chart-toolbar#openSettings" = fa_icon 'cog'
       button type="button" class=class_names("btn toggle-tickers-list btn-#{@list_shown ? '' : 'outline-'}secondary") data-action="chart-toolbar#toggleTickersList" = fa_icon 'bars'
 
