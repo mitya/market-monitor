@@ -59,8 +59,8 @@ class Stats < ApplicationRecord
 
   def relative_volume
     return nil if avg_volume == nil || avg_volume == 0
-    return nil if instrument.today&.volume == nil
-    instrument.today&.volume.to_f / avg_volume
+    return nil if instrument.last_day&.volume == nil
+    instrument.last_day&.volume.to_f / avg_volume
   end
 
 

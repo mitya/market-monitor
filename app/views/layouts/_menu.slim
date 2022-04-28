@@ -43,6 +43,7 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
             li= link_to 'Futures', futures_path, class: 'dropdown-item'
             li= link_to 'Today RU', momentum_ru_trading_path, class: 'dropdown-item'
             li= link_to 'Today RU / All', recent_trading_path, class: 'dropdown-item'
+            li= link_to 'Today RU / MAs', averages_trading_path, class: 'dropdown-item'
             li= link_to 'Today US', momentum_us_trading_path, class: 'dropdown-item'
             li= link_to 'Week / Gainers', last_week_trading_path, class: 'dropdown-item'
             li= link_to 'Week / Spikes', last_week_spikes_trading_path, class: 'dropdown-item'
@@ -60,3 +61,5 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
               .dropdown-item(class="x-refresh-prices text-muted cursor-pointer" data-scope='us')= "US #{time_ago_in_words(Setting.iex_last_update)} ago"
             li
               .dropdown-item(class="x-refresh-prices text-muted cursor-pointer" data-scope='ru')= "RU #{time_ago_in_words(Setting.tinkoff_last_update)} ago"
+            li
+              .dropdown-item(class="text-muted cursor-pointer")= link_to "Hide menu", url_for(request.params.merge mh: 1)

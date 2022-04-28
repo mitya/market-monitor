@@ -1,0 +1,9 @@
+- page_title! 'Today / MAs'
+
+main.container-fluid
+  .row
+    / - @instrument_rows.in_groups_of(36, false) do |rows|
+    - @groups.each do |key, group|
+      - group.in_groups_of(100, false) do |rows|
+        .col-3
+          = render 'instruments_top', rows: rows, fields: %i[change change_to_ema_20 change_to_ema_50 change_to_ema_200]

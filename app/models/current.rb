@@ -2,11 +2,12 @@ class Current < ActiveSupport::CurrentAttributes
   attribute :day_candles_cache, :prices_cache
 
   def date
-    # date = Time.current.hour < 4 ? Date.yesterday : Date.current
     date = Time.now.hour > 20 ? Date.tomorrow : Date.current
     date.on_weekend?? date.prev_weekday : date
   end
-  alias today date
+
+  def date = Date.current
+  def last_day = @last_day ||= Candle.maximum(:date)
 
   def ytd = date.beginning_of_year
   def est = Time.find_zone!('Eastern Time (US & Canada)')
@@ -16,9 +17,10 @@ class Current < ActiveSupport::CurrentAttributes
   def us_date = us_time.to_date
   def us_market_open? = date.on_weekday? && us_time.to_s(:time) >= '09:30'
   def uk_market_open? = date.on_weekday? && Time.current.to_s(:time) >= '11:00'
+  def ru_market_open? = workday?(:rub) && Time.current.to_s(:time).between?('10:00', '19:00')
   def ru_market_open_time = ru_time.change(hour: 7).utc
   def weekend? = us_date.on_weekend? # || MarketCalendar.nyse_holidays.include?(us_date)
-  def workday? = MarketCalendar.market_open?(Date.current)
+  def workday?(currency = nil) = MarketCalendar.market_open?(Date.current, currency)
   def zero_day = Time.utc(2000)
 
   def us_market_open_time      = Current.us_time.change(hour:  9, min: 30)
@@ -52,6 +54,7 @@ class Current < ActiveSupport::CurrentAttributes
   def y2021     = Date.new(2021,  1,  4)
   def y2022     = Date.new(2022,  1,  3)
 
+  alias today date
   alias d0_ago today
   alias d1_ago yesterday
   alias w1_ago d5_ago

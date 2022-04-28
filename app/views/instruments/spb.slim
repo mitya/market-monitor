@@ -43,7 +43,7 @@ main.container-fluid
         - if chart_volatility
           th V
     tbody
-      - instruments = @instruments.sort_by &:gain_since_close
+      - instruments = @instruments.sort_by { _1.change_since_close.to_f }
       - instruments.each do |instrument|
         - inst = instrument
         - info = instrument.info

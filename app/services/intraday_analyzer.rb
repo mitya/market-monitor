@@ -4,7 +4,7 @@ class IntradayAnalyzer
   def analyze(instrument, candles)
     return if candles.blank?
     instrument.transaction do
-      @candles_history = candles.first.same_day_siblings.where('time >= ? AND time < ?', candles.first.time - 7.minutes, candles.first.time).order(:time) + candles
+      @candles_history = candles.first.same_day_siblings.where('time >= ? AND time < ?', candles.first.time - 2.hours, candles.first.time).order(:time) + candles
       candles.each { analyze_one instrument, _1 }
     end
     nil
@@ -13,19 +13,25 @@ class IntradayAnalyzer
   def analyze_one(instrument, candle)
     average_volume = instrument.info.average_volume_for(candle.interval)
     m1_big_change = candle.instrument.rub?? 0.015 : 0.01
-    m1_big_volume = 5 * average_volume if average_volume
+    m1_big_volume = 7 * average_volume if average_volume
+    m1_very_big_volume = 15 * average_volume if average_volume
     m5_big_change = candle.instrument.rub?? 0.03 : 0.02
+
+    last_2_hours = @candles_history.select { _1.time.between? candle.time - 2.hours, candle.time - 1.second }
 
     # candle_index_in_history = @candles_history.index_of(candle)
     # previous_n = @candles_history[[candle_index_in_history - 5, 0].max .. candle_index_in_history]
     # previous_n_change = candle.close - previous_n.first.open
     # previous_n_rel_change = previous_n_change / previous_n.first.open
 
-    if candle.rel_change.abs > m1_big_change
-      emit! :big_change, candle
     # elsif previous_n_rel_change > m5_big_change
     #   emit! :big_change, candle
-    elsif m1_big_volume && candle.volume > m1_big_volume
+
+    if candle.rel_change.abs > m1_big_change
+      emit! :big_change, candle
+    elsif m1_big_volume && (
+          candle.volume > m1_very_big_volume ||
+          candle.volume > m1_big_volume && last_2_hours.none? { _1.volume > candle.volume } )
       emit! :volume_spike, candle
     end
 

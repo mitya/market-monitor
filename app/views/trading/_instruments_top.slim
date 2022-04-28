@@ -14,6 +14,9 @@
       = th :last_to_15m_ago, '15m'
       = th :last_to_05m_ago, '5m'
       = th :last_to_01m_ago, '1m'
+      = th :change_to_ema_20, 'MA20 ﹪', class: 'money-cell'
+      = th :change_to_ema_50, 'MA50 ﹪', class: 'money-cell'
+      = th :change_to_ema_200, 'MA200 ﹪', class: 'money-cell'
       = th :rel_volume, '𝑉 ﹪', class: 'money-cell'
       = th :yesterday_volume, 'Yvol', class: 'money-cell'
       = th :volume, '𝑉 m', class: 'money-cell'
@@ -36,6 +39,7 @@
           = colorized_ratio row.last_to_yesterday_open, precision: 1
         = td :change, class: "money-cell" do
           = colorized_ratio row.change, precision: 1
+          / = ratio_bar row.change, classes: 'solid'
         = td :recent_change, class: "money-cell" do
           = colorized_ratio row.recent_change, precision: 1
           / = ratio_bar row.recent_change, classes: 'solid m-wide'
@@ -59,3 +63,9 @@
           = format_price_in_millions row.d5_volume, unit: inst.currency
         = td :volatility, class: 'money-cell' do
           = number_to_percentage row.volatility, precision: 0
+        = td :change_to_ema_20, class: "money-cell" do
+          = colorized_ratio row.change_to_ema_20, precision: 1
+        = td :change_to_ema_50, class: "money-cell" do
+          = colorized_ratio row.change_to_ema_50, precision: 1
+        = td :change_to_ema_200, class: "money-cell" do
+          = colorized_ratio row.change_to_ema_200, precision: 1

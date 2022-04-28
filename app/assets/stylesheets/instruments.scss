@@ -16,6 +16,7 @@ th[data-sort] { cursor: pointer; }
 
 .changebox-green, .is-green { color: green; }
 .changebox-red, .is-red { color: red; }
+.changebox-none, .is-red { color: rgba(black, 0.6); }
 .is-dark-red { color: darkred; }
 .is-dark-green { color: darkgreen; }
 .is-light-blue { color: rgba(blue, 0.5); }

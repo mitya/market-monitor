@@ -90,6 +90,7 @@ module ApplicationHelper
   end
 
   def ratio_bar(ratio, threshold: 0.08, **attrs)
+    return if !ratio
     if ratio.to_f.abs >= threshold
       colorized_ratio ratio, precision: 1, format: '%n'
     else

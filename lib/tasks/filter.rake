@@ -39,7 +39,7 @@ namespace :filter do
       lowest_candle = inst.lowest_body_in falling_period
       next unless lowest_candle.date.in? low_reach_period
 
-      rel_diff = inst.rel_diff_value(lowest_candle.range_low)
+      rel_diff = inst.gain_since(lowest_candle.range_low, :last)
       next unless rel_diff.to_f.in? gain_range
 
       puts "#{inst.ticker.ljust 8} [#{inst.info&.sector_code.to_s.ljust 21}] since #{lowest_candle.date} #{(rel_diff * 100).to_i}% from #{lowest_candle.range_low} / #{lowest_candle.low}"

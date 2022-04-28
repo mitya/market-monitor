@@ -78,11 +78,11 @@ class Instrument < ApplicationRecord
 
   after_create { |inst| SetIexTickers.process(inst) }
 
-  attribute :current_price_selector, default: "last"
+  attribute :current_price_selector, default: :last
 
 
   MatureDate = Current.y2017
-  DateSelectors = %w[today yesterday] + %w[d1 d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].map { |period| "#{period}_ago" }
+  DateSelectors = %w[today yesterday last_day] + %w[d1 d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].map { |period| "#{period}_ago" }
 
 
   DateSelectors.each do |selector|
@@ -117,30 +117,29 @@ class Instrument < ApplicationRecord
   end
 
   def base_price = send(current_price_selector)
+  def get_price(selector) = selector.is_a?(Symbol) || selector.is_a?(String) ? send(selector) : selector
 
   def diff(old_price, new_price = current_price_selector)
-    old_price, new_price = send(old_price), send(new_price)
+    old_price, new_price = get_price(old_price), get_price(new_price)
     new_price - old_price if old_price && new_price
   end
 
-  def rel_diff(old_price, new_price = current_price_selector, default: nil)
-    old_price, new_price = send(old_price), send(new_price)
-    old_price && new_price ? new_price / old_price - 1.0 : default
+  def rel_diff(base_price, new_price = current_price_selector, default: nil)
+    base_price, new_price = get_price(base_price), get_price(new_price)
+    new_price / base_price - 1.0 rescue default
   end
+  alias gain_since rel_diff
 
-  def rel_diff_value(old_price_value, new_price = current_price_selector)
-    new_price_value = send(new_price)
-    new_price_value / old_price_value - 1.0 if old_price_value && new_price_value
-  end
-
-  def gain_since_close = rel_diff(:d1_ago_close, :last, default: 0)
-  alias gain_since rel_diff_value
+  def change_since_close = gain_since(:yesterday_close, :last)
+  def change_to_ema_20   = gain_since(:last, indicators.ema_20)
+  def change_to_ema_50   = gain_since(:last, indicators.ema_50)
+  def change_to_ema_200  = gain_since(:last, indicators.ema_200)
 
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
 
-  def d1_change = @d1_change ||= d1_ago_close / d2_ago_close - 1.0 rescue 0
+  def d1_change = @d1_change ||= gain_since(:d2_ago_close, :d1_ago_close)
   def price_change = @price_change ||= price!.change rescue 0
   def stored_gain_since(date_specifier) = date_specifier.blank? || date_specifier == 'last' ? price_change : aggregate.gains[date_specifier]
 

@@ -10,4 +10,4 @@
         = td :tickers do
           - signals.sort_by(&:ticker).each do |signal|
             - inst = signal.instrument
-            => tag.span format_ticker(inst), class: class_names("px-1", red_green_class(signal.up?), "some-opacity-40" => inst.ignored?)
+            => tag.span format_ticker(inst), class: class_names("px-1", red_green_class(signal.up?), "opacity-40" => inst.ignored?)

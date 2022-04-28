@@ -251,7 +251,7 @@ padNumber = (number, length = 2, filler = '0') -> number.toString().padStart(len
 
 formatPrice = (price) ->
   return '' if price == undefined
-  return price if price < 0.1
+  return price.toFixed(4) if price < 0.1
   if isOneChartPerPage
     if price < 10_000 then price.toFixed(2) else price
   else

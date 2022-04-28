@@ -191,17 +191,17 @@ class TradingController < ApplicationController
       OpenStruct.new(
         instrument:              inst,
         last:                    inst.last,
-        change:                  price_ratio(inst.last, inst.yesterday_close),
-        last_to_yesterday_open:  price_ratio(inst.last, inst.yesterday_open),
-        last_to_today_open:      price_ratio(inst.last, inst.today_open),
-        last_to_60m_ago:         price_ratio(inst.last, @candles[60][inst.ticker]&.close),
-        last_to_15m_ago:         price_ratio(inst.last, @candles[15][inst.ticker]&.close),
-        last_to_05m_ago:         price_ratio(inst.last, @candles[ 5][inst.ticker]&.close),
-        last_to_01m_ago:         price_ratio(inst.last, @candles[ 1][inst.ticker]&.close),
+        change:                  inst.gain_since(inst.yesterday_close, :last),
+        last_to_yesterday_open:  inst.gain_since(inst.yesterday_open, :last),
+        last_to_today_open:      inst.gain_since(inst.today_open, :last),
+        last_to_60m_ago:         inst.gain_since(@candles[60][inst.ticker]&.close, :last),
+        last_to_15m_ago:         inst.gain_since(@candles[15][inst.ticker]&.close, :last),
+        last_to_05m_ago:         inst.gain_since(@candles[ 5][inst.ticker]&.close, :last),
+        last_to_01m_ago:         inst.gain_since(@candles[ 1][inst.ticker]&.close, :last),
         yesterday_volume:        inst.d1_ago&.volume_in_money,
-        volume:                  inst.today&.volume_in_money,
-        rel_volume:              inst.info.relative_volume * 100,
-        volatility:              inst.today&.volatility.to_f * 100,
+        volume:                  inst.last_day&.volume_in_money,
+        volatility:              inst.last_day&.volatility.to_f * 100,
+        rel_volume:              inst.info.relative_volume.to_f * 100,
         d5_volume:               inst.info.avg_d5_money_volume,
       )
     end
@@ -213,11 +213,15 @@ class TradingController < ApplicationController
     # @liquid, @rows            = @rows.partition { _1.instrument.liquid? }
     @very_illiquid, @rows = @rows.partition { _1.instrument.very_illiquid? }
     # @groups = [@watched, @liquid, @illiquid, @very_illiquid]
-    @groups = [@rows, @very_illiquid]
     # @groups = [@rows]
 
+    @groups = {
+      main: @rows,
+      illiquid: @very_illiquid
+    }
+
     sort_field = params[:sort] || :change
-    @groups = @groups.map { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
+    @groups = @groups.transform_values { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
   end
 
   def momentum_ru
@@ -250,10 +254,10 @@ class TradingController < ApplicationController
         instrument: inst,
         last:       inst.last,
         volume:     inst.today&.volume_in_money,
-        rel_volume: (inst.info.relative_volume * 100 rescue 0),
+        rel_volume: inst.info.relative_volume.to_f * 100,
         volatility: inst.today&.volatility.to_f * 100,
         d5_volume:  inst.info.avg_d5_money_volume,
-        change:     price_ratio(inst.last, inst.yesterday_close),
+        change:     inst.change_since_close,
         recent_change: @recent_changes[inst.ticker].to_f,
       )
     end
@@ -313,9 +317,46 @@ class TradingController < ApplicationController
     end
   end
 
+  def averages
+    @instruments = Instrument.active.rub.includes(:info)
+    @dates = MarketCalendar.open_days(10.days.ago).last(6) - [Current.date]
+    Current.preload_day_candles_with @instruments.to_a, @dates
+    InstrumentCache.set @instruments
+
+    @rows = @instruments.map do |inst|
+      OpenStruct.new(
+        instrument: inst,
+        change:            inst.change_since_close,
+        change_to_ema_20:  inst.change_to_ema_20,
+        change_to_ema_50:  inst.change_to_ema_50,
+        change_to_ema_200: inst.change_to_ema_200,
+      )
+    end
+
+    # sort_field = params[:sort] || :change_to_ema_50
+    # @rows = @instrument_rows.sort_by { _1.send(sort_field) || 0 }.reverse
+
+    ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
+    watched_tickers = %w[AFKS AGRO AMEZ ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROSN RUAL SGZH SMLT TCSG VKCO].to_set
+    @ignored, @rows  = @rows.partition { ignored_tickers.include? _1.instrument.ticker }
+    @watched, @rows  = @rows.partition { watched_tickers.include? _1.instrument.ticker }
+    @illiquid, @rows = @rows.partition { _1.instrument.illiquid? }
+    @groups = {
+      watched: @watched,
+      other: @rows,
+      illiquid: @illiquid,
+    }
+
+    sort_field = params[:sort] || :change_to_ema_50
+    @groups = @groups.transform_values { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
+  end
+
   private
 
   def price_ratio(current, base)
     current / base - 1 rescue 0
+  end
+
+  def load_instruments
   end
 end

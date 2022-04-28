@@ -23,9 +23,9 @@ class Candle
     def is_closing! = update!(is_closing: true)
     def is_opening! = update!(is_opening: true)
 
-    def change_since_open     = cached_instrument.today_open && close - cached_instrument.today_open
-    def rel_change_since_open = cached_instrument.today_open && close - cached_instrument.today_open / cached_instrument.today_open
-    def up_since_open? = change_since_open >= 0
+    def change_since_open     = cached_instrument.today_open && (close - cached_instrument.today_open)
+    def rel_change_since_open = cached_instrument.today_open && (close - cached_instrument.today_open / cached_instrument.today_open)
+    def up_since_open? = change_since_open.to_f >= 0
 
     class << self
       def intraday? = true
