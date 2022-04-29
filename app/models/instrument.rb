@@ -134,6 +134,7 @@ class Instrument < ApplicationRecord
   def change_to_ema_20   = gain_since(:last, indicators.ema_20)
   def change_to_ema_50   = gain_since(:last, indicators.ema_50)
   def change_to_ema_200  = gain_since(:last, indicators.ema_200)
+  def change_in_3d       = gain_since(:d3_ago_close, :last) 
 
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date.to_date + 1)

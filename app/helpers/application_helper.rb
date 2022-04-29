@@ -125,4 +125,9 @@ module ApplicationHelper
     return value if value < 100
     return value.round(-1)
   end
+
+  def float_to_percentage(value, precision: 1)
+    return nil unless value
+    number_to_percentage value * 100, precision: precision
+  end
 end

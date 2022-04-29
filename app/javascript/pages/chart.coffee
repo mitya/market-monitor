@@ -202,8 +202,6 @@ export default class Chart
 
 
   setupLevelLines: ->
-    console.log @data
-
     if @data.averages
       @averageSeries = {}
       for period of @data.averages

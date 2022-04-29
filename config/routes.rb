@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'instruments#root'
+  root to: 'trading#momentum_ru'
 
   get '/instruments/:instrument_id/candles', to: 'candles#index', constraints: { instrument_id: /[^\/]+/ }
 

@@ -6,7 +6,6 @@ class TradingController < ApplicationController
     @market_open_time_in_mins = @is_morning ? 0 * 60 : 9 * 60 + 30
     @market_open_time_in_mins_utc = @market_open_time_in_mins + 4 * 60
     @market_open_time_in_hhmm_utc = helpers.format_as_minutes_since @market_open_time_in_mins_utc, 0
-    puts @market_open_time_in_hhmm_utc
 
     @instruments = InstrumentSet[:trading].scope.includes(:info, :aggregate).order(:ticker)
     @candles = Candle::M5.where(ticker: @instruments, date: Current.date).order(:time)
@@ -101,7 +100,8 @@ class TradingController < ApplicationController
         map[ticker][:levels] = { }
         map[ticker][:period] = period
 
-        if instruments.one? && period == 'day'
+        # if instruments.one? && period == 'day'
+        if period == 'day'
           indicators = instrument.indicators_history.where('date >= ?', candles.map(&:date).min).order(:date)
           map[ticker][:averages] = { }
           [20, 50, 200].each do |period|
@@ -318,23 +318,23 @@ class TradingController < ApplicationController
   end
 
   def averages
-    @instruments = Instrument.active.rub.includes(:info)
-    @dates = MarketCalendar.open_days(10.days.ago).last(6) - [Current.date]
+    @instruments = Instrument.active.rub.includes(:info, :indicators)
+    @dates = [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
+    Current.preload_prices_for @instruments.to_a
     InstrumentCache.set @instruments
+
 
     @rows = @instruments.map do |inst|
       OpenStruct.new(
         instrument: inst,
         change:            inst.change_since_close,
+        change_in_3d:      inst.change_in_3d,
         change_to_ema_20:  inst.change_to_ema_20,
         change_to_ema_50:  inst.change_to_ema_50,
         change_to_ema_200: inst.change_to_ema_200,
       )
     end
-
-    # sort_field = params[:sort] || :change_to_ema_50
-    # @rows = @instrument_rows.sort_by { _1.send(sort_field) || 0 }.reverse
 
     ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
     watched_tickers = %w[AFKS AGRO AMEZ ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROSN RUAL SGZH SMLT TCSG VKCO].to_set

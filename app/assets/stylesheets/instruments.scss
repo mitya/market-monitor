@@ -16,7 +16,7 @@ th[data-sort] { cursor: pointer; }
 
 .changebox-green, .is-green { color: green; }
 .changebox-red, .is-red { color: red; }
-.changebox-none, .is-red { color: rgba(black, 0.6); }
+.changebox-none { color: rgba(black, 0.6); }
 .is-dark-red { color: darkred; }
 .is-dark-green { color: darkgreen; }
 .is-light-blue { color: rgba(blue, 0.5); }
@@ -236,3 +236,24 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .cursor-pointer { cursor: pointer; }
 
 .ticker-item { cursor: pointer; }
+
+.price-bubble-cell {
+  width: 500px;
+}
+
+.price-bubble-row {
+  overflow-x: hidden;
+  position: relative;
+  width: 500px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: rgba(black, 0.05);
+}
+
+.price-bubble {
+  display: inline-block; position: absolute; width: 10px; height: 10px; top: 4px; border-radius: 5px; background-color: gray;
+}
+
+.price-bubble-rule {
+  display: inline-block; position: absolute; width: 1px; height: 20px; top: 0; background-color: #ccc;
+}

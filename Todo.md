@@ -1,4 +1,3 @@
-- visual representation of distance to MA for all tickers
 - calculate MAs for VTBR & others
 
 - analyze last 5 M1 candles for 3%+ changes
@@ -461,3 +460,4 @@
 + add a dashboard with last week spikes
 + show DMAs on day charts in single mode
 + percentage distance to DMAs for all tickers
++ visual representation of distance to MA for all tickers
