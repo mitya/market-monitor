@@ -131,10 +131,15 @@ class Instrument < ApplicationRecord
   alias gain_since rel_diff
 
   def change_since_close = gain_since(:yesterday_close, :last)
-  def change_to_ema_20   = gain_since(:last, indicators.ema_20)
-  def change_to_ema_50   = gain_since(:last, indicators.ema_50)
-  def change_to_ema_200  = gain_since(:last, indicators.ema_200)
-  def change_in_3d       = gain_since(:d3_ago_close, :last) 
+  def change_in_3d       = gain_since(:d3_ago_close, :last)
+  # def change_to_ema_20   = gain_since(:last, indicators.ema_20)
+  # def change_to_ema_50   = gain_since(:last, indicators.ema_50)
+  # def change_to_ema_200  = gain_since(:last, indicators.ema_200)
+  def change_to_ema_20   = gain_since(:last, last_indicators.ema_20)
+  def change_to_ema_50   = gain_since(:last, last_indicators.ema_50)
+  def change_to_ema_200  = gain_since(:last, last_indicators.ema_200)
+
+  def last_indicators = @last_indicators ||= indicators.date == Current.date ? indicators : indicators.last
 
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date.to_date + 1)

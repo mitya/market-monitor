@@ -64,8 +64,8 @@
         = td :volatility, class: 'money-cell' do
           = number_to_percentage row.volatility, precision: 0
         = td :change_to_ema_20, class: "money-cell" do
-          = colorized_ratio row.change_to_ema_20, precision: 1
+          = colorized_ratio row.change_to_ema_20, precision: 0
         = td :change_to_ema_50, class: "money-cell" do
-          = colorized_ratio row.change_to_ema_50, precision: 1
+          = colorized_ratio row.change_to_ema_50, precision: 0
         = td :change_to_ema_200, class: "money-cell" do
-          = colorized_ratio row.change_to_ema_200, precision: 1
+          = colorized_ratio row.change_to_ema_200, precision: 0

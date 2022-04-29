@@ -78,7 +78,7 @@ export default class Chart
         secondsVisible: false
         visible: @data.timeScaleVisible
         barSpacing: currentBarSpacing
-        rightOffset: if singleMode || isOneChartPerPage then 10 else 0
+        rightOffset: if singleMode || isOneChartPerPage then 10 else 2
       rightPriceScale:
         entireTextOnly: true
         visible: @data.priceScaleVisible

@@ -6,6 +6,7 @@ class DateIndicators < ApplicationRecord
 
   def datetime = date.end_of_day
   def charting_timestamp = date.end_of_day.to_time.to_i
+  def cached_instrument = InstrumentCache.get(ticker)
 
   class << self
     def create_recursive(instrument, date: Current.yesterday)
@@ -84,6 +85,32 @@ class DateIndicators < ApplicationRecord
       (close - prev_ema) * smoothing_factor + prev_ema
     end
   end
+
+  def last = @last_indicator ||= LastIndicator.new(self)
+
+  class LastIndicator
+    attr :prev
+
+    def initialize(prev)
+      @prev = prev
+      @emas = {}
+    end
+
+    def ema_20  = calculate_last_ema(20)
+    def ema_50  = calculate_last_ema(50)
+    def ema_200 = calculate_last_ema(200)
+    def date = Current.date
+
+    def calculate_last_ema(length)
+      @emas[length] ||= begin
+        last = prev.cached_instrument.last
+        prev_ema = prev.send("ema_#{length}")
+        smoothing_factor = 2.0 / (length + 1)
+        ((last - prev_ema) * smoothing_factor + prev_ema).round(4)
+      end
+    end
+  end
+
 end
 
 __END__
