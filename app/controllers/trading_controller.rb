@@ -103,6 +103,7 @@ class TradingController < ApplicationController
         # if instruments.one? && period == 'day'
         if period == 'day'
           indicators = instrument.indicators_history.where('date >= ?', candles.map(&:date).min).order(:date)
+          indicators += [indicators.last.last] if indicators.last.date != Current.date
           map[ticker][:averages] = { }
           [20, 50, 200].each do |period|
             map[ticker][:averages][period] = indicators.map { [_1.charting_timestamp, _1.send("ema_#{period}")] }.reject { _1.second == nil }

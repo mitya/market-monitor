@@ -182,7 +182,7 @@ export default class Chart
       if @averageSeries && candle.context
         for period, series of @averageSeries
           average = candle.context.seriesPrices.get(series)
-          legend.querySelector(".candle-average[data-period='#{period}']").innerText = formatPrice average
+          legend.querySelector(".candle-average[data-period='#{period}']").innerText = formatPrice average, false
 
     else
       legend.querySelector('.candle-time').innerText = ''
@@ -247,10 +247,10 @@ dataRowToVolume = (row) -> { time: row[0], value: row[5] }
 
 padNumber = (number, length = 2, filler = '0') -> number.toString().padStart(length, filler)
 
-formatPrice = (price) ->
+formatPrice = (price, align = true) ->
   return '' if price == undefined
-  return price.toFixed(4) if price < 0.1
-  if isOneChartPerPage
+  return price.toFixed(4) if price < 0.9
+  if isOneChartPerPage || !align
     if price < 10_000 then price.toFixed(2) else price
   else
     if price < 10_000 then String(price.toFixed(2)).padStart(9, '.') else price

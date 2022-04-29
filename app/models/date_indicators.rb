@@ -100,6 +100,8 @@ class DateIndicators < ApplicationRecord
     def ema_50  = calculate_last_ema(50)
     def ema_200 = calculate_last_ema(200)
     def date = Current.date
+    def datetime = date.end_of_day
+    def charting_timestamp = date.end_of_day.to_time.to_i
 
     def calculate_last_ema(length)
       @emas[length] ||= begin
