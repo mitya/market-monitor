@@ -26,10 +26,10 @@ module InstrumentsHelper
     number_to_currency price_in_millions, unit: currency_sign(unit), precision: precision, format: '%u%n'
   end
 
-  def format_price(price, unit: nil, precision: nil)
+  def format_price(price, _unit = nil, unit: nil, precision: nil)
     return unless price.present?
     precision ||= price > 1_000 ? 0 : price < 0.1 ? 4 : 2
-    number_to_currency price, unit: currency_sign(unit) || '', precision: precision if price
+    number_to_currency price, unit: currency_sign(_unit || unit) || '', precision: precision if price
   end
 
   def colorized_price(price, base_price, unit: nil, inverse: false, precision: 1)

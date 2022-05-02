@@ -8,6 +8,7 @@ class Current < ActiveSupport::CurrentAttributes
 
   def date = Date.current
   def last_day = @last_day ||= Candle.maximum(:date)
+  def prev_day = MarketCalendar.prev(last_day)
 
   def ytd = date.beginning_of_year
   def est = Time.find_zone!('Eastern Time (US & Canada)')

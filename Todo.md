@@ -1,4 +1,4 @@
-- add distance bars for recent lows / highs
+- add trend spark to MA dash
 - calculate MAs for VTBR & others
 
 - analyze last 5 M1 candles for 3%+ changes
@@ -463,3 +463,4 @@
 + percentage distance to DMAs for all tickers
 + visual representation of distance to MA for all tickers
 + calculate today MAs virtually
++ add distance bars for recent lows / highs

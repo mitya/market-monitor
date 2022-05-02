@@ -82,7 +82,7 @@ class Instrument < ApplicationRecord
 
 
   MatureDate = Current.y2017
-  DateSelectors = %w[today yesterday last_day] + %w[d1 d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].map { |period| "#{period}_ago" }
+  DateSelectors = %w[today yesterday last_day prev_day] + %w[d1 d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].map { |period| "#{period}_ago" }
 
 
   DateSelectors.each do |selector|
@@ -116,6 +116,15 @@ class Instrument < ApplicationRecord
     end
   end
 
+  %w[d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].each do |date_selector|
+    define_method("#{date_selector}_period_low")  { ExtremumCache.get(ticker, Current.send("#{date_selector}_ago"), :low) }
+    define_method("#{date_selector}_period_high") { ExtremumCache.get(ticker, Current.send("#{date_selector}_ago"), :high) }
+    # define_method("#{date_selector}_period_low")  { candles.since(Current.send("#{date_selector}_ago")).minimum(:low) }
+    # define_method("#{date_selector}_period_high") { candles.since(Current.send("#{date_selector}_ago")).maximum(:high) }
+    define_method("change_since_#{date_selector}_low")  { gain_since(send("#{date_selector}_period_low"),  :last) }
+    define_method("change_since_#{date_selector}_high") { gain_since(send("#{date_selector}_period_high"), :last) }
+  end
+
   def base_price = send(current_price_selector)
   def get_price(selector) = selector.is_a?(Symbol) || selector.is_a?(String) ? send(selector) : selector
 
@@ -130,14 +139,11 @@ class Instrument < ApplicationRecord
   end
   alias gain_since rel_diff
 
-  def change_since_close = gain_since(:yesterday_close, :last)
-  def change_in_3d       = gain_since(:d3_ago_close, :last)
-  # def change_to_ema_20   = gain_since(:last, indicators.ema_20)
-  # def change_to_ema_50   = gain_since(:last, indicators.ema_50)
-  # def change_to_ema_200  = gain_since(:last, indicators.ema_200)
-  def change_to_ema_20   = gain_since(:last, last_indicators.ema_20)
-  def change_to_ema_50   = gain_since(:last, last_indicators.ema_50)
-  def change_to_ema_200  = gain_since(:last, last_indicators.ema_200)
+  def change_since_close   = gain_since(:prev_day_close, :last)
+  def change_in_3d         = gain_since(:d3_ago_close, :last)
+  def change_to_ema_20     = gain_since(:last, last_indicators.ema_20)
+  def change_to_ema_50     = gain_since(:last, last_indicators.ema_50)
+  def change_to_ema_200    = gain_since(:last, last_indicators.ema_200)
 
   def last_indicators = @last_indicators ||= indicators.date == Current.date ? indicators : indicators.last
 

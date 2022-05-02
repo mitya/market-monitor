@@ -325,15 +325,18 @@ class TradingController < ApplicationController
     Current.preload_prices_for @instruments.to_a
     InstrumentCache.set @instruments
 
-
     @rows = @instruments.map do |inst|
       OpenStruct.new(
-        instrument: inst,
-        change:            inst.change_since_close,
-        change_in_3d:      inst.change_in_3d,
-        change_to_ema_20:  inst.change_to_ema_20,
-        change_to_ema_50:  inst.change_to_ema_50,
-        change_to_ema_200: inst.change_to_ema_200,
+        instrument:           inst,
+        change:               inst.change_since_close,
+        change_in_3d:         inst.change_in_3d,
+        change_to_ema_20:     inst.change_to_ema_20,
+        change_to_ema_50:     inst.change_to_ema_50,
+        change_to_ema_200:    inst.change_to_ema_200,
+        change_since_w2_low:  inst.change_since_w2_low,
+        change_since_w2_high: inst.change_since_w2_high,
+        change_since_month_low:  inst.change_since_month_low,
+        change_since_month_high: inst.change_since_month_high,
       )
     end
 
