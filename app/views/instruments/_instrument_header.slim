@@ -33,7 +33,7 @@ tr
     th.money-cell Average
     th.money-cell High
     th.money-cell.border-end.pe-2
-  th.money-cell Last
+  th.money-cell(data-sort="last") Last
   th.money-cell(data-sort=(@show_changes_in_atr ? "change_atr" : "change")) ﹪
   - if @show_open
     th.money-cell.border-end.pe-2(title=l(Current.today,     format: :week_day)) Open ﹪

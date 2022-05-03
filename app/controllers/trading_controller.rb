@@ -341,6 +341,7 @@ class TradingController < ApplicationController
     end
 
     ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
+    ignored_tickers += %w[TGKA TGKB TGKBP TGKDP TGKN]
     watched_tickers = %w[AFKS AGRO AMEZ ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROSN RUAL SGZH SMLT TCSG VKCO].to_set
     @ignored, @rows  = @rows.partition { ignored_tickers.include? _1.instrument.ticker }
     @watched, @rows  = @rows.partition { watched_tickers.include? _1.instrument.ticker }

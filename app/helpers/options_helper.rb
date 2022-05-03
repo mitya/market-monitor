@@ -23,9 +23,10 @@ module OptionsHelper
     portfolio_cost_diff:   "Portfolio Cost Ideal",
     change:                "Change",
     change_atr:            "ATR Change",
+    last:                  "Last",
   }.stringify_keys.invert.to_a
-  
-  
+
+
 
   def all_option = [['❊', '']]
 
@@ -44,11 +45,11 @@ module OptionsHelper
   def pagination_options
     %w[100 200 300 400 500 1000 5000]
   end
-  
+
   def recent_period_options
     [['All']] + MarketCalendar.periods.map { |period| [period.begin.strftime("%b %Y"), period.to_s] }
   end
-  
+
   def industry_options
     Stats.where.not(industry: '').group(:industry).order(count: :desc).count.map { |industry, count| ["#{industry_short_name industry, length: 100} (#{count})", industry] }
   end
@@ -71,7 +72,7 @@ module OptionsHelper
 
   def insider_options_for(ticker)
     InsiderTransaction.for_ticker(ticker).pluck(:insider_name).uniq.compact.sort.map { |name| [name.titleize, name] }
-  end    
+  end
 
   def instrument_order_options
     MainSortFields +
@@ -88,8 +89,8 @@ module OptionsHelper
       ['Delta', 'delta'],
     ]
   end
-  
+
   def min_amount_options
     %w[40_000 50_000 100_000 200_000 500_000 1_000_000]
-  end    
+  end
 end

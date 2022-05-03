@@ -69,6 +69,8 @@ class MarketCalendar
 
     def moex_holidays
       @moex_holidays ||= %w[
+        2022-05-03
+        2022-05-02
         2022-01-07
 
         2021-12-31
@@ -119,7 +121,7 @@ class MarketCalendar
     end
 
     def periods_between(start_time, end_time, step = 1.minute)
-      return [] if !start_time || !end_time 
+      return [] if !start_time || !end_time
       periods = []
       current_time = start_time
       while current_time <= end_time

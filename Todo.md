@@ -1,5 +1,4 @@
 - add trend spark to MA dash
-- calculate MAs for VTBR & others
 
 - analyze last 5 M1 candles for 3%+ changes
 - load historic M1 for US tickers & calc average in main session time
@@ -464,3 +463,4 @@
 + visual representation of distance to MA for all tickers
 + calculate today MAs virtually
 + add distance bars for recent lows / highs
++ fix VTB MAs

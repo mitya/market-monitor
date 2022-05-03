@@ -23,6 +23,7 @@ class InstrumentsSorter
     portfolio_cost_diff:   "portfolio.cost_diff",
     change:                "prices.change desc",
     change_atr:            "prices.change_atr desc",
+    last:                  "prices.value desc",
   }.stringify_keys
 
   class << self

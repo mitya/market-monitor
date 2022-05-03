@@ -28,7 +28,7 @@ class DateIndicators < ApplicationRecord
 
         accessor = "ema_#{length}"
 
-        if close < 0.02
+        if close < 0.01
           record.send "#{accessor}=", close
           record.send "#{accessor}_trend=", 0
           next
@@ -53,7 +53,7 @@ class DateIndicators < ApplicationRecord
       end
     end
 
-    def set_current(date = Current.yesterday)
+    def set_current(date = DateIndicators.maximum(:date))
       where('date < ?', date).where(current: true).update_all current: false
       where('date = ?', date).update_all current: true
     end

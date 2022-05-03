@@ -158,7 +158,7 @@ export default class Chart
     changeBox = legend.querySelector('.change-percent')
     averagesBox = legend.querySelector('.candle-averages')
     if candle
-      formattedPrice = candle.close.toFixed(2)
+      formattedPrice = candle.close.toFixed(if candle.close < 0.3 then 4 else 2)
       formattedTime = if isDaily then formatDate(candle.time) else formatTime(candle.time - 3 * 60 * 60)
       legend.querySelector('.candle-time').innerText = formattedTime
       legend.querySelector('.candle-price').innerText = formattedPrice
