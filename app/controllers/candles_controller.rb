@@ -6,7 +6,7 @@ class CandlesController < ApplicationController
     2021-09-01
     2022-01-01
   ].map { |str| Date.parse str }.sort + [
-    MarketCalendar.prev(Current.yesterday),
+    Current.d2_ago,
     Current.yesterday,
     Current.date,
   ]

@@ -186,7 +186,7 @@ class TradingController < ApplicationController
     end
 
     Current.preload_prices_for @instruments.to_a
-    Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
+    Current.preload_day_candles_with @instruments.to_a, [current_calendar.today, current_calendar.yesterday]
 
     @rows = @instruments.map do |inst|
       OpenStruct.new(
@@ -248,7 +248,7 @@ class TradingController < ApplicationController
 
     InstrumentCache.set @instruments
     Current.preload_prices_for @instruments.to_a
-    Current.preload_day_candles_with @instruments.to_a, [Current.today, Current.yesterday]
+    Current.preload_day_candles_with @instruments.to_a, [current_calendar.today, current_calendar.yesterday]
 
     @recent_candles = Candle::M1.for(@instruments).today.where(time: (@now - 10.minutes).to_hhmm .. @now.to_hhmm).order(:time).group_by(&:cached_instrument)
     @recent_changes = @recent_candles.map do |instrument, candles|
@@ -364,10 +364,6 @@ class TradingController < ApplicationController
   end
 
   private
-
-  def current_market
-    params[:market] || 'rub'
-  end
 
   def price_ratio(current, base)
     current / base - 1 rescue 0

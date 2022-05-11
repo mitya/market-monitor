@@ -22,8 +22,8 @@ module DatesHelper
     return unless date
     date = date.to_date
     case
-      when date.to_date == Current.today then 'today'
-      when date.to_date == Current.yesterday then 'yesterday'
+      when date.to_date == Date.current then 'today'
+      when date.to_date == Date.yesterday then 'yesterday'
       when date >= Current.d7_ago then sessions_ago(date)
       else days_ago(date)
     end
@@ -48,8 +48,8 @@ module DatesHelper
 
   def format_date_as_text_with_days(date)
     "On #{format_date date} | #{days_ago date}"
-  end    
-  
+  end
+
   def days_old_badge(date)
     return if date.blank?
     days_ago = (Current.date - date).to_i
@@ -58,5 +58,5 @@ module DatesHelper
     # text = Current.date == date ? 'today' : distance_of_time_in_words(date, Current.date, scope: 'datetime.distance_in_words.short')
     text = date.year == Current.date.year ? l(date, format: :month) : l(date, format: :month_year)
     tag.span text, class: "badge #{color}", title: date
-  end  
+  end
 end

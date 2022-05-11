@@ -74,6 +74,8 @@ class Current < ActiveSupport::CurrentAttributes
   def last_n_weeks(n) = weekdays_since(n.weeks.ago.to_date)
   def last_2_weeks = last_n_weeks(2)
 
+
+
   def preload_day_candles_for(instruments)
     self.day_candles_cache = DayCandleCache.new(instruments, nil)
   end

@@ -1,5 +1,79 @@
 class MarketCalendar
+  class Local
+    def initialize(market = :rub)
+      @market = market.to_sym
+    end
+
+    # def market_close_hour = @market == :rub ? 20 : 00
+
+    def date = Date.current
+    def last_day = @last_day ||= Candle.maximum(:date)
+    def prev_day = MarketCalendar.prev(last_day, @market)
+
+    def yesterday = closest_weekday(date.prev_weekday, @market)
+    def d2_ago    = closest_weekday(yesterday.prev_weekday)
+    def d3_ago    = closest_weekday(d2_ago.prev_weekday)
+    def d4_ago    = closest_weekday(d3_ago.prev_weekday)
+    def d5_ago    = closest_weekday(d4_ago.prev_weekday)
+    def d6_ago    = closest_weekday(d5_ago.prev_weekday)
+    def d7_ago    = closest_weekday(d6_ago.prev_weekday)
+    def d10_ago   = closest_weekday(d7_ago.prev_weekday.prev_weekday.prev_weekday)
+    def m1_ago    = closest_weekday(1.month.ago.to_date)
+    def m3_ago    = closest_weekday(3.month.ago.to_date)
+    def y1_ago    = closest_weekday(1.year.ago.to_date)
+
+    alias today date
+    alias d0_ago today
+    alias d1_ago yesterday
+    alias w1_ago d5_ago
+    alias w2_ago d10_ago
+    alias week_ago w1_ago
+    alias year_ago y1_ago
+    alias month_ago m1_ago
+
+    def method_missing(method, *args, &block)
+      Current.send(method, *args, &block)
+    end
+
+    delegate :closest_weekday, to: MarketCalendar
+  end
+
+
+
   class << self
+    def ru = @ru ||= Local.new(:rub)
+    def us = @us ||= Local.new(:usd)
+
+    def for(market)
+      symbol = determine_market(market)
+      return us if symbol == :usd
+      return ru if symbol == :rub
+      return ru if symbol == :eur
+    end
+
+    MARKET_SYMBOLS = {
+      :rub =>  :rub,
+      :ru  =>  :rub,
+      'ru' =>  :rub,
+      'rub' => :rub,
+      'RUB' => :rub,
+      :usd =>  :usd,
+      :us  =>  :usd,
+      'us' =>  :usd,
+      'usd' => :usd,
+      'USD' => :usd,
+
+      :eur =>  :eur,
+      :eu  =>  :eur,
+      'eu' =>  :eur,
+      'eur' => :eur,
+      'EUR' => :eur,
+    }
+    def determine_market(something)
+      return MARKET_SYMBOLS[something] if MARKET_SYMBOLS[something]
+      something.respond_to?(:currency) ? MARKET_SYMBOLS[something.currency] : nil
+    end
+
     def closest_weekday(date, currency = nil)
       date.wday == 0           ? closest_weekday(date - 2, currency) :
       date.wday == 6           ? closest_weekday(date - 1, currency) :

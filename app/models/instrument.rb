@@ -89,7 +89,7 @@ class Instrument < ApplicationRecord
   DateSelectors.each do |selector|
     define_method("#{selector}") do
       instance_variable_get("@#{selector}") ||
-      instance_variable_set("@#{selector}", day_candles!.find_date(Current.send(selector))  )
+      instance_variable_set("@#{selector}", day_candles!.find_date(calendar.send(selector))  )
       # instance_variable_set("@#{selector}", day_candles!.find_date(Current.market_for(self).send(selector))  )
     end
   end
@@ -157,6 +157,8 @@ class Instrument < ApplicationRecord
   def price_change = @price_change ||= price!.change rescue 0
   def stored_gain_since(date_specifier) = date_specifier.blank? || date_specifier == 'last' ? price_change : aggregate.gains[date_specifier]
 
+  def calendar = @calendar ||= MarketCalendar.for(self)
+
   def logo_path = Pathname("public/logos/#{ticker}.png")
   def check_logo = update_column(:has_logo, logo_path.exist?)
 
@@ -167,8 +169,8 @@ class Instrument < ApplicationRecord
   def info! = info || create_info
   def annotation! = annotation || create_annotation
 
-  def today_candle = day_candles!.find_date(Current.date)
-  def yesterday_candle = day_candles!.find_date(Current.yesterday)
+  def today_candle = day_candles!.find_date(calendar.today)
+  def yesterday_candle = day_candles!.find_date(calendar.yesterday)
 
   def tinkoff? = flags.include?('tinkoff')
   def iex? = info.present?

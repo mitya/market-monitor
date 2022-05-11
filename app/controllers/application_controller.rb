@@ -8,4 +8,12 @@ class ApplicationController < ActionController::Base
       render
     end
   end
+
+  def current_market
+    params[:market] || 'rub'
+  end
+
+  def current_calendar
+    MarketCalendar.for(current_market)
+  end
 end

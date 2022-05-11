@@ -88,7 +88,7 @@ class Tinkoff
       # return if instrument.candles.day.where('date > ?', 2.weeks.ago).none?
       # return if instrument.candles.day.today.where('updated_at > ?', 3.hours.ago).exists?
       since ||= instrument.candles.day.final.last_loaded_date.tomorrow rescue 1.month.ago
-      till = today ? Current.date.end_of_day : Current.yesterday.end_of_day
+      till = today ? Current.date.end_of_day : instrument.calendar.yesterday.end_of_day
       return if till < since
       import_day_candles instrument, since: since, till: till
     end

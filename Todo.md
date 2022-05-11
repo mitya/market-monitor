@@ -1,4 +1,4 @@
-- separate the US/RU calendars
+- add a way to quickly activate a US ticker
 - add trend spark to MA dash
 
 - analyze last 5 M1 candles for 3%+ changes
@@ -466,3 +466,4 @@
 + add distance bars for recent lows / highs
 + fix VTB MAs
 + move major links to the top level
++ separate the US/RU calendars
