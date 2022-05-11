@@ -1,12 +1,12 @@
 class Current < ActiveSupport::CurrentAttributes
   attribute :day_candles_cache, :prices_cache
 
-  def date
-    date = Time.now.hour > 20 ? Date.tomorrow : Date.current
-    date.on_weekend?? date.prev_weekday : date
-  end
+  # def date
+  #   date = Time.now.hour > 20 ? Date.tomorrow : Date.current
+  #   date.on_weekend?? date.prev_weekday : date
+  # end
 
-  # def date = Date.current
+  def date = Date.current
   def last_day = @last_day ||= Candle.maximum(:date)
   def prev_day = MarketCalendar.prev(last_day, :rub)
 

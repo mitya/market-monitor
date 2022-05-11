@@ -4,6 +4,7 @@
 - instruments = instruments.select { _1.currency == currency }    if local_assigns[:currency].present?
 - instruments = instruments.select { _1.premium? }                if local_assigns[:availability] == 'premium'
 - instruments = instruments.reject { _1.premium? }                if local_assigns[:availability] == 'tinkoff'
+- instruments = instruments.reject { _1.yesterday == nil }
 
 - instruments = case set.key
 -   when /volume/   then instruments.sort_by { _1.aggregate.volumes['d1'] }.reverse
@@ -11,7 +12,7 @@
 -   when /level/    then instruments.sort_by &:ticker
 -   when /losers/   then instruments.sort_by { _1.stored_gain_since(selector).to_f }
 -   when /volatile/ then instruments.sort_by { _1.yesterday.volatility.abs }.reverse
--   else               instruments.sort_by { _1.stored_gain_since(selector).to_f }.reverse
+-   else                 instruments.sort_by { _1.stored_gain_since(selector).to_f }.reverse
 
 h6.ps-1(
   class=class_names('ticker-set-title', 'is-dark-green': set.key =~ /up_break/, 'is-dark-red': set.key =~ /down_break/)

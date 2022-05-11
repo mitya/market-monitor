@@ -283,7 +283,7 @@ class TradingController < ApplicationController
 
   def last_week
     @instruments = Instrument.active.traded_on(current_market).includes(:info)
-    @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
+    @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
 

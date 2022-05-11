@@ -16,7 +16,7 @@ tbody
       = td :change, class: "money-cell" do
         = colorized_ratio candle.rel_close_change, precision: 1
         / = percentage_bar_or_number candle.rel_change, classes: "#{red_green_class candle.rel_change.to_f > 0}", threshold: 0.05, rtl: true
-      = td :rel_volume, class: "money-cell" do
+      = td :rel_volume, class: "money-cell no-bottom-padding" do
         / = number_to_percentage candle.volume_to_average, precision: 0, format: '%n ﹪'
         = percentage_bar candle.volume_to_average / 100, classes: 'is-light-blue', threshold: 4, rtl: true,
           title: number_to_percentage(round_percentage(candle.volume_to_average * 100), precision: 0, format: '%n ﹪')
