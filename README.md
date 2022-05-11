@@ -60,9 +60,9 @@ rake options:day
 
 
 # Run if haven't used for a while
-rake     iex:days:missing since=2022-02-01 ok=1
-rake tinkoff:days:missing since=2022-02-01 ok=1 tickers='KAP@GS KSPI@GS SPBE'
-rake tinkoff:days:missing since=2020-01-01 ok=1 tickers='BRBR DINO SHEL EMBC PARA BFH ZIMV CEG SAFM'
+rake     iex:days:missing since=2022-04-01 ok=1
+rake tinkoff:days:missing since=2022-04-01 ok=1 tickers='KAP@GS KSPI@GS SPBE'
+rake tinkoff:days:missing since=2022-04-01 ok=1 tickers='BRBR DINO SHEL EMBC PARA BFH ZIMV CEG SAFM'
 
 # Destroying tickers
 
@@ -102,11 +102,3 @@ rake list:import list=portfolio
 
 
 ## Intraday
-
-rake intraday:sync
-
-fesh gltr posi phor etln gche nmtp
-aptk selg rolo lnzl lnzlp blng chmk gtrk belu rugr pmsb
-mrks mrku
-
-@buy level: kzos nvtk five yndx tcsg lkoh poly

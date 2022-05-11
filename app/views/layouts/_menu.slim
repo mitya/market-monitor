@@ -6,19 +6,21 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
 
     div class="collapse navbar-collapse" id="navbarSupportedContent"
       ul class="navbar-nav me-auto mb-2 mb-lg-0"
-        li(class="nav-item")= link_to 'Instruments', instruments_path, class: 'nav-link'
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Views
           ul class="dropdown-menu"
+            li= link_to 'Instruments', instruments_path, class: 'dropdown-item'
             li= link_to 'Grouped', grouped_instruments_path, class: 'dropdown-item'
             li= link_to 'Spb', spb_instruments_path, class: 'dropdown-item'
             li= link_to 'Gainers US', instruments_path(order: 'prices.change desc', currency: 'USD', per_page: 300), class: 'dropdown-item'
             li= link_to 'Gainers RU', instruments_path(order: 'prices.change desc', currency: 'RUB'), class: 'dropdown-item'
             li= link_to 'Moving Averages', instruments_path(ema_trends: 1, extremums: 1, recent_prices: 0, order: 'aggregates.d1_volume desc', volume_diff: 1, ma_50: 1), class: 'dropdown-item'
             li= link_to 'Portfolio', instruments_path(set: 'portfolio', portfolio: 1, recent_prices: 0, order: 'portfolio.cost_in_usd'), class: 'dropdown-item'
-        li class="nav-item dropdown"
-          a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" TA
-          ul class="dropdown-menu"
+            li: h6.dropdown-header Insiders
+            li= link_to 'Transactions', insider_transactions_path, class: 'dropdown-item'
+            li= link_to 'Aggregates', insider_aggregates_path, class: 'dropdown-item'
+            li= link_to 'Summaries', insider_summaries_path, class: 'dropdown-item'
+            li: h6.dropdown-header TA
             li= link_to 'Signals', signals_path, class: 'dropdown-item'
             li= link_to 'Signals – Intraday', intraday_signals_path, class: 'dropdown-item'
             li= link_to 'Signals – Results', signal_results_path, class: 'dropdown-item'
@@ -28,30 +30,39 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
             li= link_to 'Hits', level_hits_path(days_since_last: 10, rvol: 100, availability: 'tinkoff'), class: 'dropdown-item'
             li= link_to 'Spikes', spikes_path, class: 'dropdown-item'
             li= link_to 'Compare', comparision_path, class: 'dropdown-item'
-        li class="nav-item dropdown"
-          a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Insiders
-          ul class="dropdown-menu"
-            li= link_to 'Transactions', insider_transactions_path, class: 'dropdown-item'
-            li= link_to 'Aggregates', insider_aggregates_path, class: 'dropdown-item'
-            li= link_to 'Summaries', insider_summaries_path, class: 'dropdown-item'
-        li class="nav-item dropdown"
-          a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Trading
-          ul class="dropdown-menu"
-            li= link_to 'EOD / Gainers', set_comparision_path, class: 'dropdown-item'
-            li= link_to 'EOD / Levels, Spikes, Volatility', summary_set_comparision_path, class: 'dropdown-item'
-            li= link_to 'Charts', charts_trading_path, class: 'dropdown-item'
-            li= link_to 'Futures', futures_path, class: 'dropdown-item'
-            li= link_to 'Today RU', momentum_ru_trading_path, class: 'dropdown-item'
-            li= link_to 'Today RU / All', recent_trading_path, class: 'dropdown-item'
-            li= link_to 'Today RU / MAs', averages_trading_path, class: 'dropdown-item'
-            li= link_to 'Today US', momentum_us_trading_path, class: 'dropdown-item'
-            li= link_to 'Week / Gainers', last_week_trading_path, class: 'dropdown-item'
-            li= link_to 'Week / Spikes', last_week_spikes_trading_path, class: 'dropdown-item'
             li: hr.dropdown-divider
             li= link_to 'Arbitrage', arbitrages_path, class: 'dropdown-item'
             li= link_to 'Activity', activities_trading_path, class: 'dropdown-item'
             li= link_to 'Trading', dashboard_trading_path, class: 'dropdown-item'
             li= link_to 'News', news_index_path, class: 'dropdown-item'
+        / li class="nav-item dropdown"
+        /   a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" Trading
+        /   ul class="dropdown-menu"
+        /     li= link_to 'EOD / Gainers', set_comparision_path, class: 'dropdown-item'
+        /     li= link_to 'EOD / Levels, Spikes, Volatility', summary_set_comparision_path, class: 'dropdown-item'
+        /     li= link_to 'Charts', charts_trading_path, class: 'dropdown-item'
+        /     li= link_to 'Futures', futures_path, class: 'dropdown-item'
+        /     li= link_to 'Today RU', momentum_ru_trading_path, class: 'dropdown-item'
+        /     li= link_to 'Today RU / All', recent_trading_path, class: 'dropdown-item'
+        /     li= link_to 'Today RU / MAs', averages_trading_path, class: 'dropdown-item'
+        /     li= link_to 'Today US', momentum_us_trading_path, class: 'dropdown-item'
+        /     li= link_to 'Week / Gainers', last_week_trading_path, class: 'dropdown-item'
+        /     li= link_to 'Week / Spikes', last_week_spikes_trading_path, class: 'dropdown-item'
+        li.nav-link |
+        li= link_to 'EOD', set_comparision_path, class: 'nav-link'
+        li= link_to 'LSV', summary_set_comparision_path, class: 'nav-link'
+        li= link_to 'Charts', charts_trading_path, class: 'nav-link'
+        li.nav-link |
+        li= link_to 'Today', momentum_trading_path(market: 'rub'), class: 'nav-link'
+        li= link_to 'All', recent_trading_path(market: current_market), class: 'nav-link'
+        li= link_to 'MAs', averages_trading_path(market: current_market), class: 'nav-link'
+        li= link_to 'Futures', futures_path, class: 'nav-link'
+        li= link_to 'US', momentum_trading_path(market: 'usd'), class: 'nav-link'
+        li.nav-link |
+        li= link_to 'Week', last_week_trading_path(market: current_market), class: 'nav-link'
+        li= link_to 'Spikes', last_week_spikes_trading_path(market: current_market), class: 'nav-link'
+
+
 
       ul class="navbar-nav mb-2 mb-lg-0 ms-auto"
         li class="nav-item dropdown"

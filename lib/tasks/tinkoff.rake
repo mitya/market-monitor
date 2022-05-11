@@ -15,7 +15,7 @@ namespace :tinkoff do
       # puts "Instruments without yesterday candles: #{instruments.map(&:ticker).join(' ')}"
 
       next unless R.confirmed?
-      instruments = R.instruments_from_env || Instrument.rub
+      instruments = R.instruments_from_env || Instrument.usd
       instruments.non_iex.abc.each do |inst|
         Tinkoff.import_day_candles inst, since: (ENV['since'].to_s.to_date || MarketCalendar.prev)
       end

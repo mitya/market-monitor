@@ -172,7 +172,7 @@ class TradingController < ApplicationController
   def recent
     now = Current.ru_time
 
-    @instruments = Instrument.rub.active.includes(:info)
+    @instruments = Instrument.active.traded_on(current_market).includes(:info)
     @all_candles = Candle::M1.for(@instruments).today
 
     InstrumentCache.set @instruments
@@ -190,6 +190,7 @@ class TradingController < ApplicationController
 
     @rows = @instruments.map do |inst|
       OpenStruct.new(
+        ticker:                  inst.ticker,
         instrument:              inst,
         last:                    inst.last,
         change:                  inst.gain_since(inst.yesterday_close, :last),
@@ -225,19 +226,24 @@ class TradingController < ApplicationController
     @groups = @groups.transform_values { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
   end
 
-  def momentum_ru
-    @now = Current.ru_time
-    @instruments = Instrument.active.rub.includes(:info)
-    momentum
-  end
-
-  def momentum_us
-    @now = Current.us_time
-    @instruments = Instrument.active.usd.current.includes(:info)
-    momentum
-  end
+  # def momentum_ru
+  #   @now = Current.ru_time
+  #   @market = :ru
+  #   @instruments = Instrument.active.rub.includes(:info)
+  #   momentum
+  # end
+  #
+  # def momentum_us
+  #   @now = Current.us_time
+  #   @market = :us
+  #   @instruments = Instrument.active.usd.current.includes(:info)
+  #   momentum
+  # end
 
   def momentum
+    @instruments = Instrument.active.traded_on(current_market).includes(:info)
+    @now = current_market == 'rub' ? Current.ru_time : Current.us_time
+
     @signals = PriceSignal.intraday.today.where(ticker: @instruments).order(time: :desc).includes(:instrument, :m1_candle).where('time > ?', (Current.msk.now - 2.hours).strftime('%H:%M')).first(300)
 
     InstrumentCache.set @instruments
@@ -262,6 +268,7 @@ class TradingController < ApplicationController
         recent_change: @recent_changes[inst.ticker].to_f,
       )
     end
+    @instrument_rows = @instrument_rows.select { _1.change.present? }
 
     @top_gainers = @instrument_rows.sort_by { _1.change }.last(20).reverse
     @top_losers  = @instrument_rows.sort_by { _1.change }.first(20)
@@ -275,8 +282,8 @@ class TradingController < ApplicationController
   end
 
   def last_week
-    @instruments = Instrument.active.includes(:info)
-    @dates = MarketCalendar.open_days(10.days.ago).last(6) - [Current.date]
+    @instruments = Instrument.active.traded_on(current_market).includes(:info)
+    @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
 
@@ -298,8 +305,8 @@ class TradingController < ApplicationController
   end
 
   def last_week_spikes
-    @instruments = Instrument.active.rub.includes(:info)
-    @dates = MarketCalendar.open_days(10.days.ago).last(6) - [Current.date]
+    @instruments = Instrument.active.traded_on(current_market).includes(:info)
+    @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
 
@@ -319,7 +326,7 @@ class TradingController < ApplicationController
   end
 
   def averages
-    @instruments = Instrument.active.rub.includes(:info, :indicators)
+    @instruments = Instrument.active.traded_on(current_market).includes(:info, :indicators, :aggregate)
     @dates = [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
     Current.preload_prices_for @instruments.to_a
@@ -357,6 +364,10 @@ class TradingController < ApplicationController
   end
 
   private
+
+  def current_market
+    params[:market] || 'rub'
+  end
 
   def price_ratio(current, base)
     current / base - 1 rescue 0

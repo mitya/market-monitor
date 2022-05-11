@@ -28,6 +28,8 @@ main.container-fluid
                   = th :change_since_month_high, 'mH ﹪', class: 'money-cell'
                   = th :averages
                   = th :extremums
+                  = th :change_map
+                  = th :trend
               tbody
                 - rows.each do |row|
                   - inst = row.instrument
@@ -57,22 +59,18 @@ main.container-fluid
                     = td :averages, class: 'price-bubble-cell' do
                       .price-bubble-row
                         .price-bubble-rule(style="left: 200px; background-color: black;")
-                        .price-bubble(style="left: #{distance_to_px.call row.change_to_ema_20};  background-color: blue;"  title=float_to_percentage(row.change_to_ema_20))
-                        .price-bubble(style="left: #{distance_to_px.call row.change_to_ema_50};  background-color: green;" title=float_to_percentage(row.change_to_ema_50))
-                        .price-bubble(style="left: #{distance_to_px.call row.change_to_ema_200}; background-color: red;"   title=float_to_percentage(row.change_to_ema_200))
                         .price-bubble-rule(style="left: 100px;")
                         .price-bubble-rule(style="left: 150px;")
-                        .price-bubble-rule(style="left: 250px;")                        
+                        .price-bubble-rule(style="left: 250px;")
                         .price-bubble-rule(style="left: 300px;")
                         .price-bubble-rule(style="left: 400px;")
                         .price-bubble-rule(style="left: 500px;")
+                        .price-bubble(style="left: #{distance_to_px.call row.change_to_ema_20};  background-color: blue;"  title=float_to_percentage(row.change_to_ema_20))
+                        .price-bubble(style="left: #{distance_to_px.call row.change_to_ema_50};  background-color: green;" title=float_to_percentage(row.change_to_ema_50))
+                        .price-bubble(style="left: #{distance_to_px.call row.change_to_ema_200}; background-color: red;"   title=float_to_percentage(row.change_to_ema_200))
                     = td :extremums, class: 'price-bubble-cell' do
                       .price-bubble-row
                         .price-bubble-rule(style="left: 200px; background-color: black;")
-                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_month_low};  background-color: gray;"  title="#{format_price inst.month_period_low, inst} #{float_to_percentage row.change_since_month_low}")
-                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_month_high};  background-color: gray;" title="#{format_price inst.month_period_high, inst} #{float_to_percentage row.change_since_month_high}")
-                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_w2_low};  background-color: gray;"  title="#{format_price inst.w2_period_low, inst} #{float_to_percentage row.change_since_w2_low}")
-                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_w2_high};  background-color: gray;" title="#{format_price inst.w2_period_high, inst} #{float_to_percentage row.change_since_w2_high}")
                         .price-bubble-rule(style="left:  50px;")
                         .price-bubble-rule(style="left: 100px;")
                         .price-bubble-rule(style="left: 150px;")
@@ -81,3 +79,11 @@ main.container-fluid
                         .price-bubble-rule(style="left: 350px;")
                         .price-bubble-rule(style="left: 400px;")
                         .price-bubble-rule(style="left: 500px;")
+                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_month_low};  background-color: gray;"  title="#{format_price inst.month_period_low, inst} #{float_to_percentage row.change_since_month_low}")
+                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_month_high};  background-color: gray;" title="#{format_price inst.month_period_high, inst} #{float_to_percentage row.change_since_month_high}")
+                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_w2_low};  background-color: gray;"  title="#{format_price inst.w2_period_low, inst} #{float_to_percentage row.change_since_w2_low}")
+                        .price-bubble(style="left: #{distance_to_px.call -row.change_since_w2_high};  background-color: gray;" title="#{format_price inst.w2_period_high, inst} #{float_to_percentage row.change_since_w2_high}")
+                    = td :change_map do
+                      = change_map inst.aggregate
+                    = td :trend do
+                      = growth_badge inst.aggregate

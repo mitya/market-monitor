@@ -1,3 +1,4 @@
+- separate the US/RU calendars
 - add trend spark to MA dash
 
 - analyze last 5 M1 candles for 3%+ changes
@@ -464,3 +465,4 @@
 + calculate today MAs virtually
 + add distance bars for recent lows / highs
 + fix VTB MAs
++ move major links to the top level

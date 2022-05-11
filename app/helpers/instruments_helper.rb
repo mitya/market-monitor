@@ -363,4 +363,8 @@ module InstrumentsHelper
   def format_ticker(instrument)
     tag.span instrument.ticker, title: instrument.name, class: class_names('ticker-item', 'fw-bold text-decoration-underline': instrument.watched?)
   end
+
+  def current_market
+    params[:market] || 'rub'
+  end
 end

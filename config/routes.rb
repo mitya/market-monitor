@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'trading#momentum_ru'
+  root to: 'trading#momentum'
 
   get '/instruments/:instrument_id/candles', to: 'candles#index', constraints: { instrument_id: /[^\/]+/ }
 
@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   resource :trading, only: %i[], controller: :trading do
     get :dashboard
     get :activities
-    get :candles, :charts, :recent, :momentum_ru, :momentum_us, :last_week, :last_week_spikes, :averages
+    get :candles, :charts, :recent, :momentum, :last_week, :last_week_spikes, :averages
     post :update_chart_settings, :update_intraday_levels, :update_ticker_sets, :refresh
   end
   resource :comparision

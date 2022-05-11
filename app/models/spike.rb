@@ -33,6 +33,6 @@ end
 
 __END__
 
-Spike.scan_all since: 1.week.ago
+Spike.scan_all since: 2.week.ago
 Spike.scan_for 'NKNCP'
 instr('NKNCP').price_on!('2021-03-12').larger_tail_range

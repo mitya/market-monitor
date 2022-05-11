@@ -47,14 +47,15 @@ class Instrument < ApplicationRecord
   scope :iex, -> { where "'iex' = any(flags)" }
   scope :iex_sourceable, -> { where.not iex_ticker: nil }
   scope :non_iex, -> { where iex_ticker: nil }
+  scope :traded_on, -> currency { where currency: currency.to_s.upcase }
   scope :usd, -> { where currency: 'USD' }
   scope :eur, -> { where currency: 'EUR' }
   scope :rub, -> { where currency: 'RUB' }
+  scope :non_usd, -> { where.not currency: 'USD' }
+  scope :non_eur, -> { where.not currency: 'EUR' }
   scope :stocks, -> { where type: 'Stock' }
   scope :futures, -> { where type: 'Future' }
   scope :funds, -> { where type: 'Fund' }
-  scope :non_usd, -> { where.not currency: 'USD' }
-  scope :non_eur, -> { where.not currency: 'EUR' }
   scope :abc, -> { order :ticker }
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.symbols if key && key.to_s != 'all' }
   scope :main, -> { in_set :main }
@@ -89,6 +90,7 @@ class Instrument < ApplicationRecord
     define_method("#{selector}") do
       instance_variable_get("@#{selector}") ||
       instance_variable_set("@#{selector}", day_candles!.find_date(Current.send(selector))  )
+      # instance_variable_set("@#{selector}", day_candles!.find_date(Current.market_for(self).send(selector))  )
     end
   end
 
@@ -262,9 +264,7 @@ class Instrument < ApplicationRecord
         grouped_m1_candles = grouped_intervals.map do |interval_data|
           interval_data => { start:, periods:, candles: }
           candles = candles.compact
-          # puts "-- build #{ticker} #{interval} on #{start} #{'NONE' if candles.none?}".white
           mx_candle = candles_for(interval).on(date).find_or_initialize_by(time: start)
-          # next if mx_candle.updated_at > candles.map(&:updated_at).max
 
           mx_candle.instrument = self
           mx_candle.source     = 'virtual'

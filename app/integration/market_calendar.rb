@@ -1,9 +1,9 @@
 class MarketCalendar
   class << self
     def closest_weekday(date, currency = nil)
-      date.wday == 0           ? closest_weekday(date - 2) :
-      date.wday == 6           ? closest_weekday(date - 1) :
-      holiday?(date, currency) ? closest_weekday(date - 1) :
+      date.wday == 0           ? closest_weekday(date - 2, currency) :
+      date.wday == 6           ? closest_weekday(date - 1, currency) :
+      holiday?(date, currency) ? closest_weekday(date - 1, currency) :
       date
     end
     alias prev_closest_weekday closest_weekday
@@ -20,18 +20,18 @@ class MarketCalendar
     end
 
     def holiday?(date, currency = nil)
-      return nyse_holidays.include?(date) if currency == :usd
-      return moex_holidays.include?(date) if currency == :rub
+      return nyse_holidays.include?(date) if currency && currency.to_sym == :usd
+      return moex_holidays.include?(date) if currency && currency.to_sym == :rub
       false
     end
 
-    def prev(date = Date.current) = prev_closest_weekday(date.to_date.yesterday)
-    def next(date = Date.current) = next_closest_weekday(date.to_date.tomorrow)
+    def prev(date = Date.current, currency = nil) = prev_closest_weekday(date.to_date.yesterday, currency)
+    def next(date = Date.current, currency = nil) = next_closest_weekday(date.to_date.tomorrow, currency)
     def prev2(date) = [prev(date), prev(prev date)]
 
-    def open_days(since, till = Current.date)
+    def open_days(since, till = Current.date, currency: nil)
       since, till = since.begin, since.end if since.is_a?(Range)
-      (since.to_date .. till.to_date).map { |date| market_open?(date) ? date : nil }.compact
+      (since.to_date .. till.to_date).map { |date| market_open?(date, currency) ? date : nil }.compact
     end
 
     def nyse_holidays
@@ -69,6 +69,8 @@ class MarketCalendar
 
     def moex_holidays
       @moex_holidays ||= %w[
+        2022-05-10
+        2022-05-09
         2022-05-03
         2022-05-02
         2022-01-07

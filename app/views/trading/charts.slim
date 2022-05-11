@@ -78,6 +78,7 @@
         = fa_icon 'expand-alt'
 
     .btn-group.btn-group-sm.w-auto.align-items-center
+      = link_to fa_icon('home'), "/", class: "btn btn-outline-secondary"
       button type="button" class="btn btn-outline-secondary go-down"   data-action="chart-toolbar#gotoDown" = fa_icon 'angle-double-down'
       button type="button" class="btn btn-outline-secondary go-up"     data-action="chart-toolbar#gotoUp"   = fa_icon 'angle-double-up'
       button type="button" class="btn btn-outline-secondary go-to-end" data-action="chart-toolbar#gotoEnd"  = fa_icon 'angle-double-right'

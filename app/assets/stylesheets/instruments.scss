@@ -21,6 +21,9 @@ th[data-sort] { cursor: pointer; }
 .is-dark-green { color: darkgreen; }
 .is-light-blue { color: rgba(blue, 0.5); }
 
+.bg-danger .is-red { color: #faa; }
+.bg-success .is-green { color: #afa; }
+
 .text-green { color: green; }
 .text-red   { color: red; }
 .opacity-30 { opacity: 0.3; }
@@ -239,6 +242,8 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 .price-bubble-cell {
   width: 500px;
+  padding-left: 0;
+  pading-right: 0;
 }
 
 .price-bubble-row {
@@ -256,4 +261,9 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 .price-bubble-rule {
   display: inline-block; position: absolute; width: 1px; height: 20px; top: 0; background-color: #ccc;
+}
+
+
+.table > :not(:last-child) > :last-child > * {
+  border-bottom-width: 2px;
 }

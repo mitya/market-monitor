@@ -18,7 +18,7 @@ class Tinkoff
 
     def import_candles_from_hash(data, candle_class: nil)
       if data['error']
-        puts "Candle import error: #{data.dig 'error', 'payload', 'message'}".red
+        puts "Candle import error: #{data.dig('error', 'payload', 'message') || data['error']}".red
         return []
       end
       interval = data['interval']

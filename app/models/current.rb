@@ -6,9 +6,9 @@ class Current < ActiveSupport::CurrentAttributes
     date.on_weekend?? date.prev_weekday : date
   end
 
-  def date = Date.current
+  # def date = Date.current
   def last_day = @last_day ||= Candle.maximum(:date)
-  def prev_day = MarketCalendar.prev(last_day)
+  def prev_day = MarketCalendar.prev(last_day, :rub)
 
   def ytd = date.beginning_of_year
   def est = Time.find_zone!('Eastern Time (US & Canada)')
@@ -37,7 +37,7 @@ class Current < ActiveSupport::CurrentAttributes
 
 
   # def yesterday = weekend?? today : MarketCalendar.closest_weekday(date.prev_weekday)
-  def yesterday = MarketCalendar.closest_weekday(date.prev_weekday)
+  def yesterday = MarketCalendar.closest_weekday(date.prev_weekday, :rub)
   def d2_ago    = MarketCalendar.closest_weekday(yesterday.prev_weekday)
   def d3_ago    = MarketCalendar.closest_weekday(d2_ago.prev_weekday)
   def d4_ago    = MarketCalendar.closest_weekday(d3_ago.prev_weekday)
