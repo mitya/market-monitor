@@ -37,10 +37,12 @@ class SetComparisionsController < ApplicationController
   def summary
     selector = 'd1'
     volume_expr = "data->'volumes'->'#{selector}'"
-    @volume_gainers = Aggregate.current.order(Arel.sql "#{volume_expr} desc nulls last").limit(50).pluck(:ticker)
-    @volume_losers  = Aggregate.current.order(Arel.sql "#{volume_expr}  asc nulls last").where("(#{volume_expr})::float > 0").limit(50).pluck(:ticker)
+    instruments = Instrument.active.stocks.traded_on(current_market)
 
-    @hits = PriceLevelHit.where(date: current_calendar.yesterday).where('days_since_last > ?', 20).all
+    @volume_gainers = Aggregate.where(currency: current_currency).current.order(Arel.sql "#{volume_expr} desc nulls last").limit(50).pluck(:ticker)
+    @volume_losers  = Aggregate.where(currency: current_currency).current.order(Arel.sql "#{volume_expr}  asc nulls last").where("(#{volume_expr})::float > 0").limit(50).pluck(:ticker)
+
+    @hits = PriceLevelHit.where(date: current_calendar.yesterday, ticker: instruments).where('days_since_last > ?', 20).all
     @hits_sets = {
       level_up_tests:    @hits.levels.select {                        _1.kind.in?(%w[up-test]) },
       level_up_breaks:   @hits.levels.select {                        _1.kind.in?(%w[up-break up-gap]) },
@@ -57,11 +59,11 @@ class SetComparisionsController < ApplicationController
     }
     get_instruments = -> key { InstrumentSet.new(key, :static, items: @hits_sets[key].pluck(:ticker)) }
 
-    @spikes = Spike.where(date: current_calendar.yesterday) #.order(ticker: :asc).includes(:instrument => [:aggregate])
+    @spikes = Spike.where(date: current_calendar.yesterday, ticker: instruments) #.order(ticker: :asc).includes(:instrument => [:aggregate])
     @spikes_index = @spikes.index_by &:ticker
     ups, downs = @spikes.partition &:up?
 
-    @most_volatile = Candle.day.for_date(current_calendar.yesterday).for(Instrument.active.stocks).sort_by { _1.volatility.abs }.last(30).pluck(:ticker)
+    @most_volatile = Candle.day.for_date(current_calendar.yesterday).for(instruments).sort_by { _1.volatility.abs }.last(30).pluck(:ticker)
 
     @set_groups = [
       [ get_instruments.(:ma200_up_tests),    get_instruments.(:ma50_up_tests), get_instruments.(:level_up_tests)       ],
