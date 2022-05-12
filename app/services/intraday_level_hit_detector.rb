@@ -38,16 +38,15 @@ class IntradayLevelHitDetector
       if candle.range.include?(level.value)
         next if @today_hits.detect { |hit| hit.level_value == level.value && hit.datetime >= candle.datetime - 3.hours }
         next if level.ma? && @older_hits.detect { |hit| hit.ma? && hit.ma_length == level.period }
-        puts "Check level #{level.important} #{level.period}" if level.ma?
         puts "Level hit for #{candle.ticker}: #{level.value} #{"IMP" if level.important}".magenta
         hit = PriceLevelHit.create!(
-          instrument:  candle.instrument, 
-          date:        candle.date, 
+          instrument:  candle.instrument,
+          date:        candle.date,
           time:        candle.time,
           positive:    candle.up_since_open?,
-          rel_vol:     candle.volume_to_average, 
-          source:      level.source_type, 
-          ma_length:   level.period, 
+          rel_vol:     candle.volume_to_average,
+          source:      level.source_type,
+          ma_length:   level.period,
           level_value: level.value,
           manual:      level.manual?,
           important:   level.important

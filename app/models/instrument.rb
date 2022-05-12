@@ -48,6 +48,7 @@ class Instrument < ApplicationRecord
   scope :iex_sourceable, -> { where.not iex_ticker: nil }
   scope :non_iex, -> { where iex_ticker: nil }
   scope :traded_on, -> currency { where currency: currency.to_s.upcase }
+  scope :intraday_traded_on, -> currency { traded_on(currency).send(currency == :usd ? :current : :itself) }
   scope :usd, -> { where currency: 'USD' }
   scope :eur, -> { where currency: 'EUR' }
   scope :rub, -> { where currency: 'RUB' }
@@ -143,11 +144,11 @@ class Instrument < ApplicationRecord
 
   def change_since_close   = gain_since(:prev_day_close, :last)
   def change_in_3d         = gain_since(:d3_ago_close, :last)
-  def change_to_ema_20     = gain_since(:last, last_indicators.ema_20)
-  def change_to_ema_50     = gain_since(:last, last_indicators.ema_50)
-  def change_to_ema_200    = gain_since(:last, last_indicators.ema_200)
+  def change_to_ema_20     = gain_since(:last, last_indicators&.ema_20)
+  def change_to_ema_50     = gain_since(:last, last_indicators&.ema_50)
+  def change_to_ema_200    = gain_since(:last, last_indicators&.ema_200)
 
-  def last_indicators = @last_indicators ||= indicators.date == Current.date ? indicators : indicators.last
+  def last_indicators = @last_indicators ||= !indicators || indicators.date == Current.date ? indicators : indicators.last
 
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_before(date.to_date + 1)
@@ -327,7 +328,11 @@ class Instrument < ApplicationRecord
 
     def moex_liquid_tickers = joins(:info).vtb_moex_short.pluck(:ticker)
     def moex_illiquid_tickers = rub.pluck(:ticker) - moex_liquid_tickers
+
+    def activate_all = update_all(active: true)
+    def deactivate_all = update_all(active: false)
   end
+
 
   concerning :Filters do
     def down_in_2021? = y2021_open_rel.to_f < 0
@@ -359,3 +364,4 @@ Instrument.get('CCL').today_open
 Instrument.join(:info).count
 
 Instrument.get('AAN').update! first_date: '2020-11-25'
+Instrument.where(ticker: %w[KAP@GS KSPI@GS MBT]).deactivate_all

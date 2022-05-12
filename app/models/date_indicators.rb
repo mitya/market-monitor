@@ -120,3 +120,5 @@ MarketCalendar.open_days(4.month.ago, Date.yesterday).each { |date| DateIndicato
 DateIndicators.set_current
 DateIndicators.create_recursive instr('AAPL')
 DateIndicators.recreate_for_all %w[RIOT]
+
+Instrument.usd.active.select { _1.indicators == nil }.pluck :ticker

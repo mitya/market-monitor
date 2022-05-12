@@ -24,13 +24,14 @@ class Aggregate < ApplicationRecord
   def candle = @candle ||= instrument.candles.day.find_date(date)
 
   class << self
-    def create_for(instrument, date: Current.yesterday, gains: true, analyze: true, volume: true, force: true, year_highs: true)
+    def create_for(instrument, date: instrument.calendar.yesterday, gains: true, analyze: true, volume: true, force: true, year_highs: true)
       puts "Aggregate data on #{date} for #{instrument}"
       aggregate = find_or_initialize_by instrument: instrument, date: date
       return if aggregate.persisted? && !force
 
       day_candle = instrument.day_candles!.find_date(date)
       close = day_candle&.close
+      aggregate.currency = instrument.currency
       aggregate.close = close
       aggregate.close_change = instrument.on_close_change(date: MarketCalendar.prev(date))
 

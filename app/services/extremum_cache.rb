@@ -8,9 +8,9 @@ class ExtremumCache
   def preload(date)
     @cache[date] ||= begin
       Candle.connection.select_rows("
-        select ticker, min(low), max(high) from candles where date >= '#{date}' and
-        ticker in (select ticker from instruments where currency = 'RUB') group by ticker order by ticker
+        select ticker, min(low), max(high) from candles where date >= '#{date}' group by ticker order by ticker
       ".squish).index_by(&:first)
+      # ticker in (select ticker from instruments where currency = 'RUB') group by ticker order by ticker
     end
   end
 

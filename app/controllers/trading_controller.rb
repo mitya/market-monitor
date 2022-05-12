@@ -241,7 +241,7 @@ class TradingController < ApplicationController
   # end
 
   def momentum
-    @instruments = Instrument.active.traded_on(current_market).includes(:info)
+    @instruments = Instrument.active.intraday_traded_on(current_market).includes(:info)
     @now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
     @signals = PriceSignal.intraday.today.where(ticker: @instruments).order(time: :desc).includes(:instrument, :m1_candle).where('time > ?', (Current.msk.now - 2.hours).strftime('%H:%M')).first(300)
@@ -347,8 +347,9 @@ class TradingController < ApplicationController
       )
     end
 
-    ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
-    ignored_tickers += %w[TGKA TGKB TGKBP TGKDP TGKN]
+    @rows.select! { _1.change_to_ema_20 && _1.change_since_month_low }
+
+    ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY  TGKA TGKB TGKBP TGKDP TGKN].to_set
     watched_tickers = %w[AFKS AGRO AMEZ ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROSN RUAL SGZH SMLT TCSG VKCO].to_set
     @ignored, @rows  = @rows.partition { ignored_tickers.include? _1.instrument.ticker }
     @watched, @rows  = @rows.partition { watched_tickers.include? _1.instrument.ticker }

@@ -6,7 +6,7 @@ class MarketCalendar
 
     # def market_close_hour = @market == :rub ? 20 : 00
 
-    def date = Date.current
+    def date = Time.now.to_date
     def last_day = @last_day ||= Candle.maximum(:date)
     def prev_day = MarketCalendar.prev(last_day, @market)
 

@@ -3,6 +3,7 @@ class Price < ApplicationRecord
   before_create { self.ticker ||= instrument.ticker }
 
   scope :missing, -> { where "source IS NULL OR source = ?", 'close' }
+  scope :outdated, -> { where "last_at < ?", 12.hours.ago }
 
   def outdated? = !last_at || last_at < Current.date
   def today? = last_at && last_at > Current.date.midnight
@@ -18,12 +19,14 @@ class Price < ApplicationRecord
 
 
   class << self
-    def set_missing_prices_to_close
-      missing.each do |price|
-        if yesterday = price.instrument.d1_ago
-          price.update! source: 'close',
-            value:   yesterday.close,
-            last_at: yesterday.date.to_time.change(hour: 23)
+    def set_missing_prices_to_close(scope = missing)
+      transaction do
+        scope.each do |price|
+          if yesterday = price.instrument.yesterday
+            price.update! source: 'close',
+              value:   yesterday.close,
+              last_at: yesterday.date.to_time.change(hour: 23)
+          end
         end
       end
     end

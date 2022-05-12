@@ -1,4 +1,5 @@
 task :process do
+  rake 'set_us_last_prices'
   rake 'aggregate'
   rake 'indicators'
   rake 'analyze'
@@ -43,4 +44,10 @@ envtask :analyze_old do
   MarketCalendar.open_days(Date.current.beginning_of_year, '2021-04-16'.to_date).each do |date|
     PriceSignal.analyze_all date: date, force: false
   end
+end
+
+envtask :set_us_last_prices do
+  instruments = Instrument.active.usd
+  # Current.preload_day_candles_with instruments.to_a, MarketCalendar.us.yesterday
+  Price.set_missing_prices_to_close Price.where(ticker: instruments).includes(:instrument => :info)
 end

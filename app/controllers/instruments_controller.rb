@@ -72,7 +72,7 @@ class InstrumentsController < ApplicationController
 
     @portfolio = PortfolioItem.all
 
-    Current.preload_day_candles_with @instruments.to_a, params[:chart_volatility] ? Current.last_2_weeks : []
+    Current.preload_day_candles_with @instruments.to_a, params[:chart_volatility] ? Current.last_2_weeks : Current.last_2_weeks
     Current.preload_prices_for @instruments.to_a
   end
 end
