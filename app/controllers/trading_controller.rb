@@ -196,6 +196,7 @@ class TradingController < ApplicationController
         instrument:              inst,
         last:                    inst.last,
         change:                  inst.gain_since(inst.yesterday_close, :last),
+        change_since_open:       inst.gain_since(inst.today_open, :last),
         change_since_today_low:  inst.gain_since(inst.today_low, :last),
         change_since_today_high: inst.gain_since(inst.today_high, :last),
         last_to_yesterday_open:  inst.gain_since(inst.yesterday_open, :last),
@@ -223,10 +224,12 @@ class TradingController < ApplicationController
     # @groups = [@watched, @liquid, @illiquid, @very_illiquid]
     # @groups = [@rows]
 
-    @groups = {
-      main: @rows,
-      illiquid: @very_illiquid
-    }
+    @groups = if current_market == 'rub'
+      { main: @rows, illiquid: @very_illiquid }
+    else
+      # { main: @rows[0 .. (@rows.size / 2)], reverse: @rows[(@rows.size / 2 + 1) .. -1] }
+      { main: @rows }
+    end
 
     sort_field = params[:sort] || :change
     @groups = @groups.transform_values { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
@@ -281,15 +284,18 @@ class TradingController < ApplicationController
 
     @results = @dates.each_with_object({}) do |date, hash|
       candles = @instruments.map { _1.day_candles!.find_date(date) }.compact
-      gainers = candles.compact.sort_by(&:rel_close_change).last(15).reverse
-      losers  = candles.compact.sort_by(&:rel_close_change).first(15)
-      volume_gainers = candles.sort_by(&:volume_to_average).last(15).reverse.select { _1.volume_to_average > 2 }
-      user_tickers = (gainers + losers).map(&:ticker).to_set
+      candles_by_change = candles.sort_by(&:rel_close_change)
+      gainers = candles_by_change.last(15).reverse
+      losers  = candles_by_change.first(15)
 
-      volume_gainers.reject! { _1.ticker.in? user_tickers }
+      used_tickers = (gainers + losers).map(&:ticker).to_set
+      unused_candles = candles.reject { _1.ticker.in? used_tickers }
+
+      volume_gainers = unused_candles.sort_by(&:volume_to_average).last(15).reverse # .select { _1.volume_to_average > 2 }
+      volatile = unused_candles.sort_by(&:volatility_abs).last(15).reverse          #.select { _1.volatility_abs > 0.1 }
 
       result = OpenStruct.new(
-        gainers: gainers, losers: losers, volume_gainers: volume_gainers
+        gainers: gainers, losers: losers, volume_gainers: volume_gainers, volatile: volatile
       )
 
       hash[date] = result

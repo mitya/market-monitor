@@ -81,6 +81,7 @@ class Candle < ApplicationRecord
 
   def volatility_range = high - low
   def volatility = (high - low) / low
+  def volatility_abs = volatility.abs
   def volatility_above = top_shadow_spread / range_high
   def volatility_below = bottom_shadow_spread / range_low
   def volatility_body  = (range_high - range_low) / range_low

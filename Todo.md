@@ -468,3 +468,5 @@
 + move major links to the top level
 + separate the US/RU calendars
 + track last 15/60m changes
++ column with change since open
++ high-low to weekly dash

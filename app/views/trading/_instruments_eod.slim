@@ -1,26 +1,36 @@
-- unless local_assigns[:header] == false
+- if local_assigns[:header] != false
   thead.table-dark
     tr
       = th :icon
-      = th :ticker
+      = th :ticker, local_assigns[:title]
       = th :change, 'Yc ﹪', class: 'money-cell'
       = th :rel_volume, '𝑉', class: "money-cell"
       = th :volume, '𝑉 m', class: 'money-cell'
       = th :volatility, 'σ', class: 'money-cell'
+- else local_assigns[:title]
+  thead.table-dark
+    tr
+      = th :icon
+      = th :ticker, local_assigns[:title]
+      = th :change
+      = th :rel_volume
+      = th :volume
+      = th :volatility
+
 tbody
   - candles.each do |candle|
     - inst = candle.cached_instrument
-    tr(class=class_names('opacity-40' => inst.ignored?))
+    - classes = class_names('opacity-40' => inst.ignored? || local_assigns[:muted_if] ? muted_if.(candle) : false)
+    tr(class=classes)
       = td :icon, instrument_logo_button(inst)
       = td :ticker, format_ticker(inst)
       = td :change, class: "money-cell" do
         = colorized_ratio candle.rel_close_change, precision: 1
         / = percentage_bar_or_number candle.rel_change, classes: "#{red_green_class candle.rel_change.to_f > 0}", threshold: 0.05, rtl: true
       = td :rel_volume, class: "money-cell no-bottom-padding" do
-        / = number_to_percentage candle.volume_to_average, precision: 0, format: '%n ﹪'
-        = percentage_bar candle.volume_to_average / 100, classes: 'is-light-blue', threshold: 4, rtl: true,
+        = percentage_bar candle.volume_to_average / 100, classes: 'is-light-blue', threshold: -1, rtl: true,
           title: number_to_percentage(round_percentage(candle.volume_to_average * 100), precision: 0, format: '%n ﹪')
       = td :volume, class: 'money-cell' do
         = format_price_in_millions candle.volume_in_money, unit: inst
-      / = td :volatility, class: 'money-cell' do
-      /   = number_to_percentage row.volatility, precision: 0
+      = td :volatility, class: 'money-cell' do
+        = format_percentage candle.volatility, precision: 0

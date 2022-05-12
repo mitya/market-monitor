@@ -6,9 +6,10 @@
       = th :icon
       = th :ticker, local_assigns[:title]
       = th :icons
-      = th :last, 'Last', class: 'money-cell muted-cell'
+      = th :last, 'Last', class: 'money-cell'
       = th :last_to_yesterday_open, 'Yo ﹪', class: 'money-cell muted-cell'
       = th :change, 'Yc ﹪', class: 'money-cell'
+      = th :change_since_open, 'To ﹪', class: 'money-cell'
 
       = th :recent_change, '15m ﹪', class: 'money-cell'
       = th :gain_in_15, '15m ﹪', class: 'money-cell', sort: 15
@@ -37,7 +38,7 @@
   tbody
     - rows.each do |row|
       - inst = row.instrument
-      - classes = class_names('opacity-40' => local_assigns[:muted] ? inst.send(muted) :false)
+      - classes = class_names('opacity-40' => local_assigns[:muted] ? inst.send(muted) : false)
       tr(class=classes)
         = td :icon do
           = instrument_logo_button inst
@@ -53,6 +54,9 @@
         = td :change, class: "money-cell" do
           = colorized_ratio row.change, precision: 1
           / = ratio_bar row.change, classes: 'solid'
+
+        = td :change_since_open, class: "money-cell muted-cell" do
+          = colorized_ratio row.change_since_open, precision: 1
         = td :recent_change, class: "money-cell" do
           = colorized_ratio row.recent_change, precision: 1
         = td :gain_in_15, class: "money-cell" do
