@@ -346,6 +346,8 @@ module InstrumentsHelper
     russel_2000:     'inner-success',
     sp_500:          'inner-success',
     nasdaq_100:      'inner-success',
+    current:         'inner-warning',
+    '1'.to_sym =>    'inner-warning',
   }
 
   def format_risk_ratio(ratio)
@@ -362,9 +364,5 @@ module InstrumentsHelper
 
   def format_ticker(instrument)
     tag.span instrument.ticker, title: instrument.name, class: class_names('ticker-item', 'fw-bold text-decoration-underline': instrument.watched?)
-  end
-
-  def current_market
-    params[:market] || 'rub'
   end
 end

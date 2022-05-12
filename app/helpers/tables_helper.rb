@@ -1,7 +1,7 @@
 module TablesHelper
   def th(key, label = nil, **attrs)
     return unless current_table_fields_include?(key)
-    attrs['data-sort'] = key
+    attrs['data-sort'] = attrs.delete(:sort) || key
     tag.th label, **attrs
   end
 

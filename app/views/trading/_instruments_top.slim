@@ -1,5 +1,6 @@
 - fields = %i[icon ticker] + fields
-= data_table fields: fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
+= data_table fields: fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table",
+  data: { sort_param: local_assigns[:sort_param] || 'sort' } do |t|
   thead.table-dark
     tr
       = th :icon
@@ -8,7 +9,15 @@
       = th :last, 'Last', class: 'money-cell muted-cell'
       = th :last_to_yesterday_open, 'Yo ﹪', class: 'money-cell muted-cell'
       = th :change, 'Yc ﹪', class: 'money-cell'
+
       = th :recent_change, '15m ﹪', class: 'money-cell'
+      = th :gain_in_15, '15m ﹪', class: 'money-cell', sort: 15
+      = th :loss_in_15, '15m ﹪', class: 'money-cell', sort: 15
+      = th :gain_in_60, '60m ﹪', class: 'money-cell', sort: 60
+      = th :loss_in_60, '60m ﹪', class: 'money-cell', sort: 60
+      = th :change_in_15, '15m ﹪', class: 'money-cell'
+      = th :change_in_60, '60m ﹪', class: 'money-cell'
+
       = th :last_to_today_open, 'To ﹪', class: 'money-cell muted-cell'
       = th :last_to_60m_ago, '1h'
       = th :last_to_15m_ago, '15m'
@@ -17,11 +26,14 @@
       = th :change_to_ema_20, 'MA20 ﹪', class: 'money-cell'
       = th :change_to_ema_50, 'MA50 ﹪', class: 'money-cell'
       = th :change_to_ema_200, 'MA200 ﹪', class: 'money-cell'
+
       = th :rel_volume, '𝑉 ﹪', class: 'money-cell'
       = th :yesterday_volume, 'Yvol', class: 'money-cell'
       = th :volume, '𝑉 m', class: 'money-cell'
       = th :d5_volume, '𝑉 5', class: 'money-cell'
       = th :volatility, 'σ', class: 'money-cell'
+      = th :change_since_today_low, 'L ﹪', class: 'money-cell'
+      = th :change_since_today_high, 'H ﹪', class: 'money-cell'
   tbody
     - rows.each do |row|
       - inst = row.instrument
@@ -37,12 +49,25 @@
           = relative_price inst.last, inst.yesterday_close, unit: inst.currency, format: 'absolute'
         = td :last_to_yesterday_open, class: "money-cell muted-cell" do
           = colorized_ratio row.last_to_yesterday_open, precision: 1
+
         = td :change, class: "money-cell" do
           = colorized_ratio row.change, precision: 1
           / = ratio_bar row.change, classes: 'solid'
         = td :recent_change, class: "money-cell" do
           = colorized_ratio row.recent_change, precision: 1
-          / = ratio_bar row.recent_change, classes: 'solid m-wide'
+        = td :gain_in_15, class: "money-cell" do
+          = colorized_ratio row.gain_in_15, precision: 1
+        = td :loss_in_15, class: "money-cell" do
+          = colorized_ratio row.loss_in_15, precision: 1
+        = td :gain_in_60, class: "money-cell" do
+          = colorized_ratio row.gain_in_60, precision: 1
+        = td :loss_in_60, class: "money-cell" do
+          = colorized_ratio row.loss_in_60, precision: 1
+        = td :change_in_15, class: "money-cell" do
+          = colorized_ratio row.change_in_15, precision: 1
+        = td :change_in_60, class: "money-cell" do
+          = colorized_ratio row.change_in_60, precision: 1
+
         = td :last_to_today_open, class: "money-cell muted-cell" do
           = colorized_ratio row.last_to_today_open, precision: 1
         = td :last_to_60m_ago do
@@ -62,10 +87,14 @@
         = td :d5_volume, class: 'money-cell' do
           = format_price_in_millions row.d5_volume, unit: inst.currency
         = td :volatility, class: 'money-cell' do
-          = number_to_percentage row.volatility, precision: 0
+          = number_to_percentage row.volatility, precision: 0, format: '%n ﹪'
         = td :change_to_ema_20, class: "money-cell" do
           = colorized_ratio row.change_to_ema_20, precision: 0
         = td :change_to_ema_50, class: "money-cell" do
           = colorized_ratio row.change_to_ema_50, precision: 0
         = td :change_to_ema_200, class: "money-cell" do
           = colorized_ratio row.change_to_ema_200, precision: 0
+        = td :change_since_today_low, class: "money-cell" do
+          = colorized_ratio row.change_since_today_low, precision: 0
+        = td :change_since_today_high, class: "money-cell" do
+          = colorized_ratio row.change_since_today_high, precision: 0

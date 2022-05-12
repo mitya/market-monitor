@@ -1,13 +1,16 @@
-- page_title! 'Today / All'
-/ - @menu_hidden = true
+- page_title! "Today #{current_currency} / All"
 
 main.container-fluid
   .row
     - @groups.each do |key, group|
-      - items_per_column = key == :main ? 30 : 50
-      - group.in_groups_of(items_per_column, false) do |rows|
-        .col-3
-          = render 'instruments_top', rows: rows,
-            fields: %i[last change volume rel_volume volatility d5_volume]
-          / d5_volume yesterday_volume last_to_today_open last_to_05m_ago last_to_60m_ago last_to_15m_ago
-          / = tickers_copy_list rows.map(&:instrument)
+      - if current_market == 'rub'
+        - group.in_groups_of(key == :main ? 32 : 50, false) do |rows|
+          .col-3
+            = render 'instruments_top', rows: rows,
+              fields: %i[last change volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
+      - else
+        .col-5
+          = render 'instruments_top', rows: group,
+            fields: %i[last change change_in_15 change_in_60 volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
+            / d5_volume yesterday_volume last_to_today_open last_to_05m_ago last_to_60m_ago last_to_15m_ago
+            / = tickers_copy_list rows.map(&:instrument)

@@ -48,7 +48,7 @@ class Instrument < ApplicationRecord
   scope :iex_sourceable, -> { where.not iex_ticker: nil }
   scope :non_iex, -> { where iex_ticker: nil }
   scope :traded_on, -> currency { where currency: currency.to_s.upcase }
-  scope :intraday_traded_on, -> currency { traded_on(currency).send(currency == :usd ? :current : :itself) }
+  scope :intraday_traded_on, -> currency { traded_on(currency).send(currency.to_sym == :usd ? :current : :itself) }
   scope :usd, -> { where currency: 'USD' }
   scope :eur, -> { where currency: 'EUR' }
   scope :rub, -> { where currency: 'RUB' }
@@ -365,3 +365,4 @@ Instrument.join(:info).count
 
 Instrument.get('AAN').update! first_date: '2020-11-25'
 Instrument.where(ticker: %w[KAP@GS KSPI@GS MBT]).deactivate_all
+Instrument.joins(:info).where(info: { sector_code: 'healthtechnology'} ).count
