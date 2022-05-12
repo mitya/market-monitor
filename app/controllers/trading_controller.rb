@@ -250,7 +250,7 @@ class TradingController < ApplicationController
     Current.preload_prices_for @instruments.to_a
     Current.preload_day_candles_with @instruments.to_a, [current_calendar.today, current_calendar.yesterday]
 
-    @recent_candles = Candle::M1.for(@instruments).today.where(time: (@now - 10.minutes).to_hhmm .. @now.to_hhmm).order(:time).group_by(&:cached_instrument)
+    @recent_candles = Candle::M1.for(@instruments).today.where(time: (@now - 15.minutes).to_hhmm .. @now.to_hhmm).order(:time).group_by(&:cached_instrument)
     @recent_changes = @recent_candles.map do |instrument, candles|
       ratio = price_ratio(instrument.last, candles.first.close) if candles.count > 5
       [instrument.ticker, ratio.to_f]
