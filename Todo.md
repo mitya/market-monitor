@@ -1,3 +1,8 @@
+- fix open/close prices for selected US tickers
+
+- refactor TradingController
+- cache info / indicators / aggregate in memory for all tickers
+
 - add a way to quickly activate a US ticker
 - add trend spark to MA dash
 

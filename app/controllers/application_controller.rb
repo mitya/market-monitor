@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
   def current_market_symbol = current_market.to_sym
   def current_calendar = MarketCalendar.for(current_market)
   def current_currency = current_market.upcase
+  def ru_market? = current_market == 'rub'
+  def us_market? = current_market == 'usd'
 
-  helper_method :current_market, :current_currency
+  helper_method :current_market, :current_currency, :ru_market?, :us_market?
 end

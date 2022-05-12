@@ -73,11 +73,11 @@ module ApplicationHelper
     end
   end
 
-  def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false, threshold: 0.08)
+  def percentage_bar_or_number(value, classes: nil, precision: 1, rtl: false, threshold: 0.08, title: nil)
     if value.to_f.abs >= threshold
       colorized_ratio value, precision: precision, format: '%n'
     else
-      percentage_bar value, classes: classes, rtl: rtl
+      percentage_bar value, classes: classes, rtl: rtl, title: title
     end
   end
 
@@ -129,5 +129,12 @@ module ApplicationHelper
   def float_to_percentage(value, precision: 1)
     return nil unless value
     number_to_percentage value * 100, precision: precision
+  end
+
+  def format_percentage(value, precision: percentage_precision, round: false)
+    return unless value
+    value = value * 100
+    value = round_percentage(value) if round
+    number_to_percentage value, precision: precision, format: '%n ﹪'
   end
 end

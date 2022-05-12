@@ -1,13 +1,15 @@
 - page_title! 'Week / Gainers'
 
 - fields = %i[icon ticker change rel_volume volume volatility]
+- change_mute_threshold = ru_market? ? 0.03 : 0.05
+- volume_mute_threshold = ru_market? ? 1.5 : 2
 main.container-fluid
   .row
     - @results.each do |date, result|
       .col-2
         h6.text-end= l date, format: :rus_with_week_day
         = data_table fields: fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do
-          = render 'instruments_eod', candles: result.gainers, title: 'Gainers', muted_if: -> { _1.rel_close_change < 0.05 }
-          = render 'instruments_eod', candles: result.losers, header: false, title: 'Losers', muted_if: -> { _1.rel_close_change > -0.05 }
-          = render 'instruments_eod', candles: result.volume_gainers, header: false, title: 'Volume', muted_if: -> { _1.volume_to_average < 2 }
+          = render 'instruments_eod', candles: result.gainers, title: 'Gainers', muted_if: -> { _1.rel_close_change < change_mute_threshold }
+          = render 'instruments_eod', candles: result.losers, header: false, title: 'Losers', muted_if: -> { _1.rel_close_change > -change_mute_threshold }
+          = render 'instruments_eod', candles: result.volume_gainers, header: false, title: 'Volume', muted_if: -> { _1.volume_to_average < volume_mute_threshold }
           = render 'instruments_eod', candles: result.volatile, header: false, title: 'Volatile', muted_if: -> { _1.volatility.abs < 0.1 }

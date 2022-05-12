@@ -25,11 +25,12 @@ tbody
       = td :icon, instrument_logo_button(inst)
       = td :ticker, format_ticker(inst)
       = td :change, class: "money-cell" do
-        = colorized_ratio candle.rel_close_change, precision: 1
+        = colorized_ratio candle.rel_close_change, precision: 1, title: format_price(candle.close, candle.cached_instrument)
         / = percentage_bar_or_number candle.rel_change, classes: "#{red_green_class candle.rel_change.to_f > 0}", threshold: 0.05, rtl: true
-      = td :rel_volume, class: "money-cell no-bottom-padding" do
-        = percentage_bar candle.volume_to_average / 100, classes: 'is-light-blue', threshold: -1, rtl: true,
-          title: number_to_percentage(round_percentage(candle.volume_to_average * 100), precision: 0, format: '%n ﹪')
+      = td :rel_volume, class: "money-cell is-light-blue" do
+        = format_percentage candle.volume_to_average, round: true
+        / = percentage_bar candle.volume_to_average / 100, classes: 'is-light-blue', threshold: -1, rtl: true,
+        /   title: number_to_percentage(round_percentage(candle.volume_to_average * 100), precision: 0, format: '%n ﹪')
       = td :volume, class: 'money-cell' do
         = format_price_in_millions candle.volume_in_money, unit: inst
       = td :volatility, class: 'money-cell' do
