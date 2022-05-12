@@ -90,6 +90,7 @@ class Candle < ApplicationRecord
   alias top_tail_range volatility_above
 
   def analyzed! = update!(analyzed: true)
+  def final! = update!(ongoing: false)
 
   def up? = close >= open
   def down? = close < open

@@ -1,4 +1,3 @@
-- fix open/close prices for selected US tickers
 
 - refactor TradingController
 - cache info / indicators / aggregate in memory for all tickers
@@ -475,3 +474,4 @@
 + track last 15/60m changes
 + column with change since open
 + high-low to weekly dash
++ fix open/close prices for US tickers with loaded 1m data

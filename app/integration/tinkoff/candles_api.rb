@@ -174,3 +174,7 @@ class Tinkoff
     end
   end
 end
+
+__END__
+
+Tinkoff.load_day(instr(:zim), Current.date)

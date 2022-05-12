@@ -1,12 +1,12 @@
 class IntradayLoader
-  def initialize(instruments: nil, interval: nil, include_history: true, mode: nil)
-    @wide_market       = mode != nil
+  def initialize(instruments: nil, interval: nil, include_history: true, market: nil)
+    @market            = MarketCalendar.for(market)
     @instruments       = instruments
     @interval          = interval
     @include_history   = include_history
-    @sync_today_candle = @wide_market
-    @should_analyze    = @wide_market
-    @sync_futures      = @mode == :ru
+    @sync_futures      = @market.ru?
+    @sync_today_candle = market != nil
+    @should_analyze    = market != nil
   end
 
   def tickers
@@ -100,6 +100,11 @@ class IntradayLoader
         futures_synced_at = Time.current
       end
 
+      if @market.closed?
+        instruments.each { _1.today.final! } if @market&.us?
+        exit
+      end
+
       sleep 5
     end
   end
@@ -188,11 +193,11 @@ class IntradayLoader
     end
 
     def sync_ru
-      new(instruments: Instrument.active.stocks.rub, interval: '1min', include_history: false, mode: :ru).sync
+      new(instruments: Instrument.active.stocks.rub, interval: '1min', include_history: false, market: :rub).sync
     end
 
     def sync_us
-      new(instruments: Instrument.active.stocks.usd.current, interval: '1min', include_history: false, mode: :us).sync
+      new(instruments: Instrument.active.stocks.usd.current, interval: '1min', include_history: false, market: :usd).sync
     end
   end
 end

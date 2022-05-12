@@ -1,10 +1,12 @@
 class MarketCalendar
   class Local
     def initialize(market = :rub)
-      @market = market.to_sym
+      @key = @market = @currency = market.to_sym
+      @exchange_code = @key == :rub ? :Moex1 : :US
     end
 
-    # def market_close_hour = @market == :rub ? 20 : 00
+    def us? = @key == :usd
+    def ru? = @key == :rub
 
     def date = Time.now.to_date
     def last_day = @last_day ||= Candle.maximum(:date)
@@ -31,13 +33,25 @@ class MarketCalendar
     alias year_ago y1_ago
     alias month_ago m1_ago
 
+    def est = Time.find_zone!('Eastern Time (US & Canada)')
+    def msk = Time.find_zone!('Moscow')
+    def timezone = @timezone ||= ru? ? msk : est
+    def time = timezone.now
+
+    def opening_time_str = MarketInfo::OpeningTimes[@exchange_code]
+    def closing_time_str = MarketInfo::ClosingTimes[@exchange_code]
+
+    def holiday?(date) = MarketCalendar.holiday?(date, @currency)
+    def open_on?(date = self.date) = date.on_weekday? && !holiday?(date)
+    def open? = open_on?(date) && time.to_s(:time).between?(opening_time_str, closing_time_str)
+    def closed? = !open?
+
     def method_missing(method, *args, &block)
       Current.send(method, *args, &block)
     end
 
     delegate :closest_weekday, to: MarketCalendar
   end
-
 
 
   class << self
