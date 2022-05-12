@@ -57,14 +57,12 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
         li= link_to 'Week', last_week_trading_path(market: current_market), class: 'nav-link'
         li= link_to 'Spikes', last_week_spikes_trading_path(market: current_market), class: 'nav-link'
         li.nav-link |
-        li= link_to 'RU', momentum_trading_path(market: 'rub'), class: 'nav-link'
-        li= link_to 'US', momentum_trading_path(market: 'usd'), class: 'nav-link'
+        li= link_to 'Day', momentum_trading_path(market: current_market), class: 'nav-link'
         li= link_to 'All', recent_trading_path(market: current_market), class: 'nav-link'
         li= link_to 'Futures', futures_path, class: 'nav-link'
 
-
-
       ul class="navbar-nav mb-2 mb-lg-0 ms-auto"
+        li= link_to current_market == 'rub' ? 'US' : 'RU', url_for(market: current_market == 'rub' ? 'usd' : 'rub'), class: 'nav-link'
         li class="nav-item dropdown"
           a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" = fa_icon :sync
           ul class="dropdown-menu dropdown-menu-end"
