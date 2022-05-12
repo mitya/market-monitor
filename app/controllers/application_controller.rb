@@ -9,11 +9,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_market
-    params[:market] || 'rub'
-  end
-
-  def current_calendar
-    MarketCalendar.for(current_market)
-  end
+  def current_market = params[:market] || 'rub'
+  def current_market_symbol = current_market.to_sym
+  def current_calendar = MarketCalendar.for(current_market)
 end

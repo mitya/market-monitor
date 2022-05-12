@@ -22,7 +22,6 @@ h6.ps-1(
 table class="dash-table table table-sm table-hover table-font-sm tickers-table table-no-border table-sm-v"
   tbody
     - instruments.each do |inst|
-      / - p inst.ticker
       = render 'set_comparisions/ticker_row', inst: inst,
         change: inst.stored_gain_since(selector),
         hit: @hits_sets && @hits_sets[set.key]&.detect { inst.ticker == _1.ticker },
@@ -31,4 +30,5 @@ table class="dash-table table table-sm table-hover table-font-sm tickers-table t
         volume_cell: set.key =~ /volume_gainers|spike/,
         volume_decrease_cell: set.key =~ /volume_losers/,
         volatility_cell: set.key =~ /volatile/,
-        level_cell: set.key =~ /ma|level/
+        level_cell: set.key =~ /ma|level/,
+        bar_threshold: 0

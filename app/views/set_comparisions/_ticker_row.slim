@@ -11,7 +11,7 @@ tr.ticker-item(data-ticker=inst.ticker tabindex="0")
   td.money-cell.price-cell= format_price inst.last, unit: inst.currency
 
   td.money-cell.change-cell
-    = percentage_bar_or_number change, classes: "#{red_green_class change.to_f > 0} solid-narrow float-end", rtl: true
+    = percentage_bar_or_number change, classes: "#{red_green_class change.to_f > 0} solid-narrow float-end", rtl: true, threshold: local_assigns[:bar_threshold] || 0.08
 
   - if hit
     td.money-cell(data-col="days_since_last")

@@ -5,24 +5,27 @@ class SetComparisionsController < ApplicationController
 
     InstrumentSet.reload_categories!
 
-    @set_groups = [
-      # %w[gainers_us],
-      # %w[losers_us],
-      %w[gainers_ru],
-      %w[losers_ru],
-      # %w[mine.us mine.ru],
-      # %w[watch.us watch.ru extremes],
-      # %w[energy.oil energy.oil.refinery energy.oil.service],
-      # %w[energy.gas energy.coal* energy.uranium mining.fertilizers],
-      # %w[mining.steel mining.gold mining.misc],
-      # %w[shipping*],
-      # %w[it.faang it.hot it.games],
-      # %w[biotech*],
-      # %w[reit retail],
-      # %w[china travelling transportation.airlines],
-    ]
-
-    # retail covid
+    @set_groups = if current_market_symbol == :rub
+       [
+        %w[gainers_ru],
+        %w[losers_ru],
+      ]
+    else
+      [
+       %w[gainers_us],
+       %w[losers_us],
+       %w[mine.us mine.ru],
+       %w[watch.us watch.ru extremes],
+       %w[energy.oil energy.oil.refinery energy.oil.service],
+       %w[energy.gas energy.coal* energy.uranium mining.fertilizers],
+       %w[mining.steel mining.gold mining.misc],
+       %w[shipping*],
+       %w[it.faang it.hot it.games],
+       %w[biotech*],
+       %w[reit retail],
+       %w[china travelling transportation.airlines],
+     ]
+    end
 
     @set_groups = @set_groups.map do |keys|
       Array(keys).map { |k| InstrumentSet.new k, :category, period: params[:selector] }

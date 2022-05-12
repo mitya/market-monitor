@@ -8,6 +8,7 @@ main.container-fluid.gainers-dashboard
         .d-inline-flex.flex-row.align-items-center.w-75.ps-3
           = render 'instruments/filter_by_currency'
           = render 'instruments/filter_by_availability'
+          = hidden_field_tag :market, current_market
           = select_tag :selector, options_for_select(%w[last] + Aggregate::Selectors + MarketCalendar.special_dates - %w[d1], selector),
             class: "form-select form-select-sm w-auto", prompt: 'Period'
           = search_field_tag :tickers, params[:tickers].to_s.squish, class: "form-control form-control-sm text-uppercase ms-3",

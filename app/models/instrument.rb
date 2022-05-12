@@ -156,7 +156,7 @@ class Instrument < ApplicationRecord
 
   def d1_change = @d1_change ||= gain_since(:d2_ago_close, :d1_ago_close)
   def price_change = @price_change ||= price!.change rescue 0
-  def stored_gain_since(date_specifier) = date_specifier.blank? || date_specifier == 'last' ? price_change : aggregate.gains[date_specifier]
+  def stored_gain_since(date_specifier) = (date_specifier.blank? || date_specifier == 'last') ? price_change : aggregate.gains[date_specifier]
 
   def calendar = @calendar ||= MarketCalendar.for(self)
 
