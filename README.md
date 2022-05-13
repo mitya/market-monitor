@@ -66,7 +66,7 @@ rake tinkoff:days:missing since=2022-04-01 ok=1 tickers='BRBR DINO SHEL EMBC PAR
 
 # Destroying tickers
 
-rake t:destroy ticker='TRIT XLNX' ok=1
+rake t:destroy ticker='BLL' ok=1
 rake tinkoff:instruments:sync ok=1
 
 

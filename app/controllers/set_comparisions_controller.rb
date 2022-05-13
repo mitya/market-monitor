@@ -3,6 +3,8 @@ class SetComparisionsController < ApplicationController
     # @set_keys = %w[oil gas shipping]
     # @set_keys = %w[xbi xhb xhs xlc xlf xli xlk xlp xlu xsd xlv xme xle xop xes xlb]
 
+    params[:selector] = 'd2' if current_market_symbol == :usd && params[:selector] == 'last' || params[:selector].blank?
+
     InstrumentSet.reload_categories!
 
     @set_groups = if current_market_symbol == :rub

@@ -106,7 +106,21 @@ class TradingController < ApplicationController
           indicators += [indicators.last.last] if indicators.last.date != Current.date
           map[ticker][:averages] = { }
           [20, 50, 200].each do |period|
-            map[ticker][:averages][period] = indicators.map { [_1.charting_timestamp, _1.send("ema_#{period}")] }.reject { _1.second == nil }
+            map[ticker][:averages][period] = {}
+            map[ticker][:averages][period][:data] = indicators.map { [_1.charting_timestamp, _1.send("ema_#{period}")] }.reject { _1.second == nil }
+
+            if last_value = map.dig(ticker, :averages, period, :data, -1, -1)
+              gain = instrument.gain_since(:last, last_value)
+              map[ticker][:averages][period][:distance] = "#{gain > 0 ? '+' : '–'}#{(gain.abs * 100).to_i}%"
+            end
+          end
+
+          extremums = ExtremumFinder.find_for(candles)
+          extremums.each do |extremum|
+            gain = instrument.gain_since(:last, extremum)
+            next if gain.abs < 0.05
+            gain_pct = (gain * 100).to_i
+            map[ticker][:levels]["#{gain_pct > 0 ? '+' : '–'}#{gain_pct.abs}%"] = extremum
           end
         end
 
@@ -205,7 +219,7 @@ class TradingController < ApplicationController
         last_to_15m_ago:         inst.gain_since(@candles[15][inst.ticker]&.close, :last),
         last_to_05m_ago:         inst.gain_since(@candles[ 5][inst.ticker]&.close, :last),
         last_to_01m_ago:         inst.gain_since(@candles[ 1][inst.ticker]&.close, :last),
-        yesterday_volume:        inst.d1_ago&.volume_in_money,
+        yesterday_volume:        inst.yesterday&.volume_in_money,
         volume:                  inst.last_day&.volume_in_money,
         volatility:              inst.last_day&.volatility.to_f * 100,
         rel_volume:              inst.info.relative_volume.to_f * 100,
@@ -249,9 +263,9 @@ class TradingController < ApplicationController
       OpenStruct.new(
         instrument: inst,
         last:       inst.last,
-        volume:     inst.today&.volume_in_money,
+        volume:     inst.last_day&.volume_in_money,
+        volatility: inst.last_day&.volatility.to_f * 100,
         rel_volume: inst.info.relative_volume.to_f * 100,
-        volatility: inst.today&.volatility.to_f * 100,
         d5_volume:  inst.info.avg_d5_money_volume,
         change:     inst.change_since_close,
         gain_in_15: recent_gains [15][inst.ticker].to_f,
@@ -281,12 +295,13 @@ class TradingController < ApplicationController
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
+    number_of_gainers = current_market == 'rub' ? 15 : 30
 
     @results = @dates.each_with_object({}) do |date, hash|
       candles = @instruments.map { _1.day_candles!.find_date(date) }.compact
       candles_by_change = candles.sort_by(&:rel_close_change)
-      gainers = candles_by_change.last(15).reverse
-      losers  = candles_by_change.first(15)
+      gainers = candles_by_change.last(number_of_gainers).reverse
+      losers  = candles_by_change.first(number_of_gainers)
 
       used_tickers = (gainers + losers).map(&:ticker).to_set
       unused_candles = candles.reject { _1.ticker.in? used_tickers }

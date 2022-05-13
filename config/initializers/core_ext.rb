@@ -40,6 +40,7 @@ end
 
 class Array
   def average
+    return nil if count == 0
     sum / count
   end
 

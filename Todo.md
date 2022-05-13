@@ -1,6 +1,9 @@
+- check today moves | fill wait lists
+- check turn-around behaviours on 5m charts
 
-- refactor TradingController
 - cache info / indicators / aggregate in memory for all tickers
+- refactor TradingController
+- add all instrument sets to chart tickers set selectors
 
 - add a way to quickly activate a US ticker
 - add trend spark to MA dash
@@ -475,3 +478,4 @@
 + column with change since open
 + high-low to weekly dash
 + fix open/close prices for US tickers with loaded 1m data
++ add percentage levels to daily charts

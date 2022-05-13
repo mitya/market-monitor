@@ -157,7 +157,7 @@ export default class Chart
     legend = @legend
     changeBox = legend.querySelector('.change-percent')
     averagesBox = legend.querySelector('.candle-averages')
-    if candle
+    if candle and candle.close
       formattedPrice = candle.close.toFixed(if candle.close < 0.3 then 4 else 2)
       formattedTime = if isDaily then formatDate(candle.time) else formatTime(candle.time - 3 * 60 * 60)
       legend.querySelector('.candle-time').innerText = formattedTime
@@ -202,16 +202,26 @@ export default class Chart
 
 
   setupLevelLines: ->
+    levelColorFor = (title) -> switch
+      when title.startsWith('+') then '#56a39a'
+      when title.startsWith('–') then 'darkred'
+      else levelColors[title]
+
+    levelLineStyleFor = (title) -> switch
+      when title.startsWith('+') || title.startsWith('–') then LineStyle.Solid
+      else LineStyle[levelLineStyles[title]]
+
     if @data.averages
       @averageSeries = {}
-      for period of @data.averages
+      for period, info of @data.averages
         @averageSeries[period] = @chart.addLineSeries
           color: levelColors["MA#{period}"]
           lineWidth: 2
           priceScaleId: 'right'
           priceLineVisible: false
           autoscaleInfoProvider: @autoscaleInfoProvider
-        @averageSeries[period].setData @data.averages[period].map  (row) -> { time: row[0], value: Number(row[1]) }
+          title: info.distance
+        @averageSeries[period].setData info.data.map  (row) -> { time: row[0], value: Number(row[1]) }
 
     for title, values of @data.levels
       continue if values == null
@@ -219,10 +229,10 @@ export default class Chart
       for level in values
         @candlesSeries.createPriceLine
           price: Number(level)
-          color: levelColors[title]
+          color: levelColorFor(title)
           opacity: 0.5
           lineWidth: levelLineWidths[title]
-          lineStyle: LineStyle[levelLineStyles[title]]
+          lineStyle: levelLineStyleFor(title)
           axisLabelVisible: @data.levelLabelsVisible
           title: title
 
