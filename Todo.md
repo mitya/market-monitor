@@ -1,5 +1,3 @@
-
-- add ability to add any ticker set to the chart in one click
 - colorize tickers in some lists by category (tech / resources / etc)
 - a list with distance to target (last, target, 15/60 m change, distance from origin)
 
@@ -483,3 +481,4 @@
 + fix open/close prices for US tickers with loaded 1m data
 + add percentage levels to daily charts
 + add all instrument sets to chart lists
++ add ability to add any ticker set to the chart in one click

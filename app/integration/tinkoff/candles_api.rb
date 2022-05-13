@@ -32,7 +32,7 @@ class Tinkoff
 
       candle_class.transaction do
         candles = candles.sort_by { _1['time' ]}
-        puts "Import Tinkoff #{instrument} - no candles".colorize(:white) if candles.empty?
+        puts "Import Tinkoff #{instrument} ⨯".colorize(:white) if candles.empty? # ∅
         candles.map do |hash|
           timestamp = Time.parse(hash['time']).in_time_zone(instrument.time_zone)
           date = timestamp.to_date

@@ -5,6 +5,11 @@ document.addEventListener "turbolinks:load", ->
 
   # setInterval (-> location.reload()), 20_000
 
+  document.addEventListener 'click', (e) ->
+    if link = e.target.closest('.x-copy-tickers')
+      e.stopImmediatePropagation()
+      syncChannel.setChartTicker(link.dataset.tickers)
+
   $delegate '.momentum-table', 'th[data-sort]', 'click', (th, e) ->
     table = th.closest('table')
     sortParam = table.dataset.sortParam || 'sort'

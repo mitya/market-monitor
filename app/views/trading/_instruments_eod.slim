@@ -2,7 +2,7 @@
   thead.table-dark
     tr
       = th :icon
-      = th :ticker, local_assigns[:title]
+      = th :ticker, copy_tickers_button(candles.pluck(:ticker), local_assigns[:title]), sort: false
       = th :change, 'Yc ﹪', class: 'money-cell'
       = th :rel_volume, '𝑉', class: "money-cell"
       = th :volume, '𝑉 m', class: 'money-cell'
@@ -11,7 +11,7 @@
   thead.table-dark
     tr
       = th :icon
-      = th :ticker, local_assigns[:title]
+      = th :ticker, copy_tickers_button(candles.pluck(:ticker), local_assigns[:title]), sort: false
       = th :change
       = th :rel_volume
       = th :volume

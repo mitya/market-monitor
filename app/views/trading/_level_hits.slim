@@ -3,7 +3,7 @@
     tr
       = th :time, nil, class: 'fixed-font'
       = th :icon
-      = th :ticker, 'Hits'
+      = th :ticker, copy_tickers_button(@level_hits.pluck(:ticker).uniq, 'Hits'), sort: false
       = th :level, 'Level', class: 'money-cell'
       = th :MA, 'MA', class: 'money-cell'
       = th :rel_vol, '𝑉 ﹪', class: 'money-cell'

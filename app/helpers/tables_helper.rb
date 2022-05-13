@@ -1,7 +1,7 @@
 module TablesHelper
   def th(key, label = nil, **attrs)
     return unless current_table_fields_include?(key)
-    attrs['data-sort'] = attrs.delete(:sort) || key
+    attrs['data-sort'] = attrs.delete(:sort) || key unless attrs.delete(:sort) == false
     tag.th label, **attrs
   end
 
@@ -27,5 +27,10 @@ module TablesHelper
 
   def current_table_fields_include?(key)
     current_table_fields.empty? || current_table_fields.include?(key)
+  end
+
+  def copy_tickers_button(tickers, title = nil)
+    content = title || fa_icon(:copy)
+    tag.span content, class: 'x-copy-tickers', data: { tickers: tickers.join(' ') }
   end
 end

@@ -4,7 +4,7 @@
   thead.table-dark
     tr
       = th :icon
-      = th :ticker, local_assigns[:title]
+      = th :ticker, copy_tickers_button(rows.pluck(:ticker), local_assigns[:title]), sort: false
       = th :icons
       = th :last, 'Last', class: 'money-cell'
       = th :last_to_yesterday_open, 'Yo ﹪', class: 'money-cell muted-cell'
@@ -40,7 +40,7 @@
       - inst = row.instrument
       - classes = class_names('opacity-40' => local_assigns[:muted] ? inst.send(muted) : false)
       tr(class=classes)
-        = td :icon do
+        = td :icon, class: 'text-center' do
           = instrument_logo_button inst
         = td :ticker
           = format_ticker(inst)

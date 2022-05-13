@@ -18,10 +18,14 @@ class Setting < ApplicationRecord
     def chart_period   = chart_settings['period']
     def chart_columns  = chart_settings['columns']
 
-    def replace_chart_ticker(ticker)
+    def replace_chart_ticker(tickers_str)
       setting = find_by_key('chart_settings')
-      tickers = setting.value['tickers']
-      tickers[0] = ticker
+      tickers = tickers_str.split
+      if tickers.many?
+        setting.value['tickers'] = tickers
+      else
+        setting.value['tickers'][0] = tickers.first
+      end
       setting.save!
     end
   end

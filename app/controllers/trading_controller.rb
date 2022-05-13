@@ -265,6 +265,7 @@ class TradingController < ApplicationController
     @instrument_rows = @instruments.map do |inst|
       OpenStruct.new(
         instrument: inst,
+        ticker:     inst.ticker,
         last:       inst.last,
         volume:     inst.last_day&.volume_in_money,
         volatility: inst.last_day&.volatility.to_f * 100,
