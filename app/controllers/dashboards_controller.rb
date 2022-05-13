@@ -2,7 +2,7 @@ class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
-    @instruments = Instrument.active.intraday_traded_on(current_market).includes(:info)
+    @instruments = Instrument.active.intraday_traded_on(current_market)
     @all_candles = Candle::M1.for(@instruments).today
 
     InstrumentCache.set @instruments
@@ -66,7 +66,7 @@ class DashboardsController < ApplicationController
   end
 
   def momentum
-    @instruments = Instrument.active.intraday_traded_on(current_market).includes(:info)
+    @instruments = Instrument.active.intraday_traded_on(current_market)
     @now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
     InstrumentCache.set @instruments
@@ -108,7 +108,7 @@ class DashboardsController < ApplicationController
   end
 
   def last_week
-    @instruments = Instrument.active.traded_on(current_market).includes(:info)
+    @instruments = Instrument.active.traded_on(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
@@ -135,7 +135,7 @@ class DashboardsController < ApplicationController
   end
 
   def last_week_spikes
-    @instruments = Instrument.active.traded_on(current_market).includes(:info)
+    @instruments = Instrument.active.traded_on(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
     InstrumentCache.set @instruments
@@ -156,7 +156,7 @@ class DashboardsController < ApplicationController
   end
 
   def averages
-    @instruments = Instrument.active.traded_on(current_market).includes(:info, :indicators, :aggregate)
+    @instruments = Instrument.active.traded_on(current_market).includes(:indicators, :aggregate)
     @dates = [Current.date]
     Current.preload_day_candles_with @instruments.to_a, @dates
     Current.preload_prices_for @instruments.to_a
@@ -200,7 +200,7 @@ class DashboardsController < ApplicationController
     @market_open_time_in_mins_utc = @market_open_time_in_mins + 4 * 60
     @market_open_time_in_hhmm_utc = helpers.format_as_minutes_since @market_open_time_in_mins_utc, 0
 
-    @instruments = InstrumentSet[:trading].scope.includes(:info, :aggregate).order(:ticker)
+    @instruments = InstrumentSet[:trading].scope.includes(:aggregate).order(:ticker)
     @candles = Candle::M5.where(ticker: @instruments, date: Current.date).order(:time)
     @candles = @candles.select { |candle| candle.time_before_type_cast >= @market_open_time_in_hhmm_utc }
     @candles_by_ticker = @candles.group_by(&:ticker)

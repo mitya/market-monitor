@@ -1,7 +1,9 @@
 class Stats < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'ticker'
+  belongs_to :instrument_record, foreign_key: 'ticker', class_name: 'Instrument'
 
   scope :abc, -> { order :ticker }
+
+  def instrument = PermanentCache.instrument(ticker)
 
   def refresh(include_company: false)
     # return if stats_updated_at && stats_updated_at > 15.minutes.ago

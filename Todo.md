@@ -1,28 +1,22 @@
-- intraday target list (last, target, dist to target, start time, hit time, change since start, 15/60 m)
-- a textfield to add ticker there "zim 61.5"
-- favorites list
-
 - cache info / indicators / aggregate in memory for all tickers
 
-- check turn-around behaviours on 5m charts
+- intraday target list (last target dist-to-target start-time hit-time change-since-start 15/60ch
+- a textfield to add ticker there "zim 61.5"
+- favorites list + the button
 
+- check turn-around behaviours on 5m charts
 - add a way to quickly activate a US ticker
 - add trend spark to MA dash
 - add a wide category to every ticker (tech / biotech / energy / industrial / real)
-
 - analyze last 5 M1 candles for 3%+ changes
 - load historic M1 for US tickers & calc average in main session time
 - analyze M1 candles for daggers
 - fit to scale toggle
-- percentage scale relative to the last bar (inject the same bar as first and autoscale chart to fit)
-
 - panel with ticker info — name, marketcap, changes in period
 - load missing intraday candles in single mode automatically
-
 - changes since low/high in predefined periods
 - dashboard with distances to highs / lows + dashboard with new highs / new lows
 - turn-around scanner (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
-
 - run empty analysis & mark candles
 - hits for today open in 15+ mins since start, then only after 4% change
 - hits yesterday close
