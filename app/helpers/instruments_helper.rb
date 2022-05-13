@@ -316,6 +316,19 @@ module InstrumentsHelper
     instrument_logo inst, class: 'open-chart', 'data-ticker': inst.ticker
   end
 
+  def instrument_icon(inst)
+    prefer_sector_icons = false
+    if prefer_sector_icons && inst.usd?
+      sector_icon(inst)
+    else
+      instrument_logo_button(inst)
+    end
+  end
+
+  def sector_icon(inst)
+    tag.span class: 'sector-icon', data: { sector: inst.info.sector_category }
+  end
+
   def tickers_copy_list(records)
     tickers = records.to_a.map(&:ticker)
     tag.p class: 'text-muted text-center x-tickers-list my-1 mx-5 py-1 px-5', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json do
@@ -362,7 +375,10 @@ module InstrumentsHelper
   end
 
   def format_ticker(instrument)
-    tag.span instrument.ticker, title: instrument.name, class: class_names('ticker-item', 'fw-bold text-decoration-underline': instrument.watched?)
+    tag.span instrument.ticker,
+      title: instrument.name,
+      class: ['ticker-item', 'fw-bold text-decoration-underline': instrument.watched?]
+      # data: { sector: instrument.info.sector_category || instrument.info.sector_code }
   end
 
   InstrumentSetNames = {

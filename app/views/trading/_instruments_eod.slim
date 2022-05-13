@@ -22,7 +22,7 @@ tbody
     - inst = candle.cached_instrument
     - classes = class_names('opacity-40' => inst.ignored? || local_assigns[:muted_if] ? muted_if.(candle) : false)
     tr(class=classes)
-      = td :icon, instrument_logo_button(inst)
+      = td :icon, instrument_icon(inst)
       = td :ticker, format_ticker(inst)
       = td :change, class: "money-cell" do
         = colorized_ratio candle.rel_close_change, precision: 1, title: format_price(candle.close, candle.cached_instrument)

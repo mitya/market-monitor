@@ -41,7 +41,7 @@
       - classes = class_names('opacity-40' => local_assigns[:muted] ? inst.send(muted) : false)
       tr(class=classes)
         = td :icon, class: 'text-center' do
-          = instrument_logo_button inst
+          = instrument_icon inst
         = td :ticker
           = format_ticker(inst)
         = td :icons, class: 'px-0'

@@ -13,7 +13,7 @@
       - classes = class_names('bg-success text-white' => hit.important? && hit.positive?, 'bg-danger text-white' => hit.important? && !hit.positive?, 'opacity-40' => inst.ignored?)
       tr(class=classes)
         = td :time, l(hit.time, format: '%H:%M'), class: 'fixed-font'
-        = td :icon, instrument_logo_button(inst)
+        = td :icon, instrument_icon(inst)
         = td :ticker, format_ticker(inst)
         = td :level, class: ['money-cell', red_green_class(hit.positive?)] do
           = format_price(hit.level_value, unit: inst)

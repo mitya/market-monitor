@@ -64,9 +64,9 @@ class Stats < ApplicationRecord
   end
 
 
-  def country_code
-    COUNTRY_NAMES_TO_ISO3[country.to_s]
-  end
+  def country_code = COUNTRY_NAMES_TO_ISO3[country.to_s]
+
+  def sector_category = Const::SectorCategories[sector_code].presence
 
   def vtb_long_risk = extra&.dig('vtb_long_risk')
   def vtb_short_risk = extra&.dig('vtb_short_risk')

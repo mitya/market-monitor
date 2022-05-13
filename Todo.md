@@ -1,4 +1,3 @@
-- colorize tickers in some lists by category (tech / resources / etc)
 - a list with distance to target (last, target, 15/60 m change, distance from origin)
 
 - cache info / indicators / aggregate in memory for all tickers
@@ -8,6 +7,7 @@
 
 - add a way to quickly activate a US ticker
 - add trend spark to MA dash
+- add a wide category to every ticker (tech / biotech / energy / industrial / real)
 
 - analyze last 5 M1 candles for 3%+ changes
 - load historic M1 for US tickers & calc average in main session time
@@ -482,3 +482,4 @@
 + add percentage levels to daily charts
 + add all instrument sets to chart lists
 + add ability to add any ticker set to the chart in one click
++ colorize tickers in some lists by category (tech / resources / etc)
