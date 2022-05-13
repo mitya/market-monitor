@@ -1,6 +1,6 @@
 nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar", 'd-none' => params['full-screen'] == '1')
   div class="container-fluid"
-    a class="navbar-brand" href=set_comparision_path Trading
+    a class="navbar-brand" href=today_dashboard_path Trading
     button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       span class="navbar-toggler-icon"
 
@@ -37,8 +37,8 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
         li= link_to fa_icon('list'), instruments_path, class: 'nav-link'
         li= link_to fa_icon('chart-line'), chart_path, class: 'nav-link'
         li.nav-link |
-        li= link_to 'EOD', set_comparision_path(market: current_market), class: 'nav-link'
-        li= link_to 'LSV', summary_set_comparision_path(market: current_market), class: 'nav-link'
+        li= link_to 'EOD', static_set_comparision_path(market: current_market), class: 'nav-link'
+        li= link_to 'LSV', dynamic_set_comparision_path(market: current_market), class: 'nav-link'
         li= link_to 'MAs', averages_dashboard_path(market: current_market), class: 'nav-link'
         li.nav-link |
         li= link_to 'Week', last_week_dashboard_path(market: current_market), class: 'nav-link'

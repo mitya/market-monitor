@@ -27,9 +27,9 @@ Rails.application.routes.draw do
   resources :arbitrages, only: %i[index] do
     post :limit_order, :cancel_order, on: :collection
   end
-  resources :orders, only: %i[index]
-  resources :operations, only: %i[index]
-  resources :news
+  resources :orders, only: :index
+  resources :operations, only: :index
+  resources :news, only: :index
   resource :trading, only: [], controller: :trading do
     get :activities
     post :refresh
@@ -39,17 +39,18 @@ Rails.application.routes.draw do
     get :momentum, :today, :favorites, :last_week, :last_week_spikes, :averages, :timeline
   end
 
+  resource :set_comparision, only: []  do
+    get :static, :dynamic
+  end
+
   resource :chart, only: %i[show update] do
     get :candles
     put :update_intraday_levels, :update_ticker_sets
   end
 
-  resource :comparision
-  resource :set_comparision, only: :show  do
-    get :summary
-  end
+  resource :comparision, only: :show
 
-  resources :futures do
+  resources :futures, only: :index do
     get :imported, on: :collection
   end
 

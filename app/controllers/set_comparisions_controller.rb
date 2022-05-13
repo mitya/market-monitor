@@ -1,5 +1,5 @@
 class SetComparisionsController < ApplicationController
-  def show
+  def static
     # @set_keys = %w[oil gas shipping]
     # @set_keys = %w[xbi xhb xhs xlc xlf xli xlk xlp xlu xsd xlv xme xle xop xes xlb]
 
@@ -36,7 +36,7 @@ class SetComparisionsController < ApplicationController
     preload_associations
   end
 
-  def summary
+  def dynamic
     selector = 'd1'
     volume_expr = "data->'volumes'->'#{selector}'"
     instruments = Instrument.active.stocks.traded_on(current_market)
