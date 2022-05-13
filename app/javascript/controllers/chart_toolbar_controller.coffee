@@ -49,6 +49,7 @@ export default class extends Controller
     document.dispatchEvent(new Event 'chart-loaded')
 
   refreshCharts: =>
+    return if @intervalSelector.dataset.buttonGroupCurrentValue == 'day'
     data = await $fetchJSON "/trading/candles?limit=1#{if ChartsPage.listIsOn then "&single=1" else ''}"
     for ticker, payload of data
       @charts[ticker].addCandle payload.candles[0]

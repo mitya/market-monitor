@@ -2,5 +2,5 @@
   legend class="col-form-label col-sm-#{label_width local_assigns} pt-0" Set
   .col-sm-10(style="line-height: 2rem")
     - InstrumentSet.all_with_null.each do |set|
-      = bs_toggle_button :set, set.key.to_s, set.name, classes: set_button_class(set.key)
+      = bs_toggle_button :set, set.key.to_s, instrument_set_name(set), classes: set_button_class(set.key)
 / = bs_select :set, 'Set:', InstrumentSet.all_with_null.map { |set| [set.name, set.key.to_s] }, select_class: 'w-auto', blank: nil

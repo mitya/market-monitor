@@ -364,4 +364,21 @@ module InstrumentsHelper
   def format_ticker(instrument)
     tag.span instrument.ticker, title: instrument.name, class: class_names('ticker-item', 'fw-bold text-decoration-underline': instrument.watched?)
   end
+
+  InstrumentSetNames = {
+    sp_500: 'S&P 500',
+    ipo: 'IPO',
+  }
+
+  def instrument_set_name(set)
+    key = set.is_a?(InstrumentSet) ? set.key.to_s : set.to_s
+    result = case
+      when InstrumentSetNames[key.to_sym] then InstrumentSetNames[key.to_sym]
+      when key.empty? then 'All'
+      when key =~ /^\d+/ then "##{key}"
+      when key.length <= 4 && key =~ /^(ar|x)/ then key.upcase
+      else key.humanize
+    end
+    result.gsub('rus', 'RUS')
+  end
 end

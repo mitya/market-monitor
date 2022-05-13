@@ -10,9 +10,9 @@ class TickerSet < ApplicationRecord
       %i[moex_1 moex_2].map { new(key: _1, tickers: send(_1)) }
     end
 
-    def list
-      order(:key) + virtual
-    end
+    def stored = order(:key)
+    def from_instrument_sets = InstrumentSet.all.map { new(key: _1.key, tickers: _1.symbols) }
+    def list = order(:key) + virtual
 
     def update_from_lines(lines)
       transaction do

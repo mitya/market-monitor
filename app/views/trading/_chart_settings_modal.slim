@@ -9,7 +9,7 @@
         .my-4
           label class="form-label" Synced tickers
           input type="text" class="synced-tickers-field form-control form-control-sm text-uppercase w-100" value=@synced_tickers
-        
+
         .my-4 class="intraday-levels"
           label class="form-label" Intraday Levels
           textarea(type="text" class="form-control form-control-sm text-uppercase w-100" rows=10)= @intraday_levels_text
@@ -19,7 +19,7 @@
           .form-check.form-switch
             input class="form-check-input" type="checkbox" id="sync-ticker-sets-toggle" checked = @sync_ticker_sets
             label class="form-check-label" for="sync-ticker-sets-toggle" Sync ticker sets
-          textarea(type="text" class="form-control form-control-sm text-uppercase w-100" rows=10)= @ticker_sets_text
+          textarea(type="text" class="form-control form-control-sm text-uppercase w-100" rows=10)= @custom_ticker_sets_text
 
       .modal-footer
         button type="button" class="btn btn-sm btn-primary x-save" Save

@@ -1,9 +1,12 @@
-- check today moves | fill wait lists
-- check turn-around behaviours on 5m charts
+
+- add ability to add any ticker set to the chart in one click
+- colorize tickers in some lists by category (tech / resources / etc)
+- a list with distance to target (last, target, 15/60 m change, distance from origin)
 
 - cache info / indicators / aggregate in memory for all tickers
 - refactor TradingController
-- add all instrument sets to chart tickers set selectors
+
+- check turn-around behaviours on 5m charts
 
 - add a way to quickly activate a US ticker
 - add trend spark to MA dash
@@ -479,3 +482,4 @@
 + high-low to weekly dash
 + fix open/close prices for US tickers with loaded 1m data
 + add percentage levels to daily charts
++ add all instrument sets to chart lists

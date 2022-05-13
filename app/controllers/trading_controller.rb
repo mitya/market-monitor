@@ -58,15 +58,18 @@ class TradingController < ApplicationController
     @synced_tickers = Setting.sync_tickers.join(' ')
     @sync_ticker_sets = Setting.sync_ticker_sets
 
-    @chart_tickers = Setting.chart_tickers
 
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
 
-    @ticker_sets = TickerSet.list
-    @ticker_sets_text = @ticker_sets.map(&:as_line).join("\n")
+    @custom_ticker_sets = TickerSet.stored
+    @custom_ticker_sets_text = @custom_ticker_sets.map(&:as_line).join("\n")
+    @predefined_ticker_sets = TickerSet.from_instrument_sets
 
-    @current_ticker_set = @ticker_sets.detect { _1.tickers == @chart_tickers }
+    @chart_tickers = Setting.chart_tickers.sort
+    @chart_tickers_line = @chart_tickers.join(' ').upcase
+    @current_ticker_set = (@custom_ticker_sets + @predefined_ticker_sets).detect { _1.tickers == @chart_tickers }
+
     @list_ticker_set = InstrumentSet.new(@current_ticker_set&.key || 'Custom', :static, items: @chart_tickers)
 
     @list_shown = params[:list] == '1'
@@ -118,7 +121,7 @@ class TradingController < ApplicationController
           extremums = ExtremumFinder.find_for(candles)
           extremums.each do |extremum|
             gain = instrument.gain_since(:last, extremum)
-            next if gain.abs < 0.05
+            next if gain.abs < 0.03
             gain_pct = (gain * 100).to_i
             map[ticker][:levels]["#{gain_pct > 0 ? '+' : '–'}#{gain_pct.abs}%"] = extremum
           end

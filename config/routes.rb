@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     get :candles, :charts, :recent, :momentum, :last_week, :last_week_spikes, :averages
     post :update_chart_settings, :update_intraday_levels, :update_ticker_sets, :refresh
   end
+
   resource :comparision
   resource :set_comparision  do
     get :summary

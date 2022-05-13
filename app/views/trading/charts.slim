@@ -89,10 +89,17 @@
 
     select class="ticker-set-selector form-select form-select-sm w-auto me-2 ms-auto" data-action="chart-toolbar#changeTickerSet"
       option
-      - @ticker_sets.each do |set|
-        - tickers_line = set.tickers_line
-        option(data-id=set.id value=tickers_line selected=(@current_ticker_set == set))
-          = set.key.downcase
+      optgroup
+        - @custom_ticker_sets.each do |set|
+          - tickers_line = set.tickers_line
+          option(data-id=set.id value=tickers_line selected=(@chart_tickers_line == tickers_line))
+            = instrument_set_name set.key.downcase
+      optgroup
+        - @predefined_ticker_sets.each do |set|
+          - tickers_line = set.tickers_line
+          option(data-key=set.key value=tickers_line selected=(@chart_tickers_line == tickers_line))
+            = instrument_set_name set.key
+
 
     .btn-group class="btn-group-sm w-auto align-items-center pe-0"
       button type="button" class="btn btn-outline-secondary open-settings" data-action="chart-toolbar#openSettings" = fa_icon 'cog'
