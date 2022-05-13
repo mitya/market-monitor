@@ -35,7 +35,7 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
             li= link_to 'News', news_index_path, class: 'dropdown-item'
             li= link_to 'Timeline', timeline_dashboard_path, class: 'dropdown-item'
         li= link_to fa_icon('list'), instruments_path, class: 'nav-link'
-        li= link_to fa_icon('chart-line'), charts_trading_path, class: 'nav-link'
+        li= link_to fa_icon('chart-line'), chart_path, class: 'nav-link'
         li.nav-link |
         li= link_to 'EOD', set_comparision_path(market: current_market), class: 'nav-link'
         li= link_to 'LSV', summary_set_comparision_path(market: current_market), class: 'nav-link'

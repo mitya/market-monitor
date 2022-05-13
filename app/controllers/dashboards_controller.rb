@@ -1,6 +1,4 @@
 class DashboardsController < ApplicationController
-  skip_before_action :verify_authenticity_token
-
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
 

@@ -3,7 +3,6 @@
 - favorites list
 
 - cache info / indicators / aggregate in memory for all tickers
-- refactor TradingController
 
 - check turn-around behaviours on 5m charts
 
@@ -486,3 +485,4 @@
 + add ability to add any ticker set to the chart in one click
 + colorize tickers in some lists by category (tech / resources / etc)
 + extract all dashboards into a separate controller
++ extract charts into a separate controller

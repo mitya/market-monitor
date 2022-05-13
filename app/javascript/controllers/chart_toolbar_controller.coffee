@@ -36,7 +36,7 @@ export default class extends Controller
 
   loadCharts: ->
     @clearCharts()
-    data = await $fetchJSON "/trading/candles#{if ChartsPage.listIsOn then "?single=1" else ''}"
+    data = await $fetchJSON "/chart/candles#{if ChartsPage.listIsOn then "?single=1" else ''}"
     for ticker, payload of data
       @charts[ticker] = new Chart {
         timeScaleVisible:      @timeScaleToggle.checked,
@@ -50,7 +50,7 @@ export default class extends Controller
 
   refreshCharts: =>
     return if @intervalSelector.dataset.buttonGroupCurrentValue == 'day'
-    data = await $fetchJSON "/trading/candles?limit=1#{if ChartsPage.listIsOn then "&single=1" else ''}"
+    data = await $fetchJSON "/chart/candles?limit=1#{if ChartsPage.listIsOn then "&single=1" else ''}"
     for ticker, payload of data
       @charts[ticker].addCandle payload.candles[0]
       @charts[ticker].gotoLastCandle()
@@ -68,7 +68,7 @@ export default class extends Controller
     levels_shown     =         @levelsToggle.checked
     bar_spacing      =    @currentBarSpacing
 
-    await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: {
+    await $fetchJSON "/chart", method: 'PUT', data: {
       chart_tickers, period, columns, rows, time_shown, price_shown, bar_spacing, wheel_scaling, level_labels, levels_shown, since
     }
     @reload() unless options?.reload == false
@@ -77,14 +77,14 @@ export default class extends Controller
     console.log 'updateOtherSettings'
 
     tickerSetsText = $qs('.ticker-sets textarea').value
-    await $fetchJSON "/trading/update_ticker_sets", method: 'POST', data: { text: tickerSetsText }
+    await $fetchJSON "/chart/update_ticker_sets", method: 'PUT', data: { text: tickerSetsText }
 
     intradayLevelsText = $qs("#chart-settings-modal .intraday-levels textarea").value
-    await $fetchJSON "/trading/update_intraday_levels", method: 'POST', data: { text: intradayLevelsText }
+    await $fetchJSON "/chart/update_intraday_levels", method: 'PUT', data: { text: intradayLevelsText }
 
     synced_tickers   = $qs("#chart-settings-modal .synced-tickers-field").value
     sync_ticker_sets = $qs('#chart-settings-modal #sync-ticker-sets-toggle').checked
-    await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: {
+    await $fetchJSON "/chart/update_chart_settings", method: 'PUT', data: {
       synced_tickers, sync_ticker_sets
     }
 
