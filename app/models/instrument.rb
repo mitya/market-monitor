@@ -1,11 +1,11 @@
 class Instrument < ApplicationRecord
   self.inheritance_column = nil
 
-  has_many :candles,                         foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
-  has_many :day_candles, -> { day },         foreign_key: 'ticker', inverse_of: :instrument, class_name: 'Candle'
-  has_many :m1_candles,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M1'
-  has_many :m3_candles,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M3'
-  has_many :m5_candles,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M5'
+  has_many :candles,                         foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all
+  has_many :day_candles, -> { day },         foreign_key: 'ticker', inverse_of: :instrument_record, class_name: 'Candle'
+  has_many :m1_candles,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'Candle::M1'
+  has_many :m3_candles,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'Candle::M3'
+  has_many :m5_candles,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'Candle::M5'
   has_many :signal_results,                  foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceSignalResult'
   has_many :signals,                         foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceSignal'
   has_many :price_targets,                   foreign_key: 'ticker', inverse_of: :instrument
@@ -31,10 +31,10 @@ class Instrument < ApplicationRecord
   has_one :portfolio_item,                   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :insider_aggregate,                foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :orderbook,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
-  has_one :annotation,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete, class_name: 'InstrumentAnnotation'
   has_one :future,                           foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
+  has_one :annotation,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete, class_name: 'InstrumentAnnotation'
 
-  has_one :info_record,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete, class_name: 'Stats'
+  has_one :info_record,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete, class_name: 'InstrumentInfo'
   has_one :aggregate_record,                 foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete, class_name: 'Aggregate'
   has_one :indicators_record, -> { current },foreign_key: 'ticker', inverse_of: :instrument_record, class_name: 'DateIndicators'
   has_many :indicators_history,              foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'DateIndicators'

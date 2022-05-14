@@ -103,6 +103,7 @@ class Aggregate < ApplicationRecord
     def create_for_all(date: Current.date, instruments: Instrument.active, **options)
       instruments = instruments.sort_by &:ticker
       PriceCache.preload instruments
+      CandleCache.preload instruments
       Current.parallelize_instruments(instruments, 6) { |inst| create_for inst, date: date, **options }
     end
 

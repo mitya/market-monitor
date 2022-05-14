@@ -72,16 +72,17 @@ class Tinkoff
       import_candles_from_hash data
       sleep delay
     rescue
-      puts "Import #{instrument} failed: #{$!}"
+      puts "Import #{instrument} failed (Tinkoff): #{$!}"
     end
 
     # import_day_candles_between
     def import_day_candles(instrument, since:, till: Date.tomorrow, delay: 0.01, candle_class: nil)
+      return if (since .. till.to_date).uniq.all? { !instrument.calendar.open_on? _1 }
       data = load_day instrument, since, till
       import_candles_from_hash data, candle_class: candle_class
       sleep delay
     rescue
-      puts "Import #{instrument} failed: #{$!}"
+      puts "Import #{instrument} failed (Tinkoff): #{$!}"
     end
 
     # import_day_candles_since

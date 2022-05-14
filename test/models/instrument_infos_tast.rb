@@ -1,6 +1,6 @@
 require "test_helper"
 
-class StatsTest < ActiveSupport::TestCase
+class InstrumentInfoTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

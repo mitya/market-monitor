@@ -21,7 +21,7 @@ class DateIndicators < ApplicationRecord
       close = candle.close
 
       prev = instrument.indicators_history.where('date < ?', date).order(:date).last
-      record = find_or_initialize_by instrument: instrument, date: date
+      record = find_or_initialize_by ticker: instrument, date: date
       return if record.persisted?
 
       {20 => 20, 50 => 50, 100 => 100, 200 => 200}.each do |length, real_length|

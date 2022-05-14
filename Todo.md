@@ -1,9 +1,12 @@
-- rename Stats => InstrumentInfo // and the table
+- make the query to load all market instruments db-less
+
 - try to remove Price.source & rebenchmark
+- remove some fields from candles table
 
 - intraday target list (last target dist-to-target start-time hit-time change-since-start 15/60ch
-- a textfield to add ticker there "zim 61.5"
-- favorites list + the button
+- intraday target list: a textfield to add ticker there "zim 61.5"
+- favorites list
+- favorites list: button to toggle items outside
 
 - check turn-around behaviours on 5m charts
 - add a way to quickly activate a US ticker
@@ -486,3 +489,4 @@
 + used cached backrefs for candles
 + cache indicators ref
 + cache spikes backref
++ rename Stats

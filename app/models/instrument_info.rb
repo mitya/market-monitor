@@ -1,4 +1,4 @@
-class Stats < ApplicationRecord
+class InstrumentInfo < ApplicationRecord
   belongs_to :instrument_record, foreign_key: 'ticker', class_name: 'Instrument'
 
   scope :abc, -> { order :ticker }
@@ -186,14 +186,14 @@ __END__
 
 Instrument.premium.each &:create_info
 Instrument.get('AAPL').info.refresh
-Stats.refresh
-Stats.group(:industry).order(:count).count
-Stats.pluck(:industry)
-Stats.load_sector_codes_from_tops
+InstrumentInfo.refresh
+InstrumentInfo.group(:industry).order(:count).count
+InstrumentInfo.pluck(:industry)
+InstrumentInfo.load_sector_codes_from_tops
 Instrument['BABA'].info.refresh
 
-Stats.find_each &:sync_earning_dates
-Stats.find_each {  |s| p (s.earning_dates.to_a + [s.next_earnings_date]).uniq.compact.sort }; nil
+InstrumentInfo.find_each &:sync_earning_dates
+InstrumentInfo.find_each {  |s| p (s.earning_dates.to_a + [s.next_earnings_date]).uniq.compact.sort }; nil
 
-Stats.load_non_us_info
+InstrumentInfo.load_non_us_info
 Instrument.rub.each &:info!

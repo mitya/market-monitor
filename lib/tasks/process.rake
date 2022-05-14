@@ -48,5 +48,5 @@ end
 
 envtask :set_us_last_prices do
   instruments = Instrument.active.usd
-  Price.set_missing_prices_to_close Price.where(ticker: instruments).includes(:instrument => :info)
+  Price.set_missing_prices_to_close Price.where(ticker: instruments)
 end

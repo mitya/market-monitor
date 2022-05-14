@@ -4,7 +4,7 @@ class InsiderTransactionsController < ApplicationController
     params[:insider] = nil if params[:tickers] && params[:tickers].split.many?
     min_amount = params[:min_amount].to_i.nonzero?
 
-    # params[:tickers] ||= Instrument.joins(:info).where('stats.marketcap < ?', 600_000_000).pluck(:ticker).join(' ')
+    # params[:tickers] ||= Instrument.joins(:info).where('instrument_infos.marketcap < ?', 600_000_000).pluck(:ticker).join(' ')
 
     @transactions = InsiderTransaction.with_price
     @transactions = @transactions.joins(:instrument)

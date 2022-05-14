@@ -74,7 +74,7 @@ namespace :iex do
   end
 
   envtask(:tops) { ApiCache.get("cache/iex/tops.json") { Iex.tops } }
-  envtask('tops:set_sectors' => :tops) { Stats.load_sector_codes_from_tops }
+  envtask('tops:set_sectors' => :tops) { InstrumentInfo.load_sector_codes_from_tops }
 
   namespace :symbols do
     envtask :load do
@@ -93,7 +93,7 @@ namespace :iex do
         end
       end
     end
-    envtask(:peers) { Stats.load_peers }
+    envtask(:peers) { InstrumentInfo.load_peers }
     envtask :missing do
       items = Iex.all_symbols_cache
       index = items.index_by(&:symbol)

@@ -55,7 +55,7 @@ class CandleCache
     def find_date(date)          = @cache.find_date(ticker, date)
     def find_date_or_before(date)= @cache.find_date_or_before(ticker, date)
     def find_date_or_after(date) = @cache.find_date_or_after(ticker, date)
-    def find_dates_in(period)    = @cache.find_dates_in(ticker, date)
+    def find_dates_in(period)    = @cache.find_dates_in(ticker, period)
   end
 end
 

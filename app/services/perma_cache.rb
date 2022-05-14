@@ -7,7 +7,7 @@ class PermaCache
 
   def info(ticker)
     load_infos unless @infos
-    @infos[ticker] ||= Stats.create(ticker: ticker)
+    @infos[ticker] ||= InstrumentInfo.create(ticker: ticker)
   end
 
   def instrument(ticker)
@@ -34,7 +34,7 @@ class PermaCache
 
   def load_infos
     ApplicationRecord.benchmark "Preload infos".magenta, silence: true do
-      @infos = Stats.all.index_by(&:ticker)
+      @infos = InstrumentInfo.all.index_by(&:ticker)
     end
   end
 

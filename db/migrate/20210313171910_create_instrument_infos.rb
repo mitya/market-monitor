@@ -1,4 +1,4 @@
-class CreateStatss < ActiveRecord::Migration[6.1]
+class CreateInstrumentInfos < ActiveRecord::Migration[6.1]
   def change
     create_table :instrument_infos, id: false do |t|
       t.primary_key :ticker, :string
