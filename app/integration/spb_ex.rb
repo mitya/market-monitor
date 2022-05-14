@@ -41,4 +41,4 @@ __END__
 Instrument.delete_all
 rr 'InstrumentLoader.load_tinkoff_instruments'
 rr 'InstrumentLoader.load_spb_instruments'
-Candle.where(figi: Instrument.find_by(ticker: 'AAPL').figi, interval: 'day').where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
+Candle.where(figi: Instrument.find_by(ticker: 'AAPL').figi).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?

@@ -8,6 +8,7 @@ task :process do
   rake 'tinkoff:portfolio'
   rake 'tinkoff:instruments'
   rake 'averages'
+  rake 'candles:cleanup'
 end
 
 envtask :aggregate do

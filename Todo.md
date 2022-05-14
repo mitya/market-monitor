@@ -1,11 +1,9 @@
-- try to remove Price.source & rebenchmark
-- remove some fields from candles table
-
 - intraday target list (last target dist-to-target start-time hit-time change-since-start 15/60ch
 - intraday target list: a textfield to add ticker there "zim 61.5"
 - favorites list
 - favorites list: button to toggle items outside
 
+- use enums for price signal interals, level hit kinds
 - check turn-around behaviours on 5m charts
 - add a way to quickly activate a US ticker
 - add trend spark to MA dash
@@ -489,3 +487,4 @@
 + cache spikes backref
 + rename Stats
 + make the query to load all market instruments db-less
++ use postgres enums for candle sources

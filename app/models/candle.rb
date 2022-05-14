@@ -8,7 +8,7 @@ class Candle < ApplicationRecord
 
   scope :ongoing, -> { where ongoing: true }
   scope :final, -> { where ongoing: false }
-  scope :day, -> { where interval: 'day' }
+  scope :day, -> { }
   scope :today, -> { where date: Current.date }
   scope :yesterday, -> { where date: Current.yesterday }
   scope :for_date, -> date { order(date: :desc).where(date: date.to_date) }
@@ -106,6 +106,7 @@ class Candle < ApplicationRecord
   def trend_down? = prev_close && close <= prev_close
   def days_up = previous && trend_up? ? 1 + previous.days_up : 0
   def days_down = previous && trend_down? ? 1 + previous.days_down : 0
+  def interval = 'day'
 
   def change_key
     case
@@ -134,7 +135,7 @@ class Candle < ApplicationRecord
   def body_to_shadow_ratio = range_spread / shadows_spread
   def shadow_to_body_ratio = shadows_spread / range_spread
 
-  def siblings = self.class.where(ticker: ticker, interval: interval)
+  def siblings = self.class.where(ticker: ticker)
   def same_day_siblings = siblings.where(date: date)
   def previous = @previous ||= siblings.find_by(date: MarketCalendar.prev(date)) || siblings.where('date < ?', date).order(:date).last
   def previous_n(n, including: false) = siblings.where("date #{including ? '<=' : '<'} ?", date).order(:date).last(n)

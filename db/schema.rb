@@ -10,9 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_12_105949) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "candle_interval", ["day", "hour", "m5", "m3", "m1"]
+  create_enum "candle_source", ["tinkoff", "iex", "virtual", "close"]
 
   create_table "aggregates", force: :cascade do |t|
     t.string "ticker", null: false
@@ -35,6 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_105949) do
     t.date "y1_low_date"
     t.date "y3_low_date"
     t.string "change_map"
+    t.text "currency"
     t.index ["current"], name: "index_aggregates_on_current"
     t.index ["ticker", "date"], name: "index_aggregates_on_ticker_and_date", unique: true
     t.index ["ticker"], name: "index_aggregates_on_ticker"
@@ -130,7 +136,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_105949) do
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
-    t.string "source", default: "iex", null: false
+    t.string "source", null: false
     t.boolean "ongoing", default: false, null: false
     t.boolean "analyzed", default: false, null: false
     t.decimal "prev_close", precision: 20, scale: 4
@@ -300,6 +306,38 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_105949) do
     t.datetime "updated_at", precision: nil
   end
 
+  create_table "instrument_infos", primary_key: "ticker", id: :string, force: :cascade do |t|
+    t.string "name"
+    t.string "industry"
+    t.string "sector"
+    t.string "country"
+    t.bigint "marketcap"
+    t.bigint "shares"
+    t.float "beta"
+    t.float "pe"
+    t.float "dividend_yield"
+    t.date "next_earnings_date"
+    t.date "ex_divident_date"
+    t.jsonb "company"
+    t.datetime "company_updated_at", precision: nil
+    t.jsonb "stats"
+    t.datetime "stats_updated_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "sector_code"
+    t.jsonb "advanced_stats"
+    t.datetime "advanced_stats_updated_at", precision: nil
+    t.string "peers", array: true
+    t.float "last_insider_buy_price"
+    t.jsonb "extra"
+    t.integer "avg_volume"
+    t.bigint "d5_money_volume"
+    t.date "earning_dates", array: true
+    t.float "avg_change"
+    t.float "d5_marketcap_volume"
+    t.jsonb "averages"
+  end
+
   create_table "instruments", primary_key: "ticker", id: :string, force: :cascade do |t|
     t.string "isin"
     t.string "figi"
@@ -439,6 +477,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_105949) do
     t.integer "days_since_last"
     t.float "rel_vol"
     t.datetime "created_at", null: false
+    t.time "time"
     t.index ["level_id"], name: "index_price_level_hits_on_level_id"
     t.index ["ticker", "date"], name: "index_price_level_hits_on_ticker_date"
     t.index ["ticker"], name: "index_price_level_hits_on_ticker"
@@ -542,6 +581,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_105949) do
     t.time "time"
     t.boolean "on_level"
     t.float "volume_change"
+    t.bigint "candle_id"
+    t.float "rel_volume"
+    t.float "change"
   end
 
   create_table "price_targets", force: :cascade do |t|
@@ -627,37 +669,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_105949) do
     t.integer "from_factor"
     t.integer "to_factor"
     t.datetime "created_at", precision: nil
-  end
-
-  create_table "stats", primary_key: "ticker", id: :string, force: :cascade do |t|
-    t.string "name"
-    t.string "industry"
-    t.string "sector"
-    t.string "country"
-    t.bigint "marketcap"
-    t.bigint "shares"
-    t.float "beta"
-    t.float "pe"
-    t.float "dividend_yield"
-    t.date "next_earnings_date"
-    t.date "ex_divident_date"
-    t.jsonb "company"
-    t.datetime "company_updated_at", precision: nil
-    t.jsonb "stats"
-    t.datetime "stats_updated_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "sector_code"
-    t.jsonb "advanced_stats"
-    t.datetime "advanced_stats_updated_at", precision: nil
-    t.string "peers", array: true
-    t.float "last_insider_buy_price"
-    t.jsonb "extra"
-    t.integer "avg_volume"
-    t.bigint "d5_money_volume"
-    t.date "earning_dates", array: true
-    t.float "avg_change"
-    t.float "d5_marketcap_volume"
   end
 
   create_table "ticker_sets", force: :cascade do |t|

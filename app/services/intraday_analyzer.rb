@@ -91,7 +91,7 @@ class IntradayAnalyzer
     prev = recent[curr_index - 1]
     prev_rel_change = (curr.close - prev.open) / prev.open if prev
 
-    candle_attrs = { ticker: candle.instrument, date: candle.date, time: candle.time, interval: candle.interval, direction: candle.direction }
+    candle_attrs = { ticker: candle.instrument, date: candle.date, time: candle.time, direction: candle.direction }
 
 
     # .5% change in a candle

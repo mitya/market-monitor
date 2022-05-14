@@ -61,7 +61,7 @@ class Iex
       candles_data.each do |hash|
         date = Date.parse hash['date']
         puts "Import IEX #{date} candle for #{instrument}"
-        candle = instrument.candles.find_or_initialize_by interval: 'day', date: date
+        candle = instrument.candles.find_or_initialize_by date: date
         candle.source  = 'iex'
         candle.ticker  = instrument.ticker
         candle.time    = date.to_time :utc
@@ -123,7 +123,7 @@ class Iex
         time = hash['minute']
         next puts "Miss   IEX #{date} #{time} candle for #{instrument}".yellow if hash['marketVolume'].to_i == 0
         puts "Import IEX #{date} #{time} candle for #{instrument}"
-        candle = Candle::M1.find_or_initialize_by ticker: instrument.ticker, interval: '1min', date: date, time: time
+        candle = Candle::M1.find_or_initialize_by ticker: instrument.ticker, date: date, time: time
         candle.source  = 'iex'
         candle.ongoing = false
         candle.open    = hash['marketOpen']

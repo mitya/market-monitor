@@ -25,10 +25,11 @@ class Tinkoff
       instrument = Instrument.get!(figi: data['figi'])
       candles = data['candles'].to_a
 
-      # return if instrument.candles.where(interval: interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
-      # puts "Import #{candles.count} #{interval} candles for #{instrument}"
       candle_class ||= Candle.interval_class_for(interval)
       return "Missing candles for #{instrument}".red if candle_class == nil
+
+      # return if instrument.candles_for(interval).where(Candle.arel_table[:time].gteq 1.day.ago.midnight).exists?
+      # puts "Import #{candles.count} #{interval} candles for #{instrument}"
 
       candle_class.transaction do
         candles = candles.sort_by { _1['time' ]}
@@ -40,7 +41,7 @@ class Tinkoff
           ongoing = interval == 'day' && date == Current.date && !Current.weekend? ||
                     candle_class.intraday? && timestamp + candle_class.interval_duration >= Time.current
 
-          candle = candle_class.find_or_initialize_by({ ticker: instrument, interval: interval, date: date, time: hhmm }.compact)
+          candle = candle_class.find_or_initialize_by({ ticker: instrument, date: date, time: hhmm }.compact)
 
           next puts "Skip   Tinkoff #{date} #{hhmm} #{interval} #{instrument} because of IEX".white if candle.iex?
           puts      "Import Tinkoff #{date} #{hhmm} #{interval} #{instrument} #{ongoing ? '...' : ''}".colorize(candle.new_record?? :green : :yellow)

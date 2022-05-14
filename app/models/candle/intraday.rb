@@ -41,21 +41,26 @@ class Candle
 
   class H1 < Intraday
     self.table_name = "candles_h1"
+    def interval = 'hour'
   end
 
   class M5 < Intraday
     self.table_name = "candles_m5"
+    def interval = '5min'
   end
 
   class M3 < Intraday
     self.table_name = "candles_m3"
+    def interval = '3min'
   end
 
   class M1 < Intraday
     self.table_name = "candles_m1"
+    def interval = '1min'
   end
 
   class DayTinkoff < Candle
     self.table_name = "candles_d1_tinkoff"
+    def interval = 'day'
   end
 end

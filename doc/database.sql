@@ -110,3 +110,7 @@ CREATE TABLE candles_m3 (
 
 CREATE INDEX candles_m3_ticker_idx ON candles_m3(ticker text_ops);
 CREATE INDEX candles_m3_ticker_date_idx ON candles_m3(ticker text_ops,date date_ops);
+
+
+
+alter table candles_m3 ALTER COLUMN source TYPE candle_source using source::candle_source;

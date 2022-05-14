@@ -2,7 +2,7 @@ class Instrument < ApplicationRecord
   self.inheritance_column = nil
 
   has_many :candles,                         foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all
-  has_many :day_candles, -> { day },         foreign_key: 'ticker', inverse_of: :instrument_record, class_name: 'Candle'
+  has_many :day_candles,                     foreign_key: 'ticker', inverse_of: :instrument_record, class_name: 'Candle'
   has_many :m1_candles,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'Candle::M1'
   has_many :m3_candles,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'Candle::M3'
   has_many :m5_candles,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'Candle::M5'
