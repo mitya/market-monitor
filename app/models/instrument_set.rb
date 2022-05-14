@@ -36,7 +36,7 @@ class InstrumentSet
   end
 
   def missing_symbols = symbols.select { |s| !Instrument.exists?(ticker: s) }
-  def instruments = Instrument.where(ticker: symbols)
+  def instruments = symbols.uniq.map { PermaCache.instrument _1 }.compact
   alias tickers symbols
   alias scope instruments
 

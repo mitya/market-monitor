@@ -51,6 +51,12 @@ class PermaCache
   end
 
 
+  # def intraday_instruments_for_market(market)
+  #   load_instruments unless @instruments
+  #   @intraday_instruments_for_market[market] ||
+  # end
+
+
   def instruments_scope = Instrument.active
 
   class << self

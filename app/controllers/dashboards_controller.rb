@@ -2,6 +2,8 @@ class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
     @instruments = Instrument.active.intraday_traded_on(current_market)
+    # @instruments = PermaCache.intraday_instruments_for_market(current_market)
+
     # Price.sync_with_last_candles @instruments
 
     @all_candles = Candle::M1.for(@instruments).today
@@ -133,8 +135,9 @@ class DashboardsController < ApplicationController
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
     CandleCache.preload @instruments, dates: @dates
 
+    @spikes = Spike.where(date: @dates, ticker: @instruments).order(:spike).group_by(&:date)
     @results = @dates.each_with_object({}) do |date, hash|
-      spikes = Spike.where(date: date, ticker: @instruments).order(:spike)
+      spikes = @spikes[date] || []
       spikes = spikes.reject { _1.spike.abs < 0.05 }
       spikes_index = spikes.index_by &:ticker
       ups, downs = spikes.partition &:up?

@@ -33,7 +33,7 @@ class Instrument < ApplicationRecord
   has_one :orderbook,                        foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :annotation,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete, class_name: 'InstrumentAnnotation'
   has_one :future,                           foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
-  
+
   has_one :info_record,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete, class_name: 'Stats'
   has_one :aggregate_record,                 foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete, class_name: 'Aggregate'
   has_one :indicators_record, -> { current },foreign_key: 'ticker', inverse_of: :instrument_record, class_name: 'DateIndicators'

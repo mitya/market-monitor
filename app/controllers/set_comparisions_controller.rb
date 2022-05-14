@@ -45,19 +45,21 @@ class SetComparisionsController < ApplicationController
     @volume_losers  = Aggregate.where(currency: current_currency).current.order(Arel.sql "#{volume_expr}  asc nulls last").where("(#{volume_expr})::float > 0").limit(50).pluck(:ticker)
 
     @hits = PriceLevelHit.where(date: current_calendar.yesterday, ticker: instruments).where('days_since_last > ?', 20).all
+    @level_hits = @hits.levels
+    @ma_hits    = @hits.ma
     @hits_sets = {
-      level_up_tests:    @hits.levels.select {                        _1.kind.in?(%w[up-test]) },
-      level_up_breaks:   @hits.levels.select {                        _1.kind.in?(%w[up-break up-gap]) },
-      level_down_tests:  @hits.levels.select {                        _1.kind.in?(%w[down-test]) },
-      level_down_breaks: @hits.levels.select {                        _1.kind.in?(%w[down-break down-gap]) },
-      ma200_up_tests:    @hits.ma.    select { _1.ma_length == 200 && _1.kind.in?(%w[up-test]) },
-      ma200_up_breaks:   @hits.ma.    select { _1.ma_length == 200 && _1.kind.in?(%w[up-break up-gap]) },
-      ma200_down_tests:  @hits.ma.    select { _1.ma_length == 200 && _1.kind.in?(%w[down-test]) },
-      ma200_down_breaks: @hits.ma.    select { _1.ma_length == 200 && _1.kind.in?(%w[down-break down-gap]) },
-      ma50_up_tests:     @hits.ma.    select { _1.ma_length ==  50 && _1.kind.in?(%w[up-test]) },
-      ma50_up_breaks:    @hits.ma.    select { _1.ma_length ==  50 && _1.kind.in?(%w[up-break up-gap]) },
-      ma50_down_tests:   @hits.ma.    select { _1.ma_length ==  50 && _1.kind.in?(%w[down-test]) },
-      ma50_down_breaks:  @hits.ma.    select { _1.ma_length ==  50 && _1.kind.in?(%w[down-break down-gap]) },
+      level_up_tests:    @level_hits.select {                        _1.kind.in?(%w[up-test]) },
+      level_up_breaks:   @level_hits.select {                        _1.kind.in?(%w[up-break up-gap]) },
+      level_down_tests:  @level_hits.select {                        _1.kind.in?(%w[down-test]) },
+      level_down_breaks: @level_hits.select {                        _1.kind.in?(%w[down-break down-gap]) },
+      ma200_up_tests:    @ma_hits.   select { _1.ma_length == 200 && _1.kind.in?(%w[up-test]) },
+      ma200_up_breaks:   @ma_hits.   select { _1.ma_length == 200 && _1.kind.in?(%w[up-break up-gap]) },
+      ma200_down_tests:  @ma_hits.   select { _1.ma_length == 200 && _1.kind.in?(%w[down-test]) },
+      ma200_down_breaks: @ma_hits.   select { _1.ma_length == 200 && _1.kind.in?(%w[down-break down-gap]) },
+      ma50_up_tests:     @ma_hits.   select { _1.ma_length ==  50 && _1.kind.in?(%w[up-test]) },
+      ma50_up_breaks:    @ma_hits.   select { _1.ma_length ==  50 && _1.kind.in?(%w[up-break up-gap]) },
+      ma50_down_tests:   @ma_hits.   select { _1.ma_length ==  50 && _1.kind.in?(%w[down-test]) },
+      ma50_down_breaks:  @ma_hits.   select { _1.ma_length ==  50 && _1.kind.in?(%w[down-break down-gap]) },
     }
     get_instruments = -> key { InstrumentSet.new(key, :static, items: @hits_sets[key].pluck(:ticker)) }
 

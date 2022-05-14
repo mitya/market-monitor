@@ -306,8 +306,8 @@ module InstrumentsHelper
   end
 
   def instrument_logo(instrument, **options)
-    @default_logo_instrument ||= Instrument.get('LX')
-    inst = instrument.has_logo? ? instrument : @default_logo_instrument
+    @@default_logo_instrument ||= Instrument.get('LX')
+    inst = instrument.has_logo? ? instrument : @@default_logo_instrument
     image_tag "#{inst.logo_path.sub('public', '')}", size: '19x19', class: 'rounded', **options
   end
 
