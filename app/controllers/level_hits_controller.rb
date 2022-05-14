@@ -12,8 +12,6 @@ class LevelHitsController < ApplicationController
 
     @hits = PriceLevelHit.all
     @hits = @hits.left_joins(:instrument, :level)
-    @hits = @hits.includes(:instrument => [:info, :price_target, :aggregate])
-
     @hits = @hits.where date: params[:dates]                                  if params[:dates].present?
     @hits = @hits.where kind: params[:kind]                                   if params[:kind].present?
     @hits = @hits.where instruments: { currency: params[:currency] }          if params[:currency].present?

@@ -22,8 +22,7 @@ class InstrumentsController < ApplicationController
     params[:per_page] ||= 5000
 
     @instruments = Instrument.active
-    @instruments = @instruments.left_joins(:aggregate, :info)
-    @instruments = @instruments.preload(:aggregate)
+    @instruments = @instruments.left_joins(:aggregate_record, :info_record)
     @instruments = @instruments.where(currency: params[:currency])                 if params[:currency].present?
     @instruments = @instruments.with_flag(params[:availability])                   if params[:availability].present?
     @instruments = @instruments.in_set(params[:set].presence)                      if params[:set].present? && params[:tickers].blank?
@@ -47,8 +46,8 @@ class InstrumentsController < ApplicationController
 
   def load_instruments(base)
     @instruments = base
-    @instruments = @instruments.left_joins(:aggregate, :info_record, :indicators, :price)
-    @instruments = @instruments.preload(:price_target, :portfolio_item, :aggregate, :insider_aggregate, :portfolio_item, :indicators)
+    @instruments = @instruments.left_joins(:aggregate_record, :info_record, :indicators, :price)
+    @instruments = @instruments.preload(:price_target, :portfolio_item, :insider_aggregate, :portfolio_item, :indicators)
     @instruments = @instruments.where(info_record: { industry: params[:industry] })       if params[:industry].present?
     @instruments = @instruments.where(info_record: { sector: params[:sector] })           if params[:sector].present?
     @instruments = @instruments.where(info_record: { sector_code: params[:sector_code] }) if params[:sector_code].present?

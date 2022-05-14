@@ -1,5 +1,5 @@
 class Aggregate < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'ticker'
+  belongs_to :instrument_record, foreign_key: 'ticker', class_name: 'Instrument'
 
   scope :current, -> { where current: true }
   scope :old, -> { where current: false }
@@ -21,6 +21,7 @@ class Aggregate < ApplicationRecord
   def volumes      = data['volumes'] ||= {}
   def volatilities = data['volatilities'] ||= {}
 
+  def instrument = PermaCache.instrument(ticker)
   def candle = @candle ||= instrument.candles.day.find_date(date)
 
   class << self

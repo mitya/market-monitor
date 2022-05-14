@@ -6,7 +6,7 @@ class Instrument < ApplicationRecord
   has_many :m1_candles,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M1'
   has_many :m3_candles,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M3'
   has_many :m5_candles,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'Candle::M5'
-  has_many :aggregates,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  # has_many :aggregates,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :indicators_history,              foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'DateIndicators'
   has_many :signal_results,                  foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceSignalResult'
   has_many :signals,                         foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all, class_name: 'PriceSignal'
@@ -29,7 +29,6 @@ class Instrument < ApplicationRecord
   has_many :missing_dates,                   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_one :recommendation, -> { current },   foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current },   foreign_key: 'ticker', inverse_of: :instrument
-  has_one :aggregate,                        foreign_key: 'ticker', inverse_of: :instrument
   has_one :indicators,     -> { current },   foreign_key: 'ticker', inverse_of: :instrument, class_name: 'DateIndicators'
   has_one :price,                            foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :portfolio_item,                   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
@@ -38,6 +37,7 @@ class Instrument < ApplicationRecord
   has_one :annotation,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete, class_name: 'InstrumentAnnotation'
   has_one :future,                           foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
   has_one :info_record, class_name: 'Stats', foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete
+  has_one :aggregate_record, class_name: 'Aggregate', foreign_key: 'ticker', inverse_of: :instrument_record
 
 
   scope :with_flag, -> flag { where "? = any(flags)", flag }
@@ -170,6 +170,7 @@ class Instrument < ApplicationRecord
   def info = PermaCache.info(ticker)
   def info! = info
   def annotation! = annotation || create_annotation
+  def aggregate = PermaCache.aggregate(ticker)
 
   def today_candle = day_candles!.find_date(calendar.today)
   def yesterday_candle = day_candles!.find_date(calendar.yesterday)

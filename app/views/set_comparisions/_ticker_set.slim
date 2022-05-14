@@ -1,4 +1,4 @@
-- instruments = set.instruments.includes(:aggregate)
+- instruments = set.instruments
 
 - instruments = instruments.select { tickers.include? _1.ticker } if local_assigns[:tickers].present?
 - instruments = instruments.select { _1.currency == currency }    if local_assigns[:currency].present?

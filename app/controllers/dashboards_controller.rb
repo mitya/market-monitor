@@ -153,7 +153,7 @@ class DashboardsController < ApplicationController
   end
 
   def averages
-    @instruments = Instrument.active.traded_on(current_market).includes(:indicators, :aggregate)
+    @instruments = Instrument.active.traded_on(current_market).includes(:indicators)
     @dates = [Current.date]
     CandleCache.preload @instruments, @dates
     PriceCache.preload @instruments
@@ -197,7 +197,7 @@ class DashboardsController < ApplicationController
     @market_open_time_in_mins_utc = @market_open_time_in_mins + 4 * 60
     @market_open_time_in_hhmm_utc = helpers.format_as_minutes_since @market_open_time_in_mins_utc, 0
 
-    @instruments = InstrumentSet[:trading].scope.includes(:aggregate).order(:ticker)
+    @instruments = InstrumentSet[:trading].scope.order(:ticker)
     @candles = Candle::M5.where(ticker: @instruments, date: Current.date).order(:time)
     @candles = @candles.select { |candle| candle.time_before_type_cast >= @market_open_time_in_hhmm_utc }
     @candles_by_ticker = @candles.group_by(&:ticker)

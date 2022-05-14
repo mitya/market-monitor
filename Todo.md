@@ -1,4 +1,3 @@
-- cache info / indicators / aggregate in memory for all tickers
 - rename Stats => InstrumentInfo // and the table
 - try to remove Price.source & rebenchmark
 
@@ -483,3 +482,4 @@
 + extract all dashboards into a separate controller
 + extract charts into a separate controller
 + cache all prices & day candles
++ cache aggregate in memory for all tickers

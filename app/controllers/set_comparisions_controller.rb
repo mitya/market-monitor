@@ -61,7 +61,7 @@ class SetComparisionsController < ApplicationController
     }
     get_instruments = -> key { InstrumentSet.new(key, :static, items: @hits_sets[key].pluck(:ticker)) }
 
-    @spikes = Spike.where(date: current_calendar.yesterday, ticker: instruments) #.order(ticker: :asc).includes(:instrument => [:aggregate])
+    @spikes = Spike.where(date: current_calendar.yesterday, ticker: instruments)
     @spikes_index = @spikes.index_by &:ticker
     ups, downs = @spikes.partition &:up?
 
@@ -92,6 +92,6 @@ class SetComparisionsController < ApplicationController
 
   def preload_associations
     CandleCache.preload
-    PriceCache.preload @set_groups.flatten.flat_map(&:instruments)
+    PriceCache.preload # @set_groups.flatten.flat_map(&:instruments)
   end
 end
