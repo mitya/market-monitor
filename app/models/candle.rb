@@ -1,12 +1,11 @@
 class Candle < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'ticker', class_name: 'Instrument'
-  def cached_instrument = InstrumentCache.get(ticker)
-
-  # belongs_to :instrument_record, foreign_key: 'ticker', class_name: 'Instrument'
-  # def instrument = PermaCache.instrument(ticker)
-  # def instrument=(instrument)
-  #   self.instrument_record = instrument
-  # end
+  belongs_to :instrument_record, foreign_key: 'ticker', class_name: 'Instrument', inverse_of: :candles
+  def instrument = PermaCache.instrument(ticker)
+  def instrument=(instrument)
+    self.instrument_record = instrument
+  end
+  def cached_instrument = instrument
+  # alias instrument= instrument_record=
 
   scope :ongoing, -> { where ongoing: true }
   scope :final, -> { where ongoing: false }

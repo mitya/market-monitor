@@ -483,3 +483,4 @@
 + extract charts into a separate controller
 + cache all prices & day candles
 + cache aggregate in memory for all tickers
++ used cached backlinks for candles

@@ -40,8 +40,6 @@ class IntradayLoader
     larger_candles_updated_at = 1.hour.ago
     futures_synced_at = 1.hour.ago
 
-    InstrumentCache.set instruments
-
     loop do
       now = Time.current
       current_tickers = tickers

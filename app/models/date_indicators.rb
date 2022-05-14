@@ -6,7 +6,7 @@ class DateIndicators < ApplicationRecord
 
   def datetime = date.end_of_day
   def charting_timestamp = date.end_of_day.to_time.to_i
-  def cached_instrument = InstrumentCache.get(ticker)
+  def cached_instrument = PermaCache.instrument(ticker)
 
   class << self
     def create_recursive(instrument, date: Current.yesterday)

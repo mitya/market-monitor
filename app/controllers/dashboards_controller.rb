@@ -2,7 +2,6 @@ class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
     @instruments = Instrument.active.intraday_traded_on(current_market)
-    InstrumentCache.set @instruments
     # Price.sync_with_last_candles @instruments
 
     @all_candles = Candle::M1.for(@instruments).today
@@ -66,7 +65,6 @@ class DashboardsController < ApplicationController
     @instruments = Instrument.active.intraday_traded_on(current_market)
     @now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
-    InstrumentCache.set @instruments
     PriceCache.preload @instruments
     CandleCache.preload @instruments, dates: [current_calendar.today, current_calendar.yesterday]
 
@@ -108,7 +106,6 @@ class DashboardsController < ApplicationController
     @instruments = Instrument.active.traded_on(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
     CandleCache.preload @instruments, dates: @dates
-    InstrumentCache.set @instruments
     number_of_gainers = current_market == 'rub' ? 15 : 30
 
     @results = @dates.each_with_object({}) do |date, hash|
@@ -135,7 +132,6 @@ class DashboardsController < ApplicationController
     @instruments = Instrument.active.traded_on(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
     CandleCache.preload @instruments, dates: @dates
-    InstrumentCache.set @instruments
 
     @results = @dates.each_with_object({}) do |date, hash|
       spikes = Spike.where(date: date, ticker: @instruments).order(:spike)
@@ -157,7 +153,6 @@ class DashboardsController < ApplicationController
     @dates = [Current.date]
     CandleCache.preload @instruments, @dates
     PriceCache.preload @instruments
-    InstrumentCache.set @instruments
 
     @rows = @instruments.map do |inst|
       OpenStruct.new(
