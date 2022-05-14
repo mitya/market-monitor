@@ -107,8 +107,9 @@ main.container-fluid.mb-4
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.cost_in_usd'
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.ideal_cost_in_usd'
         - instruments = instruments.sort_by { |inst| inst.portfolio_item&.cost_in_usd.to_d - inst.portfolio_item&.ideal_cost_in_usd.to_d }.reverse if @is_portfolio && params[:order] == 'portfolio.cost_diff'
-        - instruments.each do |inst|
-          = render 'instrument_row', inst: inst
+        - benchmark "  Rendered instrument rows", silence: true do
+          - instruments.each do |inst|
+            = render 'instrument_row', inst: inst
 
 
   = paginate @instruments, window: 20

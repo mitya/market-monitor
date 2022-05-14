@@ -1,8 +1,7 @@
 class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
-    @instruments = Instrument.active.intraday_traded_on(current_market)
-    # @instruments = PermaCache.intraday_instruments_for_market(current_market)
+    @instruments = PermaCache.current_instruments_for_market(current_market)
 
     # Price.sync_with_last_candles @instruments
 
@@ -64,7 +63,7 @@ class DashboardsController < ApplicationController
   end
 
   def momentum
-    @instruments = Instrument.active.intraday_traded_on(current_market)
+    @instruments = PermaCache.current_instruments_for_market(current_market)
     @now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
     PriceCache.preload @instruments
@@ -105,7 +104,7 @@ class DashboardsController < ApplicationController
   end
 
   def last_week
-    @instruments = Instrument.active.traded_on(current_market)
+    @instruments = PermaCache.instruments_for_market(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
     CandleCache.preload @instruments, dates: @dates
     number_of_gainers = current_market == 'rub' ? 15 : 30
@@ -131,7 +130,7 @@ class DashboardsController < ApplicationController
   end
 
   def last_week_spikes
-    @instruments = Instrument.active.traded_on(current_market)
+    @instruments = PermaCache.instruments_for_market(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
     CandleCache.preload @instruments, dates: @dates
 
@@ -152,7 +151,7 @@ class DashboardsController < ApplicationController
   end
 
   def averages
-    @instruments = Instrument.active.traded_on(current_market)
+    @instruments = PermaCache.instruments_for_market(current_market)
     @dates = [Current.date]
     CandleCache.preload @instruments, @dates
     PriceCache.preload @instruments

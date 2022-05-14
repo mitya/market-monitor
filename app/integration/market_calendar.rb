@@ -60,32 +60,36 @@ class MarketCalendar
 
     def for(market)
       symbol = determine_market(market)
-      return us if symbol == :usd
-      return ru if symbol == :rub
-      return ru if symbol == :eur
+      return us if symbol == :us
+      return ru if symbol == :ru
+      return ru if symbol == :eu
     end
 
     MARKET_SYMBOLS = {
-      :rub =>  :rub,
-      :ru  =>  :rub,
-      'ru' =>  :rub,
-      'rub' => :rub,
-      'RUB' => :rub,
-      :usd =>  :usd,
-      :us  =>  :usd,
-      'us' =>  :usd,
-      'usd' => :usd,
-      'USD' => :usd,
+      :rub =>  :ru,
+      :ru  =>  :ru,
+      'ru' =>  :ru,
+      'rub' => :ru,
+      'RUB' => :ru,
+      :usd =>  :us,
+      :us  =>  :us,
+      'us' =>  :us,
+      'usd' => :us,
+      'USD' => :us,
 
-      :eur =>  :eur,
-      :eu  =>  :eur,
-      'eu' =>  :eur,
-      'eur' => :eur,
-      'EUR' => :eur,
+      :eur =>  :eu,
+      :eu  =>  :eu,
+      'eu' =>  :eu,
+      'eur' => :eu,
+      'EUR' => :eu,
     }
     def determine_market(something)
       return MARKET_SYMBOLS[something] if MARKET_SYMBOLS[something]
       something.respond_to?(:currency) ? MARKET_SYMBOLS[something.currency] : nil
+    end
+
+    def normalize_market(something)
+      MARKET_SYMBOLS[something]
     end
 
     def closest_weekday(date, currency = nil)

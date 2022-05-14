@@ -51,10 +51,26 @@ class PermaCache
   end
 
 
-  # def intraday_instruments_for_market(market)
-  #   load_instruments unless @instruments
-  #   @intraday_instruments_for_market[market] ||
-  # end
+  def instruments_for_market(market)
+    @instruments_for_market ||= begin
+      load_instruments unless @instruments
+      active_instruments = @instruments.values.select { _1.active? && _1.type == 'Stock' }
+      @instruments_for_market = { }
+      @instruments_for_market[:ru] = active_instruments.select { _1.currency == 'RUB' }
+      @instruments_for_market[:us] = active_instruments.select { _1.currency == 'USD' }
+      @instruments_for_market
+    end[MarketCalendar.normalize_market market]
+  end
+
+  def current_instruments_for_market(market)
+    @current_instruments_for_market ||= begin
+      current_tickers = InstrumentSet.get(:current)
+      @current_instruments_for_market = { }
+      @current_instruments_for_market[:ru] = instruments_for_market(market)
+      @current_instruments_for_market[:us] = instruments_for_market(market).select { current_tickers.include?(_1.ticker) }
+      @current_instruments_for_market
+    end[MarketCalendar.normalize_market market]
+  end
 
 
   def instruments_scope = Instrument.active

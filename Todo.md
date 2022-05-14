@@ -1,5 +1,3 @@
-- make the query to load all market instruments db-less
-
 - try to remove Price.source & rebenchmark
 - remove some fields from candles table
 
@@ -490,3 +488,4 @@
 + cache indicators ref
 + cache spikes backref
 + rename Stats
++ make the query to load all market instruments db-less
