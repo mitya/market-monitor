@@ -13,7 +13,7 @@ class SpikesController < ApplicationController
     @spikes = params[:direction] == 'up' ? @spikes.up : @spikes.down              if params[:direction].present?
     @spikes = @spikes.page(params[:page]).per(params[:per_page])
 
-    Current.preload_prices_for @spikes.map(&:instrument)
-    Current.preload_day_candles_for @spikes.map(&:instrument)
+    PriceCache.preload @spikes
+    CandleCache.preload @spikes
   end
 end

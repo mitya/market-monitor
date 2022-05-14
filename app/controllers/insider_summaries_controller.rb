@@ -4,8 +4,7 @@ class InsiderSummariesController < ApplicationController
     @instrument = Instrument.get(params[:ticker])
     if @instrument
       @summaries = @instrument.insider_summaries
-      @summaries = @summaries.includes(:instrument => :info)
-      Current.preload_prices_for @summaries.map &:instrument
+      PriceCache.preload @summaries
     else
       @summaries = []
     end

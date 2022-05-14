@@ -5,6 +5,7 @@ class InstrumentsController < ApplicationController
 
   def index
     params[:per_page] ||= '200'
+    params[:availability] ||= 'tinkoff'
     load_instruments Instrument.active
   end
 
@@ -30,8 +31,8 @@ class InstrumentsController < ApplicationController
     @instruments = @instruments.order("#{order} nulls last")
     @instruments = @instruments.page(params[:page]).per(params[:per_page])
 
-    Current.preload_day_candles_with :all, [] #, dates: [Current.yesterday]
-    Current.preload_prices_for @instruments.to_a
+    CandleCache.preload :all
+    PriceCache.preload @instruments
   end
 
   def grouped
@@ -72,7 +73,7 @@ class InstrumentsController < ApplicationController
 
     @portfolio = PortfolioItem.all
 
-    Current.preload_day_candles_with @instruments.to_a, params[:chart_volatility] ? Current.last_2_weeks : Current.last_2_weeks
-    Current.preload_prices_for @instruments.to_a
+    CandleCache.preload @instruments, Current.last_2_weeks
+    PriceCache.preload @instruments
   end
 end

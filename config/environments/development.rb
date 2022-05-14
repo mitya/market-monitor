@@ -4,6 +4,10 @@ module Rails::ConsoleMethods
   def instr(ticker)
     Instrument[ticker]
   end
+
+  def msms(&block)
+    Benchmark.ms &block
+  end
 end
 
 Rails.application.configure do
@@ -57,7 +61,7 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
 
   # Highlight code that triggered database queries in logs.
-  config.active_record.verbose_query_logs = false
+  config.active_record.verbose_query_logs = ENV['VQL'] ? true : false
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large

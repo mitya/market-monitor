@@ -18,7 +18,7 @@ class PublicSignalsController < ApplicationController
     @signals = @signals.page(params[:page]).per(params[:per_page])
     @signals = @signals.order('date desc')
 
-    Current.preload_prices_for @signals.map(&:instrument)
-    Current.preload_day_candles_for @signals.map(&:instrument)
+    PriceCache.preload @signals
+    CandleCache.preload @signals
   end
 end

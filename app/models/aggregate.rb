@@ -26,7 +26,7 @@ class Aggregate < ApplicationRecord
   class << self
     def create_for(instrument, date: instrument.calendar.yesterday, gains: true, analyze: true, volume: true, force: true, year_highs: true)
       puts "Aggregate data on #{date} for #{instrument}"
-      aggregate = find_or_initialize_by instrument: instrument, date: date
+      aggregate = find_or_initialize_by ticker: instrument, date: date
       return if aggregate.persisted? && !force
 
       day_candle = instrument.day_candles!.find_date(date)
@@ -101,7 +101,7 @@ class Aggregate < ApplicationRecord
 
     def create_for_all(date: Current.date, instruments: Instrument.active, **options)
       instruments = instruments.sort_by &:ticker
-      Current.preload_prices_for instruments
+      PriceCache.preload instruments
       Current.parallelize_instruments(instruments, 6) { |inst| create_for inst, date: date, **options }
     end
 

@@ -20,7 +20,7 @@ class InsiderTransactionsController < ApplicationController
     @transactions = @transactions.includes(:instrument => [:info, :portfolio_item])
     @transactions = @transactions.page(params[:page]).per(params[:per_page])
 
-    Current.preload_prices_for @transactions.map(&:instrument)
-    Current.preload_day_candles_with @transactions.map(&:instrument).uniq, nil
+    PriceCache.preload @transactions
+    CandleCache.preload @transactions.pluck(:instrument).uniq, nil
   end
 end

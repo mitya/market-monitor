@@ -27,8 +27,8 @@ class SignalsController < ApplicationController
     @signals = @signals.order(:ticker, :date => :desc) if params[:interval] == 'day'
     @signals = @signals.order('date, time desc') if params[:interval] != 'day'
 
-    Current.preload_prices_for @signals.map(&:instrument)
-    Current.preload_day_candles_for @signals.map(&:instrument)
+    PriceCache.preload @signals
+    CandleCache.preload @signals
   end
 
   def intraday

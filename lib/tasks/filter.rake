@@ -1,7 +1,7 @@
 namespace :filter do
   envtask :run do
-    Current.preload_day_candles_for Instrument.all
-    Current.preload_prices_for Instrument.all
+    CandleCache.preload
+    PriceCache.preload
     instruments = Instrument.select(&:down_in_2021?)
     tickers = instruments.map(&:ticker).sort
     puts "Total: #{tickers.count}"
@@ -26,7 +26,7 @@ namespace :filter do
   end
 
   envtask :bottom_gainers do
-    Current.preload_prices_for Instrument.all
+    PriceCache.preload
 
     falling_since = 3.months.ago
     falling_period = falling_since..Current.date

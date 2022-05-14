@@ -48,6 +48,5 @@ end
 
 envtask :set_us_last_prices do
   instruments = Instrument.active.usd
-  # Current.preload_day_candles_with instruments.to_a, MarketCalendar.us.yesterday
   Price.set_missing_prices_to_close Price.where(ticker: instruments).includes(:instrument => :info)
 end

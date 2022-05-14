@@ -34,7 +34,7 @@ class Price < ApplicationRecord
     def sync_with_last_candles(instruments, interval: '1min')
       puts "Sync prices with #{interval} candles [#{instruments.size} tickers]".yellow
       last_candle_ids = Candle.interval_class_for(interval).select("max(id)").group(:ticker)
-      last_candles = Candle.interval_class_for(interval).where(ticker: instruments).where(id: last_candle_ids).includes(:instrument)
+      last_candles = Candle.interval_class_for(interval).where(ticker: instruments).where(id: last_candle_ids)
       prices = Price.where(ticker: instruments).index_by(&:ticker)
       last_candles.each do |candle|
         if price = prices[candle.ticker]

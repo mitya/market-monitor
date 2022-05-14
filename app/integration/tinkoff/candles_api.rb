@@ -40,7 +40,7 @@ class Tinkoff
           ongoing = interval == 'day' && date == Current.date && !Current.weekend? ||
                     candle_class.intraday? && timestamp + candle_class.interval_duration >= Time.current
 
-          candle = candle_class.find_or_initialize_by({ instrument: instrument, interval: interval, date: date, time: hhmm }.compact)
+          candle = candle_class.find_or_initialize_by({ ticker: instrument, interval: interval, date: date, time: hhmm }.compact)
 
           next puts "Skip   Tinkoff #{date} #{hhmm} #{interval} #{instrument} because of IEX".white if candle.iex?
           puts      "Import Tinkoff #{date} #{hhmm} #{interval} #{instrument} #{ongoing ? '...' : ''}".colorize(candle.new_record?? :green : :yellow)
@@ -168,7 +168,7 @@ class Tinkoff
     def import_closing_5m_candles(instruments)
       return if !instrument.tinkoff?
       return if instrument.rub? || instrument.eur?
-      return puts "Last 5m already loaded on #{date} for #{instrument}".yellow if Candle::M5.where(instrument: instrument, date: date, time: '19:55').exists?
+      return puts "Last 5m already loaded on #{date} for #{instrument}".yellow if Candle::M5.where(ticker: instrument, date: date, time: '19:55').exists?
 
       est_midnight = date.in_time_zone Current.est
       import_candles_from_hash load_intervals instrument, '5min', est_midnight.change(hour: 15, min: 50), est_midnight.change(hour: 16, min: 00), delay: 0.1

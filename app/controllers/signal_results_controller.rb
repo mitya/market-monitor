@@ -51,7 +51,7 @@ class SignalResultsController < ApplicationController
       @averages[attr] = @unpaged_results.average(attr)
     end
 
-    Current.preload_prices_for @results.map(&:instrument)
-    Current.preload_day_candles_for @results.map(&:instrument)
+    PriceCache.preload @results
+    CandleCache.preload @results
   end
 end

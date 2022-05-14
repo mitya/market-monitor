@@ -1,5 +1,12 @@
 class Candle < ApplicationRecord
-  belongs_to :instrument, foreign_key: 'ticker'
+  belongs_to :instrument, foreign_key: 'ticker', class_name: 'Instrument'
+  def cached_instrument = InstrumentCache.get(ticker)
+
+  # belongs_to :instrument_record, foreign_key: 'ticker', class_name: 'Instrument'
+  # def instrument = PermaCache.instrument(ticker)
+  # def instrument=(instrument)
+  #   self.instrument_record = instrument
+  # end
 
   scope :ongoing, -> { where ongoing: true }
   scope :final, -> { where ongoing: false }
@@ -185,6 +192,4 @@ class Candle < ApplicationRecord
 
   def volume_to_average = volume.to_f / cached_instrument.info&.average_volume_for(interval) rescue nil
   def volume_in_money = volume * close * cached_instrument.lot
-
-  def cached_instrument = InstrumentCache.get(ticker)
 end

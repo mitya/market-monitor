@@ -1,4 +1,4 @@
-class PermanentCache
+class PermaCache
   include StaticService
 
   def initialize
@@ -17,11 +17,15 @@ class PermanentCache
 
 
   def load_instruments
-    @instruments ||= instruments_scope.index_by(&:ticker)
+    ApplicationRecord.benchmark "Preload instruments".magenta, silence: true do
+      @instruments ||= instruments_scope.index_by(&:ticker)
+    end
   end
 
   def load_infos
-    @infos = Stats.where(ticker: instruments_scope).index_by(&:ticker)
+    ApplicationRecord.benchmark "Preload instrument infos".magenta, silence: true do
+      @infos = Stats.where(ticker: instruments_scope).index_by(&:ticker)
+    end
   end
 
 
@@ -34,4 +38,4 @@ end
 
 __END__
 
-PermanentCache.info('AAPL')
+PermaCache.info('AAPL')

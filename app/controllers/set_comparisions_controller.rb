@@ -91,7 +91,7 @@ class SetComparisionsController < ApplicationController
   private
 
   def preload_associations
-    Current.preload_day_candles_with :all, []
-    Current.preload_prices_for @set_groups.flatten.flat_map(&:instruments)
+    CandleCache.preload
+    PriceCache.preload @set_groups.flatten.flat_map(&:instruments)
   end
 end

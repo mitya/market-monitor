@@ -6,7 +6,7 @@ class FuturesController < ApplicationController
     @stocks  = Instrument.where(ticker: @future_specs.map(&:base_ticker))
     @futures_by_ticker = @futures.index_by { _1.future.base_ticker }
 
-    Current.preload_prices_for Instrument.rub.to_a
+    PriceCache.preload Instrument.rub
 
     @rows = @stocks.map do |stock|
       future = @futures_by_ticker[stock.ticker]

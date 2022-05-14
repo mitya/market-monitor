@@ -1,4 +1,6 @@
 - cache info / indicators / aggregate in memory for all tickers
+- rename Stats => InstrumentInfo // and the table
+- try to remove Price.source & rebenchmark
 
 - intraday target list (last target dist-to-target start-time hit-time change-since-start 15/60ch
 - a textfield to add ticker there "zim 61.5"
@@ -480,3 +482,4 @@
 + colorize tickers in some lists by category (tech / resources / etc)
 + extract all dashboards into a separate controller
 + extract charts into a separate controller
++ cache all prices & day candles

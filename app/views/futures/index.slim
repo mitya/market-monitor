@@ -20,4 +20,4 @@ table.table.table-sm.table-hover.table-font-sm.tickers-table.table-selectable.w-
         td.money-cell= format_price future_price, unit: stock.currency
         td.money-cell= relative_price stock.last!, future_price, unit: stock.currency, format: 'relative', percentage_precision: 1
         td.money-cell= relative_price stock.last!, future_price, unit: stock.currency, format: 'diff'
-        td.money-cell= distance_of_time_in_words future.price.updated_at, Time.current
+        td.money-cell= distance_of_time_in_words future.price!.updated_at, Time.current

@@ -30,7 +30,7 @@ class Comparision
 
   def values_for_all(instruments, dates)
     instruments = instruments.map(&Instrument)
-    Current.preload_day_candles_with instruments.to_a, dates
+    CandleCache.preload instruments, dates
 
     instruments.each_with_object({}) { |inst, hash| hash[inst.ticker] = values_for(inst, dates) }
   end

@@ -1,22 +1,19 @@
 class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
-
     @instruments = Instrument.active.intraday_traded_on(current_market)
-    @all_candles = Candle::M1.for(@instruments).today
-
     InstrumentCache.set @instruments
-    Price.sync_with_last_candles @instruments
+    # Price.sync_with_last_candles @instruments
 
+    @all_candles = Candle::M1.for(@instruments).today
     @candles = {}
-
     [1, 5, 15, 60].each do |duration|
       last_candle_ids = @all_candles.where('time < ?', (now - duration.minutes).strftime('%H:%M')).group(:ticker).pluck('max(id)')
       @candles[duration] = @all_candles.where(id: last_candle_ids).index_by(&:ticker)
     end
 
-    Current.preload_prices_for @instruments.to_a
-    Current.preload_day_candles_with @instruments.to_a, [current_calendar.today, current_calendar.yesterday]
+    PriceCache.preload @instruments
+    CandleCache.preload @instruments, dates: [current_calendar.today, current_calendar.yesterday]
 
     recent_gains, recent_losses, recent_changes = RecentChanges.prepare @instruments, intervals: [15, 60], now: now
 
@@ -70,8 +67,8 @@ class DashboardsController < ApplicationController
     @now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
     InstrumentCache.set @instruments
-    Current.preload_prices_for @instruments.to_a
-    Current.preload_day_candles_with @instruments.to_a, [current_calendar.today, current_calendar.yesterday]
+    PriceCache.preload @instruments
+    CandleCache.preload @instruments, dates: [current_calendar.today, current_calendar.yesterday]
 
     recent_gains, recent_losses = RecentChanges.prepare @instruments, intervals: [15, 60], now: @now
 
@@ -110,7 +107,7 @@ class DashboardsController < ApplicationController
   def last_week
     @instruments = Instrument.active.traded_on(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
-    Current.preload_day_candles_with @instruments.to_a, @dates
+    CandleCache.preload @instruments, dates: @dates
     InstrumentCache.set @instruments
     number_of_gainers = current_market == 'rub' ? 15 : 30
 
@@ -137,7 +134,7 @@ class DashboardsController < ApplicationController
   def last_week_spikes
     @instruments = Instrument.active.traded_on(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
-    Current.preload_day_candles_with @instruments.to_a, @dates
+    CandleCache.preload @instruments, dates: @dates
     InstrumentCache.set @instruments
 
     @results = @dates.each_with_object({}) do |date, hash|
@@ -158,8 +155,8 @@ class DashboardsController < ApplicationController
   def averages
     @instruments = Instrument.active.traded_on(current_market).includes(:indicators, :aggregate)
     @dates = [Current.date]
-    Current.preload_day_candles_with @instruments.to_a, @dates
-    Current.preload_prices_for @instruments.to_a
+    CandleCache.preload @instruments, @dates
+    PriceCache.preload @instruments
     InstrumentCache.set @instruments
 
     @rows = @instruments.map do |inst|
@@ -220,7 +217,7 @@ class DashboardsController < ApplicationController
       [ticker, candles.to_a]
     end.to_h
 
-    Current.preload_day_candles_with @instruments.to_a, []
-    Current.preload_prices_for @instruments.to_a
+    CandleCache.preload @instruments
+    PriceCache.preload @instruments
   end
 end

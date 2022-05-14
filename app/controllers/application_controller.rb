@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
+  before_action :preload_cache
+
 
   private
 
@@ -19,4 +21,10 @@ class ApplicationController < ActionController::Base
   def us_market? = current_market == 'usd'
 
   helper_method :current_market, :current_currency, :ru_market?, :us_market?
+
+  def preload_cache
+    # PermaCache.load_instruments
+    # PermaCache.load_infos
+    # CandleCache.preload
+  end
 end

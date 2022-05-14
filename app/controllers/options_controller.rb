@@ -22,7 +22,7 @@ class OptionsController < ApplicationController
     @options = @instrument.option_items.where(date: @date)
     @update_dates = @options.map(&:updated_on).uniq.sort.last(30)
     @strikes = @options.map(&:strike).uniq.sort
-    Current.preload_day_candles_with [@instrument], @update_dates
+    CandleCache.preload [@instrument], @update_dates
     render :show
   end
 end

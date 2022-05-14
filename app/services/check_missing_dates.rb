@@ -5,7 +5,7 @@ class CheckMissingDates
     dates = dates ? dates.to_s.split(',').presence : []
     dates += Current.last_n_weeks(weeks.to_i)         if weeks
     dates += Current.weekdays_since(since.to_date)    if since
-    dates += Current::SpecialDates.dates_plus         if special
+    dates += MarketCalendar::SpecialDates.dates_plus         if special
     dates -= [Current.date]
 
     if till = till.to_s.to_date

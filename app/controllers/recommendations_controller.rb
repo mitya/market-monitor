@@ -12,7 +12,7 @@ class RecommendationsController < ApplicationController
     @recommendations = @recommendations.page(params[:page]).per(params[:per_page])
 
     @instruments = @recommendations.map(&:instrument).uniq
-    Current.preload_day_candles_for @instruments
-    Current.preload_prices_for @instruments
+    CandleCache.preload @instruments
+    PriceCache.preload @instruments
   end
 end

@@ -1,6 +1,4 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :day_candles_cache, :prices_cache
-
   # def date
   #   date = Time.now.hour > 20 ? Date.tomorrow : Date.current
   #   date.on_weekend?? date.prev_weekday : date
@@ -36,7 +34,6 @@ class Current < ActiveSupport::CurrentAttributes
   def ru_2nd_market_work_period = ru_2nd_market_open_time..ru_2nd_market_close_time
 
 
-  # def yesterday = weekend?? today : MarketCalendar.closest_weekday(date.prev_weekday)
   def yesterday = MarketCalendar.closest_weekday(date.prev_weekday, :rub)
   def d2_ago    = MarketCalendar.closest_weekday(yesterday.prev_weekday)
   def d3_ago    = MarketCalendar.closest_weekday(d2_ago.prev_weekday)
@@ -67,7 +64,6 @@ class Current < ActiveSupport::CurrentAttributes
   def us_open_time_in_minutes_utc = 13 * 60 + 30
 
   def last_closed_day = workday? ? yesterday : today
-  # def last_closed_day_as_iex = workday? ? yesterday : yesterday - 1
   def last_closed_day_as_iex = yesterday
 
   def weekdays_since(date) = date.upto(Current.today).to_a.select { |date| MarketCalendar.market_open?(date) }.reverse
@@ -75,22 +71,6 @@ class Current < ActiveSupport::CurrentAttributes
   def last_2_weeks = last_n_weeks(2)
 
 
-
-  def preload_day_candles_for(instruments)
-    self.day_candles_cache = DayCandleCache.new(instruments, nil)
-  end
-
-  def preload_day_candles_with(instruments, extra_dates, dates: nil)
-    self.day_candles_cache = DayCandleCache.new(instruments, extra_dates, dates: dates)
-  end
-
-  def preload_day_candles_for_dates(instruments, dates)
-    self.day_candles_cache = DayCandleCache.new(instruments, [], dates: dates)
-  end
-
-  def preload_prices_for(instruments)
-    self.prices_cache = PriceCache.new(instruments)
-  end
 
   def in_usd(amount, currency)
     return unless amount
@@ -101,13 +81,13 @@ class Current < ActiveSupport::CurrentAttributes
     end
   end
 
+
+
   def parallelize(threads_count, &block)
     threads_count.times.map { |i| Thread.new(&block) }.each &:join
   end
 
   def parallelize_instruments(instruments, threads_count, &block)
-    # queue = Queue.new
-    # instruments.each { |instr| queue << instr }
     queue = instruments.to_a
     threads_count.times.map do |index|
       Thread.new do
@@ -116,74 +96,5 @@ class Current < ActiveSupport::CurrentAttributes
         end
       end
     end.each &:join
-  end
-
-  class PriceCache
-    def initialize(instruments)
-      @instruments = Instrument.normalize(instruments)
-      @prices = @instruments.size > 30 ? Price.all : Price.where(ticker: @instruments.map(&:ticker))
-      @prices_by_ticker = @prices.index_by &:ticker
-    end
-
-    def for_instrument(instrument) = @prices_by_ticker[instrument.ticker]
-  end
-
-  class DayCandleCache
-    attr :candles, :candles_by_ticker
-
-    def initialize(instruments, extra_dates = nil, dates: nil)
-      dates ||= (SpecialDates.dates + extra_dates.to_a)
-      dates = dates.compact.uniq.sort
-      @instruments = Instrument.normalize(instruments).compact unless instruments == :all
-      @candles = Candle.day.where(date: dates)
-      @candles = @candles.where(ticker: @instruments.map(&:ticker)) unless instruments == :all
-      @candles = @candles.order(:date).to_a
-      @candles_by_ticker = @candles.group_by &:ticker
-    end
-
-    def scope_to_instrument(instrument) = InstrumentScope.new(instrument, self)
-
-    class InstrumentScope
-      attr :instrument
-
-      def initialize(instrument, cache)
-        @instrument, @cache = instrument, cache
-      end
-
-      def find_date(date) = @cache.candles_by_ticker[@instrument.ticker]&.find { |candle| candle.date == date }
-      def find_date_before(date) = find_date(MarketCalendar.closest_weekday date)
-      def find_date_or_after(date) = @cache.candles_by_ticker[@instrument.ticker]&.find { |candle| candle.date >= date }
-      alias find_date_or_before find_date_before
-      def find_dates_in(period) = @cache.candles_by_ticker[@instrument.ticker]&.select { |candle| candle.date.in? period }
-    end
-  end
-
-  class SpecialDates
-    include StaticService
-
-    def dates
-      [
-        Current.y2017,
-        Current.y2018,
-        Current.y2019,
-        Current.y2020,
-        Current.y2021,
-        Current.y2022,
-        Current.date,
-        Current.d1_ago,
-        Current.d2_ago,
-        Current.d3_ago,
-        Current.d4_ago,
-        Current.w1_ago,
-        Current.w2_ago,
-        Current.m1_ago,
-        Current.m3_ago,
-        Current.y1_ago,
-      ]
-    end
-
-    def dates_plus
-      dates + []
-    end
   end
 end

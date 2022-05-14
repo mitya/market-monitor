@@ -222,6 +222,35 @@ class MarketCalendar
     end
 
   end
+
+  class SpecialDates
+    include StaticService
+
+    def dates
+      [
+        Current.y2017,
+        Current.y2018,
+        Current.y2019,
+        Current.y2020,
+        Current.y2021,
+        Current.y2022,
+        Current.date,
+        Current.d1_ago,
+        Current.d2_ago,
+        Current.d3_ago,
+        Current.d4_ago,
+        Current.w1_ago,
+        Current.w2_ago,
+        Current.m1_ago,
+        Current.m3_ago,
+        Current.y1_ago,
+      ]
+    end
+
+    def dates_plus
+      dates + []
+    end
+  end
 end
 
 __END__

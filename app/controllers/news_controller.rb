@@ -12,7 +12,7 @@ class NewsController < ApplicationController
     @news = @news.where ["? = any(instruments.flags)", params[:availability]] if params[:availability].present?
     @news = @news.page(params[:page]).per(params[:per_page])
 
-    Current.preload_prices_for @news.map(&:instrument)
-    Current.preload_day_candles_for @news.map(&:instrument)
+    PriceCache.preload @news
+    CandleCache.preload @news
   end
 end

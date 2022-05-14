@@ -33,7 +33,7 @@ class LevelHitsController < ApplicationController
     @hits = @hits.page(params[:page]).per(params[:per_page])
     @hits = @hits.order('date desc, ticker')
 
-    Current.preload_prices_for @hits.map(&:instrument)
-    Current.preload_day_candles_for @hits.map(&:instrument)
+    PriceCache.preload @hits
+    CandleCache.preload @hits
   end
 end

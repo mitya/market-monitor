@@ -30,7 +30,7 @@ namespace :tinkoff do
 
     envtask :special do
       R.instruments_from_env.abc.each do |inst|
-        Current::SpecialDates.dates_plus.each do |date|
+        MarketCalendar::SpecialDates.dates_plus.each do |date|
           Tinkoff.import_day_candle(inst, date)
         end
       end

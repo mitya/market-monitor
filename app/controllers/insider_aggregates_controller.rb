@@ -11,6 +11,6 @@ class InsiderAggregatesController < ApplicationController
     @aggregates = @aggregates.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
     @aggregates = @aggregates.page(params[:page]).per(params[:per_page])
 
-    Current.preload_prices_for @aggregates.map &:instrument
+    PriceCache.preload @aggregates
   end
 end

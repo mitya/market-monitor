@@ -3,7 +3,7 @@ class Stats < ApplicationRecord
 
   scope :abc, -> { order :ticker }
 
-  def instrument = PermanentCache.instrument(ticker)
+  def instrument = PermaCache.instrument(ticker)
 
   def refresh(include_company: false)
     # return if stats_updated_at && stats_updated_at > 15.minutes.ago

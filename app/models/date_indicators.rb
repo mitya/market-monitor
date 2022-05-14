@@ -48,7 +48,7 @@ class DateIndicators < ApplicationRecord
     def create_for_all(date: Current.yesterday, instruments: Instrument.active)
       instruments = instruments.sort_by &:ticker
       transaction do
-        Current.preload_day_candles_for_dates instruments, [date.to_date]
+        CandleCache.preload instruments, [date.to_date]
         Current.parallelize_instruments(instruments, 6) { |inst| create_recursive inst, date: date }
       end
     end

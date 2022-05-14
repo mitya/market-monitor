@@ -151,7 +151,7 @@ class Instrument < ApplicationRecord
   def last_indicators = @last_indicators ||= !indicators || indicators.date == Current.date ? indicators : indicators.last
 
   def price_on!(date) = day_candles!.find_date(date)
-  def price_on(date) = day_candles!.find_date_before(date.to_date + 1)
+  def price_on(date) = day_candles!.find_date_or_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
 
   def d1_change = @d1_change ||= gain_since(:d2_ago_close, :d1_ago_close)
@@ -163,11 +163,11 @@ class Instrument < ApplicationRecord
   def logo_path = Pathname("public/logos/#{ticker}.png")
   def check_logo = update_column(:has_logo, logo_path.exist?)
 
-  def price! = Current.prices_cache&.for_instrument(self) || price || create_price!
-  def day_candles! = Current.day_candles_cache ? Current.day_candles_cache.scope_to_instrument(self) : day_candles
+  def price! = PriceCache.for_instrument(self) || price || create_price!
+  def day_candles! = CandleCache.for_instrument(self)
   def candles_for(interval) = Candle.interval_class_for(interval).where(ticker: ticker)
 
-  def info = PermanentCache.info(ticker)
+  def info = PermaCache.info(ticker)
   def info! = info
   def annotation! = annotation || create_annotation
 
@@ -319,7 +319,15 @@ class Instrument < ApplicationRecord
     def to_proc = -> ticker { get ticker }
 
     def reject_missing(tickers) = Instrument.for_tickers(tickers).pluck(:ticker)
-    def normalize(records) = self === records.first ? records : records.map { |ticker| self[ticker] }.compact
+
+    def normalize(records)
+      case
+        when records.blank? then []
+        when records.first.is_a?(self) then records
+        when records.first.respond_to?(:instrument) then records.map(&:instrument)
+        else records.map { self[_1] }.compact
+      end
+    end
 
     def tickers = @tickers ||= pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
@@ -367,3 +375,7 @@ Instrument.join(:info).count
 Instrument.get('AAN').update! first_date: '2020-11-25'
 Instrument.where(ticker: %w[KAP@GS KSPI@GS MBT]).deactivate_all
 Instrument.joins(:info).where(info: { sector_code: 'healthtechnology'} ).count
+
+Benchmark.ms { prices = Price.all.to_a }
+Instrument.first(100).pluck(:ticker)
+Benchmark.ms { prices = Price.where(ticker: t).to_a }
