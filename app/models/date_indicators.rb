@@ -1,12 +1,13 @@
 class DateIndicators < ApplicationRecord
   self.table_name = "indicators"
 
-  belongs_to :instrument, foreign_key: 'ticker'
+  belongs_to :instrument_record, foreign_key: 'ticker', class_name: 'Instrument'
+
   scope :current, -> { where current: true }
 
   def datetime = date.end_of_day
   def charting_timestamp = date.end_of_day.to_time.to_i
-  def cached_instrument = PermaCache.instrument(ticker)
+  def instrument = PermaCache.instrument(ticker)
 
   class << self
     def create_recursive(instrument, date: Current.yesterday)
@@ -105,7 +106,7 @@ class DateIndicators < ApplicationRecord
 
     def calculate_last_ema(length)
       @emas[length] ||= begin
-        last = prev.cached_instrument.last
+        last = prev.instrument.last
         prev_ema = prev.send("ema_#{length}")
         smoothing_factor = 2.0 / (length + 1)
         ((last - prev_ema) * smoothing_factor + prev_ema).round(4)

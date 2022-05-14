@@ -15,6 +15,11 @@ class PermaCache
     @instruments[ticker]
   end
 
+  def indicator(ticker)
+    load_indicators unless @indicators
+    @indicators[ticker]
+  end
+
   def aggregate(ticker)
     load_aggregates unless @aggregates
     @aggregates[ticker]
@@ -28,16 +33,21 @@ class PermaCache
   end
 
   def load_infos
-    ApplicationRecord.benchmark "Preload instrument infos".magenta, silence: true do
+    ApplicationRecord.benchmark "Preload infos".magenta, silence: true do
       @infos = Stats.all.index_by(&:ticker)
     end
   end
 
   def load_aggregates
-    ApplicationRecord.benchmark "Preload instrument aggregates".magenta, silence: true do
+    ApplicationRecord.benchmark "Preload aggregates".magenta, silence: true do
       @aggregates = Aggregate.current.index_by(&:ticker)
     end
+  end
 
+  def load_indicators
+    ApplicationRecord.benchmark "Preload indicators".magenta, silence: true do
+      @indicators = DateIndicators.current.index_by(&:ticker)
+    end
   end
 
 

@@ -39,13 +39,13 @@ class ChartsController < ApplicationController
     tickers = tickers.first(1) if is_single
     since_date = Setting.chart_settings['since'].to_date
 
-    instruments = Instrument.for_tickers(tickers).includes(:indicators, :annotation)
+    instruments = Instrument.for_tickers(tickers).includes(:annotation)
     instruments = tickers.map { |ticker| instruments.find { _1.ticker == ticker.upcase } }.compact
     openings = Candle::M1.today.openings.for(instruments).index_by(&:ticker)
 
     candles = instruments.inject({}) do |map, instrument|
       ticker = instrument.ticker
-      candles = repo.for(instrument).includes(:instrument).order(:date, :time).since(since_date).last(params[:limit] || (is_single ? 777 : 500))
+      candles = repo.for(instrument).order(:date, :time).since(since_date).last(params[:limit] || (is_single ? 777 : 500))
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.charting_timestamp, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
 

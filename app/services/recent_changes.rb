@@ -7,7 +7,7 @@ class RecentChanges
     recent_changes = {}
 
     intervals.each do |interval|
-      recent_candles = Candle::M1.for(instruments).today.where(time: (now - interval.minutes).to_hhmm .. now.to_hhmm).order(:time).group_by(&:cached_instrument)
+      recent_candles = Candle::M1.for(instruments).today.where(time: (now - interval.minutes).to_hhmm .. now.to_hhmm).order(:time).group_by(&:instrument)
       recent_candles.reject! { |inst, candles| candles.size < 5 }
       recent_gains[interval]  = recent_candles.map { |inst, candles| [inst.ticker, inst.gain_since(candles.minimum(:low),  :last)] }.to_h
       recent_losses[interval] = recent_candles.map { |inst, candles| [inst.ticker, inst.gain_since(candles.maximum(:high), :last)] }.to_h

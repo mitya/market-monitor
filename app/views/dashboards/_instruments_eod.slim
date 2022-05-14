@@ -19,13 +19,13 @@
 
 tbody
   - candles.each do |candle|
-    - inst = candle.cached_instrument
+    - inst = candle.instrument
     - classes = class_names('opacity-40' => inst.ignored? || local_assigns[:muted_if] ? muted_if.(candle) : false)
     tr(class=classes)
       = td :icon, instrument_icon(inst)
       = td :ticker, format_ticker(inst)
       = td :change, class: "money-cell" do
-        = colorized_ratio candle.rel_close_change, precision: 1, title: format_price(candle.close, candle.cached_instrument)
+        = colorized_ratio candle.rel_close_change, precision: 1, title: format_price(candle.close, candle.instrument)
         / = percentage_bar_or_number candle.rel_change, classes: "#{red_green_class candle.rel_change.to_f > 0}", threshold: 0.05, rtl: true
       = td :rel_volume, class: "money-cell is-light-blue" do
         = format_percentage candle.volume_to_average, round: true

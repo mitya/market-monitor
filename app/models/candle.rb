@@ -4,7 +4,6 @@ class Candle < ApplicationRecord
   def instrument=(instrument)
     self.instrument_record = instrument
   end
-  def cached_instrument = instrument
   # alias instrument= instrument_record=
 
   scope :ongoing, -> { where ongoing: true }
@@ -189,6 +188,6 @@ class Candle < ApplicationRecord
   def average_prior_volume(days: 10) = siblings.where('date < ?', date).take(days).pluck(:volume).average
   def volume_change(days: 10) = volume.to_f / average_prior_volume(days: days)
 
-  def volume_to_average = volume.to_f / cached_instrument.info&.average_volume_for(interval) rescue nil
-  def volume_in_money = volume * close * cached_instrument.lot
+  def volume_to_average = volume.to_f / instrument.info&.average_volume_for(interval) rescue nil
+  def volume_in_money = volume * close * instrument.lot
 end

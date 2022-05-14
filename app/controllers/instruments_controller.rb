@@ -46,8 +46,8 @@ class InstrumentsController < ApplicationController
 
   def load_instruments(base)
     @instruments = base
-    @instruments = @instruments.left_joins(:aggregate_record, :info_record, :indicators, :price)
-    @instruments = @instruments.preload(:price_target, :portfolio_item, :insider_aggregate, :portfolio_item, :indicators)
+    @instruments = @instruments.left_joins(:aggregate_record, :info_record, :indicators_record, :price)
+    @instruments = @instruments.preload(:price_target, :portfolio_item, :insider_aggregate, :portfolio_item)
     @instruments = @instruments.where(info_record: { industry: params[:industry] })       if params[:industry].present?
     @instruments = @instruments.where(info_record: { sector: params[:sector] })           if params[:sector].present?
     @instruments = @instruments.where(info_record: { sector_code: params[:sector_code] }) if params[:sector_code].present?

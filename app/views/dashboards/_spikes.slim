@@ -10,7 +10,7 @@
       = th :rel_volume, '𝑉', class: "money-cell"
 tbody
   - spikes.each do |spike|
-    - inst = spike.cached_instrument
+    - inst = spike.instrument
     - candle = spike.candle
     tr(class=class_names('opacity-40' => inst.ignored?))
       = td :icon, instrument_logo_button(inst)

@@ -149,7 +149,7 @@ class DashboardsController < ApplicationController
   end
 
   def averages
-    @instruments = Instrument.active.traded_on(current_market).includes(:indicators)
+    @instruments = Instrument.active.traded_on(current_market)
     @dates = [Current.date]
     CandleCache.preload @instruments, @dates
     PriceCache.preload @instruments
