@@ -377,7 +377,8 @@ module InstrumentsHelper
   def format_ticker(instrument)
     tag.span instrument.ticker,
       title: instrument.name,
-      class: ['ticker-item', 'fw-bold text-decoration-underline': instrument.watched?]
+      class: ['ticker-item', 'watched': instrument.favorite?],
+      data: { ticker: instrument.ticker }
       # data: { sector: instrument.info.sector_category || instrument.info.sector_code }
   end
 

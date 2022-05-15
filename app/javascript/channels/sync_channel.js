@@ -21,8 +21,14 @@ const syncChannel = consumer.subscriptions.create("SyncChannel", {
   },
 
   setChartTicker(ticker) {
-    this.perform("set_chart_ticker", { ticker: ticker })
+    this.updateTimeout = setTimeout( () => {
+      this.perform("set_chart_ticker", { ticker: ticker })
+    }, 250)
   },
+
+  cancelChartUpdate() {
+    clearTimeout(this.updateTimeout)
+  }
 });
 
 window.syncChannel = syncChannel

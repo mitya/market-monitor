@@ -192,6 +192,7 @@ class Instrument < ApplicationRecord
   def very_illiquid? = rub? && MarketInfo::MoexVeryIlliquid.include?(ticker)
   def ignored? = rub? && MarketInfo::MoexIgnored.include?(ticker)
   def watched? = InstrumentSet.watched?(ticker)
+  def favorite? = TickerSet.favorites.include?(ticker)
 
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)

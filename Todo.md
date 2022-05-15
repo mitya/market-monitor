@@ -1,7 +1,8 @@
 - intraday target list (last target dist-to-target start-time hit-time change-since-start 15/60ch
 - intraday target list: a textfield to add ticker there "zim 61.5"
 - favorites list
-- favorites list: button to toggle items outside
+
+- memoization
 
 - use enums for price signal interals, level hit kinds
 - check turn-around behaviours on 5m charts
@@ -488,3 +489,4 @@
 + rename Stats
 + make the query to load all market instruments db-less
 + use postgres enums for candle sources
++ favorites list: button to toggle items outside

@@ -1,0 +1,18 @@
+.x-copy-tickers { cursor: copy; }
+
+.ticker-item { padding: 1px; }
+.ticker-item[data-sector='tech']       { color: white; background-color: darkgreen; }
+.ticker-item[data-sector='energy']     { color: white; background-color: blue; }
+.ticker-item[data-sector='industrial'] { color: white; background-color: #222; }
+.ticker-item[data-sector='biotech']    { color: white; background-color: darkred; }
+
+.sector-icon { display: inline-block; width: 10px; height: 10px; border-radius: 5px;  background-color: #ccc; }
+.sector-icon[data-sector='tech']       { background-color: green; }
+.sector-icon[data-sector='biotech']    { background-color: red; }
+.sector-icon[data-sector='energy']     { background-color: blue; border-radius: 0; }
+.sector-icon[data-sector='industrial'] { background-color: black; border-radius: 0; }
+
+.ticker-item.watched {
+  font-weight: bold;
+  text-decoration: underline;
+}

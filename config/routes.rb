@@ -54,6 +54,12 @@ Rails.application.routes.draw do
     get :imported, on: :collection
   end
 
+  resources :ticker_sets, only: [] do
+    resources :items, only: [], controller: :ticker_set_items do
+      post :toggle, on: :member
+    end
+  end
+
   mount ActionCable.server => '/cable'
 
   mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql" if Rails.env.development?

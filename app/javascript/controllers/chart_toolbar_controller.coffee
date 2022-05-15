@@ -84,7 +84,7 @@ export default class extends Controller
 
     synced_tickers   = $qs("#chart-settings-modal .synced-tickers-field").value
     sync_ticker_sets = $qs('#chart-settings-modal #sync-ticker-sets-toggle').checked
-    await $fetchJSON "/chart/update_chart_settings", method: 'PUT', data: {
+    await $fetchJSON "/chart", method: 'PUT', data: {
       synced_tickers, sync_ticker_sets
     }
 

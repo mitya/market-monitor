@@ -37,9 +37,9 @@ document.addEventListener "turbolinks:load", ->
   if $qs('.main-navbar')
     $delegate '.main-navbar', '.x-refresh-prices', 'click', (button, e) ->
       await $fetchJSON "/trading/refresh", method: 'POST', data: { scope: button.dataset.scope }
-      
-      
+
+
   $delegate '', '.ticker-set-title', 'click', (header, e) ->
-    await $fetchJSON "/trading/update_chart_settings", method: 'POST', data: {
+    await $fetchJSON "/trading", method: 'PUT', data: {
       chart_tickers: header.dataset.tickers
     }
