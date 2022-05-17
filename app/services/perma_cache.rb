@@ -14,6 +14,9 @@ class PermaCache
 
   def instrument(ticker)
     load_instruments unless @instruments
+    if @instruments[ticker] == nil
+      puts "PermaCache miss instrument #{ticker} #{@instruments.size}"
+    end
     @instruments[ticker]
   end
 
@@ -77,7 +80,7 @@ class PermaCache
   end
 
 
-  def instruments_scope = Instrument.active
+  def instruments_scope = Instrument.active!
 
   class << self
     def instance = @instance ||= new

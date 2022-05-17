@@ -8,7 +8,7 @@ class SignalsController < ApplicationController
 
     @signals = PriceSignal.all
     @signals = @signals.joins(:instrument)
-    @signals = @signals.includes(:instrument => [:info, :price_target])
+    @signals = @signals.includes(:instrument => [:price_target])
 
     @signals = @signals.for_interval params[:interval]                              if params[:interval].present?
     @signals = @signals.where date: params[:dates]                                  if params[:dates].any?

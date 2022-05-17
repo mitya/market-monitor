@@ -1,0 +1,14 @@
+.col-4
+  = data_table fields: nil, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table watches-table" do
+    thead.table-dark
+      tr
+        = th :icon
+        = th :ticker, title
+        = th :last, 'Last', class: 'money-cell'
+        = th :expected, 'Exp', class: 'money-cell'
+        = th :pct_to_expected, 'E ﹪', class: 'money-cell'
+        = th :pct_from_start, 'S ﹪', class: 'money-cell'
+        = th :hit_at, 'Hit', class: 'money-cell'
+    tbody
+      - targets.each do |target|
+        = render 'target_row', target: target

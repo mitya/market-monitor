@@ -20,6 +20,22 @@ document.addEventListener "turbolinks:load", ->
       for item in document.querySelectorAll(".ticker-item[data-ticker='#{result.ticker}']")
         item.classList[if result.included then 'add' else 'remove']('watched')
 
+  for form in document.querySelectorAll('.watch-adder')
+    form.addEventListener 'submit', (e) ->
+      e.preventDefault()
+      response = await $fetchJSON "/watched_targets", method: 'POST', data: { text: form.querySelector('input').value }
+      if response.ok
+        form.reset()
+        document.querySelector('.watches-table tbody').insertAdjacentHTML 'beforeend', response.html
+
+  document.addEventListener 'keypress', (e) ->
+    if button = e.target.closest('.watch-adder .btn')
+      input = button.closest('.watch-adder').querySelector('input')
+      await $fetchJSON "/watched_targets", method: 'POST', data: { text: input.value }
+      input.value = ''
+      button.blur()
+
+
   $delegate '.momentum-table', 'th[data-sort]', 'click', (th, e) ->
     table = th.closest('table')
     sortParam = table.dataset.sortParam || 'sort'

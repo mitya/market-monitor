@@ -1,4 +1,6 @@
 class Current < ActiveSupport::CurrentAttributes
+  attribute :favorites
+
   # def date
   #   date = Time.now.hour > 20 ? Date.tomorrow : Date.current
   #   date.on_weekend?? date.prev_weekday : date

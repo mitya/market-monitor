@@ -12,10 +12,12 @@ class TickerSet < ApplicationRecord
     return tickers.include?(ticker)
   end
 
+  def instruments = tickers.map { PermaCache.instrument _1 }
+
   class << self
     def moex_1 = Instrument.active.rub.where.not(ticker: MarketInfo::Moex2).pluck(:ticker).sort
     def moex_2 = Instrument.active.rub.where(    ticker: MarketInfo::Moex2).pluck(:ticker).sort
-    def favorites = Thread.current[:favorites] ||= find_by_key('favorites')
+    def favorites = Current.favorites ||= find_by_key('favorites')
 
     def virtual
       %i[moex_1 moex_2].map { new(key: _1, tickers: send(_1)) }

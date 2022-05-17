@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   end
 
   resource :dashboard, only: [] do
-    get :momentum, :today, :favorites, :last_week, :last_week_spikes, :averages, :timeline
+    get :momentum, :today, :favorites, :last_week, :last_week_spikes, :averages, :timeline, :favorites
   end
 
   resource :set_comparision, only: []  do
@@ -59,6 +59,8 @@ Rails.application.routes.draw do
       post :toggle, on: :member
     end
   end
+
+  resources :watched_targets, only: %i[index create destroy]
 
   mount ActionCable.server => '/cable'
 

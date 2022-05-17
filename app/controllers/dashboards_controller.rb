@@ -1,9 +1,7 @@
 class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
-    @instruments = PermaCache.current_instruments_for_market(current_market)
-
-    # Price.sync_with_last_candles @instruments
+    @instruments ||= PermaCache.current_instruments_for_market(current_market)
 
     @all_candles = Candle::M1.for(@instruments).today
     @candles = {}
@@ -17,7 +15,7 @@ class DashboardsController < ApplicationController
 
     recent_gains, recent_losses, recent_changes = RecentChanges.prepare @instruments, intervals: [15, 60], now: now
 
-    @rows = @instruments.map do |inst|
+    rows = @instruments.map do |inst|
       OpenStruct.new(
         ticker:                  inst.ticker,
         instrument:              inst,
@@ -42,24 +40,26 @@ class DashboardsController < ApplicationController
       )
     end
 
-    ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
-    watched_tickers = %w[AFKS AGRO AMEZ ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROSN RUAL SGZH SMLT TCSG VKCO].to_set
-    @ignored, @rows           = @rows.partition { ignored_tickers.include? _1.instrument.ticker }
-    # @watched, @rows           = @rows.partition { watched_tickers.include? _1.instrument.ticker }
-    # @liquid, @rows            = @rows.partition { _1.instrument.liquid? }
-    @very_illiquid, @rows = @rows.partition { _1.instrument.very_illiquid? }
-    # @groups = [@watched, @liquid, @illiquid, @very_illiquid]
-    # @groups = [@rows]
 
     @groups = if current_market == 'rub'
-      { main: @rows, illiquid: @very_illiquid }
+      ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
+      ignored, rows = rows.partition { ignored_tickers.include? _1.instrument.ticker }
+      very_illiquid, rows = rows.partition { _1.instrument.very_illiquid? }
+      { main: rows, illiquid: very_illiquid }
     else
-      # { main: @rows[0 .. (@rows.size / 2)], reverse: @rows[(@rows.size / 2 + 1) .. -1] }
-      { main: @rows }
+      favorites_for_market = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
+      favorites, rows = rows.partition { favorites_for_market.include? _1.ticker }
+      { main: rows, favorites: favorites }
     end
 
     sort_field = params[:sort] || :change
-    @groups = @groups.transform_values { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
+    @groups = @groups.transform_values { |group_rows| group_rows.sort_by { _1.send(sort_field) || 0 }.reverse }
+  end
+
+  def favorites
+    @instruments = TickerSet.favorites.instruments.select { _1.currency == current_currency }
+    today
+    render :today
   end
 
   def momentum

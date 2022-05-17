@@ -171,7 +171,7 @@ class Candle < ApplicationRecord
   def pin_bar?(min_pin_height: 0.03)
     return if shadow_to_body_ratio <= 2
     yesterday = previous
-    yesterday_aggregate = instrument.aggregates.find_by_date(yesterday.date)
+    yesterday_aggregate = instrument.aggregate
     return if !yesterday_aggregate || !yesterday
     return 'down' if yesterday_aggregate.days_up   >= 2 && close < yesterday.close && high > yesterday.body_high && ((high - yesterday.close) / yesterday.close) > min_pin_height
     return 'up'   if yesterday_aggregate.days_down >= 2 && close > yesterday.close && low  < yesterday.body_low && ((yesterday.close - low ) / yesterday.close) > min_pin_height

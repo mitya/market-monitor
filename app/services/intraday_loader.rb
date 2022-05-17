@@ -141,8 +141,8 @@ class IntradayLoader
   def analyze_latest
     return if should_analyze == false || interval != '1min'
     puts "#{Time.now} analyze latest"
-    instruments.includes(:info).abc.each do |inst|
-      new_candles = inst.candles_for(interval).on(Current.date).non_analyzed.order(:time).includes(:instrument)
+    instruments.abc.each do |inst|
+      new_candles = inst.candles_for(interval).on(Current.date).non_analyzed.order(:time)
       IntradayAnalyzer.analyze inst, new_candles
       IntradayLevelHitDetector.analyze inst, candles: new_candles, levels: PriceLevel.textual[inst.ticker]
     end

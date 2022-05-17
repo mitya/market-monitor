@@ -72,7 +72,7 @@ class Tinkoff
           hhmm = timestamp.to_s(:time)
           ongoing = !hash['isComplete']
 
-          params = { instrument: instrument, date: date }
+          params = { ticker: instrument, date: date }
           params.merge! time: hhmm if candle_class.intraday?
           candle = candle_class.find_or_initialize_by(params)
           puts "Import Tinkoff V2 #{date} #{hhmm} #{interval} #{instrument} #{ongoing ? '...' : ''}".colorize(candle.new_record?? :green : :yellow)

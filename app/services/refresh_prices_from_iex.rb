@@ -49,7 +49,7 @@ class RefreshPricesFromIex
   end
 
   def instruments_index
-    @instruments_index ||= Instrument.includes(:price, :info).index_by(&:iex_ticker)
+    @instruments_index ||= Instrument.index_by(&:iex_ticker)
   end
 end
 

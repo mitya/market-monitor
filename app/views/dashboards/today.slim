@@ -10,7 +10,7 @@ main.container-fluid
               fields: %i[last change volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
     - else
       - @groups.each do |key, group_rows|
-        .col-6.offset-3
+        .col-6
           = render 'instruments_top', rows: group_rows,
             fields: %i[last change change_since_open change_in_15 change_in_60 volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
             / d5_volume yesterday_volume last_to_today_open last_to_05m_ago last_to_60m_ago last_to_15m_ago

@@ -1,8 +1,20 @@
-- intraday target list (last target dist-to-target start-time hit-time change-since-start 15/60ch
-- intraday target list: a textfield to add ticker there "zim 61.5"
-- favorites list
+- keep in-memory prices updated
+- keep in-momory today candles updated
+- separate bullish & bearish watches
+- fix adding to watches (bullish / bearish)
+- adding to favorites with a field
+- removing from watches
+- removing from favorites
+
+- add change since close / open / 60 / 15 min to watches list
+- add swing targets "zim 60 d"
+- track swing target hits in daily loadings
+- track intraday DMA hits only if that MA was not hit in a few days
 
 - memoization
+- fix intraday sync after market close
+- telegram notifications for watch hits
+- browser notifications for watch hits
 
 - use enums for price signal interals, level hit kinds
 - check turn-around behaviours on 5m charts
@@ -490,3 +502,7 @@
 + make the query to load all market instruments db-less
 + use postgres enums for candle sources
 + favorites list: button to toggle items outside
++ favorites list
++ intraday target list (last target dist-to-target start-time hit-time change-since-start 15/60ch
++ intraday target list: a textfield to add ticker there "zim 61.5"
++ track watch hits in IntradayLoader

@@ -4,20 +4,24 @@ class IntradayAnalyzer
   def analyze(instrument, candles)
     return if candles.blank?
     instrument.transaction do
-      @candles_history = candles.first.same_day_siblings.where('time >= ? AND time < ?', candles.first.time - 2.hours, candles.first.time).order(:time) + candles
-      candles.each { analyze_one instrument, _1 }
+      candles_history = candles.first.same_day_siblings.where('time >= ? AND time < ?', candles.first.time - 2.hours, candles.first.time).order(:time) + candles
+      watches = instrument.watched_targets.pending.order(:expected_price)
+      candles.each do
+        check_watches _1, instrument, watches
+        analyze_one   _1, instrument, candles_history
+      end
     end
     nil
   end
 
-  def analyze_one(instrument, candle)
+  def analyze_one(candle, instrument, candles_history)
     average_volume = instrument.info.average_volume_for(candle.interval)
     m1_big_change = candle.instrument.rub?? 0.015 : 0.01
     m1_big_volume = 7 * average_volume if average_volume
     m1_very_big_volume = 15 * average_volume if average_volume
     m5_big_change = candle.instrument.rub?? 0.03 : 0.02
 
-    last_2_hours = @candles_history.select { _1.time.between? candle.time - 2.hours, candle.time - 1.second }
+    last_2_hours = candles_history.select { _1.time.between? candle.time - 2.hours, candle.time - 1.second }
 
     # candle_index_in_history = @candles_history.index_of(candle)
     # previous_n = @candles_history[[candle_index_in_history - 5, 0].max .. candle_index_in_history]
@@ -73,6 +77,13 @@ class IntradayAnalyzer
       direction:  up ? 'up' : 'down',
       rel_volume: (candle.volume / average_volume rescue 0),
       change:     candle.rel_change
+  end
+
+  def check_watches(candle, instrument, watches)
+    watches.select { _1.hit_in? candle }.each do
+      puts "Watch hit #{instrument} #{_1.expected_price} at #{candle.time_str}".cyan
+      _1.hit!
+    end
   end
 
   def analyze_candle(candle)

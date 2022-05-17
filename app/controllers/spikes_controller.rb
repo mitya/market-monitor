@@ -4,8 +4,6 @@ class SpikesController < ApplicationController
 
     @spikes = Spike.order(date: :desc, ticker: :asc)
     @spikes = @spikes.joins(:instrument)
-    @spikes = @spikes.includes(:instrument => [:info, :price_target])
-
     @spikes = @spikes.where instruments: { currency: params[:currency] }          if params[:currency].present?
     @spikes = @spikes.where ticker: params[:tickers].to_s.split.map(&:upcase)     if params[:tickers].present?
     @spikes = @spikes.where ticker: InstrumentSet.get(params[:set]).symbols       if params[:set].present? && params[:tickers].blank?

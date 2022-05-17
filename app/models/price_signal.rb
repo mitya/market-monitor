@@ -40,9 +40,13 @@ class PriceSignal < ApplicationRecord
   end
 
   def candle
-    scope = intraday?? instrument.candles_for(interval) : instrument.day_candles!
-    return scope.find(candle_id) if candle_id
-    scope.find_by({ date: date, time: time }.compact)
+    if intraday?
+      candle_id ?
+        instrument.candles_for(interval).find(candle_id) :
+        instrument.candles_for(interval).find_by( date: date, time: time)
+    else
+      instrument.day_candles!.find_date(date)
+    end
   end
 
   def current = instrument.last

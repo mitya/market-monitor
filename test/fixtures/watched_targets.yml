@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker: MyString
+  expected_price: 9.99
+  start_price: MyString
+  hit_at: 2022-05-15 23:21:52
+
+two:
+  ticker: MyString
+  expected_price: 9.99
+  start_price: MyString
+  hit_at: 2022-05-15 23:21:52

@@ -1,0 +1,11 @@
+- page_title! 'Watches'
+
+main.container-fluid
+  .row
+    .col-2
+    = render 'list', targets: @bearish_targets, title: 'Bearish'
+    = render 'list', targets: @bullish_targets, title: 'Bullish'
+
+  form.watch-adder class="d-flex justify-content-center"
+    input class="form-control form-control-sm w-auto me-2 text-uppercase"
+    button class="btn btn-sm btn-primary" = fa_icon('plus')

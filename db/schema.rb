@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_15_202152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -70,26 +70,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
 
   create_table "candles", force: :cascade do |t|
     t.string "ticker"
-    t.string "interval", null: false
     t.time "time"
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
-    t.string "source"
+    t.enum "source", enum_type: "candle_source"
     t.date "date"
     t.boolean "ongoing", default: false
     t.boolean "analyzed"
     t.decimal "prev_close", precision: 20, scale: 4
-    t.index ["ticker", "interval", "date"], name: "index_candles_on_ticker_interval_date"
-    t.index ["ticker", "interval", "date"], name: "uniq_ticker_date_for_days", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "index_candles_on_ticker"
   end
 
   create_table "candles_d1_tinkoff", id: :bigint, default: -> { "nextval('candles_d1_tinkoff_seq'::regclass)" }, force: :cascade do |t|
     t.string "ticker", null: false
-    t.string "interval", default: "day", null: false
     t.date "date", null: false
     t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
@@ -107,28 +103,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
 
   create_table "candles_h1", force: :cascade do |t|
     t.string "ticker"
-    t.string "interval", null: false
     t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
-    t.string "source"
+    t.enum "source", enum_type: "candle_source"
     t.date "date"
     t.boolean "ongoing", default: false
     t.boolean "analyzed"
     t.decimal "prev_close", precision: 20, scale: 4
     t.boolean "is_opening"
     t.boolean "is_closing"
-    t.index ["ticker", "interval", "date"], name: "candles_1h_ticker_interval_date_idx"
-    t.index ["ticker", "interval", "date"], name: "candles_1h_ticker_interval_date_idx1", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "candles_1h_ticker_idx"
   end
 
   create_table "candles_m1", force: :cascade do |t|
     t.string "ticker", null: false
-    t.string "interval", default: "1min", null: false
     t.date "date", null: false
     t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
@@ -136,7 +128,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
-    t.string "source", null: false
+    t.enum "source", null: false, enum_type: "candle_source"
     t.boolean "ongoing", default: false, null: false
     t.boolean "analyzed", default: false, null: false
     t.decimal "prev_close", precision: 20, scale: 4
@@ -148,7 +140,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
 
   create_table "candles_m3", force: :cascade do |t|
     t.string "ticker"
-    t.string "interval", limit: 4, null: false
     t.date "date", null: false
     t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
@@ -156,7 +147,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
-    t.string "source", null: false
+    t.enum "source", null: false, enum_type: "candle_source"
     t.boolean "ongoing", default: false, null: false
     t.boolean "analyzed", default: false, null: false
     t.decimal "prev_close", precision: 20, scale: 4
@@ -168,22 +159,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
 
   create_table "candles_m5", force: :cascade do |t|
     t.string "ticker"
-    t.string "interval", limit: 4, null: false
     t.time "time", null: false
     t.decimal "open", precision: 20, scale: 4, null: false
     t.decimal "close", precision: 20, scale: 4, null: false
     t.decimal "high", precision: 20, scale: 4, null: false
     t.decimal "low", precision: 20, scale: 4, null: false
     t.integer "volume", null: false
-    t.string "source"
+    t.enum "source", enum_type: "candle_source"
     t.date "date"
     t.boolean "ongoing", default: false
     t.boolean "analyzed", default: false
     t.decimal "prev_close", precision: 20, scale: 4
     t.boolean "is_opening"
     t.boolean "is_closing"
-    t.index ["ticker", "interval", "date"], name: "candles_5m_ticker_interval_date_idx"
-    t.index ["ticker", "interval", "date"], name: "candles_5m_ticker_interval_date_idx1", where: "((\"interval\")::text = 'day'::text)"
     t.index ["ticker"], name: "candles_5m_ticker_idx"
   end
 
@@ -215,10 +203,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
     t.decimal "ema_50", precision: 20, scale: 4
     t.decimal "ema_100", precision: 20, scale: 4
     t.decimal "ema_200", precision: 20, scale: 4
-    t.integer "ema_20_trend"
-    t.integer "ema_50_trend"
-    t.integer "ema_100_trend"
-    t.integer "ema_200_trend"
+    t.integer "ema_20_trend", limit: 2
+    t.integer "ema_50_trend", limit: 2
+    t.integer "ema_100_trend", limit: 2
+    t.integer "ema_200_trend", limit: 2
     t.index ["current"], name: "index_date_indicators_on_current"
     t.index ["id"], name: "date_indicators_pkey", unique: true
     t.index ["ticker", "current"], name: "index_date_indicators_on_ticker_and_current", where: "(current = true)"
@@ -594,7 +582,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
     t.decimal "average", precision: 20, scale: 4
     t.string "currency"
     t.integer "analysts_count"
-    t.string "source"
+    t.enum "source", enum_type: "candle_source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "current"
@@ -605,7 +593,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
     t.decimal "value", precision: 20, scale: 4
     t.datetime "updated_at", precision: nil
     t.datetime "last_at", precision: nil
-    t.string "source"
+    t.enum "source", enum_type: "candle_source"
     t.decimal "low", precision: 20, scale: 4
     t.integer "volume"
     t.float "change"
@@ -675,6 +663,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_214713) do
     t.string "key"
     t.string "tickers", array: true
     t.datetime "updated_at", precision: nil
+  end
+
+  create_table "watched_targets", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.decimal "start_price", precision: 12, scale: 4
+    t.decimal "expected_price", precision: 12, scale: 4
+    t.datetime "created_at", precision: nil
+    t.datetime "hit_at", precision: nil
   end
 
   add_foreign_key "price_level_hits", "price_levels", column: "level_id", name: "price_level_hits_level_id_fkey"

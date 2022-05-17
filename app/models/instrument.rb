@@ -25,6 +25,8 @@ class Instrument < ApplicationRecord
   has_many :spikes,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :splits,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :missing_dates,                   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
+  has_many :watched_targets,                 foreign_key: 'ticker', dependent: :delete_all
+
   has_one :recommendation, -> { current },   foreign_key: 'ticker', inverse_of: :instrument
   has_one :price_target,   -> { current },   foreign_key: 'ticker', inverse_of: :instrument
   has_one :price,                            foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete
@@ -74,7 +76,8 @@ class Instrument < ApplicationRecord
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
 
-  scope :active, -> { where active: true, type: 'Stock' }
+  scope :active,  -> { where active: true, type: 'Stock' }
+  scope :active!, -> { where active: true }
 
   validates_presence_of :ticker, :name
 
@@ -95,17 +98,17 @@ class Instrument < ApplicationRecord
     end
   end
 
-  def y2017         = @y2017 ||= day_candles!.find_date(Current.y2017)
-  def y2018         = @y2018 ||= day_candles!.find_date(Current.y2018)
-  def y2019         = @y2019 ||= day_candles!.find_date(Current.y2019)
-  def y2020         = @y2020 ||= day_candles!.find_date(Current.y2020)
-  def y2021         = @y2021 ||= day_candles!.find_date(Current.y2021)
-  def y2022         = @y2022 ||= day_candles!.find_date(Current.y2022)
-  def last          = @last  ||= price!.last_at && yesterday_candle&.close_time ? (price!.last_at < yesterday_candle.close_time ? yesterday_candle.close : price!.value) : price!.value
-  def last!         = @last  ||= price!.value
-  def last_low      = @last_low ||= price!.low
+  def y2017         = day_candles!.find_date(Current.y2017)
+  def y2018         = day_candles!.find_date(Current.y2018)
+  def y2019         = day_candles!.find_date(Current.y2019)
+  def y2020         = day_candles!.find_date(Current.y2020)
+  def y2021         = day_candles!.find_date(Current.y2021)
+  def y2022         = day_candles!.find_date(Current.y2022)
+  def last          = price!.last_at && yesterday_candle&.close_time ? (price!.last_at < yesterday_candle.close_time ? yesterday_candle.close : price!.value) : price!.value
+  def last!         = price!.value
+  def last_low      = price!.low
   def last_or_open  = last || today_open
-  def last_using(interval = '1min') = @last_alt ||= candles_for(interval).last&.close
+  def last_using(interval = '1min') = candles_for(interval).last&.close
 
   %w[usd eur rub].each { |currency| define_method("#{currency}?") { self.currency == currency.upcase } }
 
@@ -148,17 +151,17 @@ class Instrument < ApplicationRecord
   def change_to_ema_50     = gain_since(:last, last_indicators&.ema_50)
   def change_to_ema_200    = gain_since(:last, last_indicators&.ema_200)
 
-  def last_indicators = @last_indicators ||= !indicators || indicators.date == Current.date ? indicators : indicators.last
+  def last_indicators = !indicators || indicators.date == Current.date ? indicators : indicators.last
 
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_or_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
 
-  def d1_change = @d1_change ||= gain_since(:d2_ago_close, :d1_ago_close)
-  def price_change = @price_change ||= price!.change rescue 0
+  def d1_change = gain_since(:d2_ago_close, :d1_ago_close)
+  def price_change = price!.change rescue 0
   def stored_gain_since(date_specifier) = (date_specifier.blank? || date_specifier == 'last') ? price_change : aggregate.gains[date_specifier]
 
-  def calendar = @calendar ||= MarketCalendar.for(self)
+  def calendar = MarketCalendar.for(self)
 
   def logo_path = Pathname("public/logos/#{ticker}.png")
   def check_logo = update_column(:has_logo, logo_path.exist?)
@@ -197,7 +200,7 @@ class Instrument < ApplicationRecord
   def market_work_period = moex_2nd? ? Current.ru_2nd_market_work_period : moex? ? Current.ru_market_work_period : Current.us_market_work_period
   def market_open? = market_work_period.include?(Time.current)
 
-  def time_zone  = usd?? Current.est : Current.msk
+  def time_zone  = calendar.timezone
   def time       = time_zone.now
   def opening_hhmm  = MarketInfo.ticker_opening_time(ticker)
   def closing_hhmm  = MarketInfo.ticker_closing_time(ticker)
@@ -271,7 +274,6 @@ class Instrument < ApplicationRecord
 
           mx_candle.instrument = self
           mx_candle.source     = 'virtual'
-          mx_candle.interval   = interval
           mx_candle.prev_close = last_mx_candle.prev_close
           if candles.any?
             mx_candle.open       = candles.first.open
@@ -318,6 +320,15 @@ class Instrument < ApplicationRecord
     def to_proc = -> ticker { get ticker }
 
     def reject_missing(tickers) = Instrument.for_tickers(tickers).pluck(:ticker)
+
+    def normalize_ticker(ticker)
+      case
+        when ticker == nil then nil
+        when ticker.is_a?(String) then ticker
+        when ticker.respond_to?(:ticker) then ticker.ticker
+        else ticker.to_s.upcase
+      end
+    end
 
     def normalize(records)
       case

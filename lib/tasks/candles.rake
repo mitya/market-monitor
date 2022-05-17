@@ -3,7 +3,7 @@ namespace :candles do
       klasses = [Candle]
       # klasses = [Candle::H1, Candle::M1, Candle::M3, Candle::M5, Candle::DayTinkoff]
       klasses.each do |klass|
-        klass.where('date >= ?', '2021-12-01').includes(:instrument).find_in_batches do |candles|
+        klass.where('date >= ?', '2021-12-01').find_in_batches do |candles|
           klass.transaction do
             candles.each do |candle|
               puts "#{candle.class} #{candle.ticker}"

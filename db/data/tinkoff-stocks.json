@@ -721,16 +721,6 @@
       "type": "Stock"
     },
     {
-      "figi": "TCS00JH9TZ56",
-      "ticker": "APY",
-      "isin": "US03755L1044",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Apergy Corporation",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000Q7GG57",
       "ticker": "TGKB",
       "isin": "RU000A0JNGS7",
@@ -5320,6 +5310,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG0134WCM78",
+      "ticker": "DKNG",
+      "isin": "US26142V1052",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "DraftKings",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG00L2B8KW8",
       "ticker": "VRT",
       "isin": "US92537N1081",
@@ -7300,7 +7300,7 @@
     },
     {
       "figi": "BBG000BDDNH5",
-      "ticker": "BLL",
+      "ticker": "BALL",
       "isin": "US0584981064",
       "minPriceIncrement": 0.01,
       "lot": 1,
@@ -10389,15 +10389,6 @@
       "type": "Stock"
     },
     {
-      "figi": "IZHBULDINKDK",
-      "ticker": "TOT",
-      "isin": "IZHBULDINKDK",
-      "lot": 1,
-      "currency": "USD",
-      "name": "TotalEnergies SE",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000FTLBV7",
       "ticker": "IOVA",
       "isin": "US4622601007",
@@ -11925,16 +11916,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "LHC Group Inc",
-      "type": "Stock"
-    },
-    {
-      "figi": "BBG00TCBG714",
-      "ticker": "DKNG",
-      "isin": "US26142R1041",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "DraftKings Inc",
       "type": "Stock"
     },
     {
@@ -15457,16 +15438,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BQT4L6",
-      "ticker": "PBCT",
-      "isin": "US7127041058",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "People's United Financial",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00MS90LK2",
       "ticker": "LAZR",
       "isin": "US5504241051",
@@ -18916,5 +18887,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1892
+  "total": 1889
 }

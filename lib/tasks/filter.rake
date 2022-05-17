@@ -35,7 +35,7 @@ namespace :filter do
     gain_range = 0.05..nil
     results = []
 
-    Instrument.includes(:info).find_each do |inst|
+    Instrument.find_each do |inst|
       lowest_candle = inst.lowest_body_in falling_period
       next unless lowest_candle.date.in? low_reach_period
 
