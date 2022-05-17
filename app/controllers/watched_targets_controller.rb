@@ -4,6 +4,8 @@ class WatchedTargetsController < ApplicationController
     targets = targets.select { _1.instrument.currency == current_currency }
 
     @bullish_targets, @bearish_targets = targets.partition &:bullish?
+    @bearish_targets = @bearish_targets.sort_by { [_1.ticker, -_1.expected_price] }
+
     PriceCache.preload
   end
 

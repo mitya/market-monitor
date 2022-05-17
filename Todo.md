@@ -1,17 +1,15 @@
-- adding to favorites with a field
-- removing from favorites
+- removing from favorites & currents
+- telegram notifications for watch hits
 
+- show days since MA on averages page
 - keep in-memory prices updated
-- keep in-momory today candles updated
-
+- keep in-memory today candles updated
 - add change since close / open / 60 / 15 min to watches list
 - add swing targets "zim 60 d"
 - track swing target hits in daily loadings
 - track intraday DMA hits only if that MA was not hit in a few days
-
 - memoization
 - fix intraday sync after market close
-- telegram notifications for watch hits
 - browser notifications for watch hits
 
 - use enums for price signal interals, level hit kinds
@@ -507,3 +505,4 @@
 + separate bullish & bearish watches
 + fix adding to watches (bullish / bearish)
 + removing from watches
++ adding to favorites with a field

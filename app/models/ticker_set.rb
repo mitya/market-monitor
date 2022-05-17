@@ -14,10 +14,18 @@ class TickerSet < ApplicationRecord
 
   def instruments = tickers.map { PermaCache.instrument _1 }
 
+  def add(tickers)
+    update tickers: self.tickers | tickers
+  end
+
   class << self
+    def cached = Current.ticker_sets ||= {}
+    def get(key) = cached[key] ||= find_by(key: key)
+    def favorites = get(:favorites)
+    def current   = get(:current)
+
     def moex_1 = Instrument.active.rub.where.not(ticker: MarketInfo::Moex2).pluck(:ticker).sort
     def moex_2 = Instrument.active.rub.where(    ticker: MarketInfo::Moex2).pluck(:ticker).sort
-    def favorites = Current.favorites ||= find_by_key('favorites')
 
     def virtual
       %i[moex_1 moex_2].map { new(key: _1, tickers: send(_1)) }
@@ -35,6 +43,12 @@ class TickerSet < ApplicationRecord
           set.update! tickers: tickers.sort.map(&:upcase)
         end
       end
+    end
+
+    def update_from_instrument_set(key)
+      ticker_set = find_or_initialize_by key: key
+      instrument_set = InstrumentSet[key]
+      ticker_set.update tickers: instrument_set.tickers
     end
   end
 end

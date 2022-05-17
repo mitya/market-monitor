@@ -1,24 +1,34 @@
 class IntradayLoader
-  def initialize(instruments: nil, interval: nil, include_history: true, market: nil)
-    @market            = MarketCalendar.for(market)
-    @instruments       = instruments
+  def initialize(tickers_source: nil, interval: nil, include_history: true)
+    @tickers_source    = tickers_source
     @interval          = interval
     @include_history   = include_history
+
+    @market            = MarketCalendar.for(tickers_source) if tickers_source
     @sync_futures      = @market.ru?
-    @sync_today_candle = market != nil
-    @should_analyze    = market != nil
+    @sync_today_candle = @market != nil
+    @should_analyze    = @market != nil
   end
 
   def tickers
     return R.tickers_from_env if R.tickers_from_env.present?
 
-    tickers = Setting.sync_tickers
-    tickers += Setting.chart_tickers
-    tickers += TickerSet.pluck(:tickers).flatten if Setting.sync_ticker_sets
-    tickers.sort
+    @tickers ||= begin
+      tickers = case @tickers_source
+        when :ru then Instrument.active.stocks.rub.pluck(:ticker)
+        when :us then TickerSet.find_by_key(:current).tickers
+        else Setting.sync_tickers + Setting.chart_tickers
+      end
+
+      tickers.sort
+    end
   end
 
-  def instruments = @instruments || Instrument.for_tickers(tickers).abc
+  def instruments
+    @instruments ||= begin
+      Instrument.for_tickers(tickers).abc
+    end
+  end
 
   def interval
     return @interval if @interval
@@ -46,7 +56,7 @@ class IntradayLoader
       current_interval = interval
       interval_in_minutes = 1
       current_interval_index = (Time.current.hour * 60 + Time.current.min) / interval_in_minutes
-      # puts "#{Time.now} tick - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
+      puts "#{Time.now} tick - #{current_interval}##{current_interval_index} - last #{last_interval_index}"
 
       change_last_params = -> do
         last_tickers = current_tickers
@@ -102,6 +112,9 @@ class IntradayLoader
         instruments.each { _1.today.final! } if @market&.us?
         exit
       end
+
+      @tickers = nil
+      @instruments = nil
 
       sleep 5
     end
@@ -191,11 +204,11 @@ class IntradayLoader
     end
 
     def sync_ru
-      new(instruments: Instrument.active.stocks.rub, interval: '1min', include_history: false, market: :rub).sync
+      new(tickers_source: :ru, interval: '1min', include_history: false).sync
     end
 
     def sync_us
-      new(instruments: Instrument.active.stocks.usd.current, interval: '1min', include_history: false, market: :usd).sync
+      new(tickers_source: :us, interval: '1min', include_history: false).sync
     end
   end
 end

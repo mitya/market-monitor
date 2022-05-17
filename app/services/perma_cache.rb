@@ -70,13 +70,17 @@ class PermaCache
 
   def current_instruments_for_market(market)
     @current_instruments_for_market ||= begin
-      current_tickers = InstrumentSet.get(:current)
+      current_tickers = TickerSet.current
       {
         ru: instruments_for_market(market),
         us: instruments_for_market(market).select { current_tickers.include?(_1.ticker) }
       }
     end
     @current_instruments_for_market[MarketCalendar.normalize_market market]
+  end
+
+  def reset_current_instruments
+    @current_instruments_for_market = nil
   end
 
 

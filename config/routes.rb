@@ -55,7 +55,7 @@ Rails.application.routes.draw do
   end
 
   resources :ticker_sets, only: [] do
-    resources :items, only: [], controller: :ticker_set_items do
+    resources :items, only: [:create], controller: :ticker_set_items do
       post :toggle, on: :member
     end
   end

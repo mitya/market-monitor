@@ -49,11 +49,13 @@ class DashboardsController < ApplicationController
     else
       favorites_for_market = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
       favorites, rows = rows.partition { favorites_for_market.include? _1.ticker }
-      { main: rows, favorites: favorites }
+      { current: rows, favorites: favorites }
     end
 
-    sort_field = params[:sort] || :change
-    @groups = @groups.transform_values { |group_rows| group_rows.sort_by { _1.send(sort_field) || 0 }.reverse }
+    sort_field = params[:sort].to_s.to_sym || :change
+    asc_sorts = %i[ticker change_since_today_high]
+    @groups = @groups.transform_values { |group_rows| group_rows.sort_by { _1.send(sort_field) || 0 } }
+    @groups = @groups.transform_values { |group_rows| group_rows.reverse } unless asc_sorts.include?(sort_field)
   end
 
   def favorites

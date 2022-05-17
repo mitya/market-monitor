@@ -61,8 +61,9 @@ class Instrument < ApplicationRecord
   scope :funds, -> { where type: 'Fund' }
   scope :abc, -> { order :ticker }
   scope :in_set, -> key { where ticker: InstrumentSet.get(key)&.symbols if key && key.to_s != 'all' }
+  scope :in_ticker_set, -> key { where ticker: TickerSet.get(key).tickers }
   scope :main, -> { in_set :main }
-  scope :current, -> { in_set :current }
+  scope :current, -> { in_ticker_set :current }
   scope :small, -> { in_set :small }
   scope :for_tickers, -> tickers { where ticker: tickers.map(&:upcase) }
   scope :with_alarm, -> { joins(:levels).where(levels: { manual: true }) }

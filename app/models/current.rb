@@ -1,5 +1,5 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :favorites
+  attribute :ticker_sets
 
   # def date
   #   date = Time.now.hour > 20 ? Date.tomorrow : Date.current
