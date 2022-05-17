@@ -14,3 +14,5 @@ tr
     - if target.hit_at
       span title=distance_of_time_in_words(target.hit_at, target.created_at)
         = distance_of_time_in_words_to_now target.hit_at
+  = td :actions do
+    = link_to fa_icon(:trash), watched_target_path(target), class: 'mini-button x-remove-row'

@@ -10,6 +10,7 @@
         = th :pct_to_expected, 'E ﹪', class: 'money-cell'
         = th :pct_from_start, 'S ﹪', class: 'money-cell'
         = th :hit_at, 'Hit', class: 'money-cell'
+        = th :actions
     tbody
       - targets.each do |target|
         = render 'row', target: target

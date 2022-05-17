@@ -9,9 +9,16 @@ document.addEventListener "turbolinks:load", ->
     if link = e.target.closest('.x-copy-tickers')
       e.stopImmediatePropagation()
       syncChannel.setChartTicker(link.dataset.tickers)
+      
     if target = e.target.closest('.ticker-item')
       return if e.detail == 2
       syncChannel.setChartTicker(target.innerText)
+
+    if link = e.target.closest('.x-remove-row')
+      e.preventDefault()
+      row = link.closest('tr')
+      response = await $fetchJSON link.href, method: 'DELETE'
+      row.remove()
 
   document.addEventListener 'dblclick', (e) ->
     if target = e.target.closest('.ticker-item')

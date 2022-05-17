@@ -1,5 +1,4 @@
 - adding to favorites with a field
-- removing from watches
 - removing from favorites
 
 - keep in-memory prices updated
@@ -507,3 +506,4 @@
 + track watch hits in IntradayLoader
 + separate bullish & bearish watches
 + fix adding to watches (bullish / bearish)
++ removing from watches

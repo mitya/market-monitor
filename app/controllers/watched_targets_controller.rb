@@ -18,4 +18,10 @@ class WatchedTargetsController < ApplicationController
       list: target.bullish?? 'bullish' : 'bearish'
     }
   end
+
+  def destroy
+    target = WatchedTarget.find(params[:id])
+    target.destroy
+    render json: { ok: true }
+  end
 end
