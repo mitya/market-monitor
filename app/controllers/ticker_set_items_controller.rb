@@ -12,4 +12,12 @@ class TickerSetItemsController < ApplicationController
     PermaCache.reset_current_instruments if set.key == 'current'
     render json: { ok: true }
   end
+
+  def destroy
+    set = TickerSet.find_by_key(params[:ticker_set_id])
+    ticker = params[:id]
+    set.remove(ticker)
+    PermaCache.reset_current_instruments if set.key == 'current'
+    render json: { ok: true }
+  end
 end

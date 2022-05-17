@@ -72,8 +72,8 @@ class PermaCache
     @current_instruments_for_market ||= begin
       current_tickers = TickerSet.current
       {
-        ru: instruments_for_market(market),
-        us: instruments_for_market(market).select { current_tickers.include?(_1.ticker) }
+        ru: instruments_for_market(:ru),
+        us: instruments_for_market(:us).select { current_tickers.include?(_1.ticker) }
       }
     end
     @current_instruments_for_market[MarketCalendar.normalize_market market]

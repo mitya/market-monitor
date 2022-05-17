@@ -15,7 +15,11 @@ class TickerSet < ApplicationRecord
   def instruments = tickers.map { PermaCache.instrument _1 }
 
   def add(tickers)
-    update tickers: self.tickers | tickers
+    update tickers: (self.tickers | tickers).sort
+  end
+
+  def remove(ticker)
+    update tickers: self.tickers.without(ticker)
   end
 
   class << self

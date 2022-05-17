@@ -35,6 +35,7 @@
       = th :volatility, 'σ', class: 'money-cell'
       = th :change_since_today_low, 'L ﹪', class: 'money-cell'
       = th :change_since_today_high, 'H ﹪', class: 'money-cell'
+      = th :remove
   tbody
     - rows.each do |row|
       - inst = row.instrument
@@ -102,3 +103,5 @@
           = colorized_ratio row.change_since_today_low, precision: 0
         = td :change_since_today_high, class: "money-cell" do
           = colorized_ratio row.change_since_today_high, precision: 0
+        = td :remove, nil, class: 'text-end' do
+          = link_to fa_icon(:trash), ticker_set_item_path(set_id, row.ticker), class: 'mini-button x-remove-row'

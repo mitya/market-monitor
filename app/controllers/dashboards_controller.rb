@@ -1,21 +1,20 @@
 class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
-    @instruments ||= PermaCache.current_instruments_for_market(current_market)
+    instruments ||= PermaCache.current_instruments_for_market(current_market)
 
-    @all_candles = Candle::M1.for(@instruments).today
-    @candles = {}
+    all_candles = Candle::M1.for(instruments).today
+    candles = {}
     [1, 5, 15, 60].each do |duration|
-      last_candle_ids = @all_candles.where('time < ?', (now - duration.minutes).strftime('%H:%M')).group(:ticker).pluck('max(id)')
-      @candles[duration] = @all_candles.where(id: last_candle_ids).index_by(&:ticker)
+      last_candle_ids = all_candles.where('time < ?', (now - duration.minutes).strftime('%H:%M')).group(:ticker).pluck('max(id)')
+      candles[duration] = all_candles.where(id: last_candle_ids).index_by(&:ticker)
     end
 
-    PriceCache.preload @instruments
-    CandleCache.preload @instruments, dates: [current_calendar.today, current_calendar.yesterday]
+    PriceCache.preload instruments
+    CandleCache.preload instruments, dates: [current_calendar.today, current_calendar.yesterday]
+    recent_gains, recent_losses, recent_changes = RecentChanges.prepare instruments, intervals: [15, 60], now: now
 
-    recent_gains, recent_losses, recent_changes = RecentChanges.prepare @instruments, intervals: [15, 60], now: now
-
-    rows = @instruments.map do |inst|
+    rows = instruments.map do |inst|
       OpenStruct.new(
         ticker:                  inst.ticker,
         instrument:              inst,
@@ -26,10 +25,10 @@ class DashboardsController < ApplicationController
         change_since_today_high: inst.gain_since(inst.today_high, :last),
         last_to_yesterday_open:  inst.gain_since(inst.yesterday_open, :last),
         last_to_today_open:      inst.gain_since(inst.today_open, :last),
-        last_to_60m_ago:         inst.gain_since(@candles[60][inst.ticker]&.close, :last),
-        last_to_15m_ago:         inst.gain_since(@candles[15][inst.ticker]&.close, :last),
-        last_to_05m_ago:         inst.gain_since(@candles[ 5][inst.ticker]&.close, :last),
-        last_to_01m_ago:         inst.gain_since(@candles[ 1][inst.ticker]&.close, :last),
+        last_to_60m_ago:         inst.gain_since(candles[60][inst.ticker]&.close, :last),
+        last_to_15m_ago:         inst.gain_since(candles[15][inst.ticker]&.close, :last),
+        last_to_05m_ago:         inst.gain_since(candles[ 5][inst.ticker]&.close, :last),
+        last_to_01m_ago:         inst.gain_since(candles[ 1][inst.ticker]&.close, :last),
         yesterday_volume:        inst.yesterday&.volume_in_money,
         volume:                  inst.last_day&.volume_in_money,
         volatility:              inst.last_day&.volatility.to_f * 100,
@@ -47,8 +46,8 @@ class DashboardsController < ApplicationController
       very_illiquid, rows = rows.partition { _1.instrument.very_illiquid? }
       { main: rows, illiquid: very_illiquid }
     else
-      favorites_for_market = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
-      favorites, rows = rows.partition { favorites_for_market.include? _1.ticker }
+      market_favorites = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
+      favorites, rows = rows.partition { market_favorites.include? _1.ticker }
       { current: rows, favorites: favorites }
     end
 

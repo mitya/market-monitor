@@ -1,4 +1,3 @@
-- removing from favorites & currents
 - telegram notifications for watch hits
 
 - show days since MA on averages page
@@ -506,3 +505,4 @@
 + fix adding to watches (bullish / bearish)
 + removing from watches
 + adding to favorites with a field
++ removing from favorites & currents
