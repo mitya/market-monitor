@@ -4,10 +4,9 @@ main.container-fluid
   .row
     - if current_market == 'rub'
       - @groups.each do |key, group_rows|
-        - group_rows.in_groups_of(key == :main ? 32 : 50, false) do |rows|
-          .col-3
-            = render 'instruments_top', rows: rows,
-              fields: %i[last change volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
+        .col-4
+          = render 'instruments_top', rows: group_rows,
+            fields: %i[last change volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
     - else
       - @groups.each do |key, group_rows|
         .col-6
