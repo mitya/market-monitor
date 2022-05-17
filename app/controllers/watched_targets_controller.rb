@@ -14,7 +14,8 @@ class WatchedTargetsController < ApplicationController
     target = WatchedTarget.create ticker: ticker.upcase, expected_price: expected_price
     render json: {
       ok: true,
-      html: render_to_string(partial: 'target_row', locals: { target: target })
+      html: render_to_string(partial: 'row', locals: { target: target }),
+      list: target.bullish?? 'bullish' : 'bearish'
     }
   end
 end

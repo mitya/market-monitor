@@ -1,5 +1,6 @@
 .col-4
-  = data_table fields: nil, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table watches-table" do
+  = data_table fields: nil, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table watches-table",
+    data: { key: title.underscore } do
     thead.table-dark
       tr
         = th :icon
@@ -11,4 +12,4 @@
         = th :hit_at, 'Hit', class: 'money-cell'
     tbody
       - targets.each do |target|
-        = render 'target_row', target: target
+        = render 'row', target: target

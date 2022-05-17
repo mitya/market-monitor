@@ -26,15 +26,8 @@ document.addEventListener "turbolinks:load", ->
       response = await $fetchJSON "/watched_targets", method: 'POST', data: { text: form.querySelector('input').value }
       if response.ok
         form.reset()
-        document.querySelector('.watches-table tbody').insertAdjacentHTML 'beforeend', response.html
-
-  document.addEventListener 'keypress', (e) ->
-    if button = e.target.closest('.watch-adder .btn')
-      input = button.closest('.watch-adder').querySelector('input')
-      await $fetchJSON "/watched_targets", method: 'POST', data: { text: input.value }
-      input.value = ''
-      button.blur()
-
+        targetTable = document.querySelector(".watches-table[data-key='#{response.list}'] tbody")
+        targetTable.insertAdjacentHTML 'beforeend', response.html
 
   $delegate '.momentum-table', 'th[data-sort]', 'click', (th, e) ->
     table = th.closest('table')
