@@ -1,4 +1,3 @@
-- add change since close / open / 60 / 15 min to watches list
 - track intraday DMA hits only if that MA was not hit in a few days
 - dashboard like — dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
 - show days since MA on averages page

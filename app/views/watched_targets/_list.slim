@@ -5,6 +5,8 @@
       tr
         = th :icon
         = th :ticker, title
+        = th :change, 'Yc ﹪', class: 'money-cell'
+        = th :change_since_open, 'To ﹪', class: 'money-cell'
         = th :last, 'Last', class: 'money-cell'
         = th :expected, 'Exp', class: 'money-cell'
         = th :pct_to_expected, 'E ﹪', class: 'money-cell'
