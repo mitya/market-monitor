@@ -241,7 +241,7 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .ticker-item { cursor: pointer; }
 
 .price-bubble-cell {
-  width: 500px;
+  // width: 700px;
   padding-left: 0;
   pading-right: 0;
 }
@@ -249,14 +249,18 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 .price-bubble-row {
   overflow-x: hidden;
   position: relative;
-  width: 500px;
+  // width: 700px;
   height: 20px;
   border-radius: 4px;
   background-color: rgba(black, 0.05);
 }
 
 .price-bubble {
-  display: inline-block; position: absolute; width: 8px; height: 8px; top: 5px; border-radius: 4px; background-color: gray;
+  display: inline-block; position: absolute; width: 8px; height: 8px; top: 5px; border-radius: 4px; background-color: #999;
+
+  &.mini {
+    width: 6px; height: 6px; top: 6px; border-radius: 3px
+  }
 }
 
 .price-bubble-rule {

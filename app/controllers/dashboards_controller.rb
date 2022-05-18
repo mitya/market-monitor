@@ -145,38 +145,40 @@ class DashboardsController < ApplicationController
   end
 
   def averages
-    @instruments = PermaCache.instruments_for_market(current_market)
-    @dates = [Current.date]
-    CandleCache.preload @instruments, @dates
-    PriceCache.preload @instruments
+    show_all = params[:all].present? || current_market == 'rub'
+    selector = show_all ? :instruments_for_market : :current_instruments_for_market
+    instruments = PermaCache.send(selector, current_market)
+    dates = [Current.date]
+    CandleCache.preload instruments, dates
+    PriceCache.preload instruments
 
-    @rows = @instruments.map do |inst|
+    rows = instruments.map do |inst|
       OpenStruct.new(
-        instrument:           inst,
-        change:               inst.change_since_close,
-        change_in_3d:         inst.change_in_3d,
-        change_to_ema_20:     inst.change_to_ema_20,
-        change_to_ema_50:     inst.change_to_ema_50,
-        change_to_ema_200:    inst.change_to_ema_200,
-        change_since_w2_low:  inst.change_since_w2_low,
-        change_since_w2_high: inst.change_since_w2_high,
+        instrument:              inst,
+        ticker:                  inst.ticker,
+        change:                  inst.change_since_close,
+        change_in_3d:            inst.change_in_3d,
+        change_to_ema_20:        inst.change_to_ema_20,
+        change_to_ema_50:        inst.change_to_ema_50,
+        change_to_ema_200:       inst.change_to_ema_200,
+        change_since_w2_low:     inst.change_since_w2_low,
+        change_since_w2_high:    inst.change_since_w2_high,
         change_since_month_low:  inst.change_since_month_low,
         change_since_month_high: inst.change_since_month_high,
       )
     end
+    rows.select! { _1.change_to_ema_20 && _1.change_since_month_low }
 
-    @rows.select! { _1.change_to_ema_20 && _1.change_since_month_low }
-
-    ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY  TGKA TGKB TGKBP TGKDP TGKN].to_set
-    watched_tickers = %w[AFKS AGRO AMEZ ENPG ETLN FESH FIVE GAZP GLTR GMKN KMAZ LNTA MAGN MTLR MTLRP MVID NMTP OZON POGR POLY RASP RNFT ROSN RUAL SGZH SMLT TCSG VKCO].to_set
-    @ignored, @rows  = @rows.partition { ignored_tickers.include? _1.instrument.ticker }
-    @watched, @rows  = @rows.partition { watched_tickers.include? _1.instrument.ticker }
-    @illiquid, @rows = @rows.partition { _1.instrument.illiquid? }
-    @groups = {
-      watched: @watched,
-      other: @rows,
-      illiquid: @illiquid,
-    }
+    @groups = if current_market == 'rub'
+      illiquid, rows = rows.partition { _1.instrument.illiquid? }
+      { all: rows, illiquid: illiquid }
+    else
+      favorite_tickers = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
+      current_tickers = TickerSet.current.tickers.to_set
+      favorites, rows = rows.partition { favorite_tickers.include? _1.ticker }
+      current, rows = rows.partition { current_tickers.include? _1.ticker }
+      { favorites: favorites, current: current, other: show_all ? rows : nil }.compact
+    end
 
     sort_field = params[:sort] || :change_to_ema_50
     @groups = @groups.transform_values { |rows| rows.sort_by { _1.send(sort_field) || 0 }.reverse }
