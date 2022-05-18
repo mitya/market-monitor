@@ -26,16 +26,6 @@ https://broker.vtb.ru/trade/margins/#marginlist
     Array.from(document.querySelectorAll('.wp-block-kadence-column.inner-column-1.kadence-column_5eae3b-9f td:nth-child(1)')).map(n => n.innerText).join(' ')
 
 
-## Icons
-
-https://fontawesome.com/v5/search?m=free
-
-## Charting libs
-
-* https://github.com/tradingview/lightweight-charts
-* https://github.com/tvjsx/trading-vue-js
-* https://github.com/rrag/react-stockcharts
-
 # Data Sources
 
 https://financialmodelingprep.com/

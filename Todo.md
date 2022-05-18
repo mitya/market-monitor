@@ -1,4 +1,5 @@
-
+- load S&P future
+- calcualte the RS line
 
 # Next
 - migrate to esbuild from webpack
@@ -16,6 +17,7 @@
 - load historic M1 for US tickers & calc average in main session time
 - analyze M1 candles for daggers
 - fit to scale toggle
+- explore running processing in parallel
 - panel with ticker info — name, marketcap, changes in period
 - load missing intraday candles in single mode automatically
 - changes since low/high in predefined periods

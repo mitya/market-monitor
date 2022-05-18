@@ -223,6 +223,15 @@ export default class Chart
           title: info.distance
         @averageSeries[period].setData info.data.map  (row) -> { time: row[0], value: Number(row[1]) }
 
+    if @data.rs
+      @rsSeries = @chart.addLineSeries
+        color: 'orange'
+        lineWidth: 1
+        priceScaleId: 'left'
+        priceLineVisible: false
+        title: 'RS'
+      @rsSeries.setData @data.rs.map  (row) -> { time: row[0], value: Number(row[1]) }
+
     for title, values of @data.levels
       continue if values == null
       values = [values] unless values instanceof Array
