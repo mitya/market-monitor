@@ -10,14 +10,18 @@ class WatchedTargetsController < ApplicationController
   end
 
   def create
+    p params[:text]
+    keep = params[:text].slice!('++')
+    p params[:text]
     ticker, expected_price = params[:text].split
-    return render status: 400, json: { ok: false } unless ticker && expected_price
+    return render json: { ok: false } unless ticker && expected_price
+    return render json: { ok: false } if WatchedTarget.exists? ticker: ticker.upcase, expected_price: expected_price
 
-    target = WatchedTarget.create ticker: ticker.upcase, expected_price: expected_price
+    target = WatchedTarget.create ticker: ticker.upcase, expected_price: expected_price, keep: keep
     render json: {
       ok: true,
       html: render_to_string(partial: 'row', locals: { target: target }),
-      list: target.bullish?? 'bullish' : 'bearish'
+      list: "#{target.bullish?? 'bullish' : 'bearish'}-#{target.swing?? 'swing' : 'intraday'}"
     }
   end
 

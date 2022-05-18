@@ -1,4 +1,3 @@
-- add swing targets "zim 60 d"
 - add change since close / open / 60 / 15 min to watches list
 - track swing target hits in daily loadings
 - track intraday DMA hits only if that MA was not hit in a few days
@@ -7,7 +6,6 @@
 
 - migrate to esbuild from webpack
 - use some light JS framework
-
 - keep in-memory prices updated
 - keep in-memory today candles updated
 - memoization
@@ -507,3 +505,4 @@
 + telegram notifications for watch hits
 + Ruby 3.1
 + fix the sprockets
++ add swing targets "zim 60 ++"

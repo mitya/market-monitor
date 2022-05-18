@@ -3,9 +3,12 @@
 main.container-fluid
   .row
     .col-2
-    = render 'list', targets: @bearish_targets, title: 'Bearish'
-    = render 'list', targets: @bullish_targets, title: 'Bullish'
-
-  form.watch-adder class="d-flex justify-content-center"
-    input class="form-control form-control-sm w-auto me-2 text-uppercase"
-    button class="btn btn-sm btn-primary" = fa_icon('plus')
+    = render 'list', targets: @bearish_targets.select(&:intraday?), title: '↓', list_id: 'bearish-intraday'
+    = render 'list', targets: @bullish_targets.select(&:intraday?), title: '↑', list_id: 'bullish-intraday'
+    form.watch-adder class="d-flex justify-content-center mb-5 mt-5"
+      input class="form-control form-control-sm w-auto me-2 text-uppercase"
+      button class="btn btn-sm btn-primary" = fa_icon('plus')
+  .row
+    .col-2
+    = render 'list', targets: @bearish_targets.select(&:swing?), title: '↓', list_id: 'bearish-swing'
+    = render 'list', targets: @bullish_targets.select(&:swing?), title: '↑', list_id: 'bullish-swing'
