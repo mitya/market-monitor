@@ -156,6 +156,7 @@ class DashboardsController < ApplicationController
       OpenStruct.new(
         instrument:              inst,
         ticker:                  inst.ticker,
+        indicators:              inst.indicators,
         change:                  inst.change_since_close,
         change_in_3d:            inst.change_in_3d,
         change_to_ema_20:        inst.change_to_ema_20,

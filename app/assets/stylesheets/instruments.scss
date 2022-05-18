@@ -108,7 +108,11 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
 
 .opacity-05 { opacity: 0.5; }
 
-.percentage-bars { height: 20px; white-space: nowrap; display: inline-flex; align-items: end; }
+.percentage-bars {
+  height: 20px; white-space: nowrap; display: inline-flex; align-items: end;
+  &.low { height: 10px; }
+  &.x-low { height: 4px; }
+}
 
 .percentage-bar {
   background-color: gray;
@@ -129,12 +133,15 @@ input[type="search"]::-webkit-search-decoration:hover, input[type="search"]::-we
   .is-light-blue & { background-color: rgba(blue, 0.25); }
 
   .solid-narrow & { margin-right: 0; width: 3px; }
-  .solid & { margin-right: 0; }
+  .solid & { margin-right: 0 !important; }
 
   .m-wide & { width: 6px; }
+  .narrow & { width: 3px; margin-right: 1px; }
+  .x-narrow & { width: 2px; margin-right: 1px; }
 }
 
-.percentage-bar-text-replacement { height: 25.195px; display: inline-flex; align-items: end; }
+// .percentage-bar-text-replacement { height: 25.195px; display: inline-flex; align-items: end; }
+.percentage-bar-text-replacement { }
 
 
 .open-chart, .open-row-chart { cursor: pointer; }

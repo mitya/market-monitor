@@ -49,7 +49,7 @@ module ApplicationHelper
     tag.span IntervalTitles[interval], class: 'badge bg-secondary'
   end
 
-  def percentage_bar(value, classes: nil, rtl: false, title: nil, threshold: 15, precision: 0)
+  def percentage_bar(value, classes: nil, rtl: false, title: nil, threshold: 15, threshold_text: nil, precision: 0)
     value = (value.to_f.abs * 100).round(3)
     full_percents = value.to_i
     last_percent = (value % 1 * 100).to_i
@@ -60,7 +60,14 @@ module ApplicationHelper
       too_much = true
     end
 
-    return tag.span title, class: class_names(classes, 'percentage-bar-text-replacement') if too_much
+    if too_much
+      if threshold_text.is_a?(Numeric)
+        full_percents = [threshold_text, full_percents].max
+      else
+        return threshold_text if threshold_text
+        return tag.span title, class: class_names(classes, 'percentage-bar-text-replacement')
+      end
+    end
 
     title ||= number_to_percentage(value, precision: 1)
     last_bar = last_percent.nonzero?? tag.span(class: "percentage-bar", style: "height: #{last_percent}%") : ''
@@ -68,7 +75,8 @@ module ApplicationHelper
       full_bars = (full_percents).times.map do |n|
         tag.span class: "percentage-bar", style: "height: 100%"
       end.join.html_safe
-      too_much_sign = too_much ? '!!!' : ''
+      # too_much_sign = too_much ? '!!!' : ''
+      too_much_sign = ''
       ((rtl ? (last_bar + full_bars) : (full_bars + last_bar)) + too_much_sign).html_safe
     end
   end

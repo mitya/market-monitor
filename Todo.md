@@ -1,4 +1,3 @@
-- show days since MA on averages page
 - dashboard for: dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
 - dashboard for: tickers reached 50/200 DMA for the first time in X days.
     fields: dist since low
@@ -510,3 +509,4 @@
 + track intraday DMA hits only if that MA was not hit in recent days
 + add watch hits into price signals
 + show extremums on the same chart as MAs
++ show days since MA on averages page

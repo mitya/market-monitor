@@ -126,8 +126,6 @@ class Instrument < ApplicationRecord
   %w[d2 d3 d4 d5 d6 d7 w1 w2 m1 m3 y1 week month year].each do |date_selector|
     define_method("#{date_selector}_period_low")  { ExtremumCache.get(ticker, Current.send("#{date_selector}_ago"), :low) }
     define_method("#{date_selector}_period_high") { ExtremumCache.get(ticker, Current.send("#{date_selector}_ago"), :high) }
-    # define_method("#{date_selector}_period_low")  { candles.since(Current.send("#{date_selector}_ago")).minimum(:low) }
-    # define_method("#{date_selector}_period_high") { candles.since(Current.send("#{date_selector}_ago")).maximum(:high) }
     define_method("change_since_#{date_selector}_low")  { gain_since(send("#{date_selector}_period_low"),  :last) }
     define_method("change_since_#{date_selector}_high") { gain_since(send("#{date_selector}_period_high"), :last) }
   end
