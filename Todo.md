@@ -1,7 +1,7 @@
-- migrate to esbuild from webpack
 
 
 # Next
+- migrate to esbuild from webpack
 - filter: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
 - add mins days since some MA filter to MA dashboard
 - rename watched targes to watches

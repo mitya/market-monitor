@@ -25,10 +25,10 @@ export default class Chart
     @ticker = data.ticker
     @period = data.period
 
+    # console.log data
     # timestamps = data.candles.map((c) -> c[0])
     # console.log timestamps.length
     # console.log _.uniq(timestamps).length
-    # data.candles = data.candles[0..200]
 
     @root = document.querySelector('.intraday-charts')
 
