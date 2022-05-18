@@ -37,6 +37,7 @@ class MarketCalendar
     def msk = Time.find_zone!('Moscow')
     def timezone = @timezone ||= ru? ? msk : est
     def time = timezone.now
+    def time_str = time.to_s(:time)
 
     def opening_time_str = MarketInfo::OpeningTimes[@exchange_code]
     def closing_time_str = MarketInfo::ClosingTimes[@exchange_code]

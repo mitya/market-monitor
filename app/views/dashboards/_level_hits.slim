@@ -19,5 +19,7 @@
           = format_price(hit.level_value, unit: inst)
         = td :MA, class: ['money-cell']
           = mini_ma_badge hit.ma_length if hit.ma?
+          - if hit.watch?
+            span.bg-primary.badge WATCH
         = td :rel_vol, class: 'money-cell'
           = number_to_percentage(round_percentage(hit.rel_vol.to_f * 100), precision: 0, format: '%n ﹪')

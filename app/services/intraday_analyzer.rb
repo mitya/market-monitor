@@ -80,9 +80,7 @@ class IntradayAnalyzer
   end
 
   def check_watches(candle, instrument, watches)
-    watches.select { _1.hit_in? candle }.each do
-      _1.hit!
-    end
+    watches.select { _1.check_hit_in candle }
   end
 
   def analyze_candle(candle)

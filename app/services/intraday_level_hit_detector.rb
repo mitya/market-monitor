@@ -23,7 +23,6 @@ class IntradayLevelHitDetector
     date = @candles.first.date
     @today_hits = @instrument.level_hits.intraday.where(date: date).order(time: :desc).to_a
     @last_week_hits = @instrument.level_hits.where(date: date - 5.days .. date).to_a
-    puts "--- recent hits count #{instrument.ticker} = #{@last_week_hits.size}".cyan
 
     instrument.transaction do
       @candles.each do |candle|

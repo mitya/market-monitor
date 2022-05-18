@@ -1,6 +1,8 @@
-- add watch hits into price signals
 - show days since MA on averages page
-- dashboard like — dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
+- show extremums on the same chart as MAs
+- dashboard for: dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
+- dashboard for: tickers reached 50/200 DMA for the first time in X days.
+    fields: dist since low
 
 - rename watched targes to watches
 - migrate to esbuild from webpack
@@ -507,3 +509,4 @@
 + add swing targets "zim 60 ++"
 + track watch hits in daily loadings
 + track intraday DMA hits only if that MA was not hit in recent days
++ add watch hits into price signals

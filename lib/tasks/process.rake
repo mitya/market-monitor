@@ -54,5 +54,5 @@ envtask :set_us_last_prices do
 end
 
 envtask :last_day_watch_hits do
-  WatchedTarget.pending.each { |watch| watch.hit! if watch.hit_in? watch.instrument.yesterday }
+  WatchedTarget.pending.each { |watch| watch.check_hit_in watch.instrument.yesterday }
 end

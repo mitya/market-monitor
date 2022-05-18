@@ -202,7 +202,7 @@ class Instrument < ApplicationRecord
   def market_open? = market_work_period.include?(Time.current)
 
   def time_zone  = calendar.timezone
-  def time       = time_zone.now
+  def time       = calendar.time
   def opening_hhmm  = MarketInfo.ticker_opening_time(ticker)
   def closing_hhmm  = MarketInfo.ticker_closing_time(ticker)
   def opening_time_without_date = Current.zero_day.change(MarketInfo.ticker_opening_hour_min ticker)
