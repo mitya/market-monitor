@@ -1,5 +1,6 @@
 class WatchedTarget < ApplicationRecord
-  scope :today, -> { where 'created_at >= ?', Current.date - 1 }
+  # scope :today, -> { where 'created_at >= ?', Current.date - 1 }
+  scope :today, -> { nil }
   scope :pending, -> { where hit_at: nil }
   scope :for, -> ticker { where ticker: ticker }
 
@@ -14,6 +15,12 @@ class WatchedTarget < ApplicationRecord
 
   def hit!
     update hit_at: Time.current
+    notify
+  end
+
+  def notify
+    puts "Watch hit #{instrument} #{expected_price} at #{hit_at}".cyan
+    TelegramGateway.push "#{instrument} hit #{expected_price}"
   end
 
   before_create do

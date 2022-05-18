@@ -63,7 +63,7 @@ class DashboardsController < ApplicationController
 
     PriceCache.preload @instruments
     CandleCache.preload @instruments, dates: [current_calendar.today, current_calendar.yesterday]
-    recent_gains, recent_losses = RecentChanges.prepare @instruments, intervals: [15, 60], now: @now
+    recent_gains, recent_losses = RecentChanges.prepare @instruments, periods: [15, 60], now: @now
 
     @instrument_rows = @instruments.map do |inst|
       OpenStruct.new(

@@ -48,7 +48,7 @@ class IntradayLoader
     last_iex_update_time = Setting.iex_last_update
     today_candle_updated_at = 1.hour.ago
     larger_candles_updated_at = 1.hour.ago
-    futures_synced_at = 1.hour.ago
+    futures_synced_at = 1.hour.ago # Candle::M1.where(ticker: Instrument.futures.rub).maximum("date + time")
 
     loop do
       now = Time.current
@@ -110,6 +110,7 @@ class IntradayLoader
 
       if @market.closed?
         instruments.each { _1.today.final! } if @market&.us?
+        puts "Market closed."
         exit
       end
 

@@ -1,3 +1,24 @@
+###
+
+After a while run:
+ coffee bin/telegram.coffee sendCode # and copy the 'phone_code_hash' into the 'signIn' command
+ coffee bin/telegram.coffee signIn # then everything else should work, no need to copy anything
+
+Docs:
+
+  https://core.telegram.org/methods
+  https://core.telegram.org/method/messages.sendMessage
+  https://core.telegram.org/bots/api#getme
+
+Usage coffee bin/telegram.coffee messages NEWS
+
+  coffee bin/telegram.coffee messages NEWS
+  coffee bin/telegram.coffee last-message NEWS
+
+  coffee bin/telegram.coffee sendMessage
+
+###
+
 process = require 'process'
 path = require 'path'
 MTProto = require '@mtproto/core'
@@ -28,13 +49,22 @@ do ->
     # result = await api.call('contacts.getContacts', hash: 0)
     # result = await api.call('help.getNearestDc')
     # result = await api.call 'auth.sendCode', phone_number: '79214261515', settings: { _: 'codeSettings' } # WORKS
-    # result = await api.call 'auth.signIn', phone_number: '79214261515', phone_code: '79461', phone_code_hash: 'ecc1c89c571798015d' # WORKS
+    # result = await api.call 'auth.signIn', phone_number: '79214261515', phone_code: '83294', phone_code_hash: '3b8e46f141ed3f0fd7' # WORKS
     # result = await api.call 'users.getFullUser', id: { _: 'inputUserSelf' } # WORKS
 
     switch command
+      when 'sendCode'
+        console.log await api.call 'auth.sendCode', phone_number: '79214261515', settings: { _: 'codeSettings' } # => get phone_code_hash
+      when 'signIn'
+        console.log await api.call 'auth.signIn',   phone_number: '79214261515', phone_code: '83294', phone_code_hash: '3b8e46f141ed3f0fd7'
       when 'allChats'
-        result = await api.call('messages.getAllChats', except_ids: [])
-        console.log result
+        console.log await api.call 'messages.getAllChats', except_ids: []
+      when 'me'
+        console.log await api.call 'users.getFullUser', id: { _: 'inputUserSelf' }
+      when 'bot'
+        # console.log await api.call 'users.getFullUser', id: { user_id: 1926801217, access_hash: '1884694001194928864', _: 'inputUser' }
+        # console.log await api.call 'contacts.search', q: 'MityaTradingAlert'
+        console.log await api.call 'contacts.getContacts', q: 'MityaTradingAlert'
       when 'messages'
         channel_id  = channelIds[channelCode]?.id
         access_hash = channelIds[channelCode]?.access_hash
@@ -58,14 +88,23 @@ do ->
         text = result.messages[1].message
         console.log(text)
 
+      when 'testMessage'
+        console.log await api.call 'messages.sendMessage', message: "Test", peer: { _: 'inputPeerSelf' }, random_id: 3, silent: false
+
+
     process.exit()
   catch err
     console.warn "ERROR"
     console.warn err
 
-  # dialogs = await api.call('messages.getDialogs', limit: 50)
 
-# phone_hash ecc1c89c571798015d phone_code 79461
-# access_hash 9463499563469815876
+###
 
-# coffee bin/telegram.coffee messages NEWS
+phone_hash ecc1c89c571798015d phone_code 79461
+access_hash 9463499563469815876
+dialogs = await api.call('messages.getDialogs', limit: 50)
+
+coffee bin/telegram.coffee allChats
+coffee bin/telegram.coffee messages NEWS
+
+###

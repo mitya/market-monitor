@@ -81,7 +81,6 @@ class IntradayAnalyzer
 
   def check_watches(candle, instrument, watches)
     watches.select { _1.hit_in? candle }.each do
-      puts "Watch hit #{instrument} #{_1.expected_price} at #{candle.time_str}".cyan
       _1.hit!
     end
   end

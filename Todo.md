@@ -1,5 +1,3 @@
-- telegram notifications for watch hits
-
 - show days since MA on averages page
 - keep in-memory prices updated
 - keep in-memory today candles updated
@@ -10,6 +8,7 @@
 - memoization
 - fix intraday sync after market close
 - browser notifications for watch hits
+- dashboard like — dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
 
 - use enums for price signal interals, level hit kinds
 - check turn-around behaviours on 5m charts
@@ -506,3 +505,4 @@
 + removing from watches
 + adding to favorites with a field
 + removing from favorites & currents
++ telegram notifications for watch hits
