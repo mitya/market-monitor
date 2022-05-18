@@ -1,7 +1,7 @@
 class DashboardsController < ApplicationController
   def today
     now = current_market == 'rub' ? Current.ru_time : Current.us_time
-    instruments ||= PermaCache.current_instruments_for_market(current_market)
+    instruments = @instruments || PermaCache.current_instruments_for_market(current_market)
 
     PriceCache.preload instruments
     CandleCache.preload instruments, dates: [current_calendar.today, current_calendar.yesterday]
@@ -33,15 +33,15 @@ class DashboardsController < ApplicationController
       )
     end
 
+    market_favorites = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
+    favorites, rows = rows.partition { market_favorites.include? _1.ticker }
 
     @groups = if current_market == 'rub'
       ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
       ignored, rows = rows.partition { ignored_tickers.include? _1.instrument.ticker }
       very_illiquid, rows = rows.partition { _1.instrument.very_illiquid? }
-      { main: rows, illiquid: very_illiquid }
+      { main: rows, favorites: favorites, illiquid: very_illiquid }
     else
-      market_favorites = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
-      favorites, rows = rows.partition { market_favorites.include? _1.ticker }
       { current: rows, favorites: favorites }
     end
 

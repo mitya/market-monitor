@@ -6,7 +6,7 @@ main.container-fluid
       - @groups.each do |key, group_rows|
         .col-4
           = render 'instruments_top', rows: group_rows,
-            fields: %i[last change volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
+            fields: %i[last change change_since_open volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
     - else
       - @groups.each do |key, group_rows|
         .col-6

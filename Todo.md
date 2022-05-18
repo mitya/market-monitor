@@ -1,15 +1,14 @@
-- show days since MA on averages page
-- keep in-memory prices updated
-- keep in-memory today candles updated
-- add change since close / open / 60 / 15 min to watches list
 - add swing targets "zim 60 d"
+- add change since close / open / 60 / 15 min to watches list
 - track swing target hits in daily loadings
 - track intraday DMA hits only if that MA was not hit in a few days
-- memoization
-- fix intraday sync after market close
-- browser notifications for watch hits
 - dashboard like — dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
+- show days since MA on averages page
 
+- keep in-memory prices updated
+- keep in-memory today candles updated
+- memoization
+- browser notifications for watch hits
 - use enums for price signal interals, level hit kinds
 - check turn-around behaviours on 5m charts
 - add a way to quickly activate a US ticker
@@ -106,7 +105,6 @@
 - a row with indexes / commodity futures [needs intraday futures data]
 - inject missing intraday candles
 - refactor JS
-- Ruby 3.1
 - Rails 7
 - build 3/5m candles from 1-mins on each update
 
@@ -506,3 +504,4 @@
 + adding to favorites with a field
 + removing from favorites & currents
 + telegram notifications for watch hits
++ Ruby 3.1

@@ -20,7 +20,11 @@ class WatchedTarget < ApplicationRecord
 
   def notify
     puts "Watch hit #{instrument} #{expected_price} at #{hit_at}".cyan
-    TelegramGateway.push "#{instrument} hit #{expected_price}"
+
+    action = bullish? ? 'rise to' : 'fall to'
+    tg_message = "#{instrument} #{action} #{expected_price}"
+    tg_message = "<i>#{tg_message}</i>" if bearish?
+    TelegramGateway.push tg_message
   end
 
   before_create do
