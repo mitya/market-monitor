@@ -1,5 +1,6 @@
 task :process do
   rake 'set_us_last_prices'
+  rake 'last_day_watch_hits'
   rake 'aggregate'
   rake 'indicators'
   rake 'analyze'
@@ -50,4 +51,8 @@ end
 envtask :set_us_last_prices do
   instruments = Instrument.active.usd
   Price.set_missing_prices_to_close Price.where(ticker: instruments)
+end
+
+envtask :last_day_watch_hits do
+  WatchedTarget.pending.each { |watch| watch.hit! if watch.hit_in? watch.instrument.yesterday }
 end

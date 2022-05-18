@@ -10,9 +10,7 @@ class WatchedTargetsController < ApplicationController
   end
 
   def create
-    p params[:text]
     keep = params[:text].slice!('++')
-    p params[:text]
     ticker, expected_price = params[:text].split
     return render json: { ok: false } unless ticker && expected_price
     return render json: { ok: false } if WatchedTarget.exists? ticker: ticker.upcase, expected_price: expected_price

@@ -1,9 +1,9 @@
 - add change since close / open / 60 / 15 min to watches list
-- track swing target hits in daily loadings
 - track intraday DMA hits only if that MA was not hit in a few days
 - dashboard like — dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
 - show days since MA on averages page
 
+- rename watched targes to watches
 - migrate to esbuild from webpack
 - use some light JS framework
 - keep in-memory prices updated
@@ -506,3 +506,4 @@
 + Ruby 3.1
 + fix the sprockets
 + add swing targets "zim 60 ++"
++ track watch hits in daily loadings
