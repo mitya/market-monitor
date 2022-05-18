@@ -11,7 +11,7 @@ class Candle
     def to_s = "<#{ticker}:#{interval}:#{date}T#{hhmm}>"
     def to_full_s = "#{to_s} #{ohlc_str} P#{prev_close} #{close_change} #{rel_close_change}"
 
-    def datetime = instrument.time_zone.parse("#{date} #{hhmm}")
+    def datetime = @datetime ||= instrument.time_zone.parse("#{date} #{hhmm}")
     # def hhmm = time_before_type_cast.first(5)
     def hhmm = time.strftime('%H:%M')
 

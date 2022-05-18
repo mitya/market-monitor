@@ -22,7 +22,8 @@ class IntradayLevelHitDetector
 
     date = @candles.first.date
     @today_hits = @instrument.level_hits.intraday.where(date: date).order(time: :desc).to_a
-    @older_hits = @instrument.level_hits.intraday.where(date: date - 2.days .. date).order(time: :desc).to_a
+    @last_week_hits = @instrument.level_hits.where(date: date - 5.days .. date).to_a
+    puts "--- recent hits count #{instrument.ticker} = #{@last_week_hits.size}".cyan
 
     instrument.transaction do
       @candles.each do |candle|
@@ -34,10 +35,12 @@ class IntradayLevelHitDetector
   end
 
   def analyze_intraday_candle(candle)
+    last_few_hour_hits = @today_hits.select { _1.datetime >= candle.datetime - 3.hours }
     @levels.each do |level|
       if candle.range.include?(level.value)
-        next if @today_hits.detect { |hit| hit.level_value == level.value && hit.datetime >= candle.datetime - 3.hours }
-        next if level.ma? && @older_hits.detect { |hit| hit.ma? && hit.ma_length == level.period }
+        next if               last_few_hour_hits.any? { _1.level_value == level.value }
+        next if level.ma? && @last_week_hits.any?     { _1.source == 'ma' && _1.ma_length == level.period }
+
         puts "Level hit for #{candle.ticker}: #{level.value} #{"IMP" if level.important}".magenta
         hit = PriceLevelHit.create!(
           instrument:  candle.instrument,
@@ -51,7 +54,7 @@ class IntradayLevelHitDetector
           manual:      level.manual?,
           important:   level.important
         )
-        @today_hits << hit
+        [last_few_hour_hits, @today_hits, @last_week_hits].each { _1 << hit }
       end
     end
   end

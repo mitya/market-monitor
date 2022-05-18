@@ -29,6 +29,6 @@ class PriceLevelHit < ApplicationRecord
   def ma? = source == 'ma'
   def intraday? = time != nil
 
-  def datetime = instrument!.time_zone.parse("#{date} #{time.to_hhmm}")
+  def datetime = @datetime ||= instrument!.time_zone.parse("#{date} #{time.to_hhmm}")
   def instrument! = association_cached?(:instrument) ? instrument : PermaCache.instrument(ticker)
 end
