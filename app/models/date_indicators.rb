@@ -5,8 +5,8 @@ class DateIndicators < ApplicationRecord
 
   scope :current, -> { where current: true }
 
-  def datetime = date.end_of_day
-  def charting_timestamp = date.end_of_day.to_time.to_i
+  memoize def datetime = date.end_of_day
+  memoize def charting_timestamp = date.end_of_day.to_time.to_i
   def instrument = PermaCache.instrument(ticker)
 
   class << self

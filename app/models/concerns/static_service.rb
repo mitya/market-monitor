@@ -1,4 +1,6 @@
 concern :StaticService do
+  def thread_object_id = 'instance'
+
   class_methods do
     def instance
       new

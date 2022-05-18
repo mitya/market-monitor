@@ -338,7 +338,7 @@ class Instrument < ApplicationRecord
       end
     end
 
-    def tickers = @tickers ||= pluck(:ticker).to_set
+    memoize def tickers = pluck(:ticker).to_set
     def defined?(ticker) = tickers.include?(ticker)
 
     # IEX_TICKERS = { 'KAP@GS' => nil }

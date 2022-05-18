@@ -10,24 +10,20 @@ class IntradayLoader
     @should_analyze    = @market != nil
   end
 
-  def tickers
+  memoize def tickers
     return R.tickers_from_env if R.tickers_from_env.present?
 
-    @tickers ||= begin
-      tickers = case @tickers_source
-        when :ru then Instrument.active.stocks.rub.pluck(:ticker)
-        when :us then TickerSet.find_by_key(:current).tickers
-        else Setting.sync_tickers + Setting.chart_tickers
-      end
-
-      tickers.sort
+    tickers = case @tickers_source
+      when :ru then Instrument.active.stocks.rub.pluck(:ticker)
+      when :us then TickerSet.find_by_key(:current).tickers
+      else Setting.sync_tickers + Setting.chart_tickers
     end
+
+    tickers.sort
   end
 
-  def instruments
-    @instruments ||= begin
-      Instrument.for_tickers(tickers).abc
-    end
+  memoize def instruments
+    Instrument.for_tickers(tickers).abc
   end
 
   def interval
@@ -89,8 +85,6 @@ class IntradayLoader
       #   RefreshPricesFromTinkoff.refresh Instrument.rub.abc
       #   puts "refresh Tinkoff prices".green
       # end
-
-      # analyze
 
       if @sync_today_candle
         if today_candle_updated_at < 1.minutes.ago

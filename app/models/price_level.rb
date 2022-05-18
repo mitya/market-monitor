@@ -21,8 +21,8 @@ class PriceLevel < ApplicationRecord
 
 
   class << self
-    def textual
-      @@textual ||= Pathname("db/levels.txt").readlines(chomp: true).map do |line|
+    memoize def textual
+      Pathname("db/levels.txt").readlines(chomp: true).map do |line|
         next [] if line.blank?
         ticker, *values = line.split
         [ticker.upcase, values.map { PriceLevel.new(ticker: ticker.upcase, value: _1, manual: true) }]

@@ -4,9 +4,7 @@ class WatchedTarget < ApplicationRecord
   scope :pending, -> { where hit_at: nil }
   scope :for, -> ticker { where ticker: ticker }
 
-  before_create do
-    self.start_price = instrument.last
-  end
+  before_create { self.start_price = instrument.last }
 
   def instrument = PermaCache.instrument(ticker)
   def bullish? = expected_price >= start_price
@@ -16,7 +14,7 @@ class WatchedTarget < ApplicationRecord
   def intraday? = !keep?
 
   def check_hit_in(candle)
-    hit! candle.time if hit_in? candle
+    hit! candle.datetime if hit_in? candle
   end
 
   def hit_in?(candle)
@@ -43,7 +41,7 @@ class WatchedTarget < ApplicationRecord
     end
 
     def create_hit_record
-      PriceLevelHit.create ticker: ticker, date: time.to_date, time: time&.to_s(:time),
-        source: 'watch', manual: true, positive: bullish, level_value: expected_price
+      PriceLevelHit.create ticker: ticker, date: hit_at.to_date, time: hit_at,
+        source: 'watch', manual: true, positive: bullish?, level_value: expected_price
     end
 end

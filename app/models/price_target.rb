@@ -20,14 +20,6 @@ class PriceTarget < ApplicationRecord
       target.save!
     end
 
-    # def import_iex_data_from_dir(dir: Pathname("cache/iex-price-targets"))
-    #   Pathname(dir).glob('*.json') { |file| import_iex_data_from_file file }
-    # end
-    #
-    # def import_iex_data_from_file(file_name)
-    #   import_iex_data JSON.parse File.read file_name
-    # end
-
     def import_iex_data_from_remote(instrument, delay: 0)
       instrument = Instrument[instrument]
 

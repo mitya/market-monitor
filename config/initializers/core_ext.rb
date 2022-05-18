@@ -52,3 +52,43 @@ end
 class Integer
   Max31 = 2**31 - 1
 end
+
+class Object
+  def __unmemoize(method)
+    remove_instance_variable "@#{method}"
+  end
+end
+
+class Class
+  def memoize(method)
+    alias_method "#{method}_without_memoization", method
+    # define_method method do
+    #   result = instance_variable_get "@_#{method}"
+    #   return result unless result == nil
+    #
+    #   result = send("#{method}_without_memoization")
+    #   instance_variable_set "@_#{method}", result
+    # end
+
+    module_eval <<-EOS, __FILE__, __LINE__ + 1
+      def #{method}
+        @_#{method} ||= #{method}_without_memoization
+      end
+    EOS
+  end
+
+  def thread_memoize(method)
+    alias_method "#{method}_without_memoization", method
+
+    module_eval <<-EOS, __FILE__, __LINE__ + 1
+      def #{method}
+        if object_id = thread_object_id
+          full_object_id = "#{name}" +  object_id.to_s + "#{method}"
+          Thread.current[full_object_id] ||= #{method}_without_memoization
+        else
+          #{method}_without_memoization
+        end
+      end
+    EOS
+  end
+end

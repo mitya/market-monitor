@@ -1,18 +1,16 @@
-- dashboard for: dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
-- dashboard for: tickers reached 50/200 DMA for the first time in X days.
-    fields: dist since low
-
-- rename watched targes to watches
 - migrate to esbuild from webpack
+
+
+# Next
+- filter: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
+- add mins days since some MA filter to MA dashboard
+- rename watched targes to watches
 - use some light JS framework
 - keep in-memory prices updated
 - keep in-memory today candles updated
-- memoization
 - browser notifications for watch hits
 - use enums for price signal interals, level hit kinds
 - check turn-around behaviours on 5m charts
-- add a way to quickly activate a US ticker
-- add trend spark to MA dash
 - add a wide category to every ticker (tech / biotech / energy / industrial / real)
 - analyze last 5 M1 candles for 3%+ changes
 - load historic M1 for US tickers & calc average in main session time
@@ -38,8 +36,6 @@
 - 4% fall — first green 3m bar, min 0.4%
 - show intraday scans on the chart
 - show scan ticker in the next available intraday chart
-
-# Next
 - page with 1 chart and a list of tickers to quickly check it out
 - dash for changes in last N mins
 - expected MA hits analysis
@@ -105,11 +101,6 @@
 - a row with indexes / commodity futures [needs intraday futures data]
 - inject missing intraday candles
 - build 3/5m candles from 1-mins on each update
-
-
-# Bugs
-- volume losers don't look correct
-- some days since last MA hit don't look correct
 
 
 # Done
@@ -510,3 +501,4 @@
 + add watch hits into price signals
 + show extremums on the same chart as MAs
 + show days since MA on averages page
++ memoization

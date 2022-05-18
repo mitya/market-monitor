@@ -1,11 +1,6 @@
 class Current < ActiveSupport::CurrentAttributes
   attribute :ticker_sets
 
-  # def date
-  #   date = Time.now.hour > 20 ? Date.tomorrow : Date.current
-  #   date.on_weekend?? date.prev_weekday : date
-  # end
-
   def date = Time.now.to_date
   def last_day = @last_day ||= Candle.maximum(:date)
   def prev_day = MarketCalendar.prev(last_day, :rub)
