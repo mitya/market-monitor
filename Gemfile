@@ -24,6 +24,8 @@ gem 'telegram-bot-ruby'
 gem "graphql"
 gem 'graphiql-rails'
 
+gem "sprockets-rails"
+
 group :development do
   gem 'web-console', '>= 4.1.0'
   # gem 'rack-mini-profiler', '~> 2.0'

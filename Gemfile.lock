@@ -304,6 +304,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   slim-rails
   spring
+  sprockets-rails
   telegram-bot-ruby
   turbolinks (~> 5)
   web-console (>= 4.1.0)
@@ -313,4 +314,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.8
+   2.3.13
