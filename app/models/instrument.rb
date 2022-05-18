@@ -41,7 +41,6 @@ class Instrument < ApplicationRecord
   has_one :indicators_record, -> { current },foreign_key: 'ticker', inverse_of: :instrument_record, class_name: 'DateIndicators'
   has_many :indicators_history,              foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'DateIndicators'
 
-
   scope :with_flag, -> flag { where "? = any(flags)", flag }
   scope :tinkoff, -> { with_flag 'tinkoff' }
   scope :premium, -> { with_flag 'premium' }
@@ -76,7 +75,6 @@ class Instrument < ApplicationRecord
   scope :vtb_moex_short, -> { where "stats.extra->>'vtb_can_short' = 'true'" }
   scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
-
   scope :active,  -> { where active: true, type: 'Stock' }
   scope :active!, -> { where active: true }
 
@@ -242,6 +240,8 @@ class Instrument < ApplicationRecord
       low:    intraday_candles.map(&:low).min,
       volume: intraday_candles.sum(&:volume),
     )
+
+    CandleCache.update(today)
   end
 
   def update_larger_candles(date: Current.date)

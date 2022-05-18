@@ -37,6 +37,13 @@ class CandleCache
 
   def for_instrument(instrument) = InstrumentScope.new(instrument, self)
 
+  def update(candle)
+    @index[candle.ticker] ||= []
+    @index[candle.ticker].delete_if { _1.date == candle.date }
+    @index[candle.ticker].push candle
+    @index[candle.ticker].sort_by! &:date
+  end
+
 
   class << self
     def instance = @instance ||= new

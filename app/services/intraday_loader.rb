@@ -88,11 +88,11 @@ class IntradayLoader
 
       if @sync_today_candle
         if today_candle_updated_at < 1.minutes.ago
-          update_today_candles
+          instruments.each &:update_today_candle_intraday
           today_candle_updated_at = Time.current
         end
         if larger_candles_updated_at < 1.minutes.ago
-          update_larger_candles
+          instruments.each &:update_larger_candles
           larger_candles_updated_at = Time.current
         end
       end
@@ -154,14 +154,6 @@ class IntradayLoader
       IntradayAnalyzer.analyze inst, new_candles
       IntradayLevelHitDetector.analyze inst, candles: new_candles, levels: PriceLevel.textual[inst.ticker]
     end
-  end
-
-  def update_today_candles
-    instruments.each &:update_today_candle_intraday
-  end
-
-  def update_larger_candles
-    instruments.each &:update_larger_candles
   end
 
   def check_moex_closings

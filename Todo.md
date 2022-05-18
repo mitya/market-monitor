@@ -502,3 +502,4 @@
 + show extremums on the same chart as MAs
 + show days since MA on averages page
 + memoization
++ fix duplicated day candles
