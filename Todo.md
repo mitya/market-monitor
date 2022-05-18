@@ -5,6 +5,9 @@
 - dashboard like — dist from 1m/2w/1w lows, dist to ma 20/50/200 — select those which haven't hit upper MA in a while
 - show days since MA on averages page
 
+- migrate to esbuild from webpack
+- use some light JS framework
+
 - keep in-memory prices updated
 - keep in-memory today candles updated
 - memoization
@@ -104,8 +107,6 @@
 - store the already loaded intraday dates for each interval (perf text vs close check)
 - a row with indexes / commodity futures [needs intraday futures data]
 - inject missing intraday candles
-- refactor JS
-- Rails 7
 - build 3/5m candles from 1-mins on each update
 
 
@@ -505,3 +506,4 @@
 + removing from favorites & currents
 + telegram notifications for watch hits
 + Ruby 3.1
++ fix the sprockets
