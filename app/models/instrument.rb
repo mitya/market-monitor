@@ -148,8 +148,6 @@ class Instrument < ApplicationRecord
   def change_to_ema_50     = gain_since(:last, last_indicators&.ema_50)
   def change_to_ema_200    = gain_since(:last, last_indicators&.ema_200)
 
-  def last_indicators = !indicators || indicators.date == Current.date ? indicators : indicators.last
-
   def price_on!(date) = day_candles!.find_date(date)
   def price_on(date) = day_candles!.find_date_or_before(date.to_date + 1)
   def price_on_or_before(date) = day_candles!.find_date_or_before(date)
@@ -171,6 +169,7 @@ class Instrument < ApplicationRecord
   alias info! info
   def aggregate = PermaCache.aggregate(ticker)
   def indicators = PermaCache.indicator(ticker)
+  def last_indicators = !indicators || indicators.date == Current.date ? indicators : indicators.last
   def annotation! = annotation || create_annotation
 
   def today_candle = day_candles!.find_date(calendar.today)
@@ -266,7 +265,7 @@ class Instrument < ApplicationRecord
       end
 
       transaction do
-        grouped_m1_candles = grouped_intervals.map do |interval_data|
+        grouped_m1_candles = grouped_intervals.each do |interval_data|
           interval_data => { start:, periods:, candles: }
           candles = candles.compact
           mx_candle = candles_for(interval).on(date).find_or_initialize_by(time: start)
@@ -284,6 +283,7 @@ class Instrument < ApplicationRecord
             mx_candle.save!
             last_mx_candle = mx_candle
           else
+            next if last_mx_candle.open == nil
             mx_candle.open       = last_mx_candle.open
             mx_candle.close      = last_mx_candle.close
             mx_candle.high       = last_mx_candle.high

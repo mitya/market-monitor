@@ -134,6 +134,16 @@ module ApplicationHelper
     return value.round(-1)
   end
 
+  def round_to(value, precision: 3)
+    case value
+      when 10000.. then value.round(-2)
+      when 500.. then value.round(-1)
+      when 100.. then value.round
+      when 30..100 then value.round
+      else value
+    end
+  end
+
   def float_to_percentage(value, precision: 1)
     return nil unless value
     number_to_percentage value * 100, precision: precision

@@ -27,7 +27,7 @@ class PriceLevelHit < ApplicationRecord
   def loose? = !exact?
   def source_name = "#{source}#{ma_length}"
   def ma? = source == 'ma'
-  def watch? = source == 'watch'
+  def watch? = kind == 'watch'
   def intraday? = time != nil
 
   memoize def datetime = instrument!.time_zone.parse("#{date} #{time.to_hhmm}")

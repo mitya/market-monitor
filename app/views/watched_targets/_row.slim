@@ -8,10 +8,12 @@ tr
     = colorized_ratio inst.gain_since(inst.today_open, :last), precision: 1
   = td :last, class: 'money-cell'
     = relative_price inst.last, inst.yesterday_close, unit: inst, format: 'absolute'
+  = td :expected, class: ['money-cell', 'opacity-150': target.ma?]
+    = relative_price target.ma?? round_to(target.target_price) : target.target_price, inst.last, unit: inst, format: 'absolute'
   = td :expected, class: 'money-cell'
-    = relative_price target.expected_price, inst.last, unit: inst, format: 'absolute'
+    = mini_ma_badge target.expected_ma, title: format_price(target.target_price, target.instrument)
   = td :pct_to_expected, class: "money-cell" do
-    = relative_price target.expected_price, inst.last, unit: inst, format: 'relative', percentage_precision: 1
+    = relative_price target.target_price, inst.last, unit: inst, format: 'relative', percentage_precision: 1
   = td :pct_from_start, class: "money-cell" do
     = relative_price inst.last, target.start_price, unit: inst, format: 'relative', percentage_precision: 1
   = td :hit_at, class: "money-cell" do

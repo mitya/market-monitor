@@ -4,28 +4,30 @@ class WatchedTargetsController < ApplicationController
     targets = targets.select { _1.instrument.currency == current_currency }
 
     @bullish_targets, @bearish_targets = targets.partition &:bullish?
-    @bearish_targets = @bearish_targets.sort_by { [_1.ticker, -_1.expected_price] }
+    @bearish_targets = @bearish_targets.sort_by { [_1.ticker, -_1.target_price] }
 
     PriceCache.preload
   end
 
   def create
-    keep = params[:text].slice!('++')
-    ticker, expected_price = params[:text].split
-    return render json: { ok: false } unless ticker && expected_price
-    return render json: { ok: false } if WatchedTarget.exists? ticker: ticker.upcase, expected_price: expected_price
+    keep = params[:text].slice!('++').present?
+    ticker, target = params[:text].upcase.split
+    expected_price, expected_ma = target.include?('A') ? [nil, target.delete('A')] : [target, nil]
 
-    target = WatchedTarget.create ticker: ticker.upcase, expected_price: expected_price, keep: keep
+    return render json: { ok: false } unless ticker && (expected_price || expected_ma)
+    return render json: { ok: false } if WatchedTarget.exists? ticker: ticker, expected_price: expected_price, expected_ma: expected_ma
+
+    watch = WatchedTarget.create ticker: ticker, expected_price: expected_price, expected_ma: expected_ma, keep: keep
     render json: {
       ok: true,
-      html: render_to_string(partial: 'row', locals: { target: target }),
-      list: "#{target.bullish?? 'bullish' : 'bearish'}-#{target.swing?? 'swing' : 'intraday'}"
+      html: render_to_string(partial: 'row', locals: { target: watch }),
+      list: "#{watch.bullish?? 'bullish' : 'bearish'}-#{watch.swing?? 'swing' : 'intraday'}"
     }
   end
 
   def destroy
-    target = WatchedTarget.find(params[:id])
-    target.destroy
+    watch = WatchedTarget.find(params[:id])
+    watch.destroy
     render json: { ok: true }
   end
 end

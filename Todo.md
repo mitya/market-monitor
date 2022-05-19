@@ -1,108 +1,60 @@
-- load S&P future
-- calcualte the RS line
+- extract candle aggregation to a service
 
-# Next
-- migrate to esbuild from webpack
-- filter: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
-- add mins days since some MA filter to MA dashboard
+# Later
+- dash: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
+- dash: add mins days since some MA filter to MA dashboard
+- dash: distances to highs / lows + dashboard with new highs / new lows
+
+# Big features
+- terminal-based UI
+– comparision to a random date
+
+# Longterm analysis
+- search for consolidations
+- determine consolidation boundaries
+- expected MA hits analysis
+
+# Intraday analysis
+- check turn-around behaviours on 5m charts
+- analyze last 5 M1 candles for 3%+ changes
+- load historic M1 for US tickers & calc average in main session time
+- analyze M1 candles for daggers
+- hits for today open in 15+ mins since start, then only after 4% change
+- hits yesterday close
+- hits for yesterday/today HOD / LOD
+- hits for DMA
+- hits for predefined levels
+– find stocks with significant spikes last days
+– find stocks with strong growth last days
+– find stocks with slow growth last days
+– find stocks with N% volatility on X previous days and high within Y%
+- find stocks with continious flat
+- 2% over yesterday high signals
+- 4% fall — first green 3m bar, min 0.4%
+- HOD retest when high > 2% && low since high < -2%
+- HOD 2%+ open down break
+- long shadows (espesially with volume)
+- turn-around scanner (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
+
+# Tech
 - rename watched targes to watches
 - use some light JS framework
 - keep in-memory prices updated
 - keep in-memory today candles updated
 - browser notifications for watch hits
 - use enums for price signal interals, level hit kinds
-- check turn-around behaviours on 5m charts
-- add a wide category to every ticker (tech / biotech / energy / industrial / real)
-- analyze last 5 M1 candles for 3%+ changes
-- load historic M1 for US tickers & calc average in main session time
-- analyze M1 candles for daggers
-- fit to scale toggle
+- migrate to esbuild from webpack
 - explore running processing in parallel
+
+# Maybe
+- data: add a wide category to every ticker (tech / biotech / energy / industrial / real)
+- chart fit to scale toggle
 - panel with ticker info — name, marketcap, changes in period
 - load missing intraday candles in single mode automatically
-- changes since low/high in predefined periods
-- dashboard with distances to highs / lows + dashboard with new highs / new lows
-- turn-around scanner (+5% today, open is 20% lower than any point in last 5 sessions, 150%+ volume)
-- run empty analysis & mark candles
-- hits for today open in 15+ mins since start, then only after 4% change
-- hits yesterday close
-- hits for yesterday/today HOD / LOD
-- hits for DMA
-- hits for predefined levels
-- list of intraday scans
-- long shadows (espesially with volume)
-- volume spikes
-- volume minimizations
-- HOD retest when high > 2% && low since high < -2%
-- HOD 2%+ open down break
-- 4% fall — first green 3m bar, min 0.4%
-- show intraday scans on the chart
-- show scan ticker in the next available intraday chart
-- page with 1 chart and a list of tickers to quickly check it out
-- dash for changes in last N mins
-- expected MA hits analysis
-- save MA data for some recent date
-- fully automate multiple missing days loading
-- inject fake candles when ticker with different start times are shown
-- use dropdown for sets
-- search for stable tops / bottoms
-- list all the institutional holders & find last quarter institutional transactions
-- modal with L2 and buy / sell buttons
-- once a day set price to last for tickers without the IEX price data
-- 5-min morning data & fill gaps in 5m candles
-- show price targets on arb page
-- arb list non-jerky refresh
-- show correction since 6-m high and gains since after-high low
-- highlight signalled tickers in SPB list
-- compare Tinkoff highs / lows with IEX
-- compare Tinkoff 11:00 prices with day highs on IEX
-- check yesterday close vol/change corellation with the next day
-- find large call options blocks with prices significantly higher than the current
-- find the call / put balance point
-- find significant call / put differences when the option buyer seem to be making money
-- 2% over yesterday high signals
-- insider buy signals
-- search for period lows / highs (e.g. 1w)
-- calculate average change from low-to-high
-- institutional ownership UI
-- analyze large moves (from flat and from prior slow move)
-- analyze shelves
-- indexes state bar & index updates
-- constant price update process for TI
-- new chart engine
-- improve level rebound search logic
-- iex largest trades
-- iex International symbols
-- search for consolidations
-- determine consolidation boundaries
-- add breakout dates to rockets
-- don't check Europe & Moex2 in the evening
-- intraday accelerations
-- intraday search for more than 1% in 10-min movements
-- intraday search for above average volume in 5 min
-- intraday alarms
-- custom categories (coal / gas / ...)
-- search for pull backs
-- convert rub-usd based on date
-– find stocks with significant spikes last days
-– find stocks with strong growth last days
-– find stocks with slow growth last days
-– find stocks with N% volatility on X previous days and high within Y%
-- find stocks with continious flat
 - portfolio: add a new ticker from UI
-- extract special dates
-- disable stocks without any recent data
-- russian ticker company info
-- maintain average volume for last N months
-- ticker selection & commands
-- change insider transactions to new API with `from` parameter
-– comparision to a random date
 - column selection
-- terminal-based UI
-- store the already loaded intraday dates for each interval (perf text vs close check)
-- a row with indexes / commodity futures [needs intraday futures data]
-- inject missing intraday candles
-- build 3/5m candles from 1-mins on each update
+- row with indexes & commodity futures
+
 
 
 # Done
@@ -505,3 +457,4 @@
 + show days since MA on averages page
 + memoization
 + fix duplicated day candles
++ MA watches

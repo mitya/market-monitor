@@ -12,11 +12,11 @@ module LevelHitsHelper
   end
 
   def ma_badge(length)
-    tag.span "MA #{length}", class: "badge #{MA_BG_CLASSES[length]}"
+    tag.span "MA #{length}", class: "badge #{MA_BG_CLASSES[length]}" if length
   end
 
-  def mini_ma_badge(length)
-    tag.span length, class: ['badge', MA_BG_CLASSES[length]]
+  def mini_ma_badge(length, **args)
+    tag.span length, class: ['badge', MA_BG_CLASSES[length]], **args if length
   end
 
   MA_BG_CLASSES = {

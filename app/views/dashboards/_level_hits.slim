@@ -16,7 +16,7 @@
         = td :icon, instrument_icon(inst)
         = td :ticker, format_ticker(inst)
         = td :level, class: ['money-cell', red_green_class(hit.positive?)] do
-          = format_price(hit.level_value, unit: inst)
+          = tag.span format_price(hit.level_value, unit: inst), class: hit.watch?? 'watch-hit-price' : nil
         = td :MA, class: ['money-cell']
           = mini_ma_badge hit.ma_length if hit.ma?
           - if hit.watch?
