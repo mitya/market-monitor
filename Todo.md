@@ -1,4 +1,4 @@
-- extract candle aggregation to a service
+
 
 # Later
 - dash: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
@@ -458,3 +458,4 @@
 + memoization
 + fix duplicated day candles
 + MA watches
++ extract candle aggregation to a service

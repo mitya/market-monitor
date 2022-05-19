@@ -88,11 +88,11 @@ class IntradayLoader
 
       if @sync_today_candle
         if today_candle_updated_at < 1.minutes.ago
-          instruments.each &:update_today_candle_intraday
+          instruments.each { CandleAggregator.new(_1).update_today_candle_intraday }
           today_candle_updated_at = Time.current
         end
         if larger_candles_updated_at < 1.minutes.ago
-          instruments.each &:update_larger_candles
+          instruments.each { CandleAggregator.new(_1).update_larger_candles }
           larger_candles_updated_at = Time.current
         end
       end

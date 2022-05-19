@@ -46,7 +46,8 @@ class WatchedTarget < ApplicationRecord
     end
 
     def create_hit_record
-      PriceLevelHit.create ticker: ticker, date: hit_at.to_date, time: hit_at, kind: 'watch'
-        source: price?? 'level' : 'ma', manual: true, positive: bullish?, level_value: expected_price, ma_length: expected_ma
+      PriceLevelHit.create ticker: ticker, date: hit_at.to_date, time: hit_at,
+        kind: 'watch', source: price?? 'level' : 'ma',
+        manual: true, positive: bullish?, level_value: expected_price, ma_length: expected_ma
     end
 end
