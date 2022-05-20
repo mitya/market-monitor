@@ -45,7 +45,7 @@ class IntradayHitDetector
           instrument:  candle.instrument,
           date:        candle.date,
           time:        candle.time,
-          positive:    candle.up_since_open?,
+          positive:    candle.rel_change_since_predecessor(15.minutes) > 0,
           rel_vol:     candle.volume_to_average,
           source:      level.source_type,
           ma_length:   level.period,
@@ -53,6 +53,7 @@ class IntradayHitDetector
           manual:      level.manual?,
           important:   level.important
         )
+        hit.check_importance!
 
         if hit.ma? && PriceLevelHit.where(ticker: hit.ticker, date: candle.date - 5.days .. candle.date, ma_length: hit.ma_length).count > 1
           puts "-- last week #{level.period} #{hit.ma_length}"

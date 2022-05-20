@@ -23,8 +23,16 @@ class Candle
     def is_opening! = update!(is_opening: true)
 
     def change_since_open     = instrument.today_open && (close - instrument.today_open)
-    def rel_change_since_open = instrument.today_open && (close - instrument.today_open / instrument.today_open)
+    def rel_change_since_open = instrument.today_open && (close - instrument.today_open) / instrument.today_open
     def up_since_open? = change_since_open.to_f >= 0
+
+    def predecessor(duration = 15.minutes) = same_day_siblings.where('time >= ?', (time - duration).to_fs(:time)).order(:time).first
+
+    def rel_change_since_predecessor(duration = 15.minutes)
+      pred = predecessor(duration)
+      base = pred && pred != self ? pred.close : open
+      (close - base) / base
+    end
 
     class << self
       def intraday? = true

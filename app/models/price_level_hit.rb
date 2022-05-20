@@ -34,4 +34,10 @@ class PriceLevelHit < ApplicationRecord
 
   memoize def datetime = instrument!.time_zone.parse("#{date} #{time.to_hhmm}")
   def instrument! = PermaCache.instrument(ticker)
+
+  def check_importance!
+    return if important?
+    sibling_params = ma?? { source:, ma_length: } : { level_value: }
+    update! important: !instrument.level_hits.where(sibling_params).where('date > ?', 2.weeks.ago).exists?    
+  end
 end

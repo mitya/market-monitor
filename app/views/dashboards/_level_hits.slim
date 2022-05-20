@@ -10,7 +10,7 @@
   tbody
     - @level_hits.each do |hit|
       - inst = hit.instrument!
-      - classes = class_names('bg-success text-white' => hit.important? && hit.positive?, 'bg-danger text-white' => hit.important? && !hit.positive?, 'opacity-40' => inst.ignored?)
+      - classes = class_names('bg-highlight' => hit.important?, 'opacity-40' => inst.ignored?)
       tr(class=classes)
         = td :time, l(hit.time, format: '%H:%M'), class: 'fixed-font'
         = td :icon, instrument_icon(inst)

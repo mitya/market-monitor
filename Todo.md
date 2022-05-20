@@ -1,6 +1,3 @@
-- determine MA direction based on last 15 mins
-- mark MA50/200 hits as important if they are first in 1 month, x-important if 2m
-- mark level hits as important if is first time in 2 weeks
 - recheck intraday MA hits
 
 # Later
@@ -467,3 +464,5 @@
 + extract candle aggregation to a service
 + show watches on charts
 + virtual list with watched tickers
++ determine hit direction based on last 15 mins
++ mark level hits as important if is first time in 2 weeks
