@@ -30,9 +30,10 @@ class TickerSet < ApplicationRecord
 
     def moex_1 = Instrument.active.rub.where.not(ticker: MarketInfo::Moex2).pluck(:ticker).sort
     def moex_2 = Instrument.active.rub.where(    ticker: MarketInfo::Moex2).pluck(:ticker).sort
+    def watched = WatchedTarget.distinct.pluck(:ticker).sort
 
     def virtual
-      %i[moex_1 moex_2].map { new(key: _1, tickers: send(_1)) }
+      %i[moex_1 moex_2 watched].map { new(key: _1, tickers: send(_1)) }
     end
 
     def stored = order(:key)

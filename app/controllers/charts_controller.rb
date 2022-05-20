@@ -13,7 +13,7 @@ class ChartsController < ApplicationController
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
 
-    @custom_ticker_sets = TickerSet.stored
+    @custom_ticker_sets = TickerSet.list
     @custom_ticker_sets_text = @custom_ticker_sets.map(&:as_line).join("\n")
     @predefined_ticker_sets = TickerSet.from_instrument_sets
 

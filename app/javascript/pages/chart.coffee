@@ -10,7 +10,7 @@ singleMode = false
 isDaily = false
 isZeroScale = false
 
-levelColors =     { MA20: 'blue',    MA50: 'green',   MA100: 'orange', MA200: 'red',     open: 'orange',  close: 'orange',  intraday: 'gray'  , swing: 'black', watches: 'blue' }
+levelColors =     { MA20: 'blue',    MA50: 'green',   MA100: 'orange', MA200: 'red',     open: 'orange',  close: 'orange',  intraday: 'gray'  , swing: 'black', watches: 'black' }
 levelLineStyles = { MA20: 'Dashed',  MA50: 'Dashed',  MA100: 'Solid',   MA200: 'Dashed',   open: 'Solid', close: 'Dotted',  intraday: 'Dotted', swing: 'Solid', watches: 'Dashed' }
 levelLineWidths = { MA20: 2,         MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,         intraday: 2       , swing: 1, watches: 3 }
 
@@ -208,7 +208,7 @@ export default class Chart
       else levelColors[title]
 
     levelLineStyleFor = (title) -> switch
-      when title.startsWith('+') || title.startsWith('–') then LineStyle.Solid
+      when title.startsWith('+') || title.startsWith('–') then LineStyle.Dotted
       else LineStyle[levelLineStyles[title]]
 
     if @data.averages
@@ -240,7 +240,7 @@ export default class Chart
           price: Number(level)
           color: levelColorFor(title)
           opacity: 0.5
-          lineWidth: levelLineWidths[title]
+          lineWidth: levelLineWidths[title] ? 2
           lineStyle: levelLineStyleFor(title)
           axisLabelVisible: if title == 'watches' then false else @data.levelLabelsVisible
           title: if title == 'watches' then null else title

@@ -1,8 +1,7 @@
-- recheck intraday MA hits
-- virtual list with watched tickers
 - determine MA direction based on last 15 mins
 - mark MA50/200 hits as important if they are first in 1 month, x-important if 2m
-- mark level hits as important if first in 1m
+- mark level hits as important if is first time in 2 weeks
+- recheck intraday MA hits
 
 # Later
 - dash: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
@@ -467,3 +466,4 @@
 + MA watches
 + extract candle aggregation to a service
 + show watches on charts
++ virtual list with watched tickers
