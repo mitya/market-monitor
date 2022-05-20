@@ -4,6 +4,7 @@ class WatchedTarget < ApplicationRecord
   scope :for, -> ticker { where ticker: ticker }
 
   before_create { self.start_price = instrument.last }
+  after_create :add_to_current_if_needed
 
   def instrument = PermaCache.instrument(ticker)
   def bullish? = target_price >= start_price
@@ -48,6 +49,12 @@ class WatchedTarget < ApplicationRecord
     def create_hit_record
       PriceLevelHit.create ticker: ticker, date: hit_at.to_date, time: hit_at,
         kind: 'watch', source: price?? 'level' : 'ma',
-        manual: true, positive: bullish?, level_value: expected_price, ma_length: expected_ma
+        manual: true, positive: bullish?, level_value: target_price, ma_length: expected_ma
+    end
+
+    def add_to_current_if_needed
+      if instrument.usd? && !TickerSet.current.include?(ticker)
+        TickerSet.current.add [ticker]
+      end
     end
 end

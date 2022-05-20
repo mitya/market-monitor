@@ -66,7 +66,7 @@ rake tinkoff:days:missing since=2022-04-01 ok=1 tickers='BRBR DINO SHEL EMBC PAR
 
 # Destroying tickers
 
-rake t:destroy ticker='BLL' ok=1
+rake t:destroy ticker='DKNG' ok=1
 rake tinkoff:instruments:sync ok=1
 
 
@@ -80,21 +80,21 @@ rake tinkoff:premium:import
 rake tinkoff:instruments ok=1
 rake SetIexTickers
 rake empty:iex
-export tickers='ESAB WBD ENOV'
+export tickers='DKNG BALL'
 rake tinkoff:logos:download
+rake tinkoff:days:years tinkoff:days:special
+rake candles:set_prev_closes candles:set_average_change candles:set_d5_volume
+rake set_first_date_auto tickers='ESAB WBD ENOV'
+
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1
-rake candles:set_prev_closes candles:set_average_change candles:set_d5_volume
-
 rake iex:days:missing since=2021-12-01 special=1 ok=1 reverse=1 tickers='NU'
-rake set_first_date_auto tickers='ESAB WBD ENOV'
 
 ## Optional
 rake set_first_date ticker=GRUB date=2021-03-25
 rake iex:symbols:load iex:symbols:refresh
 rake iex:days:period period=ytd
-rake tinkoff:days:year tinkoff:days:special tickers='ESAB WBD ENOV'
-rake tinkoff:days:year tinkoff:days:special
+rake tinkoff:days:years tinkoff:days:special
 
 ## Import List
 rake list:clear tickers=''
@@ -105,3 +105,5 @@ rake list:import list=portfolio
 
 ## Loading days for recently activated tickers
 rake tinkoff:days:previous
+
+## Tickers to look

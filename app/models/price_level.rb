@@ -15,9 +15,10 @@ class PriceLevel < ApplicationRecord
   def calc_average_volume = candles.map(&:volume).average
   def cache_volume = update!(total_volume: calc_total_volume, average_volume: calc_average_volume)
   def value_plus(delta) = value + value * delta
-  def inspect = "<Level #{ticker} #{value}>"
+  def inspect = "<Level #{ticker} #{value} #{period}>".strip
   def source_type = kind == 'MA' ? 'ma' : 'level'
   def ma? = kind == 'MA'
+  def direct? = !ma?
 
 
   class << self

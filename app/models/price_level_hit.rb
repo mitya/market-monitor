@@ -24,8 +24,10 @@ class PriceLevelHit < ApplicationRecord
     self.continuation = instrument.level_hits.where(date: MarketCalendar.prev2(date)).any?
   end
 
-  def loose? = !exact?
+  def inspect = "<Hit##{id} #{ticker} #{date} #{source}#{ma_length} #{level_value}>"
   def source_name = "#{source}#{ma_length}"
+
+  def loose? = !exact?
   def ma? = source == 'ma'
   def watch? = kind == 'watch'
   def intraday? = time != nil

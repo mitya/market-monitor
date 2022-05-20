@@ -13,8 +13,8 @@ class RecentChanges
         recent_gains[interval]  = recent_candles.map { |inst, candles| [inst.ticker, inst.gain_since(candles.minimum(:low),  :last)] }.to_h
         recent_losses[interval] = recent_candles.map { |inst, candles| [inst.ticker, inst.gain_since(candles.maximum(:high), :last)] }.to_h
         recent_changes[interval] = recent_candles.map do |inst, _|
-          gain = recent_gains[interval][inst.ticker]
-          loss = recent_losses[interval][inst.ticker]
+          gain = recent_gains[interval][inst.ticker].to_f
+          loss = recent_losses[interval][inst.ticker].to_f
           [inst.ticker, gain.abs > loss.abs ? gain : loss]
         end.to_h
       end

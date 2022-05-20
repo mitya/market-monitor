@@ -10,9 +10,9 @@ singleMode = false
 isDaily = false
 isZeroScale = false
 
-levelColors =     { MA20: 'blue',    MA50: 'green',   MA100: 'orange', MA200: 'red',     open: 'orange',  close: 'orange',   intraday: 'gray'  , swing: 'black' }
-levelLineStyles = { MA20: 'Dashed',  MA50: 'Dashed',  MA100: 'Solid',   MA200: 'Dashed',   open: 'Solid', close: 'Dotted',  intraday: 'Dotted', swing: 'Solid'}
-levelLineWidths = { MA20: 2,         MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,         intraday: 2       , swing: 1      }
+levelColors =     { MA20: 'blue',    MA50: 'green',   MA100: 'orange', MA200: 'red',     open: 'orange',  close: 'orange',  intraday: 'gray'  , swing: 'black', watches: 'blue' }
+levelLineStyles = { MA20: 'Dashed',  MA50: 'Dashed',  MA100: 'Solid',   MA200: 'Dashed',   open: 'Solid', close: 'Dotted',  intraday: 'Dotted', swing: 'Solid', watches: 'Dashed' }
+levelLineWidths = { MA20: 2,         MA50: 2,         MA100: 2,         MA200: 2,         open: 2,        close: 2,         intraday: 2       , swing: 1, watches: 3 }
 
 
 
@@ -242,8 +242,8 @@ export default class Chart
           opacity: 0.5
           lineWidth: levelLineWidths[title]
           lineStyle: levelLineStyleFor(title)
-          axisLabelVisible: @data.levelLabelsVisible
-          title: title
+          axisLabelVisible: if title == 'watches' then false else @data.levelLabelsVisible
+          title: if title == 'watches' then null else title
 
   addCandle: (data) ->
     candle = dataRowToCandle data

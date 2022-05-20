@@ -1,9 +1,16 @@
-
+- recheck intraday MA hits
+- virtual list with watched tickers
+- determine MA direction based on last 15 mins
+- mark MA50/200 hits as important if they are first in 1 month, x-important if 2m
+- mark level hits as important if first in 1m
 
 # Later
 - dash: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
 - dash: add mins days since some MA filter to MA dashboard
-- dash: distances to highs / lows + dashboard with new highs / new lows
+- dash with first hits of MA50/200 in 1 month
+- dash with distances to highs / lows
+- weekly dash of new highs & new lows (& consider when old new H/L happened)
+- mark if ticker is above Yh or below Yl (needs right EOD data)
 
 # Big features
 - terminal-based UI
@@ -459,3 +466,4 @@
 + fix duplicated day candles
 + MA watches
 + extract candle aggregation to a service
++ show watches on charts

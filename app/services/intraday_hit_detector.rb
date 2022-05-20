@@ -1,4 +1,4 @@
-class IntradayLevelHitDetector
+class IntradayHitDetector
   include StaticService
 
   TRACKED_MA_HITS = %w[
@@ -13,7 +13,7 @@ class IntradayLevelHitDetector
     if indicators = instrument.indicators
       [20, 50, 100, 200].each do |period|
         important = TRACKED_MA_HITS.include?(instrument.ticker) # && period >= 50
-        @levels << PriceLevel.new(ticker: instrument.ticker, value: indicators.send("ema_#{period}"),  kind: 'MA', period:  period, important: important)
+        @levels << PriceLevel.new(ticker: instrument.ticker, value: indicators.send("ema_#{period}"),  kind: 'MA', period: period, important: important)
       end
     end
 
@@ -22,7 +22,7 @@ class IntradayLevelHitDetector
 
     date = @candles.first.date
     @today_hits = @instrument.level_hits.intraday.where(date: date).order(time: :desc).to_a
-    @last_week_hits = @instrument.level_hits.where(date: date - 5.days .. date).to_a
+    @last_week_hits = @instrument.level_hits.where(date: instrument.calendar.prev_day(date, n: 5) .. date).to_a
 
     instrument.transaction do
       @candles.each do |candle|
@@ -34,13 +34,13 @@ class IntradayLevelHitDetector
   end
 
   def analyze_intraday_candle(candle)
-    last_few_hour_hits = @today_hits.select { _1.datetime >= candle.datetime - 3.hours }
+    # last_few_hour_hits = @today_hits.select { _1.datetime >= candle.datetime - 3.hours }
     @levels.each do |level|
       if candle.range.include?(level.value)
-        next if               last_few_hour_hits.any? { _1.level_value == level.value }
-        next if level.ma? && @last_week_hits.any?     { _1.source == 'ma' && _1.ma_length == level.period }
+        next if level.direct? && @today_hits.any?     { _1.source == 'level' && _1.level_value == level.value }
+        next if level.ma?     && @last_week_hits.any? { _1.source == 'ma' && _1.ma_length == level.period }
 
-        puts "Level hit for #{candle.ticker}: #{level.value} #{"IMP" if level.important}".magenta
+        puts "Level hit for #{candle.ticker}: #{level.value} #{"MA#{level.period}" if level.ma?} #{"!!" if level.important}".magenta
         hit = PriceLevelHit.create!(
           instrument:  candle.instrument,
           date:        candle.date,
@@ -53,11 +53,22 @@ class IntradayLevelHitDetector
           manual:      level.manual?,
           important:   level.important
         )
-        [last_few_hour_hits, @today_hits, @last_week_hits].each { _1 << hit }
+
+        if hit.ma? && PriceLevelHit.where(ticker: hit.ticker, date: candle.date - 5.days .. candle.date, ma_length: hit.ma_length).count > 1
+          puts "-- last week #{level.period} #{hit.ma_length}"
+          puts @last_week_hits.any?     { _1.source == 'ma' && _1.ma_length == level.period }
+          pp @last_week_hits
+          puts "-- today"
+          pp @today_hits
+          raise "Duplicated MA hit for #{hit.inspect} #{level.inspect}"
+        end
+
+        [@today_hits, @last_week_hits].each { _1 << hit }
       end
     end
   end
 end
 
 __END__
-Instrument.active.each { IntradayLevelHitDetector.analyze _1 }
+Instrument.active.each { IntradayHitDetector.analyze _1 }
+IntradayHitDetector.analyze(instr(:mgy), candles: instr(:mgy).candles_for('1min').where(date: Date.current, time: '11:31'))

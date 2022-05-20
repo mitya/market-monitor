@@ -22,7 +22,6 @@ class Instrument < ApplicationRecord
   has_many :orders,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :operations,                      foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :extremums,                       foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
-  has_many :spikes,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :splits,                          foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :missing_dates,                   foreign_key: 'ticker', inverse_of: :instrument, dependent: :delete_all
   has_many :watched_targets,                 foreign_key: 'ticker', dependent: :delete_all
@@ -39,7 +38,9 @@ class Instrument < ApplicationRecord
   has_one :info_record,                      foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete, class_name: 'InstrumentInfo'
   has_one :aggregate_record,                 foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete, class_name: 'Aggregate'
   has_one :indicators_record, -> { current },foreign_key: 'ticker', inverse_of: :instrument_record, class_name: 'DateIndicators'
+
   has_many :indicators_history,              foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all, class_name: 'DateIndicators'
+  has_many :spikes,                          foreign_key: 'ticker', inverse_of: :instrument_record, dependent: :delete_all
 
   scope :with_flag, -> flag { where "? = any(flags)", flag }
   scope :tinkoff, -> { with_flag 'tinkoff' }

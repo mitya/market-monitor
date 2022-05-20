@@ -1,23 +1,22 @@
 class WatchedTargetsController < ApplicationController
   def index
-    targets = WatchedTarget.today.order(:ticker, :expected_price)
-    targets = targets.select { _1.instrument.currency == current_currency }
-
-    @bullish_targets, @bearish_targets = targets.partition &:bullish?
+    @targets = WatchedTarget.today.order(:ticker, :expected_price).select { _1.instrument.currency == current_currency }
+    @bullish_targets, @bearish_targets = @targets.partition &:bullish?
     @bearish_targets = @bearish_targets.sort_by { [_1.ticker, -_1.target_price] }
 
     PriceCache.preload
   end
 
   def create
-    keep = params[:text].slice!('++').present?
-    ticker, target = params[:text].upcase.split
-    expected_price, expected_ma = target.include?('A') ? [nil, target.delete('A')] : [target, nil]
+    text = params[:text].upcase
+    intraday = text.slice!('*').present?
+    ticker, target = text.split
+    expected_price, expected_ma = target.include?('M') ? [nil, target.delete('M')] : [target, nil]
 
     return render json: { ok: false } unless ticker && (expected_price || expected_ma)
     return render json: { ok: false } if WatchedTarget.exists? ticker: ticker, expected_price: expected_price, expected_ma: expected_ma
 
-    watch = WatchedTarget.create ticker: ticker, expected_price: expected_price, expected_ma: expected_ma, keep: keep
+    watch = WatchedTarget.create ticker: ticker, expected_price: expected_price, expected_ma: expected_ma, keep: !intraday
     render json: {
       ok: true,
       html: render_to_string(partial: 'row', locals: { target: watch }),

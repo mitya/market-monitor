@@ -77,6 +77,9 @@ class ChartsController < ApplicationController
             map[ticker][:levels]["#{gain_pct > 0 ? '+' : '–'}#{gain_pct.abs}%"] = extremum
           end
 
+          map[ticker][:levels].merge! watches: instrument.watched_targets.map { _1.target_price }
+          # map[ticker][:watches] = instrument.watched_targets.map { _1.target_price }
+
           # rs_ref = Instrument['IVZ'].day_candles.asc.index_by &:date
           # map[ticker][:rs] = candles.map { [_1.charting_timestamp, ((_1.close / rs_ref[_1.date]&.close).round(5) rescue nil) ] }.reject { _1.second == nil }
         end

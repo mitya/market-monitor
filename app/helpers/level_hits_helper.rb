@@ -20,7 +20,7 @@ module LevelHitsHelper
   end
 
   MA_BG_CLASSES = {
-    20  => 'bg-secondary',
+    20  => 'bg-navy',
     50  => 'bg-success',
     100 => 'bg-warning',
     200 => 'bg-danger',

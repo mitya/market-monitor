@@ -10,7 +10,13 @@ class MarketCalendar
 
     def date = Time.now.to_date
     def last_day = @last_day ||= Candle.maximum(:date)
-    def prev_day = MarketCalendar.prev(last_day, @market)
+    def prev_day(base_date = last_day, n: 1)
+      return MarketCalendar.prev(base_date, @market) if n == 1
+
+      result = base_date
+      n.times { result = MarketCalendar.prev(result, @market) }
+      result
+    end
 
     def yesterday = closest_weekday(date.prev_weekday, @market)
     def d2_ago    = closest_weekday(yesterday.prev_weekday)

@@ -152,7 +152,7 @@ class IntradayLoader
     instruments.abc.each do |inst|
       new_candles = inst.candles_for(interval).on(Current.date).non_analyzed.order(:time)
       IntradayAnalyzer.analyze inst, new_candles
-      IntradayLevelHitDetector.analyze inst, candles: new_candles, levels: PriceLevel.textual[inst.ticker]
+      IntradayHitDetector.analyze inst, candles: new_candles, levels: PriceLevel.textual[inst.ticker]
     end
   end
 
