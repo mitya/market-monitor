@@ -1,12 +1,13 @@
-- recheck intraday MA hits
+- weekly dash of new highs & new lows (& consider when old new H/L happened)
+- dashboard with distance from 1h high & after-high low
 
 # Later
+- weekly dash with first hits of MA50/200 in 1 month
 - dash: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
 - dash: add mins days since some MA filter to MA dashboard
-- dash with first hits of MA50/200 in 1 month
 - dash with distances to highs / lows
-- weekly dash of new highs & new lows (& consider when old new H/L happened)
-- mark if ticker is above Yh or below Yl (needs right EOD data)
+- delete intraday MA hits at EOD processing
+- mark EOD hits as important if is the first one in 2 weeks
 
 # Big features
 - terminal-based UI
@@ -48,6 +49,11 @@
 - use enums for price signal interals, level hit kinds
 - migrate to esbuild from webpack
 - explore running processing in parallel
+
+# Data
+- mark if ticker is above Yh or below Yl (needs right EOD data)
+- US 1m volumes
+- US avg volume history for every 5m period
 
 # Maybe
 - data: add a wide category to every ticker (tech / biotech / energy / industrial / real)
@@ -466,3 +472,4 @@
 + virtual list with watched tickers
 + determine hit direction based on last 15 mins
 + mark level hits as important if is first time in 2 weeks
++ ensure that today candles are not cached

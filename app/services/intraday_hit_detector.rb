@@ -73,3 +73,4 @@ end
 __END__
 Instrument.active.each { IntradayHitDetector.analyze _1 }
 IntradayHitDetector.analyze(instr(:mgy), candles: instr(:mgy).candles_for('1min').where(date: Date.current, time: '11:31'))
+PriceLevelHit.where(ticker: 'OZON', date: 2.week.ago.., source: 'ma', ma_length: 20)

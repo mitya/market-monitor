@@ -55,7 +55,7 @@ end
 
 class Object
   def __unmemoize(method)
-    remove_instance_variable "@#{method}"
+    instance_variable_set "@#{method}", nil
   end
 end
 

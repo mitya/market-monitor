@@ -4460,16 +4460,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BG7423",
-      "ticker": "CR",
-      "isin": "US2243991054",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Crane Co",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BMGPW0",
       "ticker": "JJSF",
       "isin": "US4660321096",
@@ -18887,5 +18877,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1889
+  "total": 1888
 }

@@ -4,7 +4,7 @@ class DashboardsController < ApplicationController
     instruments = @instruments || PermaCache.current_instruments_for_market(current_market)
 
     PriceCache.preload instruments
-    CandleCache.preload instruments, dates: [current_calendar.today, current_calendar.yesterday]
+    CandleCache.preload! instruments, dates: [current_calendar.today, current_calendar.yesterday]
     oldest_candles = RecentChanges.oldest_candles_for_periods instruments, periods: [1, 5, 15, 60], now: now
     recent_gains, recent_losses, recent_changes = RecentChanges.prepare instruments, periods: [15, 60], now: now
 
@@ -62,7 +62,7 @@ class DashboardsController < ApplicationController
     @now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
     PriceCache.preload @instruments
-    CandleCache.preload @instruments, dates: [current_calendar.today, current_calendar.yesterday]
+    CandleCache.preload! @instruments, dates: [current_calendar.today, current_calendar.yesterday]
     recent_gains, recent_losses = RecentChanges.prepare @instruments, periods: [15, 60], now: @now
 
     @instrument_rows = @instruments.map do |inst|
@@ -100,7 +100,7 @@ class DashboardsController < ApplicationController
   def last_week
     @instruments = PermaCache.instruments_for_market(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
-    CandleCache.preload @instruments, dates: @dates
+    CandleCache.preload! @instruments, dates: @dates
     number_of_gainers = current_market == 'rub' ? 15 : 30
 
     @results = @dates.each_with_object({}) do |date, hash|
@@ -126,7 +126,7 @@ class DashboardsController < ApplicationController
   def last_week_spikes
     @instruments = PermaCache.instruments_for_market(current_market)
     @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
-    CandleCache.preload @instruments, dates: @dates
+    CandleCache.preload! @instruments, dates: @dates
 
     @spikes = Spike.where(date: @dates, ticker: @instruments).order(:spike).group_by(&:date)
     @results = @dates.each_with_object({}) do |date, hash|
@@ -149,7 +149,7 @@ class DashboardsController < ApplicationController
     selector = show_all ? :instruments_for_market : :current_instruments_for_market
     instruments = PermaCache.send(selector, current_market)
     dates = [Current.date]
-    CandleCache.preload instruments, dates
+    CandleCache.preload! instruments, dates
     PriceCache.preload instruments
 
     rows = instruments.map do |inst|
@@ -211,7 +211,7 @@ class DashboardsController < ApplicationController
       [ticker, candles.to_a]
     end.to_h
 
-    CandleCache.preload @instruments
+    CandleCache.preload! @instruments
     PriceCache.preload @instruments
   end
 end

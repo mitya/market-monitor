@@ -52,7 +52,7 @@ class PriceLevelHitDetector
     end
 
     indicators = instrument.indicators_history.find_by(date: curr.date)
-    { 50 => indicators&.ema_50, 200 => indicators&.ema_200 }.each do |length, value|
+    { 20 => indicators&.ema_20, 50 => indicators&.ema_50, 200 => indicators&.ema_200 }.each do |length, value|
       next unless value
       attrs = { source: 'ma', ma_length: length, date: curr.date, ticker: instrument.ticker, level_value: value }
       check_level curr, prev, value, attrs
@@ -81,7 +81,7 @@ class PriceLevelHitDetector
     end
     days_since_last = last_day_crossed ? curr.date - last_day_crossed : 99
 
-    return if days_since_last < 10 && attrs[:level]
+    return if days_since_last < 7 && attrs[:level]
 
     attrs[:days_since_last] = days_since_last
     attrs[:rel_vol] = curr.volume_to_average.to_f.round(3)
