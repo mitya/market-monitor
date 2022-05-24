@@ -1,9 +1,10 @@
 - page_title! 'Week / Spikes'
 
 main.container-fluid
+  = render 'week_pager', monday: @results.keys.max.to_date.beginning_of_week
   .row
     - @results.each do |date, result|
-      .col-2
+      .col
         h6.text-end= l date, format: :rus_with_week_day
         = data_table fields: nil, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do
           = render 'spikes', spikes: result.spikes_up

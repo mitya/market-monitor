@@ -39,7 +39,7 @@ end
 
 __END__
 
-MarketCalendar.ru.open_days(4.months.ago).each { |date| ExtremumUpdate.search_for(Instrument.active.rub, date: date) }
-MarketCalendar.us.open_days(2.months.ago).each { |date| ExtremumUpdate.search_for(Instrument.active.usd, date: date) }
+MarketCalendar.ru.open_days('2022-01-01').each { |date| ExtremumUpdate.search_for(Instrument.active.rub, date: date) }
+MarketCalendar.us.open_days('2022-01-01').each { |date| ExtremumUpdate.search_for(Instrument.active.usd, date: date) }
 
 ExtremumUpdate.search_for(Instrument.active.usd, date: '2022-05-11'.to_date)

@@ -478,3 +478,4 @@
 + hide more RU tickers
 + weekly dash of new highs & new lows
 + pagination for new HL dashboard
++ pagination for all weekly dashboards

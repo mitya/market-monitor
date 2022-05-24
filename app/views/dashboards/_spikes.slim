@@ -6,7 +6,7 @@
       = th :icon
       = th :ticker, copy_tickers_button(spikes.pluck(:ticker)), sort: false
       = th :spike, 'Spike ﹪', class: 'money-cell'
-      = th :change, 'Close', class: 'money-cell'
+      = th :change, '﹪', class: 'money-cell'
       = th :rel_volume, '𝑉', class: "money-cell"
 tbody
   - spikes.each do |spike|

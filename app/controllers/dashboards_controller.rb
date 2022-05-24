@@ -97,14 +97,15 @@ class DashboardsController < ApplicationController
     @level_hits = PriceLevelHit.where(ticker: @instruments).intraday.today.order(time: :desc)
   end
 
-  def last_week
-    @instruments = PermaCache.instruments_for_market(current_market)
-    @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6)
-    CandleCache.preload! @instruments, dates: @dates
+  def week
+    instruments = PermaCache.instruments_for_market(current_market)
+    monday = params[:week].to_s.to_date || Current.today.beginning_of_week
+    dates = current_calendar.open_days(monday, monday + 6)
+    CandleCache.preload! instruments, dates: dates
     number_of_gainers = current_market == 'rub' ? 15 : 30
 
-    @results = @dates.each_with_object({}) do |date, hash|
-      candles = @instruments.map { _1.day_candles!.find_date(date) }.compact
+    @results = dates.each_with_object({}) do |date, hash|
+      candles = instruments.map { _1.day_candles!.find_date(date) }.compact
       candles_by_change = candles.sort_by(&:rel_close_change)
       gainers = candles_by_change.last(number_of_gainers).reverse
       losers  = candles_by_change.first(number_of_gainers)
@@ -112,8 +113,8 @@ class DashboardsController < ApplicationController
       used_tickers = (gainers + losers).map(&:ticker).to_set
       unused_candles = candles.reject { _1.ticker.in? used_tickers }
 
-      volume_gainers = unused_candles.sort_by(&:volume_to_average).last(15).reverse # .select { _1.volume_to_average > 2 }
-      volatile = unused_candles.sort_by(&:volatility_abs).last(15).reverse          #.select { _1.volatility_abs > 0.1 }
+      volume_gainers = unused_candles.sort_by(&:volume_to_average).last(15).reverse
+      volatile = unused_candles.sort_by(&:volatility_abs).last(15).reverse
 
       result = OpenStruct.new(
         gainers: gainers, losers: losers, volume_gainers: volume_gainers, volatile: volatile
@@ -123,15 +124,15 @@ class DashboardsController < ApplicationController
     end
   end
 
-  def last_week_spikes
-    @instruments = PermaCache.instruments_for_market(current_market)
-    @dates = current_calendar.open_days(15.days.ago).last(6) - [Current.date]
-    CandleCache.preload! @instruments, dates: @dates
+  def week_spikes
+    instruments = PermaCache.instruments_for_market(current_market)
+    monday = params[:week].to_s.to_date || Current.today.beginning_of_week
+    dates = current_calendar.open_days(monday, monday + 6)
+    CandleCache.preload! instruments, dates: dates
 
-    @spikes = Spike.where(date: @dates, ticker: @instruments).order(:spike).group_by(&:date)
-    @results = @dates.each_with_object({}) do |date, hash|
-      spikes = @spikes[date] || []
-      spikes = spikes.reject { _1.spike.abs < 0.05 }
+    all_spikes = Spike.where(date: dates, ticker: instruments).order(:spike).group_by(&:date)
+    @results = dates.each_with_object({}) do |date, hash|
+      spikes = all_spikes[date].to_a.reject { _1.spike.abs < 0.05 }
       spikes_index = spikes.index_by &:ticker
       ups, downs = spikes.partition &:up?
       ups = ups.sort_by(&:spike).reverse
@@ -144,8 +145,9 @@ class DashboardsController < ApplicationController
     end
   end
 
-  def new_extremums
+  def week_extremums
     instruments = PermaCache.instruments_for_market(current_market)
+    params[:week] ||= Current.today.beginning_of_week.to_s
     dates = if params[:week]
       monday = params[:week].to_date
       current_calendar.open_days(monday, monday + 6)

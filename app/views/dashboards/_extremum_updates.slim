@@ -2,10 +2,10 @@
   thead.table-dark
     tr
       = th :icon
-      = th :ticker
+      = th :ticker, copy_tickers_button(records.pluck(:ticker)), sort: false
       = th :last, 'Extremum', class: 'money-cell'
       = th :change, '﹪', class: 'money-cell'
-      = th :rel_volume, 'Vol', class: 'money-cell'
+      = th :rel_volume, '𝑉', class: 'money-cell'
   tbody
     - records.each do |record|
       - inst = record.instrument

@@ -4,9 +4,10 @@
 - change_mute_threshold = 0.01 # , muted_if: -> { _1.rel_close_change > -change_mute_threshold }
 - volume_mute_threshold = ru_market? ? 1.5 : 2
 main.container-fluid
+  = render 'week_pager', monday: @results.keys.max.to_date.beginning_of_week
   .row
     - @results.each do |date, result|
-      .col-2
+      .col
         h6.text-end= l date, format: :rus_with_week_day
         = data_table fields: fields, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do
           = render 'instruments_eod', candles: result.gainers, title: 'Gainers'

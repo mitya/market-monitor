@@ -1,0 +1,11 @@
+- page_title! 'Week / New H-L'
+
+main.container-fluid
+  = render 'week_pager', monday: @results.keys.max.to_date.beginning_of_week
+  .row
+    - @results.each do |date, result|
+      .col
+        h6.text-end.d-flex.justify-content-between
+          span(class=red_green_class(result.ups.count - result.downs.count > 0))= result.ups.count - result.downs.count
+          span= l date, format: :rus_with_week_day
+        = render 'extremum_updates', records: result.ups + result.downs, direction: :lows, header: false
