@@ -63,7 +63,7 @@ class CandleCache
 
   def find_dates_in(ticker, period)
     if @index[ticker]
-      @index[ticker].select { |date, candle| date.in? period }
+      @index[ticker].select { |date, candle| date.in? period }.values
     end
   end
 

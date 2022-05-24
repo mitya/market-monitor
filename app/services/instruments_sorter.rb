@@ -1,12 +1,12 @@
 class InstrumentsSorter
   OrderMap = {
     ticker:                "instruments.ticker",
-    pe:                    "stats.pe desc",
-    beta:                  "stats.beta desc",
-    yield:                 "stats.dividend_yield desc",
-    marketcap:             "stats.marketcap desc",
-    d5_money_volume:       "stats.d5_money_volume desc",
-    d5_marketcap_volume:   "stats.d5_marketcap_volume desc",
+    pe:                    "instrument_infos.pe desc",
+    beta:                  "instrument_infos.beta desc",
+    yield:                 "instrument_infos.dividend_yield desc",
+    marketcap:             "instrument_infos.marketcap desc",
+    d5_money_volume:       "instrument_infos.d5_money_volume desc",
+    d5_marketcap_volume:   "instrument_infos.d5_marketcap_volume desc",
     days_up:               "aggregates.days_up desc",
     lowest_day_date:       "aggregates.lowest_day_date desc",
     lowest_day_gain:       "aggregates.lowest_day_gain desc",

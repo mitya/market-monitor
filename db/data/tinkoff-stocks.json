@@ -15248,16 +15248,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000DFMXT3",
-      "ticker": "AZPN",
-      "isin": "US0453271035",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Aspen Technology Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00RQ732B6",
       "ticker": "SKLZ",
       "isin": "US83067L1098",
@@ -18877,5 +18867,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1888
+  "total": 1887
 }

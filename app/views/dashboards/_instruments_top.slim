@@ -47,7 +47,7 @@
           = format_ticker(inst)
         = td :icons, class: 'px-0'
           = watched_icon inst
-        = td :last, class: "money-cell muted-cell" do
+        = td :last, class: "money-cell" do
           = relative_price inst.last, inst.yesterday_close, unit: inst.currency, format: 'absolute'
         = td :last_to_yesterday_open, class: "money-cell muted-cell" do
           = colorized_ratio row.last_to_yesterday_open, precision: 1

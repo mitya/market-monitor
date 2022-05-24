@@ -7,6 +7,7 @@ main.container-fluid
         .col-4
           = render 'instruments_top', rows: group_rows,
             fields: %i[last change change_since_open volume rel_volume change_since_today_low change_since_today_high volatility d5_volume]
+          = tickers_copy_list group_rows.pluck(:instrument)
     - else
       - @groups.each do |key, group_rows|
         .col-6
@@ -15,3 +16,4 @@ main.container-fluid
             / d5_volume yesterday_volume last_to_today_open last_to_05m_ago last_to_60m_ago last_to_15m_ago
             / = tickers_copy_list rows.map(&:instrument)
           = render 'set_adder', set_id: key
+          p.text-center.text-muted= "#{group_rows.count} rows"

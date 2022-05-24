@@ -1,5 +1,6 @@
 - weekly dash of new highs & new lows (& consider when old new H/L happened)
 - dashboard with distance from 1h high & after-high low
+- BBG000BG7423 BBG000DFMXT3 AZPN CR
 
 # Later
 - weekly dash with first hits of MA50/200 in 1 month
@@ -473,3 +474,4 @@
 + determine hit direction based on last 15 mins
 + mark level hits as important if is first time in 2 weeks
 + ensure that today candles are not cached
++ hide more RU tickers

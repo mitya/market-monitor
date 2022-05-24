@@ -47,6 +47,10 @@ class Array
   def to_inclusive_range
     first .. last
   end
+
+  def to_uniq_s
+    uniq.sort.join(' ')
+  end
 end
 
 class Integer

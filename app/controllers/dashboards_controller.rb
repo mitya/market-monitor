@@ -37,10 +37,9 @@ class DashboardsController < ApplicationController
     favorites, rows = rows.partition { market_favorites.include? _1.ticker }
 
     @groups = if current_market == 'rub'
-      ignored_tickers = %w[DASB GRNT MRKC MRKS MRKU MRKV MRKZ MSRS UPRO VRSB RENI GTRK TORS TGKBP MGTSP PMSBP MRKY].to_set
-      ignored, rows = rows.partition { ignored_tickers.include? _1.instrument.ticker }
-      very_illiquid, rows = rows.partition { _1.instrument.very_illiquid? }
-      { main: rows, favorites: favorites, illiquid: very_illiquid }
+      ignored, rows = rows.partition { MarketInfo::MoexIgnored.include? _1.instrument.ticker }
+      illiquid, rows = rows.partition { _1.instrument.illiquid? }
+      { main: rows, favorites: favorites, illiquid: illiquid }
     else
       { current: rows, favorites: favorites }
     end
@@ -59,6 +58,7 @@ class DashboardsController < ApplicationController
 
   def momentum
     @instruments = PermaCache.current_instruments_for_market(current_market)
+    @instruments.reject! &:ignored?
     @now = current_market == 'rub' ? Current.ru_time : Current.us_time
 
     PriceCache.preload @instruments
@@ -87,7 +87,7 @@ class DashboardsController < ApplicationController
 
     @top_gainers = @instrument_rows.sort_by { _1.change }.last(20).reverse
     @top_losers  = @instrument_rows.sort_by { _1.change }.first(20)
-    @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(30).reverse
+    @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(20).reverse
 
     gainers_sort_period = params[:gainers_sort_period] || 15
     @recent_gainers = @instrument_rows.sort_by { _1.send("gain_in_#{gainers_sort_period}") }.last(20).reverse

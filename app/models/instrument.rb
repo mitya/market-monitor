@@ -72,9 +72,9 @@ class Instrument < ApplicationRecord
   scope :mature, -> { where first_date: MatureDate }
   scope :with_first_date, -> { where.not first_date: nil }
   scope :without_first_date, -> { where first_date: nil }
-  scope :vtb_spb_long, -> { where "stats.extra->>'vtb_list_2' = 'true'" }
-  scope :vtb_moex_short, -> { where "stats.extra->>'vtb_can_short' = 'true'" }
-  scope :vtb_iis, -> { where "stats.extra->>'vtb_on_iis' = 'true'" }
+  scope :vtb_spb_long, -> { where "instrument_infos.extra->>'vtb_list_2' = 'true'" }
+  scope :vtb_moex_short, -> { where "instrument_infos.extra->>'vtb_can_short' = 'true'" }
+  scope :vtb_iis, -> { where "instrument_infos.extra->>'vtb_on_iis' = 'true'" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
   scope :active,  -> { where active: true, type: 'Stock' }
   scope :active!, -> { where active: true }
@@ -91,8 +91,7 @@ class Instrument < ApplicationRecord
 
 
   DateSelectors.each do |selector|
-    define_method("#{selector}") do
-      instance_variable_get("@#{selector}") ||
+    define_method(selector) do
       instance_variable_set("@#{selector}", day_candles!.find_date(calendar.send(selector))  )
       # instance_variable_set("@#{selector}", day_candles!.find_date(Current.market_for(self).send(selector))  )
     end
@@ -189,7 +188,6 @@ class Instrument < ApplicationRecord
   def shortable? = info&.tinkoff_can_short?
   def liquid? = !illiquid?
   def illiquid? = rub? && MarketInfo::MoexIlliquid.include?(ticker)
-  def very_illiquid? = rub? && MarketInfo::MoexVeryIlliquid.include?(ticker)
   def ignored? = rub? && MarketInfo::MoexIgnored.include?(ticker)
   def watched? = InstrumentSet.watched?(ticker)
   def favorite? = TickerSet.favorites.include?(ticker)

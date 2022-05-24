@@ -331,6 +331,7 @@ module InstrumentsHelper
 
   def tickers_copy_list(records)
     tickers = records.to_a.pluck(:ticker).uniq
+    return nil if tickers.blank?
     tag.p class: 'text-muted text-center x-tickers-list my-1 mx-5 py-1 px-5', style: 'font-size: 0.5rem', 'data-tickers': tickers.to_json do
       tag.span(tickers.join(' ')) + ' ' +
       link_to("Export", export_instruments_path(tickers: tickers.join(' '), set: params[:set]))
@@ -375,11 +376,12 @@ module InstrumentsHelper
   end
 
   def format_ticker(instrument)
+    category = instrument.info.sector_category || instrument.info.sector_code
     tag.span instrument.ticker,
-      title: instrument.name,
+      title: "#{instrument.name} [#{category}]",
       class: ['ticker-item', 'watched': instrument.favorite?],
-      data: { ticker: instrument.ticker }
-      # data: { sector: instrument.info.sector_category || instrument.info.sector_code }
+      # data: { ticker: instrument.ticker, }
+      data: { ticker: instrument.ticker, sector: category }
   end
 
   InstrumentSetNames = {

@@ -1,5 +1,7 @@
 - page_title! "Today #{current_currency}"
 - fields = %i[change last rel_volume volume]
+- mute_if = :illiquid?
+- mute_if = nil
 
 main.container-fluid
   .row
@@ -9,10 +11,10 @@ main.container-fluid
     .col-2
       = render 'level_hits'
     .col-2
-      = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume], muted: :ignored?, title: 'Gainers'
-      = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume], muted: :ignored?, title: 'Losers'
+      = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume], muted: mute_if, title: 'Gainers'
+      = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume], muted: mute_if, title: 'Losers'
     .col-3
-      = render 'instruments_top', rows: @recent_gainers, fields: %i[gain_in_15 gain_in_60 change_since_today_low last rel_volume], muted: :ignored?, title: 'Gainers', sort_param: 'gainers_sort_period'
-      = render 'instruments_top', rows: @recent_losers,  fields: %i[loss_in_15 loss_in_60 change_since_today_high last rel_volume], muted: :ignored?, title: 'Losers', sort_param: 'gainers_sort_period'
+      = render 'instruments_top', rows: @recent_gainers, fields: %i[gain_in_15 gain_in_60 change_since_today_low  last], muted: mute_if, title: 'Gaining', sort_param: 'gainers_sort_period'
+      = render 'instruments_top', rows: @recent_losers,  fields: %i[loss_in_15 loss_in_60 change_since_today_high last], muted: mute_if, title: 'Loosing', sort_param: 'gainers_sort_period'
     .col-2
-      = render 'instruments_top', rows: @volume_gainers, fields: %i[change rel_volume volume], muted: :ignored?, title: 'Vol. Gainers'
+      = render 'instruments_top', rows: @volume_gainers, fields: %i[change rel_volume volume], muted: mute_if, title: 'Vol. Gainers'
