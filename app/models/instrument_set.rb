@@ -66,6 +66,13 @@ class InstrumentSet
     def reload_categories! = __unmemoize(:categories)
 
     memoize def category_titles = YAML.load_file("db/categories-titles.yaml")
+    memoize def categories_per_ticker
+      categories.each_with_object({}) do |(category, tickers), result|
+        tickers.each do |ticker|
+          result[ticker] = category
+        end
+      end
+    end
 
     def symbols_for_category(key)
       if key.to_s.end_with?('*')

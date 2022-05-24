@@ -1,10 +1,22 @@
 .x-copy-tickers { cursor: copy; }
 
 .ticker-item { padding: 1px; }
-.ticker-item[data-sector='tech']       { color: white; background-color: darkgreen; }
+.ticker-item[data-sector='tech'],
+.ticker-item[data-sector='it'],
+.ticker-item[data-sector='electronictechnology'],
+.ticker-item[data-sector='telecom']    { color: white; background-color: green; }
 .ticker-item[data-sector='energy']     { color: white; background-color: blue; }
+.ticker-item[data-sector='biotech']    { color: white; background-color: red; }
+.ticker-item[data-sector='defence'],
 .ticker-item[data-sector='industrial'] { color: white; background-color: #222; }
-.ticker-item[data-sector='biotech']    { color: white; background-color: darkred; }
+.ticker-item[data-sector='utility'],
+.ticker-item[data-sector='food']       { color: white; background-color: #222; }
+
+.ticker-item[data-sector='retail'],
+.ticker-item[data-sector='travelling'],
+.ticker-item[data-sector='leisure'],
+.ticker-item[data-sector='restaraunts'] { color: black; background-color: cyan; }
+
 
 .sector-icon { display: inline-block; width: 10px; height: 10px; border-radius: 5px;  background-color: #ccc; }
 .sector-icon[data-sector='tech']       { background-color: green; }

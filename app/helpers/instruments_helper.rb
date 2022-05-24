@@ -376,12 +376,11 @@ module InstrumentsHelper
   end
 
   def format_ticker(instrument)
-    category = instrument.info.sector_category || instrument.info.sector_code
     tag.span instrument.ticker,
-      title: "#{instrument.name} [#{category}]",
+      title: "#{instrument.name} [#{instrument.info.wide_category}]",
       class: ['ticker-item', 'watched': instrument.favorite?],
-      # data: { ticker: instrument.ticker, }
-      data: { ticker: instrument.ticker, sector: category }
+      data: { ticker: instrument.ticker, },
+      data: { ticker: instrument.ticker, sector: instrument.info.wide_category }
   end
 
   InstrumentSetNames = {

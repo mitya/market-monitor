@@ -12,7 +12,7 @@ main.container-fluid
       - @groups.each do |key, group_rows|
         .col-6
           = render 'instruments_top', rows: group_rows, set_id: key,
-            fields: %i[last change change_since_open change_in_15 change_in_60 volume rel_volume change_since_today_low change_since_today_high volatility d5_volume remove]
+            fields: %i[last change change_since_open gain_in_60 loss_in_60 volume rel_volume change_since_today_low change_since_today_high volatility d5_volume remove]
             / d5_volume yesterday_volume last_to_today_open last_to_05m_ago last_to_60m_ago last_to_15m_ago
             / = tickers_copy_list rows.map(&:instrument)
           = render 'set_adder', set_id: key

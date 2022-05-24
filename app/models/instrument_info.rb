@@ -65,10 +65,12 @@ class InstrumentInfo < ApplicationRecord
     instrument.last_day&.volume.to_f / avg_volume
   end
 
-
   def country_code = COUNTRY_NAMES_TO_ISO3[country.to_s]
 
   def sector_category = Const::SectorCategories[sector_code].presence
+  def manual_category = InstrumentSet.categories_per_ticker[ticker]
+  def manual_wide_category = manual_category && manual_category.split('.').first
+  def wide_category = manual_wide_category || sector_category.presence || sector_code.presence
 
   def vtb_long_risk = extra&.dig('vtb_long_risk')
   def vtb_short_risk = extra&.dig('vtb_short_risk')

@@ -30,6 +30,8 @@ class DashboardsController < ApplicationController
         d5_volume:               inst.info.avg_d5_money_volume,
         change_in_15:            recent_changes[15][inst.ticker].to_f,
         change_in_60:            recent_changes[60][inst.ticker].to_f,
+        gain_in_60:              recent_gains[60][inst.ticker].to_f,
+        loss_in_60:              recent_losses[60][inst.ticker].to_f,
       )
     end
 

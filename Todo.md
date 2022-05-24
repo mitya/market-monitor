@@ -1,7 +1,5 @@
-- dashboard with distance from 1h high & after-high low
-- delete intraday MA hits at EOD processing
-
 # Later
+- delete intraday MA hits at EOD processing
 - weekly dash with first hits of MA50/200 in 1 month
 - dash: ma50 hit < 2 weeks ago & 1m-low-dist > ma50dist [ma's, days since last hit, dist from low]
 - dash: add mins days since some MA filter to MA dashboard

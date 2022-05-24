@@ -6,27 +6,28 @@ biotech.big: pfe mrk
 cannabis: tlry
 china: tal gotu baba yy vips ftch bidu jd cyd
 covid: chef dkng play mcri
+defence: rklb ktos
 developers.rus: etln smlt pikk lsrg
 energy: nrg klxe sji
-energy.chemicals: nknc nkncp kzos kzosp lyb
+energy.chemicals: nknc nkncp kzos kzosp lyb cc iosp oln
 energy.coal: hcc arch btu ceix mtlrp mtlr rasp
 energy.coal.met: metc amr
 energy.gas: eqt ar et am rrc swn cog
 energy.gas.rus: gazp nvtk
 energy.oil: xom cvx shel tti clr cop fang pxd eog mro oxy dvn pump apa hes
 energy.oil.other: gte
-energy.oil.refinery: dk pbf alto chx vlo mpc psx
+energy.oil.refinery: dk pbf alto chx vlo mpc psx dino
 energy.oil.rus: rosn lkoh sibn sngsp tatn banep rnft
-energy.oil.service: rig slb fti snd ois oii
+energy.oil.service: rig slb fti snd ois oii pump
 energy.uranium: kap@gs ccj uec
 finance.banks: wfc sber vtbr qiwi tcsg
-finance.other: payo lc coin pypl ehth bx ivz gs ms
-food: agro unfi tsn
+finance.other: payo lc coin pypl ehth bx ivz gs ms rga
+food: agro unfi
+food.packaged: tsn sjm ppc bynd
 hardware.chip: intc amd xlnx tsm qrvo mu qcom nvda
 hardware.office: xrx hell hpq logi
 hardware.other: crus sitm
 holdings: brk.b afks
-hot: bynd
 indexes: spy
 it.faang: aapl amzn msft fb googl nflx tsla nvda tsm v baba adbe
 it.forgotten: band yext ever mfgp uber lyft roku okta ibm
@@ -34,16 +35,23 @@ it.games: atvi ttwo znga
 it.hot: twlo docu shop etsy plan asan fsly estc twtr ayx ebay net twtr pins snap upwk
 it.rus: yndx mail ozon hhru
 it.security: tenb chkp z
+it.distributor: avt
+leisure: plnt
 meme: spce zyne nok gme pltr bbby hood mstr amc rwlk
 mine.ru: agro etln five gazp mvid sber vtbr
 mine.us: btu clf momo sblk ship veon x
-mining.gold: poly pogr plzl kgc nugt gold
-mining.misc: vale gmkn fcx rual aa enpg vsmo 
 mining.fertilizers: cf mos akrn phor
+mining.gold: poly pogr plzl kgc nugt gold
+mining.misc: vale gmkn fcx rual aa enpg vsmo
 mining.steel: x clf stld nue
 mining.steel.rus: magn chmf nlmk amez chmk
 reit: mac spg
-retail: m gps rl bbby coty uaa levi hog cnk
+restaraunts: bjri cbrl dri eat jack rrgb txrh wing
+retail: coty cnk sbh
+retail.apparel: aeo anf cri dks dlth gco m gps rl uaa levi ktb urbn
+retail.auto: aap musa pag
+retail.food: go
+retail.home: bbby rh
 retail.other: tup
 retail.rus: five lnta okey mvid
 shipping.bulk: gnk sblk dsx ship op
@@ -57,8 +65,9 @@ sourced.tiger: ftch viac disca
 telecom: veon atex
 transportation.airlines: aal dal alk luv aflt spr ba save ual
 transportation.industrial: gltr uwgn
-travelling: h mar car ccl rcl nclh hlt trip bkng abnb expe
+travelling: h mar car ccl hgv rcl nclh hlt trip bkng abnb expe
+utility: xel utl
+utility.gas: swx
 watch.ru: ozon mtlrp mtlr
 watch.us: ftch hood ccj zim
 zzz: pbi band yext ever
-extremes: amzn snap pton
