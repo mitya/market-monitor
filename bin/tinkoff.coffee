@@ -72,6 +72,7 @@ do ->
 # coffee bin/tinkoff.coffee orderbook BBG000B9XRY4
 # coffee bin/tinkoff.coffee orders
 # coffee bin/tinkoff.coffee portfolio
+# coffee bin/tinkoff.coffee currencies
 # TINKOFF_ACCOUNT=iis coffee bin/tinkoff.coffee portfolio
 
 # coffee bin/tinkoff.coffee limit-order BBG00FZYFVC5 Buy 1 17.2

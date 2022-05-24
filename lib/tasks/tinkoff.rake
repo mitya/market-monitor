@@ -37,7 +37,7 @@ namespace :tinkoff do
     end
 
     envtask :previous do
-      Instrument.active.tinkoff.non_eur.abc.each { Tinkoff.import_latest_day_candles _1, today: true }
+      Instrument.active!.tinkoff.non_eur.where(type: %w[Stock Currency]).abc.each { Tinkoff.import_latest_day_candles _1, today: true }
     end
 
     desc "Loads all day candles since 2019 for the 'tickers' specified"

@@ -57,6 +57,7 @@ class Instrument < ApplicationRecord
   scope :non_usd, -> { where.not currency: 'USD' }
   scope :non_eur, -> { where.not currency: 'EUR' }
   scope :stocks, -> { where type: 'Stock' }
+  scope :currencies, -> { where type: 'Currency' }
   scope :futures, -> { where type: 'Future' }
   scope :funds, -> { where type: 'Fund' }
   scope :abc, -> { order :ticker }

@@ -80,7 +80,30 @@ class Tinkoff
         end
       end
     end
-    
+
+    def import_currencies
+      data = JSON.parse File.read "db/data/currencies.json"
+      tickers_map = {
+        'EUR_RUB__TOM' => 'EUR_RUB',
+        'USD000UTSTOM' => 'USD_RUB',
+      }
+      Instrument.transaction do
+        data['instruments'].sort_by{|h| h['ticker']}.each do |hash|
+          next unless hash['ticker'].in? %w[EUR_RUB__TOM USD000UTSTOM]
+          next if Instrument.exists? figi: hash['figi']
+          puts "Import #{hash['ticker']}"
+          Instrument.create!(
+            ticker: tickers_map[hash['ticker']],
+            exchange: 'MOEX',
+            **hash.slice(*%w(figi lot currency name type lot)).merge(
+              price_step: hash['minPriceIncrement'],
+              flags: ['tinkoff'],
+            )
+          )
+        end
+      end
+    end
+
     def check_dead_instruments
       file = Pathname("db/data/tinkoff-stocks.json")
       data = JSON.parse file.read

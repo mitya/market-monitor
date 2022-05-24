@@ -130,6 +130,8 @@ module ApplicationHelper
   end
 
   def round_percentage(value)
+    return nil if not value
+    return value if value == Float::INFINITY
     return value if value < 100
     return value.round(-1)
   end

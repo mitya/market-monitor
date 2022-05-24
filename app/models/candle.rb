@@ -108,6 +108,11 @@ class Candle < ApplicationRecord
   def days_down = previous && trend_down? ? 1 + previous.days_down : 0
   def interval = 'day'
 
+  %w[open close high low].each do |attr|
+    define_method("usd_#{attr}") { instrument.rub? ? CurrencyConverter.convert(send(attr), :RUB, :USD, date: date) : send(attr) }
+  end
+
+
   def change_key
     case
       when prev_close == nil then '-'

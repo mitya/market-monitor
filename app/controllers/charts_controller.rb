@@ -49,6 +49,8 @@ class ChartsController < ApplicationController
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.charting_timestamp, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
 
+      # map[ticker][:candles] = candles.map { |c| [c.charting_timestamp, c.usd_open.to_f, c.usd_high.to_f, c.usd_low.to_f, c.usd_close.to_f, c.volume] }
+
       unless is_update
         map[ticker][:opens] = candles.select(&:opening?).map { _1.charting_timestamp } unless period == 'day'
         map[ticker][:levels] = { }

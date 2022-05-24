@@ -1,5 +1,3 @@
-- download currency daily candles
-- daily charts in USD / EUR
 - dashboard with distance from 1h high & after-high low
 - BBG000BG7423 BBG000DFMXT3 AZPN CR
 - delete intraday MA hits at EOD processing
@@ -479,3 +477,5 @@
 + weekly dash of new highs & new lows
 + pagination for new HL dashboard
 + pagination for all weekly dashboards
++ download currency daily candles
++ daily charts in USD / EUR

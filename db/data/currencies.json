@@ -1,15 +1,6 @@
 {
   "instruments": [
     {
-      "figi": "BBG0013HGFT4",
-      "ticker": "USD000UTSTOM",
-      "minPriceIncrement": 0.0025,
-      "lot": 1000,
-      "currency": "RUB",
-      "name": "Доллар США",
-      "type": "Currency"
-    },
-    {
       "figi": "BBG0013HJJ31",
       "ticker": "EUR_RUB__TOM",
       "minPriceIncrement": 0.0025,
@@ -17,7 +8,34 @@
       "currency": "RUB",
       "name": "Евро",
       "type": "Currency"
+    },
+    {
+      "figi": "BBG0013HG026",
+      "ticker": "KZTRUB_TOM",
+      "minPriceIncrement": 0.0025,
+      "lot": 10000,
+      "currency": "RUB",
+      "name": "Тенге",
+      "type": "Currency"
+    },
+    {
+      "figi": "BBG00D87WQY7",
+      "ticker": "BYNRUB_TOM",
+      "minPriceIncrement": 0.0025,
+      "lot": 1000,
+      "currency": "RUB",
+      "name": "Белорусский рубль",
+      "type": "Currency"
+    },
+    {
+      "figi": "BBG0013HGFT4",
+      "ticker": "USD000UTSTOM",
+      "minPriceIncrement": 0.0025,
+      "lot": 1000,
+      "currency": "RUB",
+      "name": "Доллар США",
+      "type": "Currency"
     }
   ],
-  "total": 2
+  "total": 4
 }
