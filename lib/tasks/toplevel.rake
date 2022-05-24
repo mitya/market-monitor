@@ -41,7 +41,8 @@ envtask(:set_first_date_auto) { (R.instruments_from_env || Instrument.active).to
 envtask(:service){ Module.const_get(ENV['s']).call }
 envtask(:book)   { Orderbook.sync ENV['ticker'] }
 envtask(:arb)    { Synchronizer.call }
-envtask(:spikes) { Spike.scan_all since: 1.week.ago }
+envtask(:spikes) { Spike.scan_all since: Spike.maximum(:date) }
+envtask(:extremum_updates) { ExtremumUpdate.scan_all Instrument.active, date: Current.yesterday }
 envtask(:news)   { Synchronizer.sync_news }
 
 

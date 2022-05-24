@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_18_130439) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_24_111227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_18_130439) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "candle_interval", ["day", "hour", "m5", "m3", "m1"]
   create_enum "candle_source", ["tinkoff", "iex", "virtual", "close"]
+  create_enum "extremum_update_kind", ["high", "low"]
 
   create_table "aggregates", force: :cascade do |t|
     t.string "ticker", null: false
@@ -173,6 +174,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_18_130439) do
     t.boolean "is_opening"
     t.boolean "is_closing"
     t.index ["ticker"], name: "candles_5m_ticker_idx"
+  end
+
+  create_table "extremum_updates", force: :cascade do |t|
+    t.string "ticker", null: false
+    t.date "date", null: false
+    t.decimal "price", precision: 12, scale: 4, null: false
+    t.enum "kind", null: false, enum_type: "extremum_update_kind"
+    t.integer "volume"
+    t.date "last_on"
+    t.datetime "created_at", precision: nil
+    t.index ["date"], name: "index_extremum_updates_on_date"
+    t.index ["ticker"], name: "index_extremum_updates_on_ticker"
   end
 
   create_table "extremums", force: :cascade do |t|
@@ -671,6 +684,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_18_130439) do
     t.decimal "expected_price", precision: 12, scale: 4
     t.datetime "created_at", precision: nil
     t.datetime "hit_at", precision: nil
+    t.boolean "keep", default: false
+    t.integer "expected_ma", limit: 2
   end
 
   add_foreign_key "price_level_hits", "price_levels", column: "level_id", name: "price_level_hits_level_id_fkey"

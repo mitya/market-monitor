@@ -20,7 +20,8 @@
 tbody
   - candles.each do |candle|
     - inst = candle.instrument
-    - classes = class_names('opacity-40' => inst.ignored? || local_assigns[:muted_if] ? muted_if.(candle) : false)
+    / - classes = class_names('opacity-40' => inst.ignored? || local_assigns[:muted_if] ? muted_if.(candle) : false)
+    - classes = class_names('opacity-40' => inst.ignored?)
     tr(class=classes)
       = td :icon, instrument_icon(inst)
       = td :ticker, format_ticker(inst)

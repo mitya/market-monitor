@@ -1,0 +1,9 @@
+- page_title! 'Week / New H-L'
+
+main.container-fluid
+  .row
+    - @results.each do |date, result|
+      .col
+        h6.text-end= l date, format: :rus_with_week_day
+        = data_table fields: nil, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do
+          = render 'extremum_updates', records: result.ups + result.downs, direction: :lows, header: false

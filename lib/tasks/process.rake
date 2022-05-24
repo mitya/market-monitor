@@ -5,6 +5,7 @@ task :process do
   rake 'indicators'
   rake 'analyze'
   rake 'spikes'
+  rake 'extremum_updates'
   rake 'levels:hits_all'
   rake 'tinkoff:portfolio'
   rake 'tinkoff:instruments'

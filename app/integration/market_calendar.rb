@@ -53,6 +53,11 @@ class MarketCalendar
     def open? = open_on?(date) && time.to_s(:time).between?(opening_time_str, closing_time_str)
     def closed? = !open?
 
+    def open_days(since, till = Current.date)
+      since, till = since.begin, since.end if since.is_a?(Range)
+      (since.to_date .. till.to_date).select { open_on? _1 }
+    end
+
     def method_missing(method, *args, &block)
       Current.send(method, *args, &block)
     end

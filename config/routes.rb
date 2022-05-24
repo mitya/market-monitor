@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   end
 
   resource :dashboard, only: [] do
-    get :momentum, :today, :favorites, :last_week, :last_week_spikes, :averages, :timeline, :favorites
+    get :momentum, :today, :favorites, :last_week, :last_week_spikes, :new_extremums, :averages, :timeline, :favorites
   end
 
   resource :set_comparision, only: []  do

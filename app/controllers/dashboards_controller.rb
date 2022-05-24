@@ -125,7 +125,7 @@ class DashboardsController < ApplicationController
 
   def last_week_spikes
     @instruments = PermaCache.instruments_for_market(current_market)
-    @dates = MarketCalendar.open_days(15.days.ago, currency: current_market).last(6) - [Current.date]
+    @dates = current_calendar.open_days(15.days.ago).last(6) - [Current.date]
     CandleCache.preload! @instruments, dates: @dates
 
     @spikes = Spike.where(date: @dates, ticker: @instruments).order(:spike).group_by(&:date)
@@ -141,6 +141,18 @@ class DashboardsController < ApplicationController
       )
 
       hash[date] = result
+    end
+  end
+
+  def new_extremums
+    instruments = PermaCache.instruments_for_market(current_market)
+    dates = current_calendar.open_days(15.days.ago).last(7) - [Current.date]
+    extremum_updates = ExtremumUpdate.where(date: dates, ticker: instruments).order(:ticker).group_by(&:date)
+    CandleCache.preload instruments, dates: dates
+
+    @results = dates.each_with_object({}) do |date, hash|
+      ups, downs = extremum_updates[date].to_a.partition &:new_high?
+      hash[date] = OpenStruct.new(ups:, downs:)
     end
   end
 

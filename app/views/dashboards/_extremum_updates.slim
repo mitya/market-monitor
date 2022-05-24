@@ -1,0 +1,22 @@
+= data_table fields: [], class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
+  thead.table-dark
+    tr
+      = th :icon
+      = th :ticker
+      = th :last, 'Extremum', class: 'money-cell'
+      = th :change, '﹪', class: 'money-cell'
+      = th :rel_volume, 'Vol', class: 'money-cell'
+  tbody
+    - records.each do |record|
+      - inst = record.instrument
+      - candle = record.candle
+      - positive = record.new_high?
+      tr(class=class_names("some-opacity-40" => inst.ignored?))
+        = td :icon, instrument_logo_button(inst)
+        = td :ticker, format_ticker(inst), class: 'opacity-child'
+        = td :last, class: ["money-cell", red_green_class(positive)] do
+          = format_price candle.send(positive ? 'high' : 'low'), inst
+        = td :change, class: "money-cell" do
+          = colorized_ratio candle.rel_close_change, precision: 1
+        = td :rel_volume, class: 'money-cell is-light-blue' do
+          = format_percentage candle.volume_to_average, round: true
