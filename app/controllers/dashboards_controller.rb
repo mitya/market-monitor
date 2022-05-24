@@ -146,7 +146,13 @@ class DashboardsController < ApplicationController
 
   def new_extremums
     instruments = PermaCache.instruments_for_market(current_market)
-    dates = current_calendar.open_days(15.days.ago).last(7) - [Current.date]
+    dates = if params[:week]
+      monday = params[:week].to_date
+      current_calendar.open_days(monday, monday + 6)
+    else
+      last_date = Current.yesterday
+      current_calendar.open_days(last_date - 15.days, last_date).last(7)
+    end
     extremum_updates = ExtremumUpdate.where(date: dates, ticker: instruments).order(:ticker).group_by(&:date)
     CandleCache.preload instruments, dates: dates
 

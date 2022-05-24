@@ -1,8 +1,8 @@
-- ticker, date, type=high/low, value, volume, last_date
+- download currency daily candles
+- daily charts in USD / EUR
 - dashboard with distance from 1h high & after-high low
 - BBG000BG7423 BBG000DFMXT3 AZPN CR
 - delete intraday MA hits at EOD processing
-- pagination for weekly dashboards
 
 # Later
 - weekly dash with first hits of MA50/200 in 1 month
@@ -10,8 +10,6 @@
 - dash: add mins days since some MA filter to MA dashboard
 - dash with distances to highs / lows
 - mark EOD hits as important if is the first one in 2 weeks
-- download currency daily candles
-- daily charts in USD / EUR
 
 # Big features
 - terminal-based UI
@@ -479,3 +477,4 @@
 + ensure that today candles are not cached
 + hide more RU tickers
 + weekly dash of new highs & new lows
++ pagination for new HL dashboard
