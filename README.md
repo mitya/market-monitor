@@ -46,7 +46,7 @@ rake tinkoff:days:missing ok=1
 rake today
 rake intraday:sync_all
 
-rake tinkoff:days:years tickers='BRBR DINO SHEL EMBC PARA BFH ZIMV CEG SAFM'
+rake tinkoff:days:years tickers='AZPN CR'
 
 rake levels:hits:week
 
@@ -80,11 +80,12 @@ rake tinkoff:premium:import
 rake tinkoff:instruments ok=1
 rake SetIexTickers
 rake empty:iex
-export tickers='DKNG BALL'
+export tickers='AZPN CR'
 rake tinkoff:logos:download
 rake tinkoff:days:years tinkoff:days:special
-rake candles:set_prev_closes candles:set_average_change candles:set_d5_volume
-rake set_first_date_auto tickers='ESAB WBD ENOV'
+rake set_first_date_auto
+// rake candles:set_average_change candles:set_d5_volume
+// rake candles:set_prev_closes
 
 rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
 rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1

@@ -30,7 +30,7 @@ class Tinkoff
       end
 
       current_tickers = instruments.map { |hash| hash['ticker'] }.to_set
-      outdated_tickers = Instrument.tinkoff.reject { |inst| inst.ticker.in? current_tickers }
+      outdated_tickers = Instrument.tinkoff.stocks.reject { |inst| inst.ticker.in? current_tickers }
       puts
       puts "Outdated: #{outdated_tickers.map(&:ticker).sort.join(' ')}"
       puts "Problematic: #{problematic_tickers.sort.join(' ')}"

@@ -1,5 +1,4 @@
 - dashboard with distance from 1h high & after-high low
-- BBG000BG7423 BBG000DFMXT3 AZPN CR
 - delete intraday MA hits at EOD processing
 
 # Later
@@ -8,6 +7,7 @@
 - dash: add mins days since some MA filter to MA dashboard
 - dash with distances to highs / lows
 - mark EOD hits as important if is the first one in 2 weeks
+- select chart currency in the UI
 
 # Big features
 - terminal-based UI

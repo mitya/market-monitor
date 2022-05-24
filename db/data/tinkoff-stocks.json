@@ -15628,6 +15628,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG017J18W74",
+      "ticker": "AZPN",
+      "isin": "US29109X1063",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Aspen Technology",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BH0106",
       "ticker": "BX",
       "isin": "US09260D1072",
@@ -17878,6 +17888,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG017BXPZ85",
+      "ticker": "CR",
+      "isin": "US2244411052",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Crane Holdings",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BLRP41",
       "ticker": "OLED",
       "isin": "US91347P1057",
@@ -18867,5 +18887,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1887
+  "total": 1889
 }
