@@ -1,3 +1,8 @@
+- copy selected ticker(s) to clipboard on click
+- add text to Nov & Mar 2020 + Feb 24 2022 on charts
+- sort chart tickers list tickers as entered
+- scroll current ticker into view on chart
+
 # Later
 - delete intraday MA hits at EOD processing
 - weekly dash with first hits of MA50/200 in 1 month
@@ -17,6 +22,7 @@
 - expected MA hits analysis
 
 # Intraday analysis
+- look for first red 5m bar after a series of greens
 - check turn-around behaviours on 5m charts
 - analyze last 5 M1 candles for 3%+ changes
 - load historic M1 for US tickers & calc average in main session time
@@ -477,3 +483,5 @@
 + pagination for all weekly dashboards
 + download currency daily candles
 + daily charts in USD / EUR
++ ability to select rows in dash tables
++ keyboard navigation in dash table

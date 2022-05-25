@@ -88,6 +88,7 @@ class InstrumentSet
     memoize def recommendations = new(:recommendations)
     memoize def alarms = new(:alarms)
     memoize def rejected = new(:rejected)
+    memoize def dead = new(:dead)
     memoize def categorized = new(:categorized)
     memoize def known_instruments = [main, portfolio, recommendations].flat_map(&:instruments).uniq
     memoize def known_symbols = [main, portfolio, recommendations, categorized].flat_map(&:symbols).uniq
@@ -96,6 +97,7 @@ class InstrumentSet
     def known?(symbol) = known_symbols.include?(symbol)
     def n1?(symbol) = n1.include?(symbol)
     def watched?(symbol) = n1?(symbol)
+    def dead?(symbol) = dead.include?(symbol)
   end
 end
 

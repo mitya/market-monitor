@@ -376,11 +376,13 @@ module InstrumentsHelper
   end
 
   def format_ticker(instrument)
-    tag.span instrument.ticker,
+    text = instrument.ticker
+    text = "#{text} #{fa_icon 'skull'}".html_safe if InstrumentSet.dead? instrument.ticker
+    tag.span text,
       title: "#{instrument.name} [#{instrument.info.wide_category}]",
       class: ['ticker-item', 'watched': instrument.favorite?],
       data: { ticker: instrument.ticker, },
-      data: { ticker: instrument.ticker, sector: instrument.info.wide_category }
+      data: { ticker: instrument.ticker, sector: instrument.usd? && instrument.info.wide_category }
   end
 
   InstrumentSetNames = {

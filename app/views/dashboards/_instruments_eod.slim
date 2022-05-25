@@ -23,7 +23,7 @@
       - inst = candle.instrument
       / - classes = class_names('opacity-40' => inst.ignored? || local_assigns[:muted_if] ? muted_if.(candle) : false)
       - classes = class_names('opacity-40' => inst.ignored?)
-      tr(class=classes)
+      tr(class=classes data-fn="row-selector")
         = td :icon, instrument_icon(inst)
         = td :ticker, format_ticker(inst)
         = td :change, class: "money-cell" do

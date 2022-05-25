@@ -29,29 +29,30 @@ hardware.office: xrx hell hpq logi
 hardware.other: crus sitm
 holdings: brk.b afks
 indexes: spy
+it.distributor: avt
 it.faang: aapl amzn msft fb googl nflx tsla nvda tsm v baba adbe
 it.forgotten: band yext ever mfgp uber lyft roku okta ibm
 it.games: atvi ttwo znga
 it.hot: twlo docu shop etsy plan asan fsly estc twtr ayx ebay net twtr pins snap upwk
 it.rus: yndx mail ozon hhru
 it.security: tenb chkp z
-it.distributor: avt
 leisure: plnt
 meme: spce zyne nok gme pltr bbby hood mstr amc rwlk
 mine.ru: agro etln five gazp mvid sber vtbr
 mine.us: btu clf momo sblk ship veon x
-mining.fertilizers: cf mos akrn phor
+mining.fertilizers: cf mos akrn phor ctva
 mining.gold: poly pogr plzl kgc nugt gold
 mining.misc: vale gmkn fcx rual aa enpg vsmo
 mining.steel: x clf stld nue
 mining.steel.rus: magn chmf nlmk amez chmk
-reit: mac spg
-restaraunts: bjri cbrl dri eat jack rrgb txrh wing
-retail: coty cnk sbh
+reit: mac spg bxp
+restaraunts: bjri cbrl dri eat jack rrgb txrh wing blmn
+retail: coty cnk sbh big
 retail.apparel: aeo anf cri dks dlth gco m gps rl uaa levi ktb urbn
-retail.auto: aap musa pag
+retail.auto: aap musa pag cvna
+retail.electronics: bby
 retail.food: go
-retail.home: bbby rh
+retail.home: bbby rh aan bbwi
 retail.other: tup
 retail.rus: five lnta okey mvid
 shipping.bulk: gnk sblk dsx ship op
@@ -65,8 +66,11 @@ sourced.tiger: ftch viac disca
 telecom: veon atex
 transportation.airlines: aal dal alk luv aflt spr ba save ual
 transportation.industrial: gltr uwgn
-travelling: h mar car ccl hgv rcl nclh hlt trip bkng abnb expe
-utility: xel utl
+travelling: car ccl rcl nclh
+travelling.hotel: h mar hgv hlt chh
+travelling.tech:  trip bkng abnb expe
+utility: utl
+utility.electric: xel ed wec
 utility.gas: swx
 watch.ru: ozon mtlrp mtlr
 watch.us: ftch hood ccj zim

@@ -5,14 +5,21 @@ document.addEventListener "turbolinks:load", ->
 
   # setInterval (-> location.reload()), 20_000
 
+  selectRow = (row) ->
+    other.classList.remove('selected-row') for other in document.querySelectorAll('.selected-row')
+    row.classList.add('selected-row')
+
+  setChartTicker = (ticker) ->
+    syncChannel.setChartTicker(ticker) if ticker
+
   document.addEventListener 'click', (e) ->
     if link = e.target.closest('.x-copy-tickers')
       e.stopImmediatePropagation()
-      syncChannel.setChartTicker(link.dataset.tickers)
+      setChartTicker link.dataset.tickers
 
     if target = e.target.closest('.ticker-item')
       return if e.detail == 2
-      syncChannel.setChartTicker(target.innerText)
+      setChartTicker target.innerText
 
     if link = e.target.closest('.x-remove-row')
       e.preventDefault()
@@ -20,12 +27,23 @@ document.addEventListener "turbolinks:load", ->
       response = await $fetchJSON link.href, method: 'DELETE'
       row.remove()
 
+    if row = e.target.closest('tr[data-fn~=row-selector]')
+      selectRow row
+
   document.addEventListener 'dblclick', (e) ->
     if target = e.target.closest('.ticker-item')
       syncChannel.cancelChartUpdate()
       result = await $fetchJSON "/ticker_sets/favorites/items/#{target.dataset.ticker}/toggle", method: 'POST'
       for item in document.querySelectorAll(".ticker-item[data-ticker='#{result.ticker}']")
         item.classList[if result.included then 'add' else 'remove']('watched')
+
+  document.addEventListener 'keydown', (e) ->
+    return unless e.key in ['ArrowDown', 'ArrowUp']
+    if selectedRow = document.querySelector("tr.selected-row")
+      e.preventDefault()
+      if nextRow = (if e.key == 'ArrowDown' then selectedRow.nextSibling else selectedRow.previousSibling)
+        selectRow nextRow
+        setChartTicker nextRow.querySelector('.ticker-item')?.dataset?.ticker
 
   document.querySelectorAll('.watch-adder').forEach (form) ->
     form.addEventListener 'submit', (e) ->

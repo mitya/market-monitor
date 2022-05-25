@@ -6,7 +6,9 @@
 - render_volume = -> (relvol) { relvol.to_f > 10 ? render_volume_text.call(relvol) : render_volume_bar.call(relvol) }
 
 tr.ticker-item(data-ticker=inst.ticker tabindex="0")
-  td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))= inst.clean_ticker
+  td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))
+    = format_ticker inst
+    / = inst.clean_ticker
 
   td.money-cell.price-cell= format_price inst.last, unit: inst.currency
 

@@ -42,7 +42,7 @@ envtask(:service){ Module.const_get(ENV['s']).call }
 envtask(:book)   { Orderbook.sync ENV['ticker'] }
 envtask(:arb)    { Synchronizer.call }
 envtask(:spikes) { Spike.scan_all since: Spike.maximum(:date) }
-envtask(:extremum_updates) { ExtremumUpdate.scan_all Instrument.active, date: Current.yesterday }
+envtask(:extremum_updates) { ExtremumUpdate.search_for Instrument.active, date: Current.yesterday }
 envtask(:news)   { Synchronizer.sync_news }
 
 
