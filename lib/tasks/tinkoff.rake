@@ -112,10 +112,10 @@ namespace :tinkoff do
       instruments.abc.each do |inst|
         next if File.exist? "public/logos/#{inst.ticker}.png"
 
-        puts "Load Tinkoff logo for #{inst.ticker}"
-        URI.open("https://static.tinkoff.ru/brands/traiding/#{inst.isin}x160.png", 'rb') do |remote_file|
+        URI.open("https://invest-brands.cdn-tinkoff.ru/#{inst.isin}x160.png", 'rb') do |remote_file|          
           open("public/logos/#{inst.ticker}.png", 'wb') { |file| file << remote_file.read }
         end
+        puts "Load Tinkoff logo for #{inst.ticker}"
 
       rescue OpenURI::HTTPError
         puts "Miss Tinkoff logo for #{inst.ticker}".red

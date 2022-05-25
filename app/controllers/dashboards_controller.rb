@@ -36,14 +36,14 @@ class DashboardsController < ApplicationController
     end
 
     market_favorites = TickerSet.favorites.instruments.select { _1.currency == current_currency }.pluck(:ticker).to_set
-    favorites, rows = rows.partition { market_favorites.include? _1.ticker }
+    # favorites, rows = rows.partition { market_favorites.include? _1.ticker }
 
     @groups = if current_market == 'rub'
       ignored, rows = rows.partition { MarketInfo::MoexIgnored.include? _1.instrument.ticker }
       illiquid, rows = rows.partition { _1.instrument.illiquid? }
-      { main: rows, favorites: favorites, illiquid: illiquid }
+      { main: rows, favorites: [], illiquid: illiquid }
     else
-      { current: rows, favorites: favorites }
+      { current: rows, favorites: [] }
     end
 
     sort_field = params[:sort].to_s.to_sym || :change

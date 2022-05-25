@@ -1,3 +1,5 @@
+- look for first red 5m bar after a series of greens
+- MAs...
 
 # Later
 - delete intraday MA hits at EOD processing
@@ -19,7 +21,6 @@
 - expected MA hits analysis
 
 # Intraday analysis
-- look for first red 5m bar after a series of greens
 - check turn-around behaviours on 5m charts
 - analyze last 5 M1 candles for 3%+ changes
 - load historic M1 for US tickers & calc average in main session time
