@@ -86,7 +86,7 @@ class InstrumentInfo < ApplicationRecord
     update! avg_volume: candles_for_averaging.average(:volume).to_i
   end
 
-  def set_average_change(n_candles = 10)
+  def set_average_change(n_candles = 40)
     update! avg_change: candles_for_averaging.map(&:rel_true_range).compact.average.round(3) rescue nil
   end
 

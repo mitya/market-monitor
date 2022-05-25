@@ -60,6 +60,15 @@ export default class Chart
       </div>
     ")
 
+    if singleMode
+      @root.querySelector('.intraday-chart-content').insertAdjacentHTML('beforeend', "
+        <div class='intraday-chart-desc'>
+          <span>#{@data.info.name}</span>
+          <span> — #{@data.info.sector}</span>
+          <span> — #{@data.info.industry}</span>
+        </div>
+      ")
+
     @container = @root.lastChild
 
     navbarHeight = 0 # document.querySelector('.main-navbar').offsetHeight
@@ -78,7 +87,7 @@ export default class Chart
         secondsVisible: false
         visible: @data.timeScaleVisible
         barSpacing: currentBarSpacing
-        rightOffset: if singleMode || isOneChartPerPage then 10 else 2
+        rightOffset: if singleMode || isOneChartPerPage then 15 else 2
       rightPriceScale:
         entireTextOnly: true
         visible: @data.priceScaleVisible
@@ -86,7 +95,7 @@ export default class Chart
         autoScale: true
         borderVisible: false
         scaleMargins:
-          top: 0.02
+          top: if singleMode then 0.05 else 0.02
           bottom: if isZeroScale then 0.0 else 0.05
       localization:
         priceFormatter: formatPrice
@@ -219,6 +228,7 @@ export default class Chart
     if @data.averages
       @averageSeries = {}
       for period, info of @data.averages
+        # continue if !info.distance
         @averageSeries[period] = @chart.addLineSeries
           color: levelColors["MA#{period}"]
           lineWidth: 2
@@ -226,6 +236,7 @@ export default class Chart
           priceLineVisible: false
           autoscaleInfoProvider: @autoscaleInfoProvider
           title: info.distance
+          lastValueVisible: info.distance?
         @averageSeries[period].setData info.data.map  (row) -> { time: row[0], value: Number(row[1]) }
 
     if @data.rs

@@ -23,6 +23,7 @@ module OptionsHelper
     portfolio_cost_diff:   "Portfolio Cost Ideal",
     change:                "Change",
     change_atr:            "ATR Change",
+    avg_change:            "Avg Change",
     last:                  "Last",
   }.stringify_keys.invert.to_a
 

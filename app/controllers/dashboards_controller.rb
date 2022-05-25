@@ -28,6 +28,7 @@ class DashboardsController < ApplicationController
         volatility:              inst.last_day&.volatility.to_f * 100,
         rel_volume:              inst.info.relative_volume.to_f * 100,
         d5_volume:               inst.info.avg_d5_money_volume,
+        avg_change:              inst.info.avg_change.to_f * 100,
         change_in_15:            recent_changes[15][inst.ticker].to_f,
         change_in_60:            recent_changes[60][inst.ticker].to_f,
         gain_in_60:              recent_gains[60][inst.ticker].to_f,

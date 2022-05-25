@@ -115,8 +115,9 @@
       )
       - if @list_shown
         .chart-tickers-list(
+          data-tickers-x=@list_ticker_set.tickers.join(' ')
           data-controller="chart-ticker-list"
           data-action="click->chart-ticker-list#select  keydown@document->chart-ticker-list#keydown  chart-loaded@document->chart-ticker-list#markChartTickerActive"
-        )= render 'set_comparisions/ticker_set', set: @list_ticker_set, precision: 1, selector: 'last', sort: :ticker
+        )= render 'set_comparisions/ticker_set', set: @list_ticker_set, precision: 1, selector: 'last', sort: :ticker, change_cell: false, avg_change_cell: true
 
 = render "settings_modal"

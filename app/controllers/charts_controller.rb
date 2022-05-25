@@ -20,9 +20,7 @@ class ChartsController < ApplicationController
     @chart_tickers_line = @chart_tickers.join(' ').upcase
     @current_ticker_set = (@custom_ticker_sets + @predefined_ticker_sets).detect { _1.tickers == @chart_tickers }
 
-    p @chart_tickers
-    @list_ticker_set = InstrumentSet.new(@current_ticker_set&.key || 'Custom', :static, items: @chart_tickers)
-    p @list_ticker_set
+    @list_ticker_set = InstrumentSet.new(@current_ticker_set&.key || "Custom [#{@chart_tickers.size}]", :static, items: @chart_tickers)
 
     @list_shown = params[:list] == '1'
     @chart_columns = @list_shown ? 1 : @chart_settings['columns']
@@ -49,6 +47,7 @@ class ChartsController < ApplicationController
       ticker = instrument.ticker
       candles = repo.for(instrument).order(:date, :time).since(since_date).last(params[:limit] || (is_single ? 1500 : 500))
       map[ticker] = { ticker: ticker }
+      map[ticker][:info] = { name: instrument.name, sector: instrument.info.sector, industry: instrument.info.industry, category: instrument.info.manual_category }
       map[ticker][:candles] = candles.map { |c| [c.charting_timestamp, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
 
       # map[ticker][:candles] = candles.map { |c| [c.charting_timestamp, c.usd_open.to_f, c.usd_high.to_f, c.usd_low.to_f, c.usd_close.to_f, c.volume] }
@@ -62,6 +61,8 @@ class ChartsController < ApplicationController
         if period == 'day'
           indicators = instrument.indicators_history.where('date >= ?', candles.map(&:date).min).order(:date)
           indicators += [indicators.last.last] if indicators.last.date != Current.date
+
+          distances_to_averages = []
           map[ticker][:averages] = { }
           [20, 50, 200].each do |period|
             map[ticker][:averages][period] = {}
@@ -69,7 +70,8 @@ class ChartsController < ApplicationController
 
             if last_value = map.dig(ticker, :averages, period, :data, -1, -1)
               gain = instrument.gain_since(:last, last_value)
-              map[ticker][:averages][period][:distance] = "#{gain > 0 ? '+' : '–'}#{(gain.abs * 100).to_i}%"
+              distances_to_averages << gain
+              map[ticker][:averages][period][:distance] = "#{gain > 0 ? '+' : '–'}#{(gain.abs * 100).to_i}%" if gain.abs > 0.03
             end
           end
 
@@ -77,6 +79,7 @@ class ChartsController < ApplicationController
           extremums.each do |extremum|
             gain = instrument.gain_since(:last, extremum)
             next if gain.abs < 0.03
+            next if distances_to_averages.any? { (gain - _1).abs < 0.07 }
             gain_pct = (gain * 100).to_i
             map[ticker][:levels]["#{gain_pct > 0 ? '+' : '–'}#{gain_pct.abs}%"] = extremum
           end

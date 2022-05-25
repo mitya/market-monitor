@@ -7,13 +7,14 @@
 
 tr.ticker-item(data-ticker=inst.ticker tabindex="0")
   td.ticker-cell(title=inst.name class=class_names('opacity-40': inst.illiquid? || inst.premium?))
-    = format_ticker inst
+    = format_ticker inst, sector: true
     / = inst.clean_ticker
 
   td.money-cell.price-cell= format_price inst.last, unit: inst.currency
 
-  td.money-cell.change-cell
-    = percentage_bar_or_number change, classes: "#{red_green_class change.to_f > 0} solid-narrow float-end", rtl: true, threshold: local_assigns[:bar_threshold] || 0.08
+  - unless local_assigns[:change_cell] == false
+    td.money-cell.change-cell
+      = percentage_bar_or_number change, classes: "#{red_green_class change.to_f > 0} solid-narrow float-end", rtl: true, threshold: local_assigns[:bar_threshold] || 0.08
 
   - if hit
     td.money-cell(data-col="days_since_last")
@@ -44,3 +45,7 @@ tr.ticker-item(data-ticker=inst.ticker tabindex="0")
   - if local_assigns[:volatility_cell]
     td.money-cell(data-col="volatility")
       = number_to_percentage inst.yesterday.volatility * 100, precision: 0
+
+  - if local_assigns[:avg_change_cell]
+    td.money-cell(data-col="avg_change")
+      = number_to_percentage inst.info.avg_change * 100, precision: 0

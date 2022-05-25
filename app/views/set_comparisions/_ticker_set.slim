@@ -4,7 +4,7 @@
 - instruments = instruments.select { _1.currency == currency }    if local_assigns[:currency].present?
 - instruments = instruments.select { _1.premium? }                if local_assigns[:availability] == 'premium'
 - instruments = instruments.reject { _1.premium? }                if local_assigns[:availability] == 'tinkoff'
-- instruments = instruments.reject { _1.yesterday == nil }
+/ - instruments = instruments.reject { _1.yesterday == nil }
 
 - if local_assigns[:sort]
   - instruments = instruments.sort_by(&sort)
@@ -38,4 +38,6 @@ table class="dash-table table table-sm table-hover table-font-sm tickers-table t
           volume_decrease_cell: set.key =~ /volume_losers/,
           volatility_cell: set.key =~ /volatile/,
           level_cell: set.key =~ /ma|level/,
+          change_cell: local_assigns[:change_cell],
+          avg_change_cell: local_assigns[:avg_change_cell],
           bar_threshold: 0

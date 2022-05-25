@@ -6,8 +6,8 @@ class ExtremumFinder
     extremums = []
     periods.each do |candle_count|
       last_candles = candles.last(candle_count)
-      max = last_candles.maximum(:range_high)
-      min = last_candles.minimum(:range_low)
+      max = last_candles.maximum(:high)
+      min = last_candles.minimum(:low)
       extremums << max << min
     end
     extremums.map { round _1 }.uniq

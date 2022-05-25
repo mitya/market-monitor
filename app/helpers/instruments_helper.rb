@@ -301,6 +301,7 @@ module InstrumentsHelper
     # icons = [:glasses] if icons.empty? && InstrumentSet.known?(instrument.ticker)
     # icons.map { |icon| fa_icon(icon, xsmall: true) }.join(' ').html_safe
 
+    return fa_icon :skull, xsmall: true if InstrumentSet.dead?(instrument.ticker)
     return fa_icon :dice, xsmall: true if InstrumentSet.n1?(instrument.ticker)
     return fa_icon :glasses, xsmall: true if InstrumentSet.known?(instrument.ticker)
   end
@@ -375,14 +376,15 @@ module InstrumentsHelper
     InstrumentSet.category_titles[clean_key] || clean_key.humanize
   end
 
-  def format_ticker(instrument)
+  def format_ticker(instrument, sector: false)
     text = instrument.ticker
     text = "#{text} #{fa_icon 'skull'}".html_safe if InstrumentSet.dead? instrument.ticker
+    data = { ticker: instrument.ticker }
+    data[:sector] = instrument.usd? && instrument.info.wide_category if sector
     tag.span text,
       title: "#{instrument.name} [#{instrument.info.wide_category}]",
       class: ['ticker-item', 'watched': instrument.favorite?],
-      data: { ticker: instrument.ticker, },
-      data: { ticker: instrument.ticker, sector: instrument.usd? && instrument.info.wide_category }
+      data: data
   end
 
   InstrumentSetNames = {

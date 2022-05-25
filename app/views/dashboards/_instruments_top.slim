@@ -33,6 +33,7 @@
       = th :volume, '𝑉 m', class: 'money-cell'
       = th :d5_volume, '𝑉 5', class: 'money-cell'
       = th :volatility, 'σ', class: 'money-cell'
+      = th :avg_change, '~σ', class: 'money-cell'
       = th :change_since_today_low, 'L ﹪', class: 'money-cell'
       = th :change_since_today_high, 'H ﹪', class: 'money-cell'
       = th :remove
@@ -40,7 +41,7 @@
     - rows.each do |row|
       - inst = row.instrument
       - classes = class_names('opacity-40' => local_assigns[:muted] ? inst.send(muted) : false)
-      tr(class=classes)
+      tr(class=classes data-fn="row-selector")
         = td :icon, class: 'text-center' do
           = instrument_icon inst
         = td :ticker
@@ -93,6 +94,8 @@
           = format_price_in_millions row.d5_volume, unit: inst.currency
         = td :volatility, class: 'money-cell' do
           = number_to_percentage row.volatility, precision: 0, format: '%n ﹪'
+        = td :avg_change, class: 'money-cell' do
+          = number_to_percentage row.avg_change, precision: 0, format: '%n ﹪'
         = td :change_to_ema_20, class: "money-cell" do
           = colorized_ratio row.change_to_ema_20, precision: 0
         = td :change_to_ema_50, class: "money-cell" do
