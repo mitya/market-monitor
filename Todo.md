@@ -1,4 +1,3 @@
-- copy selected ticker(s) to clipboard on click
 - add text to Nov & Mar 2020 + Feb 24 2022 on charts
 - sort chart tickers list tickers as entered
 - scroll current ticker into view on chart
@@ -485,3 +484,4 @@
 + daily charts in USD / EUR
 + ability to select rows in dash tables
 + keyboard navigation in dash table
++ copy selected ticker(s) to clipboard on click

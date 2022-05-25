@@ -10,7 +10,9 @@ document.addEventListener "turbolinks:load", ->
     row.classList.add('selected-row')
 
   setChartTicker = (ticker) ->
-    syncChannel.setChartTicker(ticker) if ticker
+    if ticker
+       syncChannel.setChartTicker(ticker)
+       navigator.clipboard.writeText(ticker)
 
   document.addEventListener 'click', (e) ->
     if link = e.target.closest('.x-copy-tickers')
