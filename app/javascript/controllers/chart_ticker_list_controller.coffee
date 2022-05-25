@@ -4,7 +4,6 @@ import ChartsPage from '../pages/charts_page'
 export default class extends Controller
   @prop 'chartedTickersField', -> $qs(".trading-page [name=charted-tickers]")
 
-
   select: (e) ->
     e.preventDefault()
     item = e.target.closest('.ticker-item')
@@ -30,3 +29,4 @@ export default class extends Controller
       currentTicker = $qs('.intraday-chart').dataset.ticker
       if currentTickerItem = @element.querySelector(".ticker-item[data-ticker=#{currentTicker}]")
         currentTickerItem.classList.add('active')
+        currentTickerItem.scrollIntoView(block: 'center')

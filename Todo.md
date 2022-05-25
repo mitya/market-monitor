@@ -1,6 +1,5 @@
 - add text to Nov & Mar 2020 + Feb 24 2022 on charts
 - sort chart tickers list tickers as entered
-- scroll current ticker into view on chart
 
 # Later
 - delete intraday MA hits at EOD processing
@@ -485,3 +484,4 @@
 + ability to select rows in dash tables
 + keyboard navigation in dash table
 + copy selected ticker(s) to clipboard on click
++ scroll current ticker into view on chart
