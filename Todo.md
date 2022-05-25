@@ -1,5 +1,3 @@
-- add text to Nov & Mar 2020 + Feb 24 2022 on charts
-- sort chart tickers list tickers as entered
 
 # Later
 - delete intraday MA hits at EOD processing
@@ -9,6 +7,7 @@
 - dash with distances to highs / lows
 - mark EOD hits as important if is the first one in 2 weeks
 - select chart currency in the UI
+- sort chart tickers list tickers as entered
 
 # Big features
 - terminal-based UI
@@ -485,3 +484,4 @@
 + keyboard navigation in dash table
 + copy selected ticker(s) to clipboard on click
 + scroll current ticker into view on chart
++ add text to Nov & Mar 2020 + Feb 24 2022 on charts

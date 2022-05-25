@@ -25,7 +25,7 @@ export default class Chart
     @ticker = data.ticker
     @period = data.period
 
-    # console.log data
+    console.log data
     # timestamps = data.candles.map((c) -> c[0])
     # console.log timestamps.length
     # console.log _.uniq(timestamps).length
@@ -210,6 +210,11 @@ export default class Chart
     levelLineStyleFor = (title) -> switch
       when title.startsWith('+') || title.startsWith('–') then LineStyle.Dotted
       else LineStyle[levelLineStyles[title]]
+
+    if @data.markers
+      @candlesSeries.setMarkers @data.markers.map ({ ts, name, color, position }) ->
+        # { time: ts, color: color, shape: 'circle', text: name, position: position ? 'aboveBar' }
+        { time: ts, color: color, shape: 'arrowUp', text: name, position: position ? 'aboveBar', size: 2 }
 
     if @data.averages
       @averageSeries = {}

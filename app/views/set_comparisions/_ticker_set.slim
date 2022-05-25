@@ -6,7 +6,11 @@
 - instruments = instruments.reject { _1.premium? }                if local_assigns[:availability] == 'tinkoff'
 - instruments = instruments.reject { _1.yesterday == nil }
 
-- unless local_assigns[:sort]
+- if local_assigns[:sort]
+  - instruments = instruments.sort_by(&sort)
+- elsif local_assigns[:sort] == false
+
+- else
   - instruments = case set.key
   -   when /volume/   then instruments.sort_by { _1.aggregate.volumes['d1'] }.reverse
   -   when /spikes/   then instruments.sort_by { @spikes_index[_1.ticker].spike.to_f }.reverse
@@ -14,8 +18,7 @@
   -   when /losers/   then instruments.sort_by { _1.stored_gain_since(selector).to_f }
   -   when /volatile/ then instruments.sort_by { _1.yesterday.volatility.abs }.reverse
   -   else                 instruments.sort_by { _1.stored_gain_since(selector).to_f }.reverse
-- else
-  - instruments = instruments.sort_by(&sort)
+
 
 h6.ps-1(
   class=class_names('ticker-set-title', 'is-dark-green': set.key =~ /up_break/, 'is-dark-red': set.key =~ /down_break/)
@@ -25,7 +28,7 @@ h6.ps-1(
 table class="dash-table table table-sm table-hover table-font-sm tickers-table table-no-border table-sm-v"
   tbody
     - instruments.each do |inst|
-      - logger.silence do 
+      - logger.silence do
         = render 'set_comparisions/ticker_row', inst: inst,
           change: inst.stored_gain_since(selector),
           hit: @hits_sets && @hits_sets[set.key]&.detect { inst.ticker == _1.ticker },

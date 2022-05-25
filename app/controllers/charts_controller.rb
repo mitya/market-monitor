@@ -9,7 +9,6 @@ class ChartsController < ApplicationController
     @synced_tickers = Setting.sync_tickers.join(' ')
     @sync_ticker_sets = Setting.sync_ticker_sets
 
-
     @intraday_levels = InstrumentAnnotation.with_intraday_levels
     @intraday_levels_text = @intraday_levels.map(&:intraday_levels_line).join("\n")
 
@@ -17,11 +16,13 @@ class ChartsController < ApplicationController
     @custom_ticker_sets_text = @custom_ticker_sets.map(&:as_line).join("\n")
     @predefined_ticker_sets = TickerSet.from_instrument_sets
 
-    @chart_tickers = Setting.chart_tickers.sort
+    @chart_tickers = Setting.chart_tickers
     @chart_tickers_line = @chart_tickers.join(' ').upcase
     @current_ticker_set = (@custom_ticker_sets + @predefined_ticker_sets).detect { _1.tickers == @chart_tickers }
 
+    p @chart_tickers
     @list_ticker_set = InstrumentSet.new(@current_ticker_set&.key || 'Custom', :static, items: @chart_tickers)
+    p @list_ticker_set
 
     @list_shown = params[:list] == '1'
     @chart_columns = @list_shown ? 1 : @chart_settings['columns']
@@ -46,7 +47,7 @@ class ChartsController < ApplicationController
 
     candles = instruments.inject({}) do |map, instrument|
       ticker = instrument.ticker
-      candles = repo.for(instrument).order(:date, :time).since(since_date).last(params[:limit] || (is_single ? 1000 : 500))
+      candles = repo.for(instrument).order(:date, :time).since(since_date).last(params[:limit] || (is_single ? 1500 : 500))
       map[ticker] = { ticker: ticker }
       map[ticker][:candles] = candles.map { |c| [c.charting_timestamp, c.open.to_f, c.high.to_f, c.low.to_f, c.close.to_f, c.volume] }
 
@@ -79,6 +80,12 @@ class ChartsController < ApplicationController
             gain_pct = (gain * 100).to_i
             map[ticker][:levels]["#{gain_pct > 0 ? '+' : '–'}#{gain_pct.abs}%"] = extremum
           end
+
+          map[ticker][:markers] = [
+            { name: 'Relax', ts: '2020-11-06', color: 'green' },
+            { name: 'Covid', ts: '2020-03-23', color: 'red', position: 'belowBar' },
+            { name: 'War',   ts: '2022-02-24', color: 'red', position: 'belowBar' },
+          ]
 
           map[ticker][:levels].merge! watches: instrument.watched_targets.map { _1.target_price }
           # map[ticker][:watches] = instrument.watched_targets.map { _1.target_price }

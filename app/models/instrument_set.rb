@@ -35,10 +35,11 @@ class InstrumentSet
 
   def missing_symbols = symbols.select { |s| !Instrument.exists?(ticker: s) }
   def instruments = symbols.uniq.map { PermaCache.instrument _1 }.compact
+  memoize def set = tickers.to_set
   alias tickers symbols
   alias scope instruments
 
-  def include?(ticker) = tickers.include?(ticker)
+  def include?(ticker) = set.include?(ticker)
 
   class << self
     def get(key)
