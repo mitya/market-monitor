@@ -111,5 +111,19 @@ class Tinkoff
       removed_tickers_which_are_still_in_tinkoff = Tinkoff::OutdatedTickers.select { index.include? _1 }
       puts removed_tickers_which_are_still_in_tinkoff.sort.join(' ')
     end
+
+    def check_lots
+      data = JSON.parse Pathname("db/data/tinkoff-stocks.json").read
+      data['instruments'].each do |hash|
+        inst = Instrument.get(hash['ticker'])
+        if inst
+          lot_size = hash['lot']
+          puts "#{inst.ticker} #{inst.lot} => #{lot_size}" if inst.lot != lot_size
+          inst.update lot: lot_size
+        else
+          # puts "Miss #{hash['ticker']}"
+        end
+      end
+    end
   end
 end

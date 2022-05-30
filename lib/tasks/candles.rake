@@ -31,3 +31,5 @@ __END__
 r candles:set_prev_closes
 r candles:set_average_change
 r m3:load tickers='CLF DK'
+
+rake candles:set_average_volume candles:set_d5_volume candles:set_average_intraday_volume

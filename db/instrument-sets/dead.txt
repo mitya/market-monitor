@@ -2,6 +2,7 @@ allk
 amti
 aplt
 arvl
+avir
 awh
 bbio
 bdtx
@@ -13,6 +14,8 @@ cvna
 dmtk
 ear
 endp
+hrtx
+iova
 kod
 nvta
 pton
@@ -24,5 +27,3 @@ tcrr
 trhc
 zy
 zyne
-hrtx
-avir

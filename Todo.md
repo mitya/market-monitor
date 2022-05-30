@@ -1,6 +1,7 @@
 - look for first red 5m bar after a series of greens
 - MAs...
 - look for 0.5% fall in 5m periods for selected tickers
+- set current ticker to chart title
 
 # Later
 - delete intraday MA hits at EOD processing

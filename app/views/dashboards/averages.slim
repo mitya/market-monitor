@@ -36,6 +36,7 @@ main.container-fluid
                 = th :change_since_w2_high, '2wH ﹪', class: 'money-cell'
                 = th :change_since_month_low, 'mL ﹪', class: 'money-cell'
                 = th :change_since_month_high, 'mH ﹪', class: 'money-cell'
+                = th :avg_change, '~σ', class: 'money-cell'
                 = th :averages
                 = th :extremums
                 = th :change_map
@@ -76,6 +77,8 @@ main.container-fluid
                     = colorized_ratio row.change_since_month_low, precision: 0
                   = td :change_since_month_high, class: "money-cell" do
                     = colorized_ratio row.change_since_month_high, precision: 0
+                  = td :avg_change, class: 'money-cell' do
+                    = number_to_percentage row.avg_change, precision: 0, format: '%n ﹪'
                   = td :averages, class: 'price-bubble-cell', style: "width: #{width}px;" do
                     .price-bubble-row style="width: #{width}px;"
                       .price-bubble-rule(style="left: #{step * 5}px; background-color: black;")
@@ -100,3 +103,5 @@ main.container-fluid
                     = change_map inst.aggregate
                   = td :trend do
                     = growth_badge inst.aggregate
+        .col-12.mb-4
+          = tickers_copy_list rows.pluck(:instrument)

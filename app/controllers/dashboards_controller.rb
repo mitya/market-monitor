@@ -189,6 +189,7 @@ class DashboardsController < ApplicationController
         change_since_w2_high:    inst.change_since_w2_high,
         change_since_month_low:  inst.change_since_month_low,
         change_since_month_high: inst.change_since_month_high,
+        avg_change:              inst.info.avg_change.to_f * 100,
       )
     end
     rows.select! { _1.change_to_ema_20 && _1.change_since_month_low }
