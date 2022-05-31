@@ -1,0 +1,47 @@
+- page_title! 'M1'
+
+main.container-fluid
+  .row
+    - @results.each do |inst, candles|
+      .col-4
+        h6.d-flex.justify-content-between
+          span= inst.ticker
+          - ups, downs = candles.partition(&:up?)
+          - diff = ups.sum(&:volume) - downs.sum(&:volume)
+          span(class=[red_green_class(diff > 0)]) = format_price diff.abs * inst.last, inst
+        = data_table fields: nil, class: "table table-sm table-hover table-font-sm tickers-table table-selectable momentum-table" do |t|
+          thead.table-dark
+            tr
+              = th :icon
+              = th :ticker, 'Ticker', class: 'money-cell'
+              = th :date, 'Date', class: 'money-cell'
+              = th :time, 'Time', class: 'money-cell'
+              = th :volume, 'Vol', class: 'money-cell'
+              = th :money_volume, 'VolM', class: 'money-cell'
+              = th :change, '﹪', class: 'money-cell'
+              = th :upper_tail, 'H', class: 'money-cell'
+              = th :lower_tail, 'L', class: 'money-cell'
+              = th :close, 'Close', class: 'money-cell'
+              tbody
+                - candles.each do |candle|
+                  tr
+                    = td :icon do
+                      = instrument_logo_button inst
+                    = td :ticker, class: 'money-cell'
+                      = format_ticker(inst)
+                    = td :date, class: 'money-cell'
+                      = l candle.date, format: :text
+                    = td :time, class: 'money-cell'
+                      = candle.time_str
+                    = td :volume, class: 'money-cell'
+                      = number_with_delimiter candle.volume, precision: 0
+                    = td :money_volume, class: ['money-cell', red_green_class(candle.up?)]
+                      = format_price candle.volume_in_money, inst
+                    = td :change, class: "money-cell" do
+                      = colorized_ratio candle.rel_close_change, precision: 1
+                    = td :upper_tail, class: "money-cell" do
+                      = ratio_percentage candle.volatility_above, precision: 1
+                    = td :lower_tail, class: "money-cell" do
+                      = ratio_percentage candle.volatility_below, precision: 1
+                    = td :close, class: ['money-cell', red_green_class(candle.up?)] do
+                      = format_price candle.close, inst

@@ -43,6 +43,7 @@ nav class=class_names("navbar navbar-expand-lg navbar-light bg-light main-navbar
         li= link_to 'Week', week_dashboard_path(market: current_market), class: 'nav-link'
         li= link_to 'Spikes', week_spikes_dashboard_path(market: current_market), class: 'nav-link'
         li= link_to 'H/L', week_extremums_dashboard_path(market: current_market), class: 'nav-link'
+        li= link_to 'M1', minutes_dashboard_path(market: current_market), class: 'nav-link'
         li.nav-link |
         li= link_to 'Day', momentum_dashboard_path(market: current_market), class: 'nav-link'
         li= link_to 'All', today_dashboard_path(market: current_market), class: 'nav-link'
