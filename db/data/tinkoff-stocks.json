@@ -6495,7 +6495,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Americold REIT",
+      "name": "Americold Realty Trust REIT",
       "type": "Stock"
     },
     {
@@ -12900,15 +12900,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000D9V7T4",
-      "ticker": "AANold",
-      "isin": "US0025353006",
-      "lot": 1,
-      "currency": "USD",
-      "name": "Aaron's Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BKYVF0",
       "ticker": "HCSG",
       "isin": "US4219061086",
@@ -18887,5 +18878,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1889
+  "total": 1888
 }

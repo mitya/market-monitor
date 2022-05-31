@@ -80,6 +80,7 @@ class DashboardsController < ApplicationController
         change:                  inst.change_since_close,
         change_since_today_low:  inst.gain_since(inst.today_low, :last),
         change_since_today_high: inst.gain_since(inst.today_high, :last),
+        last_to_today_open:      inst.gain_since(inst.today_open, :last),
         gain_in_15:              recent_gains [15][inst.ticker].to_f,
         loss_in_15:              recent_losses[15][inst.ticker].to_f,
         gain_in_60:              recent_gains [60][inst.ticker].to_f,
@@ -92,9 +93,12 @@ class DashboardsController < ApplicationController
     @top_losers  = @instrument_rows.sort_by { _1.change }.first(20)
     @volume_gainers = @instrument_rows.sort_by { _1.rel_volume }.last(20).reverse
 
-    gainers_sort_period = params[:gainers_sort_period] || 15
-    @recent_gainers = @instrument_rows.sort_by { _1.send("gain_in_#{gainers_sort_period}") }.last(20).reverse
-    @recent_losers  = @instrument_rows.sort_by { _1.send("loss_in_#{gainers_sort_period}") }.first(20)
+    sort = params[:gainers_sort_period] || 15
+    @recent_gainers = @instrument_rows.sort_by { _1.send(sort.is_a?(Numeric) ? "gain_in_#{sort}" : sort) }.last(20).reverse
+    @recent_losers  = @instrument_rows.sort_by { _1.send(sort.is_a?(Numeric) ? "loss_in_#{sort}" : sort) }.first(20)
+
+    @changed_since_low  = @instrument_rows.sort_by(&:change_since_today_low).last(20).reverse
+    @changed_since_high = @instrument_rows.sort_by(&:change_since_today_high).first(20)
 
     @signals = PriceSignal.intraday.today.where(ticker: @instruments).order(time: :desc).includes(:instrument, :m1_candle).where('time > ?', (Current.msk.now - 2.hours).strftime('%H:%M')).first(300)
     @level_hits = PriceLevelHit.where(ticker: @instruments).intraday.today.order(time: :desc)
@@ -237,5 +241,21 @@ class DashboardsController < ApplicationController
 
     CandleCache.preload! @instruments
     PriceCache.preload @instruments
+  end
+
+  def minutes
+    instruments = PermaCache.current_instruments_for_market(current_market).sort_by(&:ticker)
+    instruments.reject! &:ignored?
+
+    tickers = %w[RUAL ENPG OZON VKCO GAZP MTLR NMTP GLTR ROSN].to_set
+    instruments = instruments.select { _1.ticker.in? tickers }.first(10)
+    # PriceCache.preload instruments
+    # CandleCache.preload! instruments
+
+    @results = instruments.each_with_object({}) do |inst, hash|
+      hash[inst] = inst.candles_for('1min').where('volume > ?', inst.info.average_volume_for('1min') * 25).where('date > ?', 4.weeks.ago).order('date desc, time desc')
+    end
+    p @results.size
+    # @candles = @candles.first(300)
   end
 end

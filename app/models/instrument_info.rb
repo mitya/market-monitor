@@ -101,6 +101,10 @@ class InstrumentInfo < ApplicationRecord
     save!
   end
 
+  def update_marketcap
+    update marketcap: shares * instrument.last if shares
+  end
+
   def averages = self[:averages] ||= {}
   def average_1min_volume = averages['volume_1min']
 

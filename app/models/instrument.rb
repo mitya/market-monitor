@@ -80,6 +80,8 @@ class Instrument < ApplicationRecord
   scope :active,  -> { where active: true, type: 'Stock' }
   scope :active!, -> { where active: true }
 
+  scope :rus_receipts, -> { where(currency: 'RUB').where('isin NOT LIKE ?', 'RU%') } 
+
   validates_presence_of :ticker, :name
 
   after_create { |inst| SetIexTickers.process(inst) }

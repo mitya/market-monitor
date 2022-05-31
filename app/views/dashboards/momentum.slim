@@ -13,8 +13,11 @@ main.container-fluid
     .col-2
       = render 'instruments_top', rows: @top_gainers,    fields: %i[change last rel_volume], muted: mute_if, title: 'Gainers'
       = render 'instruments_top', rows: @top_losers,     fields: %i[change last rel_volume], muted: mute_if, title: 'Losers'
-    .col-3
-      = render 'instruments_top', rows: @recent_gainers, fields: %i[gain_in_15 gain_in_60 change_since_today_low  last], muted: mute_if, title: 'Gaining', sort_param: 'gainers_sort_period'
-      = render 'instruments_top', rows: @recent_losers,  fields: %i[loss_in_15 loss_in_60 change_since_today_high last], muted: mute_if, title: 'Loosing', sort_param: 'gainers_sort_period'
+    .col-2
+      = render 'instruments_top', rows: @recent_gainers, fields: %i[gain_in_15 gain_in_60 last_to_today_open], muted: mute_if, title: 'Gaining', sort_param: 'gainers_sort_period'
+      = render 'instruments_top', rows: @recent_losers,  fields: %i[loss_in_15 loss_in_60 last_to_today_open], muted: mute_if, title: 'Loosing', sort_param: 'gainers_sort_period'
+    .col-2
+      = render 'instruments_top', rows: @changed_since_low, fields: %i[change_since_today_low last_to_today_open]
+      = render 'instruments_top', rows: @changed_since_high,  fields: %i[change_since_today_high last_to_today_open]
     .col-2
       = render 'instruments_top', rows: @volume_gainers, fields: %i[change rel_volume volume], muted: mute_if, title: 'Vol. Gainers'

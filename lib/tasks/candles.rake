@@ -18,6 +18,7 @@ namespace :candles do
   envtask(:set_average_change)          { Instrument.transaction { Instrument.active.find_each { _1.info!.set_average_change }}}
   envtask(:set_d5_volume)               { Instrument.transaction { Instrument.active.rub.find_each { _1.info!.set_d5_volume }}}
   envtask(:set_average_intraday_volume) { Instrument.transaction { Instrument.active.rub.find_each { _1.info!.set_average_1min_volume }}}
+  envtask(:update_marketcap)            { Instrument.transaction { Instrument.active.usd.find_each { _1.info!.update_marketcap }}}
 
   envtask :cleanup do
     [Candle::M1, Candle::M3, Candle::M5, PriceLevelHit].each do |candles|
