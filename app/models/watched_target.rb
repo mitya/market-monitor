@@ -15,7 +15,7 @@ class WatchedTarget < ApplicationRecord
   def ma? = expected_ma.present?
   def price? = expected_price.present?
 
-  memoize def ma_price = expected_ma && instrument.indicators.ma_value_for(expected_ma)
+  memoize def ma_price = expected_ma && instrument.indicators&.ma_value_for(expected_ma)
   memoize def target_price = price?? expected_price : ma_price
 
   def check_hit_in(candle)
@@ -23,6 +23,7 @@ class WatchedTarget < ApplicationRecord
   end
 
   def hit_in?(candle)
+    return false if !target_price
     bullish? ? candle.high >= target_price : candle.low <= target_price
   end
 

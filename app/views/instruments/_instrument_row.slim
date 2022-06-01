@@ -36,9 +36,9 @@ tr data-ticker=inst.ticker class=class_names('portfolio-inactive': @is_portfolio
   - if @show_sector
     td= sector_badge inst
 
-  - if @vtb_marginal_info
-    td.money-cell.is-green= format_risk_ratio inst.info&.vtb_long_risk
-    td.money-cell.is-red= format_risk_ratio inst.info&.vtb_short_risk
+  / - if @vtb_marginal_info
+  /   td.money-cell.is-green= format_risk_ratio inst.info&.vtb_long_risk
+  /   td.money-cell.is-red= format_risk_ratio inst.info&.vtb_short_risk
 
   - if @tinkoff_marginal_info
     td.money-cell.is-green= format_risk_ratio inst.info&.tinkoff_long_risk

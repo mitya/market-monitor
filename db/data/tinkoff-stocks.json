@@ -7,7 +7,7 @@
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "InterDigItal Inc",
+      "name": "InterDigital",
       "type": "Stock"
     },
     {
@@ -3147,16 +3147,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Digital Turbine Inc",
-      "type": "Stock"
-    },
-    {
-      "figi": "BBG000BL9JQ1",
-      "ticker": "HFC",
-      "isin": "US4361061082",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "HollyFrontier",
       "type": "Stock"
     },
     {
@@ -18878,5 +18868,5 @@
       "type": "Stock"
     }
   ],
-  "total": 1888
+  "total": 1887
 }

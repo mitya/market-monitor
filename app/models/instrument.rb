@@ -76,11 +76,13 @@ class Instrument < ApplicationRecord
   scope :vtb_spb_long, -> { where "instrument_infos.extra->>'vtb_list_2' = 'true'" }
   scope :vtb_moex_short, -> { where "instrument_infos.extra->>'vtb_can_short' = 'true'" }
   scope :vtb_iis, -> { where "instrument_infos.extra->>'vtb_on_iis' = 'true'" }
+  scope :tinkoff_short, -> { where "instrument_infos.extra->>'tinkoff_can_short' = 'true'" }
+  scope :tinkoff_no_short, -> { where "instrument_infos.extra->>'tinkoff_can_short' != 'true' OR instrument_infos.extra->>'tinkoff_can_short' IS NULL" }
   scope :liquid, -> { rub.where.not ticker: MarketInfo::MoexIlliquid }
   scope :active,  -> { where active: true, type: 'Stock' }
   scope :active!, -> { where active: true }
 
-  scope :rus_receipts, -> { where(currency: 'RUB').where('isin NOT LIKE ?', 'RU%') } 
+  scope :rus_receipts, -> { where(currency: 'RUB').where('isin NOT LIKE ?', 'RU%') }
 
   validates_presence_of :ticker, :name
 

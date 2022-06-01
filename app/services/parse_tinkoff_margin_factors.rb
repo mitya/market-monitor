@@ -14,14 +14,11 @@ class ParseTinkoffMarginFactors
       ticker = title.split(',').first
       long_k, short_k = values.split('/').map { |v| v.squish.to_f }
 
-      # puts "#{title} #{isin} #{can_short} #{values}"
-      # printf "%6s #20s %2d %2d %s\n", ticker, isin, long_k, short_k, can_short
-      p({ isin:, ticker:, long_k:, short_k:, can_short: })
+      printf "%-14s %14s %8.2f %8.2f %s\n", ticker, isin, long_k.to_f, short_k.to_f, can_short ? 'SHORT' : nil
       next
 
       instrument = Instrument[ticker]
       next puts "Missing #{ticker}".red if instrument == nil
-      next unless real
       instrument.info!.update! extra: instrument.info!.extra.to_h.merge({
         tinkoff_long_risk: long_k,
         tinkoff_short_risk: short_k,
