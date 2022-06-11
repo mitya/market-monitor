@@ -25,26 +25,4 @@ coffee bin/tinkoff.coffee portfolio
 # Images
 
 https://www.tinkoff.ru/invest/stocks?country=Russian&orderType=Asc&sortType=ByName&start=0&end=48
-
 $$('.Avatar-module__image_ZCGVO').map(e => e.style.backgroundImage)
-
-
-
-
-curl -X POST 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.InstrumentsService/Futures' \
-  -H 'accept: application/json' -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer t.OWfz5cjTldyoEAgzYqbsemeF6ckc8C5AGXg-itWIWNy_kUZDcMlsmrEDcXGOic-_vZTTV1lsUiBU_qXK9FnLhA' \
-  -d '{ "instrumentStatus": "INSTRUMENT_STATUS_UNSPECIFIED" }' > tmp/v2-futures.json
-
-
-curl -X 'POST' \
-  'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.MarketDataService/GetCandles' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer t.OWfz5cjTldyoEAgzYqbsemeF6ckc8C5AGXg-itWIWNy_kUZDcMlsmrEDcXGOic-_vZTTV1lsUiBU_qXK9FnLhA' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "figi": "FUTMAIL06220",
-  "from": "2022-04-12T07:00:00.002Z",
-  "to": "2022-04-12T17:00:00.002Z",
-  "interval": "CANDLE_INTERVAL_1_MIN"
-}'
