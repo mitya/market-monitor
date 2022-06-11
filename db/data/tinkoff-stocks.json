@@ -211,16 +211,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000C6GN04",
-      "ticker": "QDEL",
-      "isin": "US74838J1016",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Quidel Corp",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00FH3FM15",
       "ticker": "TCRR",
       "isin": "US87808K1060",
@@ -431,16 +421,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BJ81C1",
-      "ticker": "TRV",
-      "isin": "US89417E1091",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Travelers Cos",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000DW76Y6",
       "ticker": "FICO",
       "isin": "US3032501047",
@@ -448,6 +428,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Fair Isaac Corp",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BJ81C1",
+      "ticker": "TRV",
+      "isin": "US89417E1091",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Travelers Cos",
       "type": "Stock"
     },
     {
@@ -1050,16 +1040,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000QDJT53",
-      "ticker": "GDOT",
-      "isin": "US39304D1028",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Green Dot Corp",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BCBYT2",
       "ticker": "VRNT",
       "isin": "US92343X1000",
@@ -1067,6 +1047,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Verint Systems Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000QDJT53",
+      "ticker": "GDOT",
+      "isin": "US39304D1028",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Green Dot Corp",
       "type": "Stock"
     },
     {
@@ -2460,6 +2450,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG000Q1NMJ4",
+      "ticker": "NWE",
+      "isin": "US6680743050",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "NorthWestern Corporation",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG00HQ77DS2",
       "ticker": "CARG",
       "isin": "US1417881091",
@@ -2477,16 +2477,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Mosaic",
-      "type": "Stock"
-    },
-    {
-      "figi": "BBG000Q1NMJ4",
-      "ticker": "NWE",
-      "isin": "US6680743050",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "NorthWestern Corporation",
       "type": "Stock"
     },
     {
@@ -2590,16 +2580,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG002ZCK2V9",
-      "ticker": "SSTK",
-      "isin": "US8256901005",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Shutterstock Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00FWP4JW4",
       "ticker": "SWX",
       "isin": "US8448951025",
@@ -2607,6 +2587,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Southwest Gas Holdings",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG002ZCK2V9",
+      "ticker": "SSTK",
+      "isin": "US8256901005",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Shutterstock Inc",
       "type": "Stock"
     },
     {
@@ -2650,6 +2640,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG001P3K000",
+      "ticker": "DNKN",
+      "isin": "US2655041000",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Dunkin’ Brands Group",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG00RP60KV0",
       "ticker": "OTIS",
       "isin": "US68902V1070",
@@ -2667,16 +2667,6 @@
       "lot": 1,
       "currency": "USD",
       "name": "Loyalty Ventures",
-      "type": "Stock"
-    },
-    {
-      "figi": "BBG001P3K000",
-      "ticker": "DNKN",
-      "isin": "US2655041000",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Dunkin’ Brands Group",
       "type": "Stock"
     },
     {
@@ -2750,16 +2740,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG005CPNTQ2",
-      "ticker": "KHC",
-      "isin": "US5007541064",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Kraft Heinz",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000N7MZ06",
       "ticker": "HUBS",
       "isin": "US4435731009",
@@ -2767,6 +2747,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "HubSpot Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG005CPNTQ2",
+      "ticker": "KHC",
+      "isin": "US5007541064",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Kraft Heinz",
       "type": "Stock"
     },
     {
@@ -3910,16 +3900,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000L8CBX4",
-      "ticker": "TDG",
-      "isin": "US8936411003",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "TransDigm",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BKRHQ7",
       "ticker": "AJRD",
       "isin": "US0078001056",
@@ -3927,6 +3907,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Aerojet Rocketdyne Holdings In",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000L8CBX4",
+      "ticker": "TDG",
+      "isin": "US8936411003",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "TransDigm",
       "type": "Stock"
     },
     {
@@ -4470,16 +4460,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000H01H92",
-      "ticker": "AMCX",
-      "isin": "US00164V1035",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "AMC Networks Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG001MFW6D6",
       "ticker": "CHEF",
       "isin": "US1630861011",
@@ -4487,6 +4467,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Chefs' Warehouse Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000H01H92",
+      "ticker": "AMCX",
+      "isin": "US00164V1035",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "AMC Networks Inc",
       "type": "Stock"
     },
     {
@@ -4600,16 +4590,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BL9MZ4",
-      "ticker": "MHO",
-      "isin": "US55305B1017",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "M/I Homes Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BBGQF1",
       "ticker": "AIR",
       "isin": "US0003611052",
@@ -4617,6 +4597,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "AAR Corp",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BL9MZ4",
+      "ticker": "MHO",
+      "isin": "US55305B1017",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "M/I Homes Inc",
       "type": "Stock"
     },
     {
@@ -5710,16 +5700,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000F8RCH1",
-      "ticker": "ATNI",
-      "isin": "US00215F1075",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "ATN International, Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000NVSBL7",
       "ticker": "NVAX",
       "isin": "US6700024010",
@@ -5727,6 +5707,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Novavax",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000F8RCH1",
+      "ticker": "ATNI",
+      "isin": "US00215F1075",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "ATN International, Inc",
       "type": "Stock"
     },
     {
@@ -6229,16 +6219,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BN53G7",
-      "ticker": "LEG",
-      "isin": "US5246601075",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Leggett & Platt",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00FN64XT9",
       "ticker": "DXC",
       "isin": "US23355L1061",
@@ -6246,6 +6226,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "DXC Technology",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BN53G7",
+      "ticker": "LEG",
+      "isin": "US5246601075",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Leggett & Platt",
       "type": "Stock"
     },
     {
@@ -6489,16 +6479,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG005GBRSR6",
-      "ticker": "MMI",
-      "isin": "US5663241090",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Marcus & Millichap Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BVTPQ3",
       "ticker": "MTX@DE",
       "isin": "DE000A0D9PT0",
@@ -6506,6 +6486,16 @@
       "lot": 1,
       "currency": "EUR",
       "name": "MTU Aero Engines AG",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG005GBRSR6",
+      "ticker": "MMI",
+      "isin": "US5663241090",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Marcus & Millichap Inc",
       "type": "Stock"
     },
     {
@@ -6519,16 +6509,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BKZB36",
-      "ticker": "HD",
-      "isin": "US4370761029",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "The Home Depot",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000H3GDJ8",
       "ticker": "KMPR",
       "isin": "US4884011002",
@@ -6536,6 +6516,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Kemper",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BKZB36",
+      "ticker": "HD",
+      "isin": "US4370761029",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "The Home Depot",
       "type": "Stock"
     },
     {
@@ -6759,16 +6749,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BMSRR9",
-      "ticker": "BSY",
-      "isin": "US08265T2087",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Bentley Systems",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00R45JYB7",
       "ticker": "ARNC",
       "isin": "US03966V1070",
@@ -6776,6 +6756,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Arconic",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BMSRR9",
+      "ticker": "BSY",
+      "isin": "US08265T2087",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Bentley Systems",
       "type": "Stock"
     },
     {
@@ -7059,16 +7049,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG00NN875G0",
-      "ticker": "KRTX",
-      "isin": "US48576A1007",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Karuna Therapeutics Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BN6KG8",
       "ticker": "SR",
       "isin": "US84857L1017",
@@ -7076,6 +7056,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Spire Inc.",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG00NN875G0",
+      "ticker": "KRTX",
+      "isin": "US48576A1007",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Karuna Therapeutics Inc",
       "type": "Stock"
     },
     {
@@ -7219,16 +7209,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000B9XYV2",
-      "ticker": "AMT",
-      "isin": "US03027X1000",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "American Tower REIT",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG005PG80K4",
       "ticker": "VEC",
       "isin": "US92242T1016",
@@ -7236,6 +7216,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Vectrus, Inc.",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000B9XYV2",
+      "ticker": "AMT",
+      "isin": "US03027X1000",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "American Tower REIT",
       "type": "Stock"
     },
     {
@@ -7459,16 +7449,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG0016SSV00",
-      "ticker": "REGI",
-      "isin": "US75972A3014",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Renewable Energy Group Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000KHWT55",
       "ticker": "HPQ",
       "isin": "US40434L1052",
@@ -7476,6 +7456,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "HP",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG0016SSV00",
+      "ticker": "REGI",
+      "isin": "US75972A3014",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Renewable Energy Group Inc",
       "type": "Stock"
     },
     {
@@ -7769,16 +7759,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000M44VW8",
-      "ticker": "OC",
-      "isin": "US6907421019",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Owens Corning",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BLMZK6",
       "ticker": "KMX",
       "isin": "US1431301027",
@@ -7786,6 +7766,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "CarMax",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000M44VW8",
+      "ticker": "OC",
+      "isin": "US6907421019",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Owens Corning",
       "type": "Stock"
     },
     {
@@ -8989,16 +8979,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BDXGP9",
-      "ticker": "CAG",
-      "isin": "US2058871029",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Conagra Brands",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG002V87SD0",
       "ticker": "GMED",
       "isin": "US3795772082",
@@ -9006,6 +8986,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Globus Medical Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BDXGP9",
+      "ticker": "CAG",
+      "isin": "US2058871029",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Conagra Brands",
       "type": "Stock"
     },
     {
@@ -9539,16 +9529,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG005PXTR70",
-      "ticker": "MBUU",
-      "isin": "US56117J1007",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Malibu Boats Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BJF1Z8",
       "ticker": "FDX",
       "isin": "US31428X1063",
@@ -9559,13 +9539,13 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000FQRVM3",
-      "ticker": "WAT",
-      "isin": "US9418481035",
+      "figi": "BBG005PXTR70",
+      "ticker": "MBUU",
+      "isin": "US56117J1007",
       "minPriceIncrement": 0.01,
       "lot": 1,
       "currency": "USD",
-      "name": "Waters",
+      "name": "Malibu Boats Inc",
       "type": "Stock"
     },
     {
@@ -9576,6 +9556,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Boot Barn Holdings Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000FQRVM3",
+      "ticker": "WAT",
+      "isin": "US9418481035",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Waters",
       "type": "Stock"
     },
     {
@@ -9609,16 +9599,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG00M0X4584",
-      "ticker": "VLDR",
-      "isin": "US92259F1012",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Velodyne Lidar",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000C4ZZ10",
       "ticker": "SIG",
       "isin": "BMG812761002",
@@ -9626,6 +9606,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Signet Jewelers",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG00M0X4584",
+      "ticker": "VLDR",
+      "isin": "US92259F1012",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Velodyne Lidar",
       "type": "Stock"
     },
     {
@@ -9649,16 +9639,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BGKTF9",
-      "ticker": "COF",
-      "isin": "US14040H1059",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Capital One",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000RJL816",
       "ticker": "TTLK",
       "isin": "RU000A0HM5C1",
@@ -9666,6 +9646,16 @@
       "lot": 1000,
       "currency": "RUB",
       "name": "Таттелеком",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BGKTF9",
+      "ticker": "COF",
+      "isin": "US14040H1059",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Capital One",
       "type": "Stock"
     },
     {
@@ -10399,16 +10389,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BSSC44",
-      "ticker": "RY",
-      "isin": "CA7800871021",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Royal Bank of Canada",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BBL0Y1",
       "ticker": "ALK",
       "isin": "US0116591092",
@@ -10416,6 +10396,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Alaska Air Group",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BSSC44",
+      "ticker": "RY",
+      "isin": "CA7800871021",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Royal Bank of Canada",
       "type": "Stock"
     },
     {
@@ -10989,16 +10979,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BV4XJ1",
-      "ticker": "UTHR",
-      "isin": "US91307C1027",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "United Therapeutics Corp",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BHY4D9",
       "ticker": "PB",
       "isin": "US7436061052",
@@ -11006,6 +10986,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Prosperity Bancshares",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BV4XJ1",
+      "ticker": "UTHR",
+      "isin": "US91307C1027",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "United Therapeutics Corp",
       "type": "Stock"
     },
     {
@@ -11249,16 +11239,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000GX14P2",
-      "ticker": "AVAV",
-      "isin": "US0080731088",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "AeroVironment Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BFNR17",
       "ticker": "BFH",
       "isin": "US0185811082",
@@ -11266,6 +11246,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Bread Financial",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000GX14P2",
+      "ticker": "AVAV",
+      "isin": "US0080731088",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "AeroVironment Inc",
       "type": "Stock"
     },
     {
@@ -11479,16 +11469,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000C0LW92",
-      "ticker": "BSX",
-      "isin": "US1011371077",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Boston Scientific Corporation",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG004S68696",
       "ticker": "RASP",
       "isin": "RU000A0B90N8",
@@ -11496,6 +11476,16 @@
       "lot": 10,
       "currency": "RUB",
       "name": "Распадская",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000C0LW92",
+      "ticker": "BSX",
+      "isin": "US1011371077",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Boston Scientific Corporation",
       "type": "Stock"
     },
     {
@@ -12209,16 +12199,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BG7L34",
-      "ticker": "RYN",
-      "isin": "US7549071030",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Rayonier REIT",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG003CVJP50",
       "ticker": "BYND",
       "isin": "US08862E1091",
@@ -12226,6 +12206,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Beyond Meat Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BG7L34",
+      "ticker": "RYN",
+      "isin": "US7549071030",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Rayonier REIT",
       "type": "Stock"
     },
     {
@@ -12409,16 +12399,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BKXBV7",
-      "ticker": "ARNA",
-      "isin": "US0400476075",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Arena Pharmaceuticals Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000C22QV7",
       "ticker": "SEE",
       "isin": "US81211K1007",
@@ -12426,6 +12406,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Sealed Air",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BKXBV7",
+      "ticker": "ARNA",
+      "isin": "US0400476075",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Arena Pharmaceuticals Inc",
       "type": "Stock"
     },
     {
@@ -13120,16 +13110,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000B9Z0J8",
-      "ticker": "PLD",
-      "isin": "US74340W1036",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Prologis REIT",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG00ZNSSKP3",
       "ticker": "VMEO",
       "isin": "US92719V1008",
@@ -13137,6 +13117,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Vimeo",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000B9Z0J8",
+      "ticker": "PLD",
+      "isin": "US74340W1036",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Prologis REIT",
       "type": "Stock"
     },
     {
@@ -13350,16 +13340,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG007G7V505",
-      "ticker": "WORK",
-      "isin": "US83088V1026",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Slack Technologies Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG007387YL8",
       "ticker": "PRAH",
       "isin": "US69354M1080",
@@ -13367,6 +13347,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "PRA Health Sciences Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG007G7V505",
+      "ticker": "WORK",
+      "isin": "US83088V1026",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Slack Technologies Inc",
       "type": "Stock"
     },
     {
@@ -13820,16 +13810,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BQSQ38",
-      "ticker": "PAYX",
-      "isin": "US7043261079",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Paychex Inc",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG005BLN209",
       "ticker": "DNOW",
       "isin": "US67011P1003",
@@ -13837,6 +13817,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "NOW Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BQSQ38",
+      "ticker": "PAYX",
+      "isin": "US7043261079",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Paychex Inc",
       "type": "Stock"
     },
     {
@@ -13921,7 +13911,7 @@
     },
     {
       "figi": "BBG000QK0TG5",
-      "ticker": "NCBS",
+      "ticker": "NIC",
       "isin": "US65406E1029",
       "minPriceIncrement": 0.01,
       "lot": 1,
@@ -14229,16 +14219,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG014KFRNP7",
-      "ticker": "CEG",
-      "isin": "US21037T1097",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Constellation Energy",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BKF014",
       "ticker": "LGND",
       "isin": "US53220K5048",
@@ -14246,6 +14226,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Ligand Pharmaceuticals Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG014KFRNP7",
+      "ticker": "CEG",
+      "isin": "US21037T1097",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Constellation Energy",
       "type": "Stock"
     },
     {
@@ -14439,16 +14429,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BQHTV3",
-      "ticker": "OLN",
-      "isin": "US6806652052",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Olin Corp",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000GLG0G0",
       "ticker": "GSH",
       "isin": "US40065W1071",
@@ -14456,6 +14436,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Guangshen Railway",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BQHTV3",
+      "ticker": "OLN",
+      "isin": "US6806652052",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Olin Corp",
       "type": "Stock"
     },
     {
@@ -15349,16 +15339,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG00W7F99V5",
-      "ticker": "LCID",
-      "isin": "US5494981039",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Lucid Group",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000G8N9C6",
       "ticker": "JWN",
       "isin": "US6556641008",
@@ -15366,6 +15346,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Nordstrom",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG00W7F99V5",
+      "ticker": "LCID",
+      "isin": "US5494981039",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Lucid Group",
       "type": "Stock"
     },
     {
@@ -15649,16 +15639,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG006Q52QV2",
-      "ticker": "CYBR",
-      "isin": "IL0011334468",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "CyberArk Software Ltd",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BG4202",
       "ticker": "CPB",
       "isin": "US1344291091",
@@ -15666,6 +15646,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Campbell Soup",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG006Q52QV2",
+      "ticker": "CYBR",
+      "isin": "IL0011334468",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "CyberArk Software Ltd",
       "type": "Stock"
     },
     {
@@ -17509,16 +17499,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BP3NW2",
-      "ticker": "CCMP",
-      "isin": "US12571T1007",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "CMC Materials",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BCMWM1",
       "ticker": "MTN",
       "isin": "US91879Q1094",
@@ -17526,6 +17506,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Vail Resorts Inc",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BP3NW2",
+      "ticker": "CCMP",
+      "isin": "US12571T1007",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "CMC Materials",
       "type": "Stock"
     },
     {
@@ -17729,6 +17719,16 @@
       "type": "Stock"
     },
     {
+      "figi": "BBG017TGV7M2",
+      "ticker": "QDEL",
+      "isin": "US2197981051",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "QuidelOrtho Corp",
+      "type": "Stock"
+    },
+    {
       "figi": "BBG000BJPDZ1",
       "ticker": "ISRG",
       "isin": "US46120E6023",
@@ -17859,16 +17859,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BWLMJ4",
-      "ticker": "WBA",
-      "isin": "US9314271084",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Walgreens Boots Alliance",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG017BXPZ85",
       "ticker": "CR",
       "isin": "US2244411052",
@@ -17876,6 +17866,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Crane Holdings",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BWLMJ4",
+      "ticker": "WBA",
+      "isin": "US9314271084",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Walgreens Boots Alliance",
       "type": "Stock"
     },
     {
@@ -18448,16 +18448,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG000BWP7D9",
-      "ticker": "WEC",
-      "isin": "US92939U1060",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "WEC Energy Group",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BGKXV2",
       "ticker": "CTB",
       "isin": "US2168311072",
@@ -18465,6 +18455,16 @@
       "lot": 1,
       "currency": "USD",
       "name": "Cooper Tire & Rubber Co",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG000BWP7D9",
+      "ticker": "WEC",
+      "isin": "US92939U1060",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "WEC Energy Group",
       "type": "Stock"
     },
     {
@@ -18638,16 +18638,6 @@
       "type": "Stock"
     },
     {
-      "figi": "BBG00KMXKWF9",
-      "ticker": "PRSP",
-      "isin": "US7153471005",
-      "minPriceIncrement": 0.01,
-      "lot": 1,
-      "currency": "USD",
-      "name": "Perspecta",
-      "type": "Stock"
-    },
-    {
       "figi": "BBG000BBV4M5",
       "ticker": "CNTL",
       "isin": "RU0007665147",
@@ -18655,6 +18645,16 @@
       "lot": 100,
       "currency": "RUB",
       "name": "Центральный Телеграф",
+      "type": "Stock"
+    },
+    {
+      "figi": "BBG00KMXKWF9",
+      "ticker": "PRSP",
+      "isin": "US7153471005",
+      "minPriceIncrement": 0.01,
+      "lot": 1,
+      "currency": "USD",
+      "name": "Perspecta",
       "type": "Stock"
     },
     {
