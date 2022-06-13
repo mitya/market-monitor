@@ -1,5 +1,5 @@
 - list all large M1 candles
-- show large M1 candles in real time -display monetary vol, make it configurable per ticker, show if a candle is largest in last XX days
+- show large M1 candles in real time - display monetary vol, make it configurable per ticker, show if a candle is largest in last XX days
 - look for first red 5m bar after a series of greens
 - look for 0.5% fall in 5m periods for selected tickers
 - set current ticker to chart title

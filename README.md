@@ -1,110 +1,40 @@
-# Фичи скринера
-— список бумаг с динамикой за неделю / месяц / от интересных дат
-— инсайдерские покупки по своему списку
-— консенсус прогнозы по своему списку
-— идентификация простейших паттернов типа ползучего роста
+## Run daily
 
-— отслеживание взрывов на пятиминутках
-— автоматическое выставление заявок в Тинькове на уровнях для спекуляций
+    rake main
 
-— загружать текущие котировки, EOD данные, инсайдерские сделки, прогнозы, общая инфа по тикерам
-— UI для просмотра списка бумаг с фильтрами
-— опционы?
+## Run during trading hours to get intraday signals
 
-## Swing
-* Future charts — keep an eye on all commodity futures on one page
-+ MA scanner — look for those who visit the MA first time in a while
-* Sell-off exhaustions scanner — look for the first green on spiked up day after a downtrend
-* Random date comparer
-* Low volume scan — lowest vol in N days
+    rake sync:ru
+    rake sync:us
 
-## Intraday
-* DMA hits intraday
-* double tops (0.5%) on 5m charts (with 2+ bars between hits)
-* breakouts of today top, brewakouts of yesterday top (& breakdowns)
-* retests of day open / yesterday close after 1%+ move
-* x-large volume on 1/3/5m charts
-* Low volume scan — lowest vol in N bars
-* intraday low-high change, low-current change, last 10 min change
+# Run if was not used for a while
 
+    rake tinkoff:days:missing since=2022-04-07 ok=1
+    rake tinkoff:days:missing since=2022-04-07 ok=1 tickers='XX YY'
+    rake tinkoff:days:years tickers='XX YY'
+    rake levels:hits:week
 
-# Run once in a while
+## Destroying tickers
 
-rake iex:insider_transactions
-rake iex:stats
-rake iex:price_targets
-rake iex:recommendations
-rake set_average_volume
-rake candles:set_average_change
-rake candles:set_d5_volume
-
-rake iex:days:missing since=2022-03-01
-rake tinkoff:days:missing since=2022-04-07 ok=1 tickers='ABRD AFKS AFLT AGRO'
-rake tinkoff:days:missing since=2022-04-07 ok=1
-
-rake tinkoff:days:missing ok=1
-rake today
-rake intraday:sync_all
-
-rake tinkoff:days:years tickers='AZPN CR'
-
-rake levels:hits:week
-
-# Run daily
-rake main
-rake prices
-
-rake tinkoff:candles:import:5min:last
-rake tinkoff:prices:pre
-rake options:day
-
-
-# Run if haven't used for a while
-rake     iex:days:missing since=2022-04-01 ok=1
-rake tinkoff:days:missing since=2022-04-01 ok=1 tickers='KAP@GS KSPI@GS SPBE'
-rake tinkoff:days:missing since=2022-04-01 ok=1 tickers='BRBR DINO SHEL EMBC PARA BFH ZIMV CEG SAFM'
-
-# Destroying tickers
-
-rake t:destroy ticker='DKNG' ok=1
-rake tinkoff:instruments:sync ok=1
-
-
-# Adding new tickers
+    rake t:destroy ticker='DKNG' ok=1
 
 ## IEX
-rake iex:symbols:load
-rake tinkoff:premium:import
+
+    rake iex:days:missing since=2022-01-01
+    rake iex:symbols:load iex:symbols:refresh    
+    rake iex:insider_transactions
+    rake iex:stats
+    rake iex:price_targets
+    rake iex:recommendations
+    rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers
+    rake iex:days:missing since=2021-12-01 special=1 ok=1 reverse=1 tickers='XX'
 
 ## Tinkoff
-rake tinkoff:instruments ok=1
-rake SetIexTickers
-rake empty:iex
-export tickers='AZPN CR'
-rake tinkoff:logos:download
-rake tinkoff:days:years tinkoff:days:special
-rake set_first_date_auto
-// rake candles:set_average_change candles:set_d5_volume
-// rake candles:set_prev_closes
 
-rake iex:stats company=1 iex:tops:set_sectors iex:logos:download iex:symbols:peers iex:price_targets
-rake iex:days:missing since=2020-01-01 special=1 ok=1 reverse=1
-rake iex:days:missing since=2021-12-01 special=1 ok=1 reverse=1 tickers='NU'
-
-## Optional
-rake set_first_date ticker=GRUB date=2021-03-25
-rake iex:symbols:load iex:symbols:refresh
-rake iex:days:period period=ytd
-rake tinkoff:days:years tinkoff:days:special
-
-## Import List
-rake list:clear tickers=''
-rake list:import list=portfolio
-
-
-## Intraday
-
-## Loading days for recently activated tickers
-rake tinkoff:days:previous
-
-## Tickers to look
+    rake tinkoff:instruments ok=1
+    rake empty:iex
+    export tickers='XX YY'
+    rake tinkoff:logos:download
+    rake tinkoff:days:years tinkoff:days:special
+    rake set_first_date_auto
+    rake set_first_date ticker=XX date=2021-03-25
