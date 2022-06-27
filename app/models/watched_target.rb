@@ -23,7 +23,7 @@ class WatchedTarget < ApplicationRecord
   end
 
   def hit_in?(candle)
-    return false if !target_price
+    return false if !target_price || !candle
     bullish? ? candle.high >= target_price : candle.low <= target_price
   end
 

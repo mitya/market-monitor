@@ -175,8 +175,9 @@ class DashboardsController < ApplicationController
     show_all = params[:all].present? || current_market == 'rub'
     selector = show_all ? :instruments_for_market : :current_instruments_for_market
     instruments = PermaCache.send(selector, current_market)
-    dates = [Current.date]
-    CandleCache.preload! instruments, dates
+    day_x = '2022-06-02'.to_date
+    dates = [Current.date, day_x]
+    CandleCache.preload! instruments, dates: dates
     PriceCache.preload instruments
 
     rows = instruments.map do |inst|
@@ -193,6 +194,7 @@ class DashboardsController < ApplicationController
         change_since_w2_high:    inst.change_since_w2_high,
         change_since_month_low:  inst.change_since_month_low,
         change_since_month_high: inst.change_since_month_high,
+        change_since_day_x:      inst.gain_since(inst.day_candles!.find_date(day_x)&.open, :last),
         avg_change:              inst.info.avg_change.to_f * 100,
       )
     end

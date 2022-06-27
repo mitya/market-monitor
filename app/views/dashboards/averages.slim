@@ -36,6 +36,7 @@ main.container-fluid
                 = th :change_since_w2_high, '2wH ﹪', class: 'money-cell'
                 = th :change_since_month_low, 'mL ﹪', class: 'money-cell'
                 = th :change_since_month_high, 'mH ﹪', class: 'money-cell'
+                = th :change_since_day_x, 'X ﹪', class: 'money-cell'
                 = th :avg_change, '~σ', class: 'money-cell'
                 = th :averages
                 = th :extremums
@@ -77,6 +78,8 @@ main.container-fluid
                     = colorized_ratio row.change_since_month_low, precision: 0
                   = td :change_since_month_high, class: "money-cell" do
                     = colorized_ratio row.change_since_month_high, precision: 0
+                  = td :change_since_day_x, class: "money-cell" do
+                    = colorized_ratio row.change_since_day_x, precision: 0
                   = td :avg_change, class: 'money-cell' do
                     = number_to_percentage row.avg_change, precision: 0, format: '%n ﹪'
                   = td :averages, class: 'price-bubble-cell', style: "width: #{width}px;" do
